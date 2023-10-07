@@ -7,4 +7,15 @@ import { Component } from '@angular/core';
 })
 export class LoginComponent {
 
+  username: string = '';
+  password: string = '';
+
+  constructor() { }
+
+  ngOnInit(): void {
+  }
+
+  login() {
+    console.log(this.username, this.password);
+  }
 }
