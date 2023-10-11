@@ -12,6 +12,8 @@ import { RegisterComponent } from './register/register.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import {MatIconModule, MatIconRegistry} from "@angular/material/icon";
 import {AppRoutingModule} from "./app-routing.module";
+import {HttpClientModule} from "@angular/common/http";
+import { FillFieldsWarningComponent } from './fill-fields-warning/fill-fields-warning.component';
 
 
 
@@ -20,12 +22,14 @@ import {AppRoutingModule} from "./app-routing.module";
     AppComponent,
     LoginComponent,
     RegisterComponent,
-    ForgotPasswordComponent
+    ForgotPasswordComponent,
+    FillFieldsWarningComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
+    HttpClientModule,
     AppRoutingModule,
     MatFormFieldModule,
     MatInputModule,

@@ -1,26 +1,31 @@
 <div class="container-sm">
-  <h1><b>Sign up</b></h1>
+  <h1 class="title"><b>Sign up</b></h1>
+  <mat-form-field class="mt-4 me-5">
+    <mat-label>First Name</mat-label>
+    <input matInput type="text" [(ngModel)]="firstName"/>
+  </mat-form-field>
   <mat-form-field>
+    <mat-label>Last Name</mat-label>
+    <input matInput type="text" [(ngModel)]="lastName"/>
+  </mat-form-field>
+  <br>
+  <mat-form-field class="me-5">
     <mat-label>Username</mat-label>
     <input matInput type="text" [(ngModel)]="username"/>
   </mat-form-field>
-  <br>
   <mat-form-field>
     <mat-label>Password</mat-label>
     <input matInput type="password" [(ngModel)]="password"/>
   </mat-form-field>
   <br>
-  <mat-form-field>
+  <mat-form-field id="email">
     <mat-label>Email</mat-label>
     <input matInput type="text" [(ngModel)]="email"/>
   </mat-form-field>
   <br>
-  <mat-form-field>
-    <mat-label>Phone</mat-label>
-    <input matInput type="text" [(ngModel)]="phone"/>
-  </mat-form-field>
+  <app-fill-fields-warning *ngIf="invalidRegister"></app-fill-fields-warning>
   <br>
-  <button class="mb-3" mat-raised-button color="primary" (click)="register()">Register</button>
+  <button class="mb-3" mat-raised-button color="primary" (click)="onRegister()">Register</button>
   <br>
   <a routerLink="/login">Already have an account? Login</a>
 </div>

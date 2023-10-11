@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { HttpClient } from "@angular/common/http";
 
 @Component({
   selector: 'app-login',
@@ -9,13 +10,24 @@ export class LoginComponent {
 
   username: string = '';
   password: string = '';
+  invalidLogin: boolean = false;
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
-  ngOnInit(): void {
-  }
 
-  login() {
-    console.log(this.username, this.password);
+  onLogin(): void {
+    if(this.username == '' || this.password == ''){
+      this.invalidLogin = true;
+      setTimeout(() => {
+        this.invalidLogin = false;
+      }, 1000);
+      return;
+    }
+    this.http.post('http://localhost:8080/api/authenticate', {
+      username: this.username,
+      password: this.password
+    }).subscribe((response: any) => {
+      console.log(response);
+    });
   }
 }
