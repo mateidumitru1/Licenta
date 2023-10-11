@@ -13,17 +13,20 @@
     <mat-label>Username</mat-label>
     <input matInput type="text" [(ngModel)]="username"/>
   </mat-form-field>
-  <mat-form-field>
+  <mat-form-field id="email">
+    <mat-label>Email</mat-label>
+    <input matInput type="text" [(ngModel)]="email" email/>
+  </mat-form-field>
+  <br>
+  <mat-form-field class="me-5">
     <mat-label>Password</mat-label>
     <input matInput type="password" [(ngModel)]="password"/>
   </mat-form-field>
-  <br>
-  <mat-form-field id="email">
-    <mat-label>Email</mat-label>
-    <input matInput type="text" [(ngModel)]="email"/>
+  <mat-form-field>
+    <mat-label>Confirm Password</mat-label>
+    <input matInput type="password" [(ngModel)]="confirmPassword"/>
   </mat-form-field>
-  <br>
-  <app-fill-fields-warning *ngIf="invalidRegister"></app-fill-fields-warning>
+  <app-fill-fields-warning *ngIf="invalidRegister"> {{ errorMessage }}</app-fill-fields-warning>
   <br>
   <button class="mb-3" mat-raised-button color="primary" (click)="onRegister()">Register</button>
   <br>
