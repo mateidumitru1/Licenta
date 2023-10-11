@@ -3,6 +3,7 @@ package com.matei.backend.controller;
 import com.matei.backend.dto.request.AuthenticationRequestDto;
 import com.matei.backend.dto.request.RegisterRequestDto;
 import com.matei.backend.dto.response.AuthenticationResponseDto;
+import com.matei.backend.dto.response.RegisterResponseDto;
 import com.matei.backend.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -17,7 +18,7 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponseDto> register(@RequestBody RegisterRequestDto request) {
+    public ResponseEntity<RegisterResponseDto> register(@RequestBody RegisterRequestDto request) {
         return ResponseEntity.ok(authenticationService.register(request));
     }
 

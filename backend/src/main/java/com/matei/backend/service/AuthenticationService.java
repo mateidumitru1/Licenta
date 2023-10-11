@@ -3,6 +3,7 @@ package com.matei.backend.service;
 import com.matei.backend.dto.request.AuthenticationRequestDto;
 import com.matei.backend.dto.request.RegisterRequestDto;
 import com.matei.backend.dto.response.AuthenticationResponseDto;
+import com.matei.backend.dto.response.RegisterResponseDto;
 import com.matei.backend.entity.Role;
 import com.matei.backend.entity.User;
 import com.matei.backend.repository.UserRepository;
@@ -21,7 +22,7 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
 
-    public AuthenticationResponseDto register(RegisterRequestDto request) {
+    public RegisterResponseDto register(RegisterRequestDto request) {
 
         var user = User.builder()
                 .firstName(request.getFirstName())
@@ -34,10 +35,10 @@ public class AuthenticationService {
 
         userRepository.save(user);
 
-        var jwtToken = jwtService.generateToken(user);
-
-        return AuthenticationResponseDto.builder()
-                .token(jwtToken)
+        return RegisterResponseDto.builder()
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .message("User registered successfully")
                 .build();
     }
 
