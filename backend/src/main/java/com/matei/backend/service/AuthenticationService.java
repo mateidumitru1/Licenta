@@ -6,6 +6,7 @@ import com.matei.backend.dto.response.AuthenticationResponseDto;
 import com.matei.backend.dto.response.RegisterResponseDto;
 import com.matei.backend.entity.Role;
 import com.matei.backend.entity.User;
+import com.matei.backend.exception.UserAlreadyExistsException;
 import com.matei.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,6 +24,12 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
 
     public RegisterResponseDto register(RegisterRequestDto request) {
+
+        if(userRepository.findByUsername(request.getUsername()).isPresent()
+                || userRepository.findByEmail(request.getEmail()).isPresent()) {
+
+            throw new UserAlreadyExistsException("User already exists");
+        }
 
         var user = User.builder()
                 .firstName(request.getFirstName())
