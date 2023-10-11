@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import {RegisterService} from "../service/register.service";
+import {EmailHandler} from "../handlers/email.handler";
 
 @Component({
   selector: 'app-register',
@@ -18,7 +19,7 @@ export class RegisterComponent{
   errorMessage: string = '';
   invalidRegister: boolean = false;
 
-  constructor(private registerService: RegisterService) { }
+  constructor(private registerService: RegisterService, private emailHandler: EmailHandler) { }
 
   onRegister(): void {
 
@@ -38,16 +39,11 @@ export class RegisterComponent{
       this.timeout('Passwords do not match!');
       return false;
     }
-    if(!this.isEmailValid(this.email)) {
+    if(!this.emailHandler.isEmailValid(this.email)) {
       this.timeout('Please enter a valid email address!');
       return false;
     }
     return true;
-  }
-
-  isEmailValid(email: string): boolean {
-    const pattern = new RegExp('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$');
-    return pattern.test(email);
   }
 
   timeout(message: string): void {
