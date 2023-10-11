@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import {BrowserModule, DomSanitizer} from '@angular/platform-browser';
-import {RouterModule, Routes} from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
@@ -12,13 +11,9 @@ import {MatButtonModule} from "@angular/material/button";
 import { RegisterComponent } from './register/register.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import {MatIconModule, MatIconRegistry} from "@angular/material/icon";
+import {AppRoutingModule} from "./app-routing.module";
 
-const appRoutes: Routes = [
-  { path: 'login', component: LoginComponent },
-  { path: 'register', component: RegisterComponent },
-  { path: 'forgot-password', component: ForgotPasswordComponent },
-  { path: '', redirectTo: '/login', pathMatch: 'full'}
-];
+
 
 @NgModule({
   declarations: [
@@ -31,10 +26,10 @@ const appRoutes: Routes = [
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
+    AppRoutingModule,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    RouterModule.forRoot(appRoutes),
     MatIconModule
   ],
   providers: [],
