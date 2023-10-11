@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {RegisterService} from "../service/register.service";
 
 @Component({
   selector: 'app-register',
@@ -18,26 +18,36 @@ export class RegisterComponent{
   errorMessage: string = '';
   invalidRegister: boolean = false;
 
-  constructor(private http: HttpClient) { }
+  constructor(private registerService: RegisterService) { }
 
   onRegister(): void {
+
+    if(!this.checkRegistration()) {
+      return;
+    }
+
+    this.registerService.register(this.firstName, this.lastName, this.username, this.password, this.email);
+  }
+
+  checkRegistration(): boolean {
     if(this.firstName === '' || this.lastName === '' || this.username === '' || this.password === '' || this.email === '') {
       this.timeout('Please fill out all fields');
-      return;
+      return false;
     }
     if(this.password !== this.confirmPassword) {
       this.timeout('Passwords do not match!');
-      return;
+      return false;
     }
-    this.http.post('http://localhost:8080/api/register', {
-      firstName: this.firstName,
-      lastName: this.lastName,
-      username: this.username,
-      password: this.password,
-      email: this.email
-    }).subscribe((response: any) => {
-      console.log(response);
-    });
+    if(!this.isEmailValid(this.email)) {
+      this.timeout('Please enter a valid email address!');
+      return false;
+    }
+    return true;
+  }
+
+  isEmailValid(email: string): boolean {
+    const pattern = new RegExp('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$');
+    return pattern.test(email);
   }
 
   timeout(message: string): void {

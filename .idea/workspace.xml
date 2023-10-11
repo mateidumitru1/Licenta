@@ -5,8 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0ff3fa00-627c-435d-82b1-4a1abb5b20ca" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/frontend/src/app/service/register.service.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/fill-fields-warning/fill-fields-warning.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/fill-fields-warning/fill-fields-warning.component.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/app/register/register.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/register/register.component.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/app/register/register.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/register/register.component.ts" afterDir="false" />
     </list>
@@ -125,7 +125,7 @@
       <workItem from="1696701761968" duration="612000" />
       <workItem from="1696756369136" duration="790000" />
       <workItem from="1697019077036" duration="54000" />
-      <workItem from="1697019146728" duration="8923000" />
+      <workItem from="1697019146728" duration="10284000" />
     </task>
     <servers />
   </component>
