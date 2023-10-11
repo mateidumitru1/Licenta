@@ -19,6 +19,8 @@ export class RegisterService {
       email: email
     }).subscribe((response: any) => {
       console.log(response);
+    }, (error: any) => {
+      alert(error.error)
     });
   }
 }

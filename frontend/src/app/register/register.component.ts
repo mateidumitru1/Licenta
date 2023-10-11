@@ -31,18 +31,23 @@ export class RegisterComponent{
   }
 
   checkRegistration(): boolean {
-    if(this.firstName === '' || this.lastName === '' || this.username === '' || this.password === '' || this.email === '') {
+    if(this.firstName === '' || this.lastName === '' || this.username === '' ||
+      this.password === '' || this.confirmPassword === '' || this.email === '') {
+
       this.timeout('Please fill out all fields');
       return false;
     }
+
     if(this.password !== this.confirmPassword) {
       this.timeout('Passwords do not match!');
       return false;
     }
+
     if(!this.emailHandler.isEmailValid(this.email)) {
       this.timeout('Please enter a valid email address!');
       return false;
     }
+
     return true;
   }
 
