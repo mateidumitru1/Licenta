@@ -117,4 +117,5 @@ public class EventService {
     public void deleteEventById(UUID id) {
         eventRepository.deleteById(id);
     }
+
 }
