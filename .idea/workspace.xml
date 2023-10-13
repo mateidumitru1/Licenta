@@ -5,24 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0ff3fa00-627c-435d-82b1-4a1abb5b20ca" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/controller/EventController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/controller/PlaceController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/dto/request/EventRequestDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/dto/request/PlaceRequestDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/dto/response/EventResponseDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/dto/response/PlaceResponseDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/entity/Event.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/entity/Place.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/repository/EventRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/repository/PlaceRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/EventService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/PlaceService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/exception/PlaceNotFoundException.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/configuration/SecurityConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/configuration/SecurityConfiguration.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/controller/Demo.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/login/login.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/login/login.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/register/register.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/register/register.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/register/register.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/register/register.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/controller/EventController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/controller/EventController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/controller/PlaceController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/controller/PlaceController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/repository/EventRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/repository/EventRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/EventService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/EventService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/PlaceService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/PlaceService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/handlers/EventPlaceHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/handlers/EventPlaceHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/app-routing.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/app-routing.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/app.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/app.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/login/login.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/login/login.component.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,6 +51,9 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
+  <component name="MavenRunner">
+    <option name="skipTests" value="true" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 8
 }</component>
@@ -89,11 +85,14 @@
   }
 }</component>
   <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="com.matei.exception" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Matei\Desktop\licenta\Licenta1\untitled\backend" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.BackendApplication">
+  <component name="RunManager" selected="JavaScript Debug.Angular Application (frontend)">
     <configuration name="BackendApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.matei.backend.BackendApplication" />
       <module name="backend" />
@@ -110,6 +109,13 @@
     <configuration name="Angular Application (frontend)" type="JavascriptDebugType" uri="http://localhost:4200">
       <method v="2" />
     </configuration>
+    <configuration name="BackendApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="backend" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.matei.backend.BackendApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Angular CLI Server (frontend)" type="js.build_tools.npm">
       <package-json value="$PROJECT_DIR$/frontend/package.json" />
       <command value="run" />
@@ -120,11 +126,6 @@
       <envs />
       <method v="2" />
     </configuration>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Application.BackendApplication" />
-      </list>
-    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -149,7 +150,11 @@
       <workItem from="1697059949362" duration="1000" />
       <workItem from="1697059975877" duration="1742000" />
       <workItem from="1697110486223" duration="6266000" />
-      <workItem from="1697117122979" duration="1457000" />
+      <workItem from="1697117122979" duration="1532000" />
+      <workItem from="1697120047736" duration="7303000" />
+      <workItem from="1697127399902" duration="45000" />
+      <workItem from="1697127577585" duration="10390000" />
+      <workItem from="1697208204631" duration="8492000" />
     </task>
     <servers />
   </component>

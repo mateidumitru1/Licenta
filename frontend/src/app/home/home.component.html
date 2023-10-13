@@ -1,0 +1,11 @@
+<app-navbar></app-navbar>
+<div *ngFor="let place of places">
+  <mat-card (click)="onPlaceClick(place)">
+    <mat-card-header>
+      <mat-card-title>{{place.name}}</mat-card-title>
+      <mat-card-subtitle>{{place.address}}</mat-card-subtitle>
+    </mat-card-header>
+  </mat-card>
+</div>
+<router-outlet></router-outlet>
+

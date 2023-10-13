@@ -1,0 +1,13 @@
+mat-card {
+  margin: 10px;
+  width: 300px;
+  height: 300px;
+  display: inline-block;
+  background-color: #fff;
+  box-shadow: 1px 1px 1px 1px #ccc;
+}
+
+mat-card:hover {
+  cursor: pointer;
+  box-shadow: 3px 3px 5px 6px #ccc;
+}
