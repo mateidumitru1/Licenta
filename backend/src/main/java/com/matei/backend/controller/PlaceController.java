@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/places")
 public class PlaceController {
@@ -23,7 +23,7 @@ public class PlaceController {
     }
 
     @GetMapping
-    public ResponseEntity<List<PlaceResponseDto>> getAllPlaces() {
+    public ResponseEntity<List<PlaceResponseDto>> getAllPlaces(@RequestHeader("Authorization") String token) {
         return ResponseEntity.ok(placeService.getAllPlaces());
     }
 
