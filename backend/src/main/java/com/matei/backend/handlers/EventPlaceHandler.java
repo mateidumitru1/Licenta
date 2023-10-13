@@ -1,4 +1,4 @@
-package handlers;
+package com.matei.backend.handlers;
 
 import com.matei.backend.entity.Event;
 import com.matei.backend.entity.Place;

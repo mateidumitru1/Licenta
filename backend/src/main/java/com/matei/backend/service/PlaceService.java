@@ -3,6 +3,7 @@ package com.matei.backend.service;
 import com.matei.backend.dto.request.PlaceRequestDto;
 import com.matei.backend.dto.response.PlaceResponseDto;
 import com.matei.backend.entity.Place;
+import com.matei.backend.exception.PlaceNotFoundException;
 import com.matei.backend.repository.PlaceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -53,7 +54,19 @@ public class PlaceService {
                 .build());
     }
 
+    public PlaceResponseDto getPlaceByName(String name) {
+        var place = placeRepository.findByName(name).orElseThrow(() -> new PlaceNotFoundException("Place not found"));
+
+        return PlaceResponseDto.builder()
+                .id(place.getId())
+                .name(place.getName())
+                .address(place.getAddress())
+                .build();
+    }
+
     public void deletePlaceById(UUID id) {
         placeRepository.deleteById(id);
     }
+
+
 }

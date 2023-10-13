@@ -28,9 +28,9 @@ public class EventController {
         return ResponseEntity.ok(eventService.getAllEvents());
     }
 
-    @GetMapping("?placeId={placeId}")
-    public ResponseEntity<List<EventResponseDto>> getEventListByPlace(@PathParam("placeId") String placeId) {
-        return ResponseEntity.ok(eventService.getEventListByPlace(UUID.fromString(placeId)));
+    @GetMapping("/place")
+    public ResponseEntity<List<EventResponseDto>> getEventByPlace(@RequestParam("placeName") String placeName) {
+        return ResponseEntity.ok(eventService.getEventListByPlace(placeName));
     }
 
     @GetMapping("/{id}")

@@ -23,8 +23,13 @@ public class PlaceController {
     }
 
     @GetMapping
-    public ResponseEntity<List<PlaceResponseDto>> getAllPlaces(@RequestHeader("Authorization") String token) {
+    public ResponseEntity<List<PlaceResponseDto>> getAllPlaces() {
         return ResponseEntity.ok(placeService.getAllPlaces());
+    }
+
+    @GetMapping("/{name}")
+    public ResponseEntity<PlaceResponseDto> getPlaceByName(@PathVariable String name) {
+        return ResponseEntity.ok(placeService.getPlaceByName(name));
     }
 
     @DeleteMapping("/{id}")

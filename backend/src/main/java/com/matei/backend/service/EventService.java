@@ -56,9 +56,9 @@ public class EventService {
                 .build();
     }
 
-    public List<EventResponseDto> getEventListByPlace(UUID placeId) {
+    public List<EventResponseDto> getEventListByPlace(String placeName) {
         var eventList = eventRepository
-                .findByPlaceId(placeService.getPlaceById(placeId).orElseThrow().getId())
+                .findByPlaceName(placeName)
                 .orElseThrow();
 
         return eventList.stream()
