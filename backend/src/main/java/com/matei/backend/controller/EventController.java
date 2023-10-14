@@ -23,14 +23,19 @@ public class EventController {
         return ResponseEntity.ok(eventService.createEvent(eventRequestDto));
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<EventResponseDto>> getAllEvents() {
         return ResponseEntity.ok(eventService.getAllEvents());
     }
 
     @GetMapping("/place")
-    public ResponseEntity<List<EventResponseDto>> getEventByPlace(@RequestParam("placeName") String placeName) {
+    public ResponseEntity<List<EventResponseDto>> getEventListByPlace(@RequestParam("placeName") String placeName) {
         return ResponseEntity.ok(eventService.getEventListByPlace(placeName));
+    }
+
+    @GetMapping
+    public ResponseEntity<EventResponseDto> getEventByTitle(@RequestParam("title") String title) {
+        return ResponseEntity.ok(eventService.getEventListByTitle(title));
     }
 
     @GetMapping("/{id}")

@@ -4,6 +4,7 @@ import com.matei.backend.dto.request.AuthenticationRequestDto;
 import com.matei.backend.dto.request.RegisterRequestDto;
 import com.matei.backend.dto.response.AuthenticationResponseDto;
 import com.matei.backend.dto.response.RegisterResponseDto;
+import com.matei.backend.exception.InvalidCredentialsException;
 import com.matei.backend.exception.UserAlreadyExistsException;
 import com.matei.backend.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +30,11 @@ public class AuthenticationController {
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticationResponseDto> authenticate(@RequestBody AuthenticationRequestDto request) {
-        return ResponseEntity.ok(authenticationService.authenticate(request));
+    public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequestDto request) {
+        try {
+            return ResponseEntity.ok(authenticationService.authenticate(request));
+        } catch (InvalidCredentialsException exception) {
+            return new ResponseEntity<>(exception.getMessage(), HttpStatus.UNAUTHORIZED);
+        }
     }
 }

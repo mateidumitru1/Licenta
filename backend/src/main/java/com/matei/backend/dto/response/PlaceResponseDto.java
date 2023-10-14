@@ -17,5 +17,6 @@ public class PlaceResponseDto {
     private UUID id;
     private String name;
     private String address;
+    private String imageUrl;
     private List<Event> events;
 }

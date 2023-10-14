@@ -24,6 +24,7 @@ public class Event {
     private LocalDate date;
     private String shortDescription;
     private String description;
+    private String imageUrl;
     @ManyToOne
     @JoinColumn(name = "place_id", referencedColumnName = "id")
     private Place place;

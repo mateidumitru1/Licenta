@@ -1,0 +1,16 @@
+<app-navbar></app-navbar>
+<h1 class="place"><b>{{ events[0].place.name }}</b></h1>
+<div *ngFor="let event of events">
+  <div>
+    <mat-card>
+      <div class="card-content">
+        <img mat-card-image src="{{ event.imageUrl }}" alt="{{ event.title }}">
+        <div class="card-text">
+          <mat-card-title>{{ event.title }}</mat-card-title>
+          <mat-card-subtitle>{{ event.date }}</mat-card-subtitle>
+          <mat-card-content>{{ event.shortDescription.slice(0, 320) }}</mat-card-content>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+</div>

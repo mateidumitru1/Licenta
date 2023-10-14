@@ -22,6 +22,7 @@ public class Place {
     private UUID id;
     private String name;
     private String address;
+    private String imageUrl;
 
     @JsonIgnore
     @OneToMany(mappedBy = "place", fetch = FetchType.EAGER, cascade = CascadeType.MERGE, orphanRemoval = true)

@@ -20,4 +20,5 @@ public class EventResponseDto {
     private String shortDescription;
     private String description;
     private Place place;
+    private String imageUrl;
 }

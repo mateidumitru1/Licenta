@@ -6,6 +6,7 @@ import com.matei.backend.dto.response.AuthenticationResponseDto;
 import com.matei.backend.dto.response.RegisterResponseDto;
 import com.matei.backend.entity.Role;
 import com.matei.backend.entity.User;
+import com.matei.backend.exception.InvalidCredentialsException;
 import com.matei.backend.exception.UserAlreadyExistsException;
 import com.matei.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -50,9 +51,13 @@ public class AuthenticationService {
     }
 
     public AuthenticationResponseDto authenticate(AuthenticationRequestDto request) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
-        );
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+        } catch (Exception e) {
+            throw new InvalidCredentialsException("Invalid username or password");
+        }
+
 
         var user = userRepository.findByUsername(request.getUsername()).orElseThrow();
 

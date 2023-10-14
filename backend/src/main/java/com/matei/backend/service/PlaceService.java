@@ -30,6 +30,7 @@ public class PlaceService {
                 .id(place.getId())
                 .name(place.getName())
                 .address(place.getAddress())
+                .imageUrl(place.getImageUrl())
                 .build();
     }
     public List<PlaceResponseDto> getAllPlaces() {
@@ -40,6 +41,7 @@ public class PlaceService {
                         .id(place.getId())
                         .name(place.getName())
                         .address(place.getAddress())
+                        .imageUrl(place.getImageUrl())
                         .build())
                 .toList();
     }
@@ -61,6 +63,7 @@ public class PlaceService {
                 .id(place.getId())
                 .name(place.getName())
                 .address(place.getAddress())
+                .imageUrl(place.getImageUrl())
                 .build();
     }
 

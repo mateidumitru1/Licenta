@@ -10,4 +10,5 @@ import java.util.UUID;
 public interface EventRepository extends JpaRepository<Event, UUID> {
     Optional<List<Event>> findByPlaceName(String placeId);
 
+    Optional<Event> findByTitle(String title);
 }

@@ -40,6 +40,7 @@ public class EventService {
                 .shortDescription(event.getShortDescription())
                 .description(event.getDescription())
                 .place(event.getPlace())
+                .imageUrl(event.getImageUrl())
                 .build();
     }
 
@@ -53,6 +54,7 @@ public class EventService {
                 .shortDescription(event.getShortDescription())
                 .description(event.getDescription())
                 .place(event.getPlace())
+                .imageUrl(event.getImageUrl())
                 .build();
     }
 
@@ -69,6 +71,7 @@ public class EventService {
                         .shortDescription(event.getShortDescription())
                         .description(event.getDescription())
                         .place(event.getPlace())
+                        .imageUrl(event.getImageUrl())
                         .build())
                 .toList();
     }
@@ -84,8 +87,25 @@ public class EventService {
                         .shortDescription(event.getShortDescription())
                         .description(event.getDescription())
                         .place(event.getPlace())
+                        .imageUrl(event.getImageUrl())
                         .build())
                 .toList();
+    }
+
+    public EventResponseDto getEventListByTitle(String title) {
+        var event = eventRepository
+                .findByTitle(title)
+                .orElseThrow();
+
+        return EventResponseDto.builder()
+                .id(event.getId())
+                .title(event.getTitle())
+                .date(event.getDate())
+                .shortDescription(event.getShortDescription())
+                .description(event.getDescription())
+                .place(event.getPlace())
+                .imageUrl(event.getImageUrl())
+                .build();
     }
 
     public EventResponseDto updateEvent(EventRequestDto updatedEvent) {

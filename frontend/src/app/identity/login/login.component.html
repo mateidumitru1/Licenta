@@ -1,0 +1,20 @@
+<div class="container-sm">
+  <h1><b>Sign in</b></h1>
+  <mat-form-field>
+    <mat-label>Username</mat-label>
+    <input matInput type="text" [(ngModel)]="username"/>
+  </mat-form-field>
+  <br>
+  <mat-form-field>
+    <mat-label>Password</mat-label>
+    <input matInput type="password" [(ngModel)]="password"/>
+  </mat-form-field>
+  <br>
+  <app-fill-fields-warning *ngIf="invalidLogin" class="red-font"> {{ message }} </app-fill-fields-warning>
+  <br>
+  <button class="mb-3" mat-raised-button color="primary" type="submit" (click)="onLogin()">Login</button>
+  <br>
+  <a class="link-primary" routerLink="/forgot-password">Forgot password?</a>
+  <br>
+  <a class="link-primary" routerLink="/register">Don't have an account? Register here!</a>
+</div>
