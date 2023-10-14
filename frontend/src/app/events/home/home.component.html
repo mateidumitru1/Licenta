@@ -5,6 +5,9 @@
       <mat-card-title>{{place.name}}</mat-card-title>
       <mat-card-subtitle>{{place.address}}</mat-card-subtitle>
     </mat-card-header>
+    <mat-card-content>
+      <img src="{{ place.imageUrl }}" alt="{{ place.name }}">
+    </mat-card-content>
   </mat-card>
 </div>
 <router-outlet></router-outlet>

@@ -1,8 +1,11 @@
 <app-navbar></app-navbar>
 <h1 class="place"><b>{{ events[0].place.name }}</b></h1>
+<div>
+  <img src="{{ events[0].place.imageUrl }}" alt="{{ events[0].place.name }}">
+</div>
 <div *ngFor="let event of events">
   <div>
-    <mat-card>
+    <mat-card (click)="onEventClick(event)">
       <div class="card-content">
         <img mat-card-image src="{{ event.imageUrl }}" alt="{{ event.title }}">
         <div class="card-text">
@@ -14,3 +17,4 @@
     </mat-card>
   </div>
 </div>
+<router-outlet></router-outlet>

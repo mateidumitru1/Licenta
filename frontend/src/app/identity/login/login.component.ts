@@ -1,7 +1,7 @@
 import {Component, OnInit, OnDestroy, HostListener} from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import {Router} from "@angular/router";
-import {LoginService} from "../service/login.service";
+import {LoginService} from "../../service/login.service";
 import {Observable, observable} from "rxjs";
 
 @Component({

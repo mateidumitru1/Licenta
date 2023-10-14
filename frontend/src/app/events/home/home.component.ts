@@ -12,7 +12,8 @@ export class HomeComponent implements OnInit{
   places: {
     id: string,
     name: string,
-    address: string
+    address: string,
+    imageUrl: string
   }[] = [];
 
   constructor(private http: HttpClient, private router: Router) {
@@ -25,11 +26,12 @@ export class HomeComponent implements OnInit{
         }
       }).subscribe((data: any) => {
         data.forEach(
-          (place: {id: string, name: string, address: string}) => {
+          (place: {id: string, name: string, address: string, imageUrl: string}) => {
             this.places.push({
               id: place.id,
               name: place.name,
-              address: place.address
+              address: place.address,
+              imageUrl: place.imageUrl
             });
           }
         )

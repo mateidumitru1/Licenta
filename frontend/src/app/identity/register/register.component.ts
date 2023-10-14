@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import {RegisterService} from "../service/register.service";
-import {EmailHandler} from "../handlers/email.handler";
+import {RegisterService} from "../../service/register.service";
+import {EmailHandler} from "../../handlers/email.handler";
 
 @Component({
   selector: 'app-register',

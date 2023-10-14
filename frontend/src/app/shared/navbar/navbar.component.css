@@ -4,6 +4,8 @@ a {
 }
 
 input {
+  width: 500px;
+  padding: 0 10px 0 15px;
   margin: 0 10px;
   font-size: 14px;
   border-radius: 5px;
@@ -12,6 +14,7 @@ input {
 
 input:focus {
   outline: none;
+  background-color: #f2f2f2;
 }
 
 input:active {

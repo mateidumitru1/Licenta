@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {EmailHandler} from "../handlers/email.handler";
+import {EmailHandler} from "../../handlers/email.handler";
 
 @Component({
   selector: 'app-forgot-password',
