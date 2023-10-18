@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {ActivatedRoute, Router} from "@angular/router";
+import {PlaceEventsService} from "./place-events.service";
 
 @Component({
   selector: 'app-place-events',
@@ -24,39 +25,12 @@ export class PlaceEventsComponent implements OnInit{
     imageUrl: string
   }[] = [];
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private route: ActivatedRoute, private router: Router, private placeEventsService: PlaceEventsService) {}
 
   ngOnInit(): void {
-    this.http.get('http://localhost:8080/api/events/place?placeName=' + this.router.url.split('/')[1],
-      {
-        headers: {
-          Authorization: 'Bearer ' + localStorage.getItem('token')
-        }
-      }).subscribe((events: any) => {
-      events.forEach((event: any) => {
-          this.events.push({
-            id: event.id,
-            title: event.title,
-            shortDescription: event.shortDescription,
-            description: event.description,
-            date: event.date,
-            place: {
-              id: event.place.id,
-              name: event.place.name,
-              address: event.place.address,
-              imageUrl: event.place.imageUrl
-            },
-            imageUrl: event.imageUrl
-          });
-          this.events.sort((a, b) => {
-            const dateA = new Date(a.date).getTime();
-            const dateB = new Date(b.date).getTime();
-            return dateA - dateB;
-          })
-
-        });
-    }, (error) => {
-        console.log(error);
+    this.route.params.subscribe(params => {
+      this.placeEventsService.fetchEvents(params['place']);
+      this.events = this.placeEventsService.getEvents();
     });
   }
 

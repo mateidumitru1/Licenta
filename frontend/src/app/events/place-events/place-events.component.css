@@ -1,4 +1,8 @@
-.place {
+.place-events-container {
+  z-index: 1;
+}
+
+.place-name {
   margin-top: 30px;
   margin-left: 50px;
   margin-bottom: 30px;

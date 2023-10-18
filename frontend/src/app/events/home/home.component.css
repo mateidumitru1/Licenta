@@ -1,18 +1,25 @@
 mat-card {
-  margin: 10px;
+  margin: 30px;
   width: 300px;
   height: 300px;
   display: inline-block;
   background-color: #fff;
-  box-shadow: 1px 1px 1px 1px #ccc;
+  box-shadow: 1px 1px 2px 1px #ccc;
 }
 
 mat-card:hover {
   cursor: pointer;
-  box-shadow: 3px 3px 5px 6px #ccc;
+  box-shadow: 2px 2px 4px 3px #ccc;
 }
 
 img {
   width: 100%;
   height: 100%;
+}
+
+.home-items {
+  margin: 20px 90px 50px 50px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 10px;
 }

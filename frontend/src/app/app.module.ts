@@ -24,6 +24,8 @@ import {MatCardModule} from "@angular/material/card";
 import { PlaceEventsComponent } from './events/place-events/place-events.component';
 import {EventComponent} from "./events/event/event.component";
 import {NgOptimizedImage} from "@angular/common";
+import { AccountMenuComponent } from './shared/navbar/account-menu/account-menu.component';
+import { PlacesMenuComponent } from './shared/navbar/places-menu/places-menu.component';
 
 
 
@@ -38,6 +40,8 @@ import {NgOptimizedImage} from "@angular/common";
     HomeComponent,
     NavbarComponent,
     PlaceEventsComponent,
+    AccountMenuComponent,
+    PlacesMenuComponent,
   ],
   imports: [
     BrowserModule,

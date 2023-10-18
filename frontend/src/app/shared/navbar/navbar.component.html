@@ -1,4 +1,18 @@
-<mat-toolbar color="primary">
-  <a routerLink="/login">Home</a>
-  <input placeholder="Search"/>
-</mat-toolbar>
+<div class="toolbar-container">
+  <mat-toolbar *ngIf="!isLoginOrRegisterPage()" color="primary">
+    <a class="navbar-brand" routerLink="/home">Home</a>
+    <div class="places-menu"
+      (mouseenter)="onMouseEnterPlaces(places)" (mouseleave)="onMouseLeavePlaces(places)">
+      <a #places>Places</a>
+      <app-places-menu *ngIf="getNavbarService(places).showPlacesMenu"></app-places-menu>
+    </div>
+    <span class="spacer"></span>
+    <input placeholder="Search"/>
+    <span class="spacer"></span>
+    <div class="account-menu"
+      (mouseenter)="onMouseEnterAccount(account)" (mouseleave)="onMouseLeaveAccount(account)">
+      <a href="" #account>Account</a>
+      <app-account-menu *ngIf="getNavbarService(account).showAccountMenu"></app-account-menu>
+    </div>
+  </mat-toolbar>
+</div>
