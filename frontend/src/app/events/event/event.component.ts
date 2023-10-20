@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
+import {EventService} from "./event.service";
 
 @Component({
   selector: 'app-event',
@@ -37,31 +37,13 @@ export class EventComponent implements OnInit {
     imageUrl: ''
   };
 
-  constructor(private http: HttpClient, private router: Router) { }
+  showMoreDetails: boolean = false;
+
+  constructor(private eventService: EventService, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.http.get('http://localhost:8080/api/events?title=' + this.router.url.split('/')[2],
-      {
-        headers: {
-          Authorization: 'Bearer ' + localStorage.getItem('token')
-        }
-      }).subscribe((data: any) => {
-        this.event = {
-          id: data.id,
-          title: data.title,
-          shortDescription: data.shortDescription,
-          description: data.description,
-          date: data.date,
-          place: {
-            id: data.place.id,
-            name: data.place.name,
-            address: data.place.address,
-            imageUrl: data.place.imageUrl
-          },
-          imageUrl: data.imageUrl
-        }
-    }, (error) => {
-        console.log(error);
+    this.eventService.fetchEvent(this.route.snapshot.params['eventId']).subscribe((event: any) => {
+      this.event = event;
     });
   }
 }

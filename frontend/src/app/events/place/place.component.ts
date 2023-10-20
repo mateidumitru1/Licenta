@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {ActivatedRoute, Router} from "@angular/router";
-import {PlaceEventsService} from "./place-events.service";
+import {PlaceService} from "./place.service";
 
 @Component({
   selector: 'app-place',
@@ -26,11 +26,11 @@ export class PlaceComponent implements OnInit{
       }];
   } | undefined;
 
-  constructor(private route: ActivatedRoute, private router: Router, private placeEventsService: PlaceEventsService) {}
+  constructor(private route: ActivatedRoute, private router: Router, private placeEventsService: PlaceService) {}
 
   ngOnInit(): void {
-    this.route.params.subscribe(params => {
-      this.placeEventsService.fetchEvents(params['place']).subscribe((place: any) => {
+    this.route.queryParams.subscribe(queryParams => {
+      this.placeEventsService.fetchEvents(queryParams['id']).subscribe((place: any) => {
         this.place = place;
       }, error => {
         console.log(error);
@@ -39,6 +39,6 @@ export class PlaceComponent implements OnInit{
   }
 
   onEventClick(event: any) {
-    this.router.navigate(['/' + event.place.name + '/' + event.title]);
+    this.router.navigate(['/' + this.place?.name + '/' + event.title + '/' + event.id]);
   }
 }

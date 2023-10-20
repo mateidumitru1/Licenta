@@ -2,6 +2,7 @@ a {
   padding: 15px 20px;
   color: white;
   text-decoration: none;
+  user-select: none;
 }
 
 .navbar-brand {
@@ -9,7 +10,7 @@ a {
 }
 
 input {
-  width: 500px;
+  width: 800px;
   padding: 0 10px 0 15px;
   margin: 0 10px;
   font-size: 14px;

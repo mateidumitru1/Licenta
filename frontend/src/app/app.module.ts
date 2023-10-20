@@ -21,11 +21,12 @@ import { NavbarComponent } from './shared/navbar/navbar.component';
 import {MatGridListModule} from "@angular/material/grid-list";
 import {MatListModule} from "@angular/material/list";
 import {MatCardModule} from "@angular/material/card";
-import { PlaceEventsComponent } from './events/place-events/place-events.component';
+import { PlaceComponent } from './events/place/place.component';
 import {EventComponent} from "./events/event/event.component";
 import {NgOptimizedImage} from "@angular/common";
 import { AccountMenuComponent } from './shared/navbar/account-menu/account-menu.component';
 import { PlacesMenuComponent } from './shared/navbar/places-menu/places-menu.component';
+import { TicketsComponent } from './shared/tickets/tickets.component';
 
 
 
@@ -39,9 +40,10 @@ import { PlacesMenuComponent } from './shared/navbar/places-menu/places-menu.com
     EventComponent,
     HomeComponent,
     NavbarComponent,
-    PlaceEventsComponent,
+    PlaceComponent,
     AccountMenuComponent,
     PlacesMenuComponent,
+    TicketsComponent,
   ],
   imports: [
     BrowserModule,

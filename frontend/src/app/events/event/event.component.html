@@ -1,5 +1,16 @@
 <div>
+  <div class="event-class">
+    <img src="{{ event.imageUrl }}">
+    <div class="event-info">
+      <h1><b>{{ event.title }}</b></h1>
+      <h2>{{ event.date }}</h2>
+      <h3 class="size-class">{{ event.place.name }}, {{ event.place.address }}</h3>
+      <p class="size-class">{{ event.shortDescription }}</p>
+      <p *ngIf="showMoreDetails" class="size-class">{{ event.description }}</p>
+      <a (click)="showMoreDetails = !showMoreDetails">Show more details</a>
+    </div>
+  </div>
   <div>
-    <h1>{{ event.title }}</h1>
+    <app-tickets></app-tickets>
   </div>
 </div>

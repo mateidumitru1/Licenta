@@ -21,12 +21,7 @@ export class PlacesMenuComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    this.http.get('http://localhost:8080/api/places',
-      {
-        headers: {
-          'Authorization': 'Bearer ' + localStorage.getItem('token')
-        }
-      }).subscribe((data: any) => {
+    this.http.get('http://localhost:8080/api/places').subscribe((data: any) => {
       data.forEach(
         (place: {id: string, name: string, address: string, imageUrl: string}) => {
           this.places.push({
@@ -44,6 +39,6 @@ export class PlacesMenuComponent implements OnInit{
 
   onPlaceClick(place: {id: string, name: string, address: string}) {
     this.navbarService.onClick();
-    this.router.navigate(['/' + place.name]);
+    this.router.navigate(['/' + place.name], {queryParams: {id: place.id}});
   }
 }
