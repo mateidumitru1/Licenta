@@ -1,8 +1,8 @@
 import {Component, OnInit, OnDestroy, HostListener} from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import {Router} from "@angular/router";
-import {LoginService} from "../../service/login.service";
-import {Observable, observable} from "rxjs";
+import {JwtHandler} from "../../handlers/jwt.handler";
+import {IdentityService} from "../identity.service";
 
 @Component({
   selector: 'app-login',
@@ -16,7 +16,7 @@ export class LoginComponent implements OnInit, OnDestroy{
   message: string = '';
   invalidLogin: boolean = false;
 
-  constructor(private http: HttpClient, private router: Router, private loginService: LoginService) { }
+  constructor(private http: HttpClient, private router: Router, private identityService: IdentityService, private jwtHandler: JwtHandler) { }
 
   ngOnInit(): void {
   }
@@ -38,14 +38,14 @@ export class LoginComponent implements OnInit, OnDestroy{
       this.message = 'Please enter username and password';
       this.timeout();
     } else {
-      this.http.post('http://localhost:8080/api/authenticate', {
-        username: this.username,
-        password: this.password
-      }).subscribe((response: any) => {
+      this.identityService.login(this.username, this.password).subscribe((response: any) => {
         localStorage.setItem('token', response.token);
-        localStorage.setItem('username', response.username);
-        localStorage.setItem('role', response.role);
-        this.router.navigate(['home']);
+        if(this.jwtHandler.getRole() === 'ADMIN') {
+          this.router.navigate(['admin-dashboard']);
+        }
+        else {
+          this.router.navigate(['home']);
+        }
       }, (error) => {
         this.invalidLogin = true;
         this.message = 'Invalid username or password';

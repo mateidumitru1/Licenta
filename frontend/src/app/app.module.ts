@@ -27,6 +27,8 @@ import {NgOptimizedImage} from "@angular/common";
 import { AccountMenuComponent } from './shared/navbar/account-menu/account-menu.component';
 import { PlacesMenuComponent } from './shared/navbar/places-menu/places-menu.component';
 import { TicketsComponent } from './shared/tickets/tickets.component';
+import { AdminDashboardComponent } from './events/admin-dashboard/admin-dashboard.component';
+import {MatTabsModule} from "@angular/material/tabs";
 
 
 
@@ -44,6 +46,7 @@ import { TicketsComponent } from './shared/tickets/tickets.component';
     AccountMenuComponent,
     PlacesMenuComponent,
     TicketsComponent,
+    AdminDashboardComponent,
   ],
   imports: [
     BrowserModule,
@@ -60,7 +63,8 @@ import { TicketsComponent } from './shared/tickets/tickets.component';
     MatGridListModule,
     MatListModule,
     MatCardModule,
-    NgOptimizedImage
+    NgOptimizedImage,
+    MatTabsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

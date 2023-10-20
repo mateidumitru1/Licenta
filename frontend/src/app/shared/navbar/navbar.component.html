@@ -9,10 +9,7 @@
     <span class="spacer"></span>
     <input placeholder="Search"/>
     <span class="spacer"></span>
-    <div class="account-menu"
-      (mouseenter)="onMouseEnterAccount(account)" (mouseleave)="onMouseLeaveAccount(account)">
-      <a href="" #account>Account</a>
-      <app-account-menu *ngIf="getNavbarService(account).showAccountMenu"></app-account-menu>
-    </div>
+    <button *ngIf="getJwtHandler().getRole() == 'ADMIN'" mat-button routerLink="admin-dashboard">Admin Dashboard</button>
+    <app-account-menu></app-account-menu>
   </mat-toolbar>
 </div>

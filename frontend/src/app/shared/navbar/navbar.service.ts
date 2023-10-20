@@ -5,21 +5,11 @@ import {Injectable} from "@angular/core";
 })
 export class NavbarService {
 
-  showAccountMenu: boolean = false;
   showPlacesMenu: boolean = false;
 
   placeRef: HTMLAnchorElement | undefined;
 
   constructor() { }
-
-  onMouseEnterAccount() {
-    this.showAccountMenu = true;
-  }
-
-  onMouseLeaveAccount() {
-    this.showAccountMenu = false;
-  }
-
   onMouseEnterPlaces(place: HTMLAnchorElement) {
     this.placeRef = place;
     this.showPlacesMenu = true;
@@ -32,8 +22,6 @@ export class NavbarService {
   onClick() {
     // @ts-ignore
     this.placeRef.style.boxShadow = 'none';
-    this.showAccountMenu = false;
     this.showPlacesMenu = false;
   }
-
 }

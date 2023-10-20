@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import {RegisterService} from "../../service/register.service";
 import {EmailHandler} from "../../handlers/email.handler";
+import {IdentityService} from "../identity.service";
 
 @Component({
   selector: 'app-register',
@@ -19,7 +19,7 @@ export class RegisterComponent{
   errorMessage: string = '';
   invalidRegister: boolean = false;
 
-  constructor(private registerService: RegisterService, private emailHandler: EmailHandler) { }
+  constructor(private identityService: IdentityService, private emailHandler: EmailHandler) { }
 
   onRegister(): void {
 
@@ -27,7 +27,7 @@ export class RegisterComponent{
       return;
     }
 
-    this.registerService.register(this.firstName, this.lastName, this.username, this.password, this.email);
+    this.identityService.register(this.firstName, this.lastName, this.username, this.password, this.email);
   }
 
   checkRegistration(): boolean {

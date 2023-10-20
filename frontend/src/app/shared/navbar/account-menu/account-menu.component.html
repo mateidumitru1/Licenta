@@ -1,6 +1,16 @@
-<div class="account-dropdown">
-  <a routerLink="/login" (click)="getNavbarService().onClick()">Login</a>
-  <br>
-  <a routerLink="/register" (click)="getNavbarService().onClick()">Register</a>
-</div>
+<button mat-button [matMenuTriggerFor]="menu">
+  <a>{{ accountMenuText }}</a>
+</button>
+<mat-menu #menu="matMenu" class="account-dropdown">
+  <div *ngIf="!getIdentityService().isLoggedIn()" class="guest">
+    <button mat-menu-item routerLink="/login" (click)="getNavbarService().onClick()">Login</button>
+    <br>
+    <button mat-menu-item routerLink="/register" (click)="getNavbarService().onClick()">Register</button>
+  </div>
+  <div *ngIf="getIdentityService().isLoggedIn()">
+    <button mat-menu-item (click)="getNavbarService().onClick()">Account</button>
+    <br>
+    <button mat-menu-item (click)="logout()">Logout</button>
+  </div>
+</mat-menu>
 

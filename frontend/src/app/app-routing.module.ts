@@ -6,15 +6,18 @@ import {ForgotPasswordComponent} from "./identity/forgot-password/forgot-passwor
 import {HomeComponent} from "./events/home/home.component";
 import {PlaceComponent} from "./events/place/place.component";
 import {EventComponent} from "./events/event/event.component";
+import {AdminDashboardComponent} from "./events/admin-dashboard/admin-dashboard.component";
 
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: 'home', pathMatch: 'full', component: HomeComponent },
-  { path: '', redirectTo: '/login', pathMatch: 'full'},
+  { path: 'admin-dashboard', component: AdminDashboardComponent },
   { path: ':place' , component: PlaceComponent },
-  { path: ':place/:eventName/:eventId', component: EventComponent }
+  { path: ':place/:eventName/:eventId', component: EventComponent },
+  { path: '', redirectTo: '/home', pathMatch: 'full'},
+
 ];
 
 @NgModule({

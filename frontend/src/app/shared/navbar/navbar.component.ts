@@ -1,6 +1,7 @@
 import {Component, ElementRef, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {NavbarService} from "./navbar.service";
+import {JwtHandler} from "../../handlers/jwt.handler";
 
 @Component({
   selector: 'app-navbar',
@@ -9,7 +10,7 @@ import {NavbarService} from "./navbar.service";
 })
 export class NavbarComponent implements OnInit{
 
-  constructor(private route: ActivatedRoute, private navbarService: NavbarService) {
+  constructor(private route: ActivatedRoute, private navbarService: NavbarService, private jwtHandler: JwtHandler) {
   }
 
   ngOnInit(): void {
@@ -18,16 +19,6 @@ export class NavbarComponent implements OnInit{
   isLoginOrRegisterPage() {
     const currentRouter = this.route.snapshot.firstChild?.routeConfig?.path;
     return currentRouter === 'login' || currentRouter === 'register' || currentRouter === 'forgot-password';
-  }
-
-  onMouseEnterAccount(account: HTMLAnchorElement) {
-    this.navbarService.onMouseEnterAccount();
-    account.style.boxShadow = '0 0 10px 0 rgba(0, 0, 0, 0.5)';
-  }
-
-  onMouseLeaveAccount(account: HTMLAnchorElement) {
-    this.navbarService.onMouseLeaveAccount();
-    account.style.boxShadow = 'none';
   }
 
   onMouseEnterPlaces(places: HTMLAnchorElement) {
@@ -42,5 +33,9 @@ export class NavbarComponent implements OnInit{
 
   getNavbarService(places: HTMLAnchorElement) {
     return this.navbarService;
+  }
+
+  getJwtHandler() {
+    return this.jwtHandler;
   }
 }

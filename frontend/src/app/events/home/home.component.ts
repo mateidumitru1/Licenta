@@ -13,7 +13,7 @@ export class HomeComponent implements OnInit{
   constructor(private http: HttpClient, private router: Router) {
   }
   ngOnInit(): void {
-
+    console.log(localStorage.getItem('token'));
   }
 
 
