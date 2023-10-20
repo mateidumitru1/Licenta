@@ -1,5 +1,6 @@
 package com.matei.backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,6 +26,8 @@ public class Event {
     private String shortDescription;
     private String description;
     private String imageUrl;
+
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "place_id", referencedColumnName = "id")
     private Place place;

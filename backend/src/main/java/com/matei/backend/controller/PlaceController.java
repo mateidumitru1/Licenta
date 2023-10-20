@@ -27,9 +27,9 @@ public class PlaceController {
         return ResponseEntity.ok(placeService.getAllPlaces());
     }
 
-    @GetMapping("/{name}")
-    public ResponseEntity<PlaceResponseDto> getPlaceByName(@PathVariable String name) {
-        return ResponseEntity.ok(placeService.getPlaceByName(name));
+    @GetMapping("/{id}")
+    public ResponseEntity<PlaceResponseDto> getPlaceById(@PathVariable String id) {
+        return ResponseEntity.ok(placeService.getPlaceById(UUID.fromString(id)));
     }
 
     @DeleteMapping("/{id}")

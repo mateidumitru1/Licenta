@@ -5,11 +5,14 @@ import com.matei.backend.dto.request.PlaceRequestDto;
 import com.matei.backend.dto.response.EventResponseDto;
 import com.matei.backend.entity.Event;
 import com.matei.backend.entity.Place;
+import com.matei.backend.exception.EventNotFoundException;
 import com.matei.backend.repository.EventRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -24,7 +27,7 @@ public class EventService {
                 .date(eventRequestDto.getDate())
                 .shortDescription(eventRequestDto.getShortDescription())
                 .description(eventRequestDto.getDescription())
-                .place(placeService.getPlaceById(eventRequestDto.getPlaceId()).map(
+                .place(Optional.of(placeService.getPlaceById(eventRequestDto.getPlaceId())).map(
                         placeResponseDto -> Place.builder()
                                 .id(placeResponseDto.getId())
                                 .name(placeResponseDto.getName())
@@ -45,7 +48,9 @@ public class EventService {
     }
 
     public EventResponseDto getEventById(UUID id) {
-        var event = eventRepository.findById(id).orElseThrow();
+        var event = eventRepository.findById(id).orElseThrow(
+                () -> new EventNotFoundException("Event not found")
+        );
 
         return EventResponseDto.builder()
                 .id(event.getId())
@@ -92,10 +97,12 @@ public class EventService {
                 .toList();
     }
 
-    public EventResponseDto getEventListByTitle(String title) {
+    public EventResponseDto getEventByTitle(String title) {
         var event = eventRepository
                 .findByTitle(title)
-                .orElseThrow();
+                .orElseThrow(
+                        () -> new EventNotFoundException("Event not found")
+                );
 
         return EventResponseDto.builder()
                 .id(event.getId())
@@ -115,7 +122,7 @@ public class EventService {
                 .date(updatedEvent.getDate())
                 .shortDescription(updatedEvent.getShortDescription())
                 .description(updatedEvent.getDescription())
-                .place(placeService.getPlaceById(updatedEvent.getPlaceId()).map(
+                .place(Optional.of(placeService.getPlaceById(updatedEvent.getPlaceId())).map(
                         placeResponseDto -> Place.builder()
                                 .id(placeResponseDto.getId())
                                 .name(placeResponseDto.getName())

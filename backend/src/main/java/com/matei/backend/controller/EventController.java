@@ -2,6 +2,7 @@ package com.matei.backend.controller;
 
 import com.matei.backend.dto.request.EventRequestDto;
 import com.matei.backend.dto.response.EventResponseDto;
+import com.matei.backend.exception.EventNotFoundException;
 import com.matei.backend.service.EventService;
 import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
@@ -33,14 +34,22 @@ public class EventController {
         return ResponseEntity.ok(eventService.getEventListByPlace(placeName));
     }
 
-    @GetMapping
-    public ResponseEntity<EventResponseDto> getEventByTitle(@RequestParam("title") String title) {
-        return ResponseEntity.ok(eventService.getEventListByTitle(title));
+    @GetMapping("/{title}")
+    public ResponseEntity<EventResponseDto> getEventByTitle(@PathVariable("title") String title) {
+        try{
+            return ResponseEntity.ok(eventService.getEventByTitle(title));
+        } catch (EventNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<EventResponseDto> getEventById(@PathVariable("id") String id) {
-        return ResponseEntity.ok(eventService.getEventById(UUID.fromString(id)));
+    @GetMapping
+    public ResponseEntity<EventResponseDto> getEventById(@PathParam("id") String id) {
+        try{
+            return ResponseEntity.ok(eventService.getEventById(UUID.fromString(id)));
+        } catch (EventNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PutMapping()

@@ -1,6 +1,7 @@
 package com.matei.backend.service;
 
 import com.matei.backend.dto.request.PlaceRequestDto;
+import com.matei.backend.dto.response.EventResponseDto;
 import com.matei.backend.dto.response.PlaceResponseDto;
 import com.matei.backend.entity.Place;
 import com.matei.backend.exception.PlaceNotFoundException;
@@ -46,24 +47,22 @@ public class PlaceService {
                 .toList();
     }
 
-    public Optional<PlaceResponseDto> getPlaceById(UUID id) {
-        var place = placeRepository.findById(id).orElseThrow();
-
-        return Optional.of(PlaceResponseDto.builder()
-                .id(place.getId())
-                .name(place.getName())
-                .address(place.getAddress())
-                .build());
-    }
-
-    public PlaceResponseDto getPlaceByName(String name) {
-        var place = placeRepository.findByName(name).orElseThrow(() -> new PlaceNotFoundException("Place not found"));
+    public PlaceResponseDto getPlaceById(UUID id) {
+        var place = placeRepository.findById(id).orElseThrow(() -> new PlaceNotFoundException("Place not found"));
 
         return PlaceResponseDto.builder()
                 .id(place.getId())
                 .name(place.getName())
                 .address(place.getAddress())
                 .imageUrl(place.getImageUrl())
+                .events(place.getEvents().stream().map(event -> EventResponseDto.builder()
+                        .id(event.getId())
+                        .title(event.getTitle())
+                        .description(event.getDescription())
+                        .shortDescription(event.getShortDescription())
+                        .date(event.getDate())
+                        .imageUrl(event.getImageUrl())
+                        .build()).toList())
                 .build();
     }
 

@@ -1,5 +1,6 @@
 package com.matei.backend.entity;
 
+import ch.qos.logback.classic.spi.LoggingEventVO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -27,4 +28,8 @@ public class Place {
     @JsonIgnore
     @OneToMany(mappedBy = "place", fetch = FetchType.EAGER, cascade = CascadeType.MERGE, orphanRemoval = true)
     private List<Event> eventList;
+
+    public List<Event> getEvents() {
+        return eventList;
+    }
 }

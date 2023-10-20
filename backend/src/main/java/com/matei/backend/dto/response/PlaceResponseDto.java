@@ -18,5 +18,5 @@ public class PlaceResponseDto {
     private String name;
     private String address;
     private String imageUrl;
-    private List<Event> events;
+    private List<EventResponseDto> events;
 }
