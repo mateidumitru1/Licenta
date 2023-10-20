@@ -7,11 +7,14 @@ import com.matei.backend.dto.response.RegisterResponseDto;
 import com.matei.backend.exception.InvalidCredentialsException;
 import com.matei.backend.exception.UserAlreadyExistsException;
 import com.matei.backend.service.AuthenticationService;
+import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -36,5 +39,11 @@ public class AuthenticationController {
         } catch (InvalidCredentialsException exception) {
             return new ResponseEntity<>(exception.getMessage(), HttpStatus.UNAUTHORIZED);
         }
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(@RequestHeader("Authorization") String token) {
+        authenticationService.logout(token);
+        return ResponseEntity.ok().build();
     }
 }

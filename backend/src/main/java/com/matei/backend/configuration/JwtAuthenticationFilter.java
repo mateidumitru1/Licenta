@@ -1,5 +1,6 @@
 package com.matei.backend.configuration;
 
+import com.matei.backend.entity.User;
 import com.matei.backend.service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -39,15 +40,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         String token = authorizationHeader.substring(7);
+
+        if(jwtService.isTokenBlacklisted(token)) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         String username = jwtService.extractUsername(token);
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
-            if(jwtService.isTokenValid(token, userDetails)) {
+            User user = (User) this.userDetailsService.loadUserByUsername(username);
+            if(jwtService.isTokenValid(token, user)) {
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                        userDetails,
+                        user,
                         null,
-                        userDetails.getAuthorities()
+                        user.getAuthorities()
                 );
                 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 

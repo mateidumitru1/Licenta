@@ -4,10 +4,12 @@ import com.matei.backend.dto.request.AuthenticationRequestDto;
 import com.matei.backend.dto.request.RegisterRequestDto;
 import com.matei.backend.dto.response.AuthenticationResponseDto;
 import com.matei.backend.dto.response.RegisterResponseDto;
+import com.matei.backend.entity.BlackListedToken;
 import com.matei.backend.entity.Role;
 import com.matei.backend.entity.User;
 import com.matei.backend.exception.InvalidCredentialsException;
 import com.matei.backend.exception.UserAlreadyExistsException;
+import com.matei.backend.repository.BlackListedTokenRepository;
 import com.matei.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,14 +17,19 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
 
     private final UserRepository userRepository;
-    private final JwtService jwtService;
+
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
+
+    private final JwtService jwtService;
+
 
     public RegisterResponseDto register(RegisterRequestDto request) {
 
@@ -58,7 +65,6 @@ public class AuthenticationService {
             throw new InvalidCredentialsException("Invalid username or password");
         }
 
-
         var user = userRepository.findByUsername(request.getUsername()).orElseThrow();
 
         var jwtToken = jwtService.generateToken(user);
@@ -66,5 +72,10 @@ public class AuthenticationService {
         return AuthenticationResponseDto.builder()
                 .token(jwtToken)
                 .build();
+    }
+
+    public void logout(String token) {
+
+        jwtService.addToBlackList(token);
     }
 }
