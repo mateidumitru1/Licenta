@@ -31,7 +31,7 @@ public class EventController {
 
     @GetMapping("/place")
     public ResponseEntity<List<EventResponseDto>> getEventListByPlace(@RequestParam("placeName") String placeName) {
-        return ResponseEntity.ok(eventService.getEventListByPlace(placeName));
+        return ResponseEntity.ok(eventService.getEventListByLocation(placeName));
     }
 
     @GetMapping("/{title}")

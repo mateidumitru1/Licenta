@@ -1,6 +1,5 @@
 package com.matei.backend.dto.request;
 
-import com.matei.backend.entity.Place;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,5 +18,5 @@ public class EventRequestDto {
     private LocalDate date;
     private String shortDescription;
     private String description;
-    private UUID placeId;
+    private UUID locationId;
 }

@@ -1,6 +1,5 @@
-package com.matei.backend.dto.request;
+package com.matei.backend.dto.response;
 
-import com.matei.backend.entity.Event;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,8 +12,10 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PlaceRequestDto {
+public class LocationResponseDto {
     private UUID id;
     private String name;
     private String address;
+    private String imageUrl;
+    private List<EventResponseDto> events;
 }

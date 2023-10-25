@@ -1,16 +1,14 @@
 package com.matei.backend.service;
 
 import com.matei.backend.dto.request.EventRequestDto;
-import com.matei.backend.dto.request.PlaceRequestDto;
 import com.matei.backend.dto.response.EventResponseDto;
 import com.matei.backend.entity.Event;
-import com.matei.backend.entity.Place;
+import com.matei.backend.entity.Location;
 import com.matei.backend.exception.EventNotFoundException;
 import com.matei.backend.repository.EventRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -19,7 +17,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class EventService {
     private final EventRepository eventRepository;
-    private final PlaceService placeService;
+    private final LocationService locationService;
 
     public EventResponseDto createEvent(EventRequestDto eventRequestDto) {
         var event = eventRepository.save(Event.builder()
@@ -27,11 +25,11 @@ public class EventService {
                 .date(eventRequestDto.getDate())
                 .shortDescription(eventRequestDto.getShortDescription())
                 .description(eventRequestDto.getDescription())
-                .place(Optional.of(placeService.getPlaceById(eventRequestDto.getPlaceId())).map(
-                        placeResponseDto -> Place.builder()
-                                .id(placeResponseDto.getId())
-                                .name(placeResponseDto.getName())
-                                .address(placeResponseDto.getAddress())
+                .location(Optional.of(locationService.getLocationById(eventRequestDto.getLocationId())).map(
+                        locationResponseDto -> Location.builder()
+                                .id(locationResponseDto.getId())
+                                .name(locationResponseDto.getName())
+                                .address(locationResponseDto.getAddress())
                                 .build())
                         .orElseThrow())
                 .build());
@@ -42,7 +40,7 @@ public class EventService {
                 .date(event.getDate())
                 .shortDescription(event.getShortDescription())
                 .description(event.getDescription())
-                .place(event.getPlace())
+                .location(event.getLocation())
                 .imageUrl(event.getImageUrl())
                 .build();
     }
@@ -58,14 +56,14 @@ public class EventService {
                 .date(event.getDate())
                 .shortDescription(event.getShortDescription())
                 .description(event.getDescription())
-                .place(event.getPlace())
+                .location(event.getLocation())
                 .imageUrl(event.getImageUrl())
                 .build();
     }
 
-    public List<EventResponseDto> getEventListByPlace(String placeName) {
+    public List<EventResponseDto> getEventListByLocation(String locationName) {
         var eventList = eventRepository
-                .findByPlaceName(placeName)
+                .findByLocationName(locationName)
                 .orElseThrow();
 
         return eventList.stream()
@@ -75,7 +73,7 @@ public class EventService {
                         .date(event.getDate())
                         .shortDescription(event.getShortDescription())
                         .description(event.getDescription())
-                        .place(event.getPlace())
+                        .location(event.getLocation())
                         .imageUrl(event.getImageUrl())
                         .build())
                 .toList();
@@ -91,7 +89,7 @@ public class EventService {
                         .date(event.getDate())
                         .shortDescription(event.getShortDescription())
                         .description(event.getDescription())
-                        .place(event.getPlace())
+                        .location(event.getLocation())
                         .imageUrl(event.getImageUrl())
                         .build())
                 .toList();
@@ -110,7 +108,7 @@ public class EventService {
                 .date(event.getDate())
                 .shortDescription(event.getShortDescription())
                 .description(event.getDescription())
-                .place(event.getPlace())
+                .location(event.getLocation())
                 .imageUrl(event.getImageUrl())
                 .build();
     }
@@ -122,11 +120,11 @@ public class EventService {
                 .date(updatedEvent.getDate())
                 .shortDescription(updatedEvent.getShortDescription())
                 .description(updatedEvent.getDescription())
-                .place(Optional.of(placeService.getPlaceById(updatedEvent.getPlaceId())).map(
-                        placeResponseDto -> Place.builder()
-                                .id(placeResponseDto.getId())
-                                .name(placeResponseDto.getName())
-                                .address(placeResponseDto.getAddress())
+                .location(Optional.of(locationService.getLocationById(updatedEvent.getLocationId())).map(
+                        locationResponseDto -> Location.builder()
+                                .id(locationResponseDto.getId())
+                                .name(locationResponseDto.getName())
+                                .address(locationResponseDto.getAddress())
                                 .build())
                         .orElseThrow())
                 .build());
@@ -137,7 +135,7 @@ public class EventService {
                 .date(event.getDate())
                 .shortDescription(event.getShortDescription())
                 .description(event.getDescription())
-                .place(event.getPlace())
+                .location(event.getLocation())
                 .build();
     }
 

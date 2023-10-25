@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -29,6 +28,6 @@ public class Event {
 
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "place_id", referencedColumnName = "id")
-    private Place place;
+    @JoinColumn(name = "location_id", referencedColumnName = "id")
+    private Location location;
 }

@@ -1,5 +1,5 @@
-<div class="places-dropdown">
-  <div *ngFor="let place of places">
+<div class="locations-dropdown">
+  <div *ngFor="let place of locations">
     <mat-card (click)="onPlaceClick(place)">
       <img src="{{ place.imageUrl }}" alt="{{ place.name }}">
       <mat-card-subtitle>{{ place.name }}</mat-card-subtitle>

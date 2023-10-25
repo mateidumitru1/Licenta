@@ -15,7 +15,7 @@ export class EventComponent implements OnInit {
     shortDescription: string;
     description: string;
     date: string;
-    place: {
+    location: {
       id: string;
       name: string;
       address: string;
@@ -28,7 +28,7 @@ export class EventComponent implements OnInit {
     shortDescription: '',
     description: '',
     date: '',
-    place: {
+    location: {
       id: '',
       name: '',
       address: '',
@@ -44,6 +44,8 @@ export class EventComponent implements OnInit {
   ngOnInit(): void {
     this.eventService.fetchEvent(this.route.snapshot.params['eventId']).subscribe((event: any) => {
       this.event = event;
+    }, error => {
+      this.router.navigate(['/page-not-found']);
     });
   }
 }

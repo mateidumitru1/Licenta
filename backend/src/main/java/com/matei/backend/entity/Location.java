@@ -1,6 +1,5 @@
 package com.matei.backend.entity;
 
-import ch.qos.logback.classic.spi.LoggingEventVO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -16,8 +15,8 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "places")
-public class Place {
+@Table(name = "locations")
+public class Location {
     @Id
     @GeneratedValue(generator = "uuid4")
     private UUID id;
@@ -26,7 +25,7 @@ public class Place {
     private String imageUrl;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "place", fetch = FetchType.EAGER, cascade = CascadeType.MERGE, orphanRemoval = true)
+    @OneToMany(mappedBy = "location", fetch = FetchType.EAGER, cascade = CascadeType.MERGE, orphanRemoval = true)
     private List<Event> eventList;
 
     public List<Event> getEvents() {

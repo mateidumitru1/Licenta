@@ -2,9 +2,9 @@ package com.matei.backend.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.matei.backend.entity.Event;
-import com.matei.backend.entity.Place;
+import com.matei.backend.entity.Location;
 import com.matei.backend.repository.EventRepository;
-import com.matei.backend.repository.PlaceRepository;
+import com.matei.backend.repository.LocationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
@@ -16,37 +16,35 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 public class DatabaseInitService {
-    private final PlaceRepository placeRepository;
+    private final LocationRepository locationRepository;
     private final EventRepository eventRepository;
     private final ImageService imageService;
 
     private final ObjectMapper objectMapper;
 
-    public void addPlaceAndEventData() {
+    public void addLocationAndEventData() {
         try {
-            ClassPathResource jsonResource = new ClassPathResource("places.json");
-            File placesJson = jsonResource.getFile();
-            Place[] places = objectMapper.readValue(placesJson, Place[].class);
+            ClassPathResource jsonResource = new ClassPathResource("locations.json");
+            File locationJson = jsonResource.getFile();
+            Location[] locations = objectMapper.readValue(locationJson, Location[].class);
 
-
-
-            List<Place> placeList = Arrays.stream(places).toList();
-            placeList.forEach(place -> {
+            List<Location> locationList = Arrays.stream(locations).toList();
+            locationList.forEach(location -> {
                 try {
-                    place.setImageUrl(imageService.saveImage("place-images", place.getName()));
+                    location.setImageUrl(imageService.saveImage("location-images", location.getName()));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             });
-            placeRepository.saveAll(placeList);
+            locationRepository.saveAll(locationList);
 
             File eventsJson = ResourceUtils.getFile("classpath:events.json");
             Event[] events = objectMapper.readValue(eventsJson, Event[].class);
 
             List<Event> eventList = Arrays.stream(events).map(event -> {
-                event.setPlace(placeList
+                event.setLocation(locationList
                         .stream()
-                        .filter(place -> place.getName().equals(event.getPlace().getName()))
+                        .filter(location -> location.getName().equals(event.getLocation().getName()))
                         .findFirst()
                         .orElseThrow());
                 return event;

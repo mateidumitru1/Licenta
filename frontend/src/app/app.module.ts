@@ -21,14 +21,16 @@ import { NavbarComponent } from './shared/navbar/navbar.component';
 import {MatGridListModule} from "@angular/material/grid-list";
 import {MatListModule} from "@angular/material/list";
 import {MatCardModule} from "@angular/material/card";
-import { PlaceComponent } from './events/place/place.component';
+import { LocationComponent } from './events/location/location.component';
 import {EventComponent} from "./events/event/event.component";
 import {NgOptimizedImage} from "@angular/common";
 import { AccountMenuComponent } from './shared/navbar/account-menu/account-menu.component';
-import { PlacesMenuComponent } from './shared/navbar/places-menu/places-menu.component';
+import { LocationsMenuComponent } from './shared/navbar/locations-menu/locations-menu.component';
 import { TicketsComponent } from './shared/tickets/tickets.component';
 import { AdminDashboardComponent } from './events/admin-dashboard/admin-dashboard.component';
 import {MatTabsModule} from "@angular/material/tabs";
+import {MatSidenavModule} from "@angular/material/sidenav";
+import { PageNotFoundComponent } from './shared/page-not-found/page-not-found.component';
 
 
 
@@ -42,30 +44,32 @@ import {MatTabsModule} from "@angular/material/tabs";
     EventComponent,
     HomeComponent,
     NavbarComponent,
-    PlaceComponent,
+    LocationComponent,
     AccountMenuComponent,
-    PlacesMenuComponent,
+    LocationsMenuComponent,
     TicketsComponent,
     AdminDashboardComponent,
+    PageNotFoundComponent,
   ],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    FormsModule,
-    HttpClientModule,
-    AppRoutingModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatIconModule,
-    MatToolbarModule,
-    MatMenuModule,
-    MatGridListModule,
-    MatListModule,
-    MatCardModule,
-    NgOptimizedImage,
-    MatTabsModule
-  ],
+    imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        FormsModule,
+        HttpClientModule,
+        AppRoutingModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatButtonModule,
+        MatIconModule,
+        MatToolbarModule,
+        MatMenuModule,
+        MatGridListModule,
+        MatListModule,
+        MatCardModule,
+        NgOptimizedImage,
+        MatTabsModule,
+        MatSidenavModule
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })

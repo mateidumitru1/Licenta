@@ -1,9 +1,9 @@
-<div class="place-events-container">
-  <h1 class="place-name"><b>{{ place?.name }}</b></h1>
+<div class="location-events-container">
+  <h1 class="location-name"><b>{{ location?.name }}</b></h1>
   <div>
-    <img src="{{ place?.imageUrl }}" alt="{{ place?.name }}">
+    <img src="{{ location?.imageUrl }}" alt="{{ location?.name }}">
   </div>
-  <div *ngFor="let event of place?.events">
+  <div *ngFor="let event of location?.events">
     <mat-card (click)="onEventClick(event)" routerLinkActive="active">
       <div class="card-content">
         <img mat-card-image src="{{ event.imageUrl }}" alt="{{ event.title }}">

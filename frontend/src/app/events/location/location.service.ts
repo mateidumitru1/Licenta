@@ -4,11 +4,11 @@ import {Router} from "@angular/router";
 import {Observable} from "rxjs";
 
 @Injectable({providedIn: 'root'})
-export class PlaceService {
+export class LocationService {
 
   constructor(private http: HttpClient) {}
 
   fetchEvents(id: string): Observable<any> {
-    return this.http.get('http://localhost:8080/api/places/' + id);
+    return this.http.get('http://localhost:8080/api/locations/' + id);
   }
 }

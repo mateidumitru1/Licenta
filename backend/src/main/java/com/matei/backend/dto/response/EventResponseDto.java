@@ -1,6 +1,6 @@
 package com.matei.backend.dto.response;
 
-import com.matei.backend.entity.Place;
+import com.matei.backend.entity.Location;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,6 +19,6 @@ public class EventResponseDto {
     private LocalDate date;
     private String shortDescription;
     private String description;
-    private Place place;
+    private Location location;
     private String imageUrl;
 }

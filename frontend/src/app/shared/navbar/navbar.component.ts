@@ -16,9 +16,10 @@ export class NavbarComponent implements OnInit{
   ngOnInit(): void {
   }
 
-  isLoginOrRegisterPage() {
+  shouldHide() {
     const currentRouter = this.route.snapshot.firstChild?.routeConfig?.path;
-    return currentRouter === 'login' || currentRouter === 'register' || currentRouter === 'forgot-password';
+    return currentRouter === 'login' || currentRouter === 'register' || currentRouter === 'forgot-password'
+      || currentRouter === 'admin-dashboard' || currentRouter === 'page-not-found';
   }
 
   onMouseEnterPlaces(places: HTMLAnchorElement) {

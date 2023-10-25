@@ -1,10 +1,10 @@
 <div class="toolbar-container">
-  <mat-toolbar *ngIf="!isLoginOrRegisterPage()" color="primary">
+  <mat-toolbar *ngIf="!shouldHide()" color="primary">
     <a class="navbar-brand" routerLink="/home">Home</a>
-    <div class="places-menu"
-      (mouseenter)="onMouseEnterPlaces(places)" (mouseleave)="onMouseLeavePlaces(places)">
-      <a #places>Places</a>
-      <app-places-menu *ngIf="getNavbarService(places).showPlacesMenu"></app-places-menu>
+    <div class="locations-menu"
+      (mouseenter)="onMouseEnterPlaces(locations)" (mouseleave)="onMouseLeavePlaces(locations)">
+      <a #locations>Places</a>
+      <app-locations-menu *ngIf="getNavbarService(locations).showPlacesMenu"></app-locations-menu>
     </div>
     <span class="spacer"></span>
     <input placeholder="Search"/>

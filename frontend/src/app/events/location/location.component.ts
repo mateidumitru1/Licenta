@@ -1,16 +1,15 @@
 import {Component, OnInit} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
 import {ActivatedRoute, Router} from "@angular/router";
-import {PlaceService} from "./place.service";
+import {LocationService} from "./location.service";
 
 @Component({
-  selector: 'app-place',
-  templateUrl: './place.component.html',
-  styleUrls: ['./place.component.css']
+  selector: 'app-location',
+  templateUrl: './location.component.html',
+  styleUrls: ['./location.component.css']
 })
-export class PlaceComponent implements OnInit{
+export class LocationComponent implements OnInit{
 
-  place: {
+  location: {
     id: string;
     name: string;
     address: string;
@@ -26,19 +25,19 @@ export class PlaceComponent implements OnInit{
       }];
   } | undefined;
 
-  constructor(private route: ActivatedRoute, private router: Router, private placeEventsService: PlaceService) {}
+  constructor(private route: ActivatedRoute, private router: Router, private placeEventsService: LocationService) {}
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(queryParams => {
       this.placeEventsService.fetchEvents(queryParams['id']).subscribe((place: any) => {
-        this.place = place;
+        this.location = place;
       }, error => {
-        console.log(error);
+        this.router.navigate(['/page-not-found']);
       });
     });
   }
 
   onEventClick(event: any) {
-    this.router.navigate(['/' + this.place?.name + '/' + event.title + '/' + event.id]);
+    this.router.navigate(['/' + this.location?.name + '/' + event.title + '/' + event.id]);
   }
 }

@@ -18,7 +18,7 @@ public class DatabaseInitController {
 
      @PostMapping
      public ResponseEntity<Void> addPlaceAndEventData() {
-         databaseInitService.addPlaceAndEventData();
+         databaseInitService.addLocationAndEventData();
          return ResponseEntity.ok().build();
      }
 }
