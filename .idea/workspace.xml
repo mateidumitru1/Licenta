@@ -5,51 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0ff3fa00-627c-435d-82b1-4a1abb5b20ca" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/controller/UserController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/dto/response/UserResponseDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/UserService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/admin-manage.service.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/configuration/SecurityConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/configuration/SecurityConfiguration.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/controller/DatabaseInitController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/controller/DatabaseInitController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/controller/EventController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/controller/EventController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/controller/PlaceController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/controller/LocationController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/dto/request/EventRequestDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/dto/request/EventRequestDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/dto/request/PlaceRequestDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/dto/request/LocationRequestDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/dto/response/EventResponseDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/dto/response/EventResponseDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/dto/response/PlaceResponseDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/dto/response/LocationResponseDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/entity/Event.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/entity/Event.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/entity/Place.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/entity/Location.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/exception/PlaceNotFoundException.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/exception/LocationNotFoundException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/handlers/EventPlaceHandler.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/repository/EventRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/repository/EventRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/repository/PlaceRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/repository/LocationRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/DatabaseInitService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/DatabaseInitService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/EventService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/EventService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/PlaceService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/LocationService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/events.json" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/resources/events.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/place-images/Arenele Romane.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/resources/location-images/Arenele Romane.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/place-images/Club 99.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/resources/location-images/Club 99.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/place-images/Club Fabrica.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/resources/location-images/Club Fabrica.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/place-images/Expirat Halele Carol.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/resources/location-images/Expirat Halele Carol.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/place-images/Hard Rock Cafe.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/resources/location-images/Hard Rock Cafe.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/place-images/Quantic.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/resources/location-images/Quantic.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/place-images/Romexpo.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/resources/location-images/Romexpo.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/place-images/Sala Palatului.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/resources/location-images/Sala Palatului.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/place-images/The Fool.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/resources/location-images/The Fool.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/places.json" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/resources/locations.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/app/app-routing.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/app-routing.module.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/app/app.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/app.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-dashboard.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-dashboard.component.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-dashboard.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-dashboard.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/event/event.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/event/event.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/event/event.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/event/event.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/home/home.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/home/home.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/place/place.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/location/location.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/place/place.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/location/location.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/place/place.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/location/location.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/place/place.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/location/location.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-dashboard.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-dashboard.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/event/event.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/event/event.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/location/location.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/location/location.service.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/navbar/navbar.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/navbar/navbar.component.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/navbar/navbar.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/navbar/navbar.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/navbar/places-menu/places-menu.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/navbar/locations-menu/locations-menu.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/navbar/places-menu/places-menu.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/navbar/locations-menu/locations-menu.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/navbar/places-menu/places-menu.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/navbar/locations-menu/locations-menu.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/page-not-found/page-not-found.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/page-not-found/page-not-found.component.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,8 +28,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="Interface" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -213,7 +182,9 @@
       <workItem from="1698223779854" duration="79000" />
       <workItem from="1698223876580" duration="334000" />
       <workItem from="1698224227191" duration="1146000" />
-      <workItem from="1698226280130" duration="4147000" />
+      <workItem from="1698226280130" duration="5075000" />
+      <workItem from="1698256101547" duration="455000" />
+      <workItem from="1698311367245" duration="8552000" />
     </task>
     <servers />
   </component>

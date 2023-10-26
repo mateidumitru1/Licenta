@@ -12,4 +12,8 @@ export class EventService {
   fetchEvent(eventId: string): Observable<any> {
     return this.http.get('http://localhost:8080/api/events?id=' + eventId);
   }
+
+  fetchAllEvents(): Observable<any> {
+    return this.http.get('http://localhost:8080/api/events/all');
+  }
 }

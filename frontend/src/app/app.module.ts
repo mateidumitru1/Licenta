@@ -31,6 +31,21 @@ import { AdminDashboardComponent } from './events/admin-dashboard/admin-dashboar
 import {MatTabsModule} from "@angular/material/tabs";
 import {MatSidenavModule} from "@angular/material/sidenav";
 import { PageNotFoundComponent } from './shared/page-not-found/page-not-found.component';
+import { AdminHomeComponent } from './events/admin-dashboard/admin-home/admin-home.component';
+import { AdminManageComponent } from './events/admin-dashboard/admin-manage/admin-manage.component';
+import { AdminStatisticsComponent } from './events/admin-dashboard/admin-statistics/admin-statistics.component';
+import {MatTableModule} from "@angular/material/table";
+import { AdminManageUsersComponent } from './events/admin-dashboard/admin-manage/admin-manage-users/admin-manage-users.component';
+import { AdminManageLocationsComponent } from './events/admin-dashboard/admin-manage/admin-manage-locations/admin-manage-locations.component';
+import { AdminManageEventsComponent } from './events/admin-dashboard/admin-manage/admin-manage-events/admin-manage-events.component';
+import {MatPaginatorModule} from "@angular/material/paginator";
+import { TableComponent } from './events/admin-dashboard/admin-manage/table/table.component';
+import { DataDirective } from './directives/data.directive';
+import { DisplayedColumnsDirective } from './directives/displayed-columns.directive';
+import { ActionsDirective } from './directives/actions.directive';
+import {MatSortModule} from "@angular/material/sort";
+import { TruncateTextPipe } from './pipes/truncate-text.pipe';
+import { LocationNamePipe } from './pipes/location-name.pipe';
 
 
 
@@ -50,26 +65,41 @@ import { PageNotFoundComponent } from './shared/page-not-found/page-not-found.co
     TicketsComponent,
     AdminDashboardComponent,
     PageNotFoundComponent,
+    AdminHomeComponent,
+    AdminManageComponent,
+    AdminStatisticsComponent,
+    AdminManageUsersComponent,
+    AdminManageLocationsComponent,
+    AdminManageEventsComponent,
+    DataDirective,
+    DisplayedColumnsDirective,
+    TableComponent,
+    ActionsDirective,
+    TruncateTextPipe,
+    LocationNamePipe,
   ],
-    imports: [
-        BrowserModule,
-        BrowserAnimationsModule,
-        FormsModule,
-        HttpClientModule,
-        AppRoutingModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatButtonModule,
-        MatIconModule,
-        MatToolbarModule,
-        MatMenuModule,
-        MatGridListModule,
-        MatListModule,
-        MatCardModule,
-        NgOptimizedImage,
-        MatTabsModule,
-        MatSidenavModule
-    ],
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    FormsModule,
+    HttpClientModule,
+    AppRoutingModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatIconModule,
+    MatToolbarModule,
+    MatMenuModule,
+    MatGridListModule,
+    MatListModule,
+    MatCardModule,
+    NgOptimizedImage,
+    MatTabsModule,
+    MatSidenavModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule
+  ],
   providers: [],
   bootstrap: [AppComponent]
 })

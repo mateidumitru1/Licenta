@@ -19,7 +19,7 @@ export class NavbarComponent implements OnInit{
   shouldHide() {
     const currentRouter = this.route.snapshot.firstChild?.routeConfig?.path;
     return currentRouter === 'login' || currentRouter === 'register' || currentRouter === 'forgot-password'
-      || currentRouter === 'admin-dashboard' || currentRouter === 'page-not-found';
+      || currentRouter?.startsWith('admin-dashboard') || currentRouter === 'page-not-found';
   }
 
   onMouseEnterPlaces(places: HTMLAnchorElement) {
