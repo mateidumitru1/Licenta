@@ -1,6 +1,7 @@
 package com.matei.backend.controller;
 
 import com.matei.backend.dto.request.EventRequestDto;
+import com.matei.backend.dto.request.EventUpdateRequestDto;
 import com.matei.backend.dto.response.EventResponseDto;
 import com.matei.backend.exception.EventNotFoundException;
 import com.matei.backend.service.EventService;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -52,9 +54,9 @@ public class EventController {
         }
     }
 
-    @PutMapping()
-    public ResponseEntity<EventResponseDto> updateEvent(@RequestBody EventRequestDto eventRequestDto) {
-        return ResponseEntity.ok(eventService.updateEvent(eventRequestDto));
+    @PatchMapping
+    public ResponseEntity<EventResponseDto> updateEvent(@ModelAttribute EventUpdateRequestDto eventUpdateRequestDto) throws IOException {
+        return ResponseEntity.ok(eventService.updateEvent(eventUpdateRequestDto));
     }
 
     @DeleteMapping("/{id}")
