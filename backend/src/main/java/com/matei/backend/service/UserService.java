@@ -53,7 +53,7 @@ public class UserService {
                 .build()).toList();
     }
 
-    public void updateUser(UserRequestDto userRequestDto) {
+    public UserResponseDto updateUser(UserRequestDto userRequestDto) {
         userRepository.partialUpdateUser(
                 userRequestDto.getId(),
                 userRequestDto.getUsername(),
@@ -62,6 +62,14 @@ public class UserService {
                 userRequestDto.getLastName(),
                 userRequestDto.getRole()
         );
+        return UserResponseDto.builder()
+                .id(userRequestDto.getId())
+                .username(userRequestDto.getUsername())
+                .email(userRequestDto.getEmail())
+                .firstName(userRequestDto.getFirstName())
+                .lastName(userRequestDto.getLastName())
+                .role(userRequestDto.getRole())
+                .build();
     }
 
     public void deleteUser(UUID id) {

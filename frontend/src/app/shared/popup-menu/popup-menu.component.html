@@ -1,42 +1,11 @@
 <h1 mat-dialog-title>{{ data.title }}</h1>
 <div mat-dialog-content *ngIf="data.title === 'Edit'">
-  <mat-expansion-panel *ngFor="let index of data.indexes">
-    <mat-expansion-panel-header>
-      <mat-panel-title>{{ index }}</mat-panel-title>
-      <mat-panel-description *ngIf="index !== 'location' && index !== 'imageUrl'">{{ data.rowData[index] | truncateText }}</mat-panel-description>
-      <mat-panel-description *ngIf="index === 'location'">{{ data.rowData[index].name }}</mat-panel-description>
-      <mat-panel-description *ngIf="index === 'imageUrl'">
-        <img [src]="data.rowData[index]">
-      </mat-panel-description>
-    </mat-expansion-panel-header>
-    <mat-form-field *ngIf="index !== 'role' && index !== 'location' && index !== 'imageUrl' && index !== 'date'">
-      <input matInput [(ngModel)]="toEditData[index]" placeholder="Value">
-    </mat-form-field>
-    <mat-form-field *ngIf="index === 'location'">
-      <mat-select [(ngModel)]="toEditData[index]" placeholder="Location">
-        <mat-option *ngFor="let location of data.locations" [value]="location">{{ location.name }}</mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field *ngIf="index === 'role'">
-      <mat-select [(ngModel)]="toEditData[index]" placeholder="Role">
-        <mat-option [value]="'ADMIN'"> ADMIN </mat-option>
-        <mat-option [value]="'USER'"> USER </mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field *ngIf="index ==='date'">
-      <input matInput [matDatepicker]="picker" placeholder="Choose a date" [(ngModel)]="toEditData[index]">
-      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker #picker></mat-datepicker>
-    </mat-form-field>
-    <div *ngIf="index === 'imageUrl'">
-      <input type="file" accept=".jpg, .jpeg, .png, .bmp" (change)="onFileSelected($event)">
-    </div>
-  </mat-expansion-panel>
-  <button mat-raised-button color="primary" (click)="dialogRef.close({isTrue: true, data: toEditData})">Confirm</button>
-  <button mat-raised-button color="warn" (click)="dialogRef.close({isTrue: false})">Cancel</button>
+  <app-edit-users *ngIf="data.type === 'users'" [data]="data.rowData" [dialogRef]="dialogRef"></app-edit-users>
+  <app-edit-locations *ngIf="data.type === 'locations'" [data]="data.rowData" [dialogRef]="dialogRef"></app-edit-locations>
+  <app-edit-events *ngIf="data.type === 'events'" [data]="data.rowData" [dialogRef]="dialogRef"></app-edit-events>
 </div>
 <div mat-dialog-content *ngIf="data.title === 'Delete'">
   <p>Are you sure?</p>
-  <button mat-raised-button color="primary" (click)="dialogRef.close({isTrue: true})">Yes</button>
-  <button mat-raised-button color="warn" (click)="dialogRef.close({isTrue: false})">No</button>
+  <button mat-raised-button color="primary" (click)="onDeleteConfirmClick()">Yes</button>
+  <button mat-raised-button color="warn" (click)="onDeleteCancelClick()">No</button>
 </div>

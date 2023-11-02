@@ -2,12 +2,12 @@
   <h1><b>Sign in</b></h1>
   <mat-form-field>
     <mat-label>Username</mat-label>
-    <input matInput type="text" [(ngModel)]="username"/>
+    <input matInput type="text" [(ngModel)]="username" required>
   </mat-form-field>
   <br>
   <mat-form-field>
     <mat-label>Password</mat-label>
-    <input matInput type="password" [(ngModel)]="password"/>
+    <input matInput type="password" [(ngModel)]="password" required/>
   </mat-form-field>
   <br>
   <app-fill-fields-warning *ngIf="invalidLogin" class="red-font"> {{ message }} </app-fill-fields-warning>

@@ -2,29 +2,29 @@
   <h1><b>Sign up</b></h1>
   <mat-form-field class="mt-4 me-5">
     <mat-label>First Name</mat-label>
-    <input matInput type="text" [(ngModel)]="firstName"/>
+    <input matInput type="text" [(ngModel)]="firstName" required/>
   </mat-form-field>
   <mat-form-field>
     <mat-label>Last Name</mat-label>
-    <input matInput type="text" [(ngModel)]="lastName"/>
+    <input matInput type="text" [(ngModel)]="lastName" required/>
   </mat-form-field>
   <br>
   <mat-form-field class="me-5">
     <mat-label>Username</mat-label>
-    <input matInput type="text" [(ngModel)]="username"/>
+    <input matInput type="text" [(ngModel)]="username" required/>
   </mat-form-field>
   <mat-form-field id="email">
     <mat-label>Email</mat-label>
-    <input matInput type="text" [(ngModel)]="email"/>
+    <input matInput type="text" [(ngModel)]="email" required/>
   </mat-form-field>
   <br>
   <mat-form-field class="me-5">
     <mat-label>Password</mat-label>
-    <input matInput type="password" [(ngModel)]="password"/>
+    <input matInput type="password" [(ngModel)]="password" required/>
   </mat-form-field>
   <mat-form-field>
     <mat-label>Confirm Password</mat-label>
-    <input matInput type="password" [(ngModel)]="confirmPassword"/>
+    <input matInput type="password" [(ngModel)]="confirmPassword" required/>
   </mat-form-field>
   <app-fill-fields-warning *ngIf="invalidRegister"> {{ errorMessage }} </app-fill-fields-warning>
   <br>

@@ -11,6 +11,7 @@ import {PageNotFoundComponent} from "./shared/page-not-found/page-not-found.comp
 import {AdminHomeComponent} from "./events/admin-dashboard/admin-home/admin-home.component";
 import {AdminManageComponent} from "./events/admin-dashboard/admin-manage/admin-manage.component";
 import {AdminStatisticsComponent} from "./events/admin-dashboard/admin-statistics/admin-statistics.component";
+import {AdminGuard} from "./guards/admin.guard";
 
 const appRoutes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full'},
@@ -19,7 +20,7 @@ const appRoutes: Routes = [
   { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: 'home', pathMatch: 'full', component: HomeComponent },
   { path: 'page-not-found', component: PageNotFoundComponent },
-  { path: 'admin-dashboard', component: AdminDashboardComponent, children: [
+  { path: 'admin-dashboard', canActivate: [AdminGuard], component: AdminDashboardComponent, children: [
     { path: '', pathMatch: 'full', component: AdminHomeComponent },
     { path: 'manage', component: AdminManageComponent },
     { path: 'statistics', component: AdminStatisticsComponent }

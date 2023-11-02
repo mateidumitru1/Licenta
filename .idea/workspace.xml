@@ -5,185 +5,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0ff3fa00-627c-435d-82b1-4a1abb5b20ca" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/dto/request/EventUpdateRequestDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/dto/request/LocationUpdateRequestDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/dto/request/UserCreationRequestDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/dto/request/UserRequestDto.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/configuration/CorsFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/configuration/CorsFilter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/controller/DatabaseInitController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/controller/EventController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/controller/EventController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/controller/LocationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/controller/LocationController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/dto/response/LocationResponseDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/dto/response/LocationResponseDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/entity/Event.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/entity/Event.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/entity/Location.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/entity/Location.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/repository/EventRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/repository/EventRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/repository/LocationRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/repository/LocationRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/repository/UserRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/DatabaseInitService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/EventService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/EventService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/ImageService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/ImageService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/LocationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/LocationService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/ALAN • Lansare album „31 Februarie” • Expirat • 05.11.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/ANCIENT –  ‘The Cainian Chronicle’ Special Show + MTBA  Quantic.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Adi Istrate • Expirat • 01.11.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Alternosfera - lansare single.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Amorphis, Solstafir si Lost Society.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Ansamblul Plăieșii.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Asaf Avidan la Arenele Romane (5 decembrie).jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Asaf Avidan la Arenele Romane (6 decembrie).jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Asemic 10 Years Anniversary.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/BandBook • Official Launch &amp; Showcase.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Bpressure pres. Lenzman (NL) • Expirat.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Bpressure pres. Lenzman (NL).jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Bucovina - Tradiționalul concert de Sărbători.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Bucuresti Fanfara Ciocărlia.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Chase and Status Dj Set - Arenadnb.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Compact Paul Ciuci - Fata Din Vis 40 De Ani Aniversar.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Concert 3 Sud Est.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Concert Adrian Enache.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Concert Alexander Balanescu &amp; Ada Milea  Quantic.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Concert Alina Eremia.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Concert Andra Gogan Craciunul in Roz.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Concert Bonnie Tyler.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Concert Bosquito.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Concert Cargo.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Concert Carla's Dreams.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Concert Chris Norman @ Sala Palatului.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Concert Directia 5.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Concert EMAA.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Concert Enter Shikari.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Concert Equilateral Guitar Union  Quantic 18.10.2023.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Concert Extraordinar Enrico Macias.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Concert IRIS - Cristi Minculescu, Valter si Boro.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Concert Implant Pentru Refuz in Fabrica.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Concert Infest  Saddayah  Eufobia  Maltworm.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Concert Irina Rimes.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Concert Jean Gavril la Hard Rock Cafe.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Concert Killa Fonic &amp; Band.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Concert Luis Gabriel si Haziran - In Numele Iubirii.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Concert Mihai Margineanu.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Concert Mircea Baniciu.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Concert Mircea Vintila &amp; Brambura (20 Ani De Colaborare).jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Concert Mother of Millions &amp;  Allen’s Hand  Quantic.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Concert Nicu Alifantis si ZAN.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Concert Robin and the Backstabbers.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Concert Taxi.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Concert The Motans.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Concert Vama.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Concert Vita de Vie 360.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Concert Zdob si Zdub.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Concert live de Craciun - Stefan Banica @ Sala Palatului.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Concert rares.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Cradle of Filth.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Cred Că Sunt Extraterestru • Expirat • 02.11.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Deathstars in Quantic.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Disney100.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Dordeduh  Eternal Fire (lansare de album) - Quantic.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/E-an-na • Quantic • Special Electric &amp; Acoustic Concert.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Gala Folclorului Romanesc - Ansamblul Doina Gorjului @ Sala Palatului.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Gipsy Kings @ Sala Palatului.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Gipsy Kings by Diego Baliardo @ Sala Palatului.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Godsleep (GR) • Expirat • 21.11.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/HVNDS - Lansare de album Sintetic.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Horia Brenciu -  My Way SHOW 3.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Horia Brenciu - My Way SHOW 1.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Horia Brenciu - My Way SHOW 2.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/IAN - cel mai mare show pe 8 decembrie la Arenele Romane.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Interplanetary Night - Crone, The Thirteenth Sun si Stroszek live in Quantic.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Ioana Milculescu • Lansare single &amp; videoclip „Pentru Că Nimeni” • Expirat • 12.10.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/La Familia.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Laibach in Quantic.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Machina Electronica pres. Ed Rush &amp; Optical (UK).jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Maria Popovici - O să fie bine ()  Stand Up Comedy SPECIAL @ Club99.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Metal Gates Festival 2024.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Metalhead Meeting 2024.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Morricone Story.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Old Grave Fest - Aftershock Bewitched Darkest Era Hëllstrike.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Old Grave Fest X.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Painkiller - the 33st Anniversary Tribute Show + Spill the Blood (Slayer Tribute).jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Petrecere de Halloween cu Popas Band.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Phoenix si Celelalte Cuvinte la Arenele Romane.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Pinholes • Lansare single „Al Treilea Divorț” • Expirat • 19.10.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/PlayJoi - Mirică, Victor Băra, Dumitru și Dobrotă  prezentat de Costel la Club 99.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Podcast Live  Între Show-uri cu Teo, Vio, Costel la Club 99.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Precomanda consumatie Club 99.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/ROADKILL FEST 2023 Quantic.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Redrum • 4x4 • Expirat • 24.10.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Rock the Opera II.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Rome - Gates of Europe tour - live in Bucuresti  @ Quantic.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/SEROTONE • Lansare album „MORPHO +” • Expirat • 25.10.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Sakis Tolis - Beyond The Void Tour - live in Bucuresti - Quantic.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Sarbatoarea Subcarpati 2023.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Sarmalele Reci – anul 30.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Satra B.E.N.Z - Lansare 8 Culcat.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Saturnus &amp; In The Woods.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Simion Bogdan Mihai și Lăutarii de Mătase.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/SoundArt prezinta Naxatras live in Quantic.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Stand Up Comedy cu Banciu, Frîncu, Mocanu, Ciobanu - Birtaș la Club 99.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Stand Up Comedy cu Dobrotă, Ioana State, Ioana Luiza, Mitran - Darius Grigorie la Club 99.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Stand Up Comedy cu Drăcea, Florin Gheorghe, Dobrotă &amp; Popinciuc la Club 99.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Stand Up Comedy cu Maria Popovici, Mincu, Banciu - Darius Grigorie la Club 99.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Stand Up Comedy cu Maria Popovici, Mincu, Banciu - Florentin Păune la Club 99.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Stand Up Comedy cu Vio, Andrei Ciobanu, Natanticu - Bogzi la Club 99.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Stand Up Comedy cu Vio, Mocanu, Dobrotă &amp; Mălăele la Club 99.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Stand Up Comedy cu Vio, Mocanu, Raul &amp; Victor Băra la Club 99.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Stand Up Comedy cu Vio, Sorin Pârcălab, Dumitru &amp; Victor Băra la Club 99.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Stand Up Comedy show Dăm din Casă - George Mesaroș, Tudor Costina &amp; Paul Szabo la Club 99.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Stand up Comedy cu Teo, Vio, Costel - Florin Gheorghe la Club 99.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Stand up Comedy cu Teo, Vio, Costel - Mirică la Club 99.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Stand up Comedy cu Teo, Vio, Costel - Teo Ioniță la Club 99.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Stand up Comedy cu Teo, Vio, Costel - Victor Băra la Club 99.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Stand up comedy cu Mihai Bobonete - Sfaturi de Viață - Ora 1800.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Stand up comedy cu Mihai Bobonete - Sfaturi de Viață - Ora 2100.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Stratovarius si Sonata Arctica.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Tarja la Arenele Romane - Dark Christmas Tour 2023.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/The Fool D'ale lui Frîncu!  Show de comedie.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/The Fool Stand up comedy cu Radu Bucălae, Cîrje, Mirel Popinciuc și Edi Vacariu.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/The Fool Stand-up comedy cu Bordea, Florin Gheorghe, Claudiu Popa și George Dumitru.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/The Fool Stand-up comedy cu Bordea, Geo Adrian, George Dumitru și Paul Szabo.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/The Fool Stand-up comedy cu Bordea, Mane Voicu, Claudiu Popa și Teodora Nedelcu.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/The Fool Stand-up comedy cu Bordea, Mane Voicu, Ioana State și Teodora Nedelcu.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/The Fool Stand-up comedy cu Cortea, Geo Adrian, Alex Dobrotă și Paul Szabo.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/The Fool Stand-up comedy cu Cîrje, Gabriel Gherghe, Geo Adrian și Mirel Popinciuc.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/The Fool Stand-up comedy cu Mane Voicu, Ioana State, Florin Gheorghe și Ioana Luiza.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/The Fool Stand-up comedy cu Radu Bucălae, Ioana State, Florin Gheorghe și Alex Dobrotă.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/The Fool Stand-up comedy cu Radu Bucălae, Mane Voicu, Frînculescu și Edi Vacariu.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/The Full Monty (Goi Pușcă).jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Trooper - Simfonic 28.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/VAMA.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Vlad Flueraru • Lansare EP „Reset” • Expirat • 22.11.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Ziua lui Stefan.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/byron -  lansare album ‚Efemeride’ @  Arenele Romane.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Ștefan Costea • The Summertime Madness • Expirat • 26.10.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/event-images/Șuie Paparude Full Band • Expirat • 15.11.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/events.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/location-images/Arenele Romane.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/location-images/Club 99.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/location-images/Club Fabrica.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/location-images/Expirat Halele Carol.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/location-images/Hard Rock Cafe.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/location-images/Quantic.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/location-images/Romexpo.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/location-images/Sala Palatului.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/location-images/The Fool.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/locations.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/app-routing.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/app-routing.module.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/app/app.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/app.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-dashboard.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-dashboard.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-dashboard.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-dashboard.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/admin-manage-events/admin-manage-events.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/admin-manage-events/admin-manage-events.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/admin-manage-locations/admin-manage-locations.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/admin-manage-locations/admin-manage-locations.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/admin-manage-users/admin-manage-users.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/admin-manage-users/admin-manage-users.component.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/admin-manage.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/admin-manage.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/table/table.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/table/table.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/table/table.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/table/table.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/table/table.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/table/table.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/location/location.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/location/location.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/location/location.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/location/location.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/navbar/locations-menu/locations-menu.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/navbar/locations-menu/locations-menu.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/navbar/navbar.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/navbar/navbar.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/handlers/jwt.handler.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/handlers/jwt.handler.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/identity/identity.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/identity/identity.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/identity/login/login.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/identity/login/login.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/identity/login/login.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/identity/login/login.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/identity/register/register.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/identity/register/register.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/navbar/navbar.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/navbar/navbar.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/popup-menu/popup-menu.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/popup-menu/popup-menu.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/popup-menu/popup-menu.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/popup-menu/popup-menu.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/table/table.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/table/table.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/tsconfig.app.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/tsconfig.app.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -261,11 +98,11 @@
       <recent name="C:\Users\Matei\Desktop\licenta\Licenta1\untitled\backend" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Matei\Desktop\licenta\Licenta\frontend\src\app\directives" />
+      <recent name="C:\Users\Matei\Desktop\licenta\Licenta\frontend\src\app\shared\popup-menu\edit" />
+      <recent name="C:\Users\Matei\Desktop\licenta\Licenta\frontend\src\app\guards" />
       <recent name="C:\Users\Matei\Desktop\licenta\Licenta\frontend\src\app\shared" />
       <recent name="C:\Users\Matei\Desktop\licenta\Licenta\frontend\src\app\identity\register" />
-      <recent name="C:\Users\Matei\Desktop\licenta\Licenta\frontend\src\app\identity\login" />
-      <recent name="C:\Users\Matei\Desktop\licenta\Licenta\frontend\src\app\events" />
-      <recent name="C:\Users\Matei\Desktop\licenta\Licenta\frontend\src\app\identity" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="com.matei.backend.exception" />
@@ -358,7 +195,9 @@
       <workItem from="1698490422107" duration="511000" />
       <workItem from="1698838245311" duration="15962000" />
       <workItem from="1698862803533" duration="105000" />
-      <workItem from="1698916188179" duration="12061000" />
+      <workItem from="1698916188179" duration="12351000" />
+      <workItem from="1698935745730" duration="11000" />
+      <workItem from="1698949271148" duration="8461000" />
     </task>
     <servers />
   </component>

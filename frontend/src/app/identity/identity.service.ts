@@ -48,6 +48,10 @@ export class IdentityService {
     return this.jwtHandler.isLoggedIn();
   }
 
+  isAdmin() {
+    return this.jwtHandler.isAdmin();
+  }
+
   getUserName() {
     return this.jwtHandler.getUserName();
   }

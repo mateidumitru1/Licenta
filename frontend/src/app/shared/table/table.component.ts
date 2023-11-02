@@ -7,6 +7,7 @@ import {MatSort} from "@angular/material/sort";
 import {PopupMenuComponent} from "../popup-menu/popup-menu.component";
 import {MatDialog} from "@angular/material/dialog";
 import {LocationService} from "../../events/location/location.service";
+import {MatMenu, MatMenuTrigger} from "@angular/material/menu";
 
 @Component({
   selector: 'app-table',
@@ -35,7 +36,8 @@ export class TableComponent implements OnInit, AfterViewInit {
               name: string,
               address: string}[] = [];
 
-  constructor(private dialog: MatDialog, private locationService: LocationService, private adminManageService: AdminManageService) {}
+  constructor(private dialog: MatDialog, private locationService: LocationService,
+              private adminManageService: AdminManageService) {}
 
   ngOnInit() {
     this.dataSource.data = this.data;
@@ -73,7 +75,8 @@ export class TableComponent implements OnInit, AfterViewInit {
         title: 'Edit',
         rowData: this.rowData,
         indexes: indexes,
-        locations: this.locations
+        locations: this.locations,
+        type: this.type
       },
       disableClose: true
     });

@@ -1,4 +1,4 @@
-import {Component, OnInit, OnDestroy, HostListener} from '@angular/core';
+import {Component, OnInit, OnDestroy, HostListener, AfterViewInit} from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import {Router} from "@angular/router";
 import {JwtHandler} from "../../handlers/jwt.handler";
@@ -9,7 +9,7 @@ import {IdentityService} from "../identity.service";
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
-export class LoginComponent implements OnInit, OnDestroy{
+export class LoginComponent{
 
   username: string = '';
   password: string = '';
@@ -17,13 +17,6 @@ export class LoginComponent implements OnInit, OnDestroy{
   invalidLogin: boolean = false;
 
   constructor(private http: HttpClient, private router: Router, private identityService: IdentityService, private jwtHandler: JwtHandler) { }
-
-  ngOnInit(): void {
-  }
-
-  ngOnDestroy(): void {
-
-  }
 
   @HostListener('document:keydown', ['$event'])
   keyEvent(event: KeyboardEvent) {
@@ -59,4 +52,6 @@ export class LoginComponent implements OnInit, OnDestroy{
       this.message = '';
     }, 1000);
   }
+
+  protected readonly focus = focus;
 }

@@ -32,8 +32,8 @@ public class UserController {
     @Transactional
     @PatchMapping
     public ResponseEntity<UserResponseDto> updateUser(@ModelAttribute UserRequestDto userRequestDto) {
-        userService.updateUser(userRequestDto);
-        return ResponseEntity.ok().build();
+
+        return ResponseEntity.ok(userService.updateUser(userRequestDto));
     }
 
     @DeleteMapping("/{id}")

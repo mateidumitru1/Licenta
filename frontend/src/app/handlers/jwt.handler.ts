@@ -25,6 +25,13 @@ export class JwtHandler {
     return jwt.exp > nowTime;
   }
 
+  isAdmin() {
+    if(!this.isLoggedIn()) {
+      return false;
+    }
+    return this.getRole() === 'ADMIN';
+  }
+
   removeJwt() {
     localStorage.removeItem('token');
   }

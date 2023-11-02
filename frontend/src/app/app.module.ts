@@ -53,6 +53,11 @@ import {MatSelectModule} from "@angular/material/select";
 import { ObjectTypeDirective } from './directives/object-type.directive';
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatNativeDateModule} from "@angular/material/core";
+import { EditLocationsComponent } from './shared/popup-menu/edit/edit-locations/edit-locations.component';
+import { EditUsersComponent } from './shared/popup-menu/edit/edit-users/edit-users.component';
+import { EditEventsComponent } from './shared/popup-menu/edit/edit-events/edit-events.component';
+import { DialogRefDirective } from './directives/dialog-ref.directive';
+import { EditButtonsComponent } from './shared/popup-menu/edit-buttons/edit-buttons.component';
 
 
 
@@ -86,6 +91,11 @@ import {MatNativeDateModule} from "@angular/material/core";
     LocationNamePipe,
     PopupMenuComponent,
     ObjectTypeDirective,
+    EditLocationsComponent,
+    EditUsersComponent,
+    EditEventsComponent,
+    DialogRefDirective,
+    EditButtonsComponent,
   ],
     imports: [
         BrowserModule,
