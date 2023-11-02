@@ -13,7 +13,7 @@
   <ng-container matColumnDef="actions">
     <th mat-header-cell *matHeaderCellDef> Actions </th>
     <td mat-cell *matCellDef="let data">
-      <button mat-button [matMenuTriggerFor]="contextMenu">
+      <button mat-button [matMenuTriggerFor]="contextMenu" (click)="rowData = data">
         <mat-icon>edit</mat-icon>
       </button>
     </td>
@@ -31,5 +31,6 @@
   aria-label="Select page"></mat-paginator>
 
 <mat-menu #contextMenu="matMenu">
-  <button *ngFor="let action of actions"  mat-menu-item>{{ action }}</button>
+  <button mat-menu-item (click)="onClickEdit()"> Edit </button>
+  <button mat-menu-item (click)="onClickDelete()"> Delete </button>
 </mat-menu>

@@ -3,7 +3,7 @@
   <div>
     <img src="{{ location?.imageUrl }}" alt="{{ location?.name }}">
   </div>
-  <div *ngFor="let event of location?.events">
+  <div *ngFor="let event of location?.eventList">
     <mat-card (click)="onEventClick(event)" routerLinkActive="active">
       <div class="card-content">
         <img mat-card-image src="{{ event.imageUrl }}" alt="{{ event.title }}">
@@ -16,4 +16,3 @@
     </mat-card>
   </div>
 </div>
-

@@ -14,7 +14,7 @@ export class LocationComponent implements OnInit{
     name: string;
     address: string;
     imageUrl: string;
-    events: [
+    eventList: [
       {
         id: string;
         title: string;
@@ -29,8 +29,8 @@ export class LocationComponent implements OnInit{
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(queryParams => {
-      this.placeEventsService.fetchEvents(queryParams['id']).subscribe((place: any) => {
-        this.location = place;
+      this.placeEventsService.fetchEvents(queryParams['id']).subscribe((location: any) => {
+        this.location = location;
       }, error => {
         this.router.navigate(['/page-not-found']);
       });

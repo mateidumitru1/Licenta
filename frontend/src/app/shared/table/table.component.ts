@@ -1,9 +1,12 @@
 import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core';
 import {MatTableDataSource} from "@angular/material/table";
 import {MatPaginator} from "@angular/material/paginator";
-import {AdminManageService} from "../admin-manage.service";
-import {EventService} from "../../../event/event.service";
+import {AdminManageService} from "../../events/admin-dashboard/admin-manage/admin-manage.service";
+import {EventService} from "../../events/event/event.service";
 import {MatSort} from "@angular/material/sort";
+import {PopupMenuComponent} from "../popup-menu/popup-menu.component";
+import {MatDialog} from "@angular/material/dialog";
+import {LocationService} from "../../events/location/location.service";
 
 @Component({
   selector: 'app-table',
@@ -16,7 +19,7 @@ export class TableComponent implements OnInit, AfterViewInit {
 
   @Input() displayedColumns: string[] = [];
 
-  actions: string[] = ['Edit', 'Delete'];
+  @Input() type: string = '';
 
   dataSource = new MatTableDataSource<any>();
 
@@ -26,7 +29,13 @@ export class TableComponent implements OnInit, AfterViewInit {
 
   searchText: string = '';
 
-  constructor() {}
+  rowData: any;
+
+  locations: {id: string,
+              name: string,
+              address: string}[] = [];
+
+  constructor(private dialog: MatDialog, private locationService: LocationService, private adminManageService: AdminManageService) {}
 
   ngOnInit() {
     this.dataSource.data = this.data;
@@ -39,6 +48,10 @@ export class TableComponent implements OnInit, AfterViewInit {
       }
       return item[property].toLowerCase();
     }
+
+    this.locationService.fetchAllLocations().subscribe((locations: any) => {
+      this.locations = locations;
+    });
   }
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator!;
@@ -47,5 +60,56 @@ export class TableComponent implements OnInit, AfterViewInit {
 
   applyFilter() {
     this.dataSource.filter = this.searchText.trim().toLowerCase();
+  }
+
+  onClickEdit() {
+    let indexes = this.displayedColumns;
+    if(this.type !== 'users') {
+      indexes = this.displayedColumns.concat(['imageUrl']);
+    }
+    let dialogRef = this.dialog.open(PopupMenuComponent, {
+      width: '40%',
+      data: {
+        title: 'Edit',
+        rowData: this.rowData,
+        indexes: indexes,
+        locations: this.locations
+      },
+      disableClose: true
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if(result.isTrue) {
+        this.adminManageService.update(this.type, result.data).subscribe((res) => {
+          this.dataSource.data = this.dataSource.data.map((value, key) => {
+            if(value.id === res.id) {
+              return res;
+            }
+            return value;
+          });
+        }, error => {
+          console.log("update failed");
+        });
+      }
+    });
+  }
+
+  onClickDelete() {
+    let dialogRef = this.dialog.open(PopupMenuComponent, {
+      width: '250px',
+      data: {
+        title: 'Delete',
+      }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if(result.isTrue) {
+        this.adminManageService.delete(this.type, this.rowData.id).subscribe((res: any) => {
+          this.dataSource.data = this.dataSource.data.filter((value, key) => {
+            return value.id !== this.rowData.id;
+          });
+        }, error => {
+          console.log(error);
+        });
+      }
+    });
   }
 }

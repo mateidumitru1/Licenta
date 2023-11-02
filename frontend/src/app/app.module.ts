@@ -39,13 +39,20 @@ import { AdminManageUsersComponent } from './events/admin-dashboard/admin-manage
 import { AdminManageLocationsComponent } from './events/admin-dashboard/admin-manage/admin-manage-locations/admin-manage-locations.component';
 import { AdminManageEventsComponent } from './events/admin-dashboard/admin-manage/admin-manage-events/admin-manage-events.component';
 import {MatPaginatorModule} from "@angular/material/paginator";
-import { TableComponent } from './events/admin-dashboard/admin-manage/table/table.component';
+import { TableComponent } from './shared/table/table.component';
 import { DataDirective } from './directives/data.directive';
 import { DisplayedColumnsDirective } from './directives/displayed-columns.directive';
 import { ActionsDirective } from './directives/actions.directive';
 import {MatSortModule} from "@angular/material/sort";
 import { TruncateTextPipe } from './pipes/truncate-text.pipe';
 import { LocationNamePipe } from './pipes/location-name.pipe';
+import { PopupMenuComponent } from './shared/popup-menu/popup-menu.component';
+import {MatDialogModule} from "@angular/material/dialog";
+import {MatExpansionModule} from "@angular/material/expansion";
+import {MatSelectModule} from "@angular/material/select";
+import { ObjectTypeDirective } from './directives/object-type.directive';
+import {MatDatepickerModule} from "@angular/material/datepicker";
+import {MatNativeDateModule} from "@angular/material/core";
 
 
 
@@ -77,29 +84,36 @@ import { LocationNamePipe } from './pipes/location-name.pipe';
     ActionsDirective,
     TruncateTextPipe,
     LocationNamePipe,
+    PopupMenuComponent,
+    ObjectTypeDirective,
   ],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    FormsModule,
-    HttpClientModule,
-    AppRoutingModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatIconModule,
-    MatToolbarModule,
-    MatMenuModule,
-    MatGridListModule,
-    MatListModule,
-    MatCardModule,
-    NgOptimizedImage,
-    MatTabsModule,
-    MatSidenavModule,
-    MatTableModule,
-    MatPaginatorModule,
-    MatSortModule
-  ],
+    imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        FormsModule,
+        HttpClientModule,
+        AppRoutingModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatButtonModule,
+        MatIconModule,
+        MatToolbarModule,
+        MatMenuModule,
+        MatGridListModule,
+        MatListModule,
+        MatCardModule,
+        NgOptimizedImage,
+        MatTabsModule,
+        MatSidenavModule,
+        MatTableModule,
+        MatPaginatorModule,
+        MatSortModule,
+        MatDialogModule,
+        MatExpansionModule,
+        MatSelectModule,
+        MatDatepickerModule,
+        MatNativeDateModule
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })

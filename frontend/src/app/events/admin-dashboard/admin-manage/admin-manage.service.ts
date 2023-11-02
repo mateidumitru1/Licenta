@@ -24,4 +24,35 @@ export class AdminManageService {
   fetchLocations(): Observable<any> {
     return this.locationService.fetchAllLocations();
   }
+
+  update(objectType: string, data: any): Observable<any> {
+    const formData = new FormData();
+
+    if (objectType === 'events') {
+      const date: Date = new Date(data.date.getFullYear(), data.date.getMonth(), data.date.getDate() + 1);
+      formData.append('locationId', data.location.id);
+      formData.append('date', date.toISOString());
+    }
+    for (const key in data) {
+      if(key === 'location' || key === 'date') {
+        continue;
+      }
+      formData.append(key, data[key]);
+    }
+    return this.http.patch(`http://localhost:8080/api/${objectType}`, formData,
+      {
+        headers: {
+          Authorization: 'Bearer ' + localStorage.getItem('token')
+        },
+      });
+  }
+
+  delete(objectType: string, id: string): Observable<any> {
+    return this.http.delete(`http://localhost:8080/api/${objectType}/${id}`,
+      {
+        headers: {
+          Authorization: 'Bearer ' + localStorage.getItem('token')
+        }
+      });
+  }
 }

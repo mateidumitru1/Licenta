@@ -6,6 +6,10 @@
     <button mat-button routerLink="manage">Manage</button>
     <br>
     <button mat-button routerLink="statistics">Statistics</button>
+    <br>
+    <button mat-button routerLink="settings">Settings</button>
+    <br>
+    <button mat-button (click)="logout()">Logout</button>
   </mat-sidenav>
   <mat-sidenav-content>
     <router-outlet></router-outlet>
