@@ -39,7 +39,7 @@ import { AdminManageUsersComponent } from './events/admin-dashboard/admin-manage
 import { AdminManageLocationsComponent } from './events/admin-dashboard/admin-manage/admin-manage-locations/admin-manage-locations.component';
 import { AdminManageEventsComponent } from './events/admin-dashboard/admin-manage/admin-manage-events/admin-manage-events.component';
 import {MatPaginatorModule} from "@angular/material/paginator";
-import { TableComponent } from './shared/table/table.component';
+import { TableComponent } from './events/admin-dashboard/admin-manage/table/table.component';
 import { DataDirective } from './directives/data.directive';
 import { DisplayedColumnsDirective } from './directives/displayed-columns.directive';
 import { ActionsDirective } from './directives/actions.directive';
@@ -58,6 +58,12 @@ import { EditUsersComponent } from './shared/popup-menu/edit/edit-users/edit-use
 import { EditEventsComponent } from './shared/popup-menu/edit/edit-events/edit-events.component';
 import { DialogRefDirective } from './directives/dialog-ref.directive';
 import { EditButtonsComponent } from './shared/popup-menu/edit-buttons/edit-buttons.component';
+import { FilterComponent } from './events/admin-dashboard/admin-manage/filter/filter.component';
+import { UsersFilterComponent } from './events/admin-dashboard/admin-manage/filter/users-filter/users-filter.component';
+import { LocationsFilterComponent } from './events/admin-dashboard/admin-manage/filter/locations-filter/locations-filter.component';
+import { EventsFilterComponent } from './events/admin-dashboard/admin-manage/filter/events-filter/events-filter.component';
+import { IndexDirective } from './directives/index.directive';
+import {MatRadioModule} from "@angular/material/radio";
 
 
 
@@ -96,34 +102,40 @@ import { EditButtonsComponent } from './shared/popup-menu/edit-buttons/edit-butt
     EditEventsComponent,
     DialogRefDirective,
     EditButtonsComponent,
+    FilterComponent,
+    UsersFilterComponent,
+    LocationsFilterComponent,
+    EventsFilterComponent,
+    IndexDirective,
   ],
-    imports: [
-        BrowserModule,
-        BrowserAnimationsModule,
-        FormsModule,
-        HttpClientModule,
-        AppRoutingModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatButtonModule,
-        MatIconModule,
-        MatToolbarModule,
-        MatMenuModule,
-        MatGridListModule,
-        MatListModule,
-        MatCardModule,
-        NgOptimizedImage,
-        MatTabsModule,
-        MatSidenavModule,
-        MatTableModule,
-        MatPaginatorModule,
-        MatSortModule,
-        MatDialogModule,
-        MatExpansionModule,
-        MatSelectModule,
-        MatDatepickerModule,
-        MatNativeDateModule
-    ],
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    FormsModule,
+    HttpClientModule,
+    AppRoutingModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatIconModule,
+    MatToolbarModule,
+    MatMenuModule,
+    MatGridListModule,
+    MatListModule,
+    MatCardModule,
+    NgOptimizedImage,
+    MatTabsModule,
+    MatSidenavModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatDialogModule,
+    MatExpansionModule,
+    MatSelectModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatRadioModule
+  ],
   providers: [],
   bootstrap: [AppComponent]
 })

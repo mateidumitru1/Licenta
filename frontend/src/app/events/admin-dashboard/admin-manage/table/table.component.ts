@@ -1,12 +1,12 @@
 import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core';
 import {MatTableDataSource} from "@angular/material/table";
 import {MatPaginator} from "@angular/material/paginator";
-import {AdminManageService} from "../../events/admin-dashboard/admin-manage/admin-manage.service";
-import {EventService} from "../../events/event/event.service";
+import {AdminManageService} from "../admin-manage.service";
+import {EventService} from "../../../event/event.service";
 import {MatSort} from "@angular/material/sort";
-import {PopupMenuComponent} from "../popup-menu/popup-menu.component";
+import {PopupMenuComponent} from "../../../../shared/popup-menu/popup-menu.component";
 import {MatDialog} from "@angular/material/dialog";
-import {LocationService} from "../../events/location/location.service";
+import {LocationService} from "../../../location/location.service";
 import {MatMenu, MatMenuTrigger} from "@angular/material/menu";
 
 @Component({
@@ -60,8 +60,8 @@ export class TableComponent implements OnInit, AfterViewInit {
     this.dataSource.sort = this.sort!;
   }
 
-  applyFilter() {
-    this.dataSource.filter = this.searchText.trim().toLowerCase();
+  onDataFiltered(filteredData: any[]) {
+    this.dataSource.data = filteredData;
   }
 
   onClickEdit() {
