@@ -22,8 +22,6 @@ export class AddEventComponent {
     description: string
   } = {} as any;
 
-  message: string = '';
-
   imageSrc: string | ArrayBuffer | null = null;
 
   @ViewChild('fileInput', { static: false }) fileInput!: ElementRef;
@@ -34,8 +32,7 @@ export class AddEventComponent {
     this.addService.subject.subscribe(() => {
       if(!(this.event.title && this.event.date && this.event.location
         && this.event.image && this.event.shortDescription && this.event.description)) {
-        this.message = 'Please fill all the fields';
-        this.inputFieldsErrorService.subject.next();
+        this.inputFieldsErrorService.subject.next('Please fill all fields!');
       }
       else {
         this.confirmEvent.emit(this.event);

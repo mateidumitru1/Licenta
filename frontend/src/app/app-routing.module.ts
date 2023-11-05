@@ -14,12 +14,14 @@ import {AdminStatisticsComponent} from "./events/admin-dashboard/admin-statistic
 import {AdminGuard} from "./util/guards/admin.guard";
 import {RootRedirectGuard} from "./util/guards/root-redirect-guard.service";
 import {RootComponent} from "./events/root/root.component";
+import {ResetPasswordComponent} from "./identity/reset-password/reset-password.component";
 
 const appRoutes: Routes = [
   { path: 'home' , redirectTo: '', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },
+  { path: 'reset-password/:token', component: ResetPasswordComponent },
   { path: 'page-not-found', component: PageNotFoundComponent },
   { path: 'admin-dashboard', canActivate: [AdminGuard], component: AdminDashboardComponent, children: [
     { path: '', pathMatch: 'full', component: AdminHomeComponent },
@@ -31,7 +33,7 @@ const appRoutes: Routes = [
       { path: ':location' , component: LocationComponent },
       { path: ':location/:eventName/:eventId', component: EventComponent },
   ]},
-  // { path: '**', redirectTo: 'page-not-found' },
+  { path: '**', redirectTo: 'page-not-found' },
 ];
 
 @NgModule({

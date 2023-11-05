@@ -8,7 +8,9 @@ import com.matei.backend.entity.BlackListedToken;
 import com.matei.backend.entity.Role;
 import com.matei.backend.entity.User;
 import com.matei.backend.exception.InvalidCredentialsException;
+import com.matei.backend.exception.ResetPasswordTokenExpiredException;
 import com.matei.backend.exception.UserAlreadyExistsException;
+import com.matei.backend.exception.UserNotFoundException;
 import com.matei.backend.repository.BlackListedTokenRepository;
 import com.matei.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +31,8 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
 
     private final JwtService jwtService;
+    private final EmailService emailService;
+    private final ResetPasswordTokenService resetPasswordTokenService;
 
 
     public RegisterResponseDto register(RegisterRequestDto request) {
@@ -77,5 +81,26 @@ public class AuthenticationService {
     public void logout(String token) {
 
         jwtService.addToBlackList(token);
+    }
+
+    public void forgotPassword(String email) {
+        var user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        var token = resetPasswordTokenService.save(resetPasswordTokenService.generateResetPasswordToken(user));
+        emailService.sendResetPasswordEmail(email, token);
+    }
+
+    public void resetPassword(String token, String newPassword) {
+        var resetPasswordToken = resetPasswordTokenService.findByToken(token);
+        if(resetPasswordToken.getExpiration().isBefore(LocalDate.now().atStartOfDay())) {
+            throw new ResetPasswordTokenExpiredException("Reset password token expired");
+        }
+
+        var user = resetPasswordToken.getUser();
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+
+        resetPasswordTokenService.delete(resetPasswordToken);
     }
 }

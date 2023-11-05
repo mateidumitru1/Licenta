@@ -17,8 +17,6 @@ export class RegisterComponent{
   email: string = '';
   confirmPassword: string = '';
 
-  errorMessage: string = '';
-
   constructor(private identityService: IdentityService, private emailHandler: EmailHandler,
               private inputFieldsErrorService: InputFieldsErrorService) { }
 
@@ -35,20 +33,17 @@ export class RegisterComponent{
     if(this.firstName === '' || this.lastName === '' || this.username === '' ||
       this.password === '' || this.confirmPassword === '' || this.email === '') {
 
-      this.errorMessage = 'Please fill all the fields!';
-      this.inputFieldsErrorService.subject.next();
+      this.inputFieldsErrorService.subject.next('Please fill all fields!');
       return false;
     }
 
     if(this.password !== this.confirmPassword) {
-      this.errorMessage = 'Passwords do not match!';
-      this.inputFieldsErrorService.subject.next();
+      this.inputFieldsErrorService.subject.next('Passwords do not match!');
       return false;
     }
 
     if(!this.emailHandler.isEmailValid(this.email)) {
-      this.errorMessage = 'Please enter a valid email!';
-      this.inputFieldsErrorService.subject.next();
+      this.inputFieldsErrorService.subject.next('Please enter a valid email!');
       return false;
     }
 

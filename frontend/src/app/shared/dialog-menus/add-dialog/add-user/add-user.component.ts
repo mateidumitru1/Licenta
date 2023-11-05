@@ -21,19 +21,15 @@ export class AddUserComponent implements OnInit{
     lastName: string,
   } = {} as any;
 
-  message: string = '';
-
   constructor(private addService: AddService, private emailHandler: EmailHandler, private inputFieldsErrorService: InputFieldsErrorService) {}
 
   ngOnInit() {
     this.addService.subject.subscribe(() => {
       if(!(this.user.username && this.user.email && this.user.password && this.user.role && this.user.firstName && this.user.lastName)) {
-        this.message = 'Please fill all the fields';
-        this.inputFieldsErrorService.subject.next();
+        this.inputFieldsErrorService.subject.next('Please fill all the fields!');
       }
       else if(!this.emailHandler.isEmailValid(this.user.email)) {
-        this.message = 'Please enter a valid email';
-        this.inputFieldsErrorService.subject.next();
+        this.inputFieldsErrorService.subject.next('Email is not valid!');
       }
       else {
         this.confirmEvent.emit(this.user);

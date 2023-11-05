@@ -28,8 +28,7 @@ export class LoginComponent{
 
   onLogin(): void {
     if (this.username === '' || this.password === '') {
-      this.message = 'Please enter username and password';
-      this.inputFieldsErrorService.subject.next();
+      this.inputFieldsErrorService.subject.next('Please enter username and password!');
     } else {
       this.identityService.login(this.username, this.password).subscribe((response: any) => {
         localStorage.setItem('token', response.token);
@@ -40,8 +39,7 @@ export class LoginComponent{
           this.router.navigate(['home']);
         }
       }, (error) => {
-        this.message = 'Invalid username or password';
-        this.inputFieldsErrorService.subject.next();
+        this.inputFieldsErrorService.subject.next('Invalid username or password!');
       });
     }
   }

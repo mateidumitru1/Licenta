@@ -10,10 +10,13 @@ export class InputFieldsErrorComponent implements OnInit {
 
   hidden: boolean = true;
 
+  message: string = '';
+
   constructor(private inputFieldsErrorService: InputFieldsErrorService) { }
 
   ngOnInit() {
-    this.inputFieldsErrorService.subject.subscribe(() => {
+    this.inputFieldsErrorService.subject.subscribe((message) => {
+      this.message = message;
       this.show();
     });
   }

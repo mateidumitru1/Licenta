@@ -55,4 +55,12 @@ export class IdentityService {
   getUserName() {
     return this.jwtHandler.getUserName();
   }
+
+  forgotPassword(email: string) {
+     return this.http.post('http://localhost:8080/api/forgot-password?email=' + email, null);
+  }
+
+  resetPassword(token: string, password: string) {
+    return this.http.post('http://localhost:8080/api/reset-password?token=' + token + '&password=' + password, null);
+  }
 }

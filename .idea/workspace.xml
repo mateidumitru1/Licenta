@@ -5,39 +5,39 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0ff3fa00-627c-435d-82b1-4a1abb5b20ca" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/configuration/SendGridConfiguration.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/controller/EmailController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/EmailService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/entity/ResetPasswordToken.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/exception/ResetPasswordTokenExpiredException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/exception/ResetPasswordTokenNotFoundException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/exception/UserNotFoundException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/repository/ResetPasswordTokenRespository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/ResetPasswordTokenService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/configuration/SecurityConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/configuration/SecurityConfiguration.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/configuration/SendGridConfiguration.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/controller/AuthenticationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/controller/AuthenticationController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/controller/EmailController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/repository/LocationRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/repository/LocationRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/AuthenticationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/AuthenticationService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/EmailService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/EmailService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/UserService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/resources/application.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/app/app-routing.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/app-routing.module.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/app/app.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/app.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/directives/actions.directive.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/util/directives/actions.directive.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/directives/data.directive.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/util/directives/data.directive.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/directives/dialog-ref.directive.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/util/directives/dialog-ref.directive.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/directives/displayed-columns.directive.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/util/directives/displayed-columns.directive.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/directives/index.directive.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/util/directives/index.directive.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/directives/object-type.directive.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/util/directives/object-type.directive.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/root/navbar/account-menu/account-menu.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/root/navbar/account-menu/account-menu.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/root/navbar/locations-menu/locations-menu.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/root/navbar/locations-menu/locations-menu.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/root/navbar/navbar.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/root/navbar/navbar.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/root/navbar/navbar.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/root/navbar/navbar.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/root/navbar/navbar.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/root/navbar/navbar.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/root/navbar/navbar.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/root/navbar/navbar.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/guards/admin.guard.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/util/guards/admin.guard.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/guards/root-redirect-guard.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/util/guards/root-redirect-guard.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/handlers/email.handler.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/util/handlers/email.handler.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/handlers/jwt.handler.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/util/handlers/jwt.handler.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/identity/forgot-password/forgot-password.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/identity/forgot-password/forgot-password.component.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/app/identity/forgot-password/forgot-password.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/identity/forgot-password/forgot-password.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/app/identity/identity.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/identity/identity.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/identity/login/login.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/identity/login/login.component.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/app/identity/login/login.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/identity/login/login.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/identity/register/register.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/identity/register/register.component.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/app/identity/register/register.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/identity/register/register.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/pipes/location-name.pipe.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/util/pipes/location-name.pipe.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/pipes/truncate-text.pipe.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/util/pipes/truncate-text.pipe.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/dialog-menus/add-dialog/add-event/add-event.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/dialog-menus/add-dialog/add-event/add-event.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/dialog-menus/add-dialog/add-event/add-event.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/dialog-menus/add-dialog/add-event/add-event.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/dialog-menus/add-dialog/add-location/add-location.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/dialog-menus/add-dialog/add-location/add-location.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/dialog-menus/add-dialog/add-location/add-location.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/dialog-menus/add-dialog/add-location/add-location.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/dialog-menus/add-dialog/add-user/add-user.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/dialog-menus/add-dialog/add-user/add-user.component.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/dialog-menus/add-dialog/add-user/add-user.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/dialog-menus/add-dialog/add-user/add-user.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/page-not-found/page-not-found.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/page-not-found/page-not-found.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/input-fields-error/input-fields-error.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/input-fields-error/input-fields-error.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/input-fields-error/input-fields-error.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/input-fields-error/input-fields-error.component.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -115,11 +115,11 @@
       <recent name="C:\Users\Matei\Desktop\licenta\Licenta1\untitled\backend" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Matei\Desktop\licenta\Licenta\backend\src\main\resources" />
       <recent name="C:\Users\Matei\Desktop\licenta\Licenta\frontend\src\app\util" />
       <recent name="C:\Users\Matei\Desktop\licenta\Licenta\frontend\src\app\events\root\navbar" />
       <recent name="C:\Users\Matei\Desktop\licenta\Licenta\frontend\src\app\events\root" />
       <recent name="C:\Users\Matei\Desktop\licenta\Licenta\frontend\src\app\shared\dialog-menus" />
-      <recent name="C:\Users\Matei\Desktop\licenta\Licenta\frontend\src\app\shared\dialog-menus\edit-delete-dialog\edit" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="com.matei.backend.exception" />
@@ -230,6 +230,11 @@
       <workItem from="1699093979761" duration="7650000" />
       <workItem from="1699115059615" duration="6104000" />
       <workItem from="1699175773086" duration="4120000" />
+      <workItem from="1699185657576" duration="55000" />
+      <workItem from="1699185906917" duration="6535000" />
+      <workItem from="1699193653961" duration="256000" />
+      <workItem from="1699193920827" duration="4384000" />
+      <workItem from="1699205393941" duration="1831000" />
     </task>
     <servers />
   </component>

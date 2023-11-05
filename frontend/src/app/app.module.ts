@@ -66,6 +66,7 @@ import { AddUserComponent } from './shared/dialog-menus/add-dialog/add-user/add-
 import { AddEventComponent } from './shared/dialog-menus/add-dialog/add-event/add-event.component';
 import { AddLocationComponent } from './shared/dialog-menus/add-dialog/add-location/add-location.component';
 import { RootComponent } from './events/root/root.component';
+import { ResetPasswordComponent } from './identity/reset-password/reset-password.component';
 
 
 
@@ -111,6 +112,7 @@ import { RootComponent } from './events/root/root.component';
     AddEventComponent,
     AddLocationComponent,
     RootComponent,
+    ResetPasswordComponent,
   ],
   imports: [
     BrowserModule,

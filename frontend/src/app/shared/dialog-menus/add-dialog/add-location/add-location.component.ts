@@ -17,8 +17,6 @@ export class AddLocationComponent implements OnInit{
     image: any
   } = {} as any;
 
-  message: string = '';
-
   imageSrc: string | ArrayBuffer | null = null;
 
   @ViewChild('fileInput', { static: false }) fileInput!: ElementRef;
@@ -28,8 +26,7 @@ export class AddLocationComponent implements OnInit{
   ngOnInit() {
     this.addService.subject.subscribe(() => {
       if(!(this.location.name && this.location.address && this.location.image)) {
-        this.message = 'Please fill all the fields';
-        this.inputFieldsErrorService.subject.next();
+        this.inputFieldsErrorService.subject.next('Please fill all fields!');
       }
       else {
         this.confirmEvent.emit(this.location);
