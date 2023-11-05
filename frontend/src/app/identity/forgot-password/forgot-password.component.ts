@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import {EmailHandler} from "../../handlers/email.handler";
+import {InputFieldsErrorService} from "../../shared/input-fields-error/input-fields-error.service";
 
 @Component({
   selector: 'app-forgot-password',
@@ -9,17 +10,12 @@ import {EmailHandler} from "../../handlers/email.handler";
 export class ForgotPasswordComponent {
 
   email: string = '';
-  invalidEmail: boolean = false;
 
-  constructor(private emailHandler: EmailHandler) { }
+  constructor(private emailHandler: EmailHandler, private inputFieldsErrorService: InputFieldsErrorService) { }
 
   changePassword() {
     if(!this.emailHandler.isEmailValid(this.email)) {
-      this.invalidEmail = true;
-      setTimeout(() => {
-        this.invalidEmail = false;
-      }, 1000);
-      return;
+      this.inputFieldsErrorService.subject.next();
     }
   }
 }

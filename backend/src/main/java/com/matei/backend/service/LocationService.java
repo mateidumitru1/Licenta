@@ -1,9 +1,10 @@
 package com.matei.backend.service;
 
-import com.matei.backend.dto.request.LocationRequestDto;
+import com.matei.backend.dto.request.LocationCreationRequestDto;
 import com.matei.backend.dto.request.LocationUpdateRequestDto;
 import com.matei.backend.dto.response.EventResponseDto;
 import com.matei.backend.dto.response.LocationResponseDto;
+import com.matei.backend.exception.LocationAlreadyExistsException;
 import com.matei.backend.exception.LocationNotFoundException;
 import com.matei.backend.repository.LocationRepository;
 import com.matei.backend.entity.Location;
@@ -21,11 +22,16 @@ public class LocationService {
     private final LocationRepository locationRepository;
     private final ImageService imageService;
 
-    public LocationResponseDto createLocation(LocationRequestDto locationRequestDto) {
+    public LocationResponseDto createLocation(LocationCreationRequestDto locationCreationRequestDto) throws IOException {
+        if(locationRepository.findByName(locationCreationRequestDto.getName()).isPresent()) {
+            throw new LocationAlreadyExistsException("Location already exists");
+        }
+
         var location = locationRepository.save(Location.builder()
                 .id(UUID.randomUUID())
-                .name(locationRequestDto.getName())
-                .address(locationRequestDto.getAddress())
+                .name(locationCreationRequestDto.getName())
+                .address(locationCreationRequestDto.getAddress())
+                .imageUrl(imageService.saveImage("location-images", locationCreationRequestDto.getImage()))
                 .build());
 
         return LocationResponseDto.builder()

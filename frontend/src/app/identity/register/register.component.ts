@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import {EmailHandler} from "../../handlers/email.handler";
 import {IdentityService} from "../identity.service";
+import {InputFieldsErrorService} from "../../shared/input-fields-error/input-fields-error.service";
 
 @Component({
   selector: 'app-register',
@@ -17,9 +18,9 @@ export class RegisterComponent{
   confirmPassword: string = '';
 
   errorMessage: string = '';
-  invalidRegister: boolean = false;
 
-  constructor(private identityService: IdentityService, private emailHandler: EmailHandler) { }
+  constructor(private identityService: IdentityService, private emailHandler: EmailHandler,
+              private inputFieldsErrorService: InputFieldsErrorService) { }
 
   onRegister(): void {
 
@@ -34,28 +35,23 @@ export class RegisterComponent{
     if(this.firstName === '' || this.lastName === '' || this.username === '' ||
       this.password === '' || this.confirmPassword === '' || this.email === '') {
 
-      this.timeout('Please fill out all fields');
+      this.errorMessage = 'Please fill all the fields!';
+      this.inputFieldsErrorService.subject.next();
       return false;
     }
 
     if(this.password !== this.confirmPassword) {
-      this.timeout('Passwords do not match!');
+      this.errorMessage = 'Passwords do not match!';
+      this.inputFieldsErrorService.subject.next();
       return false;
     }
 
     if(!this.emailHandler.isEmailValid(this.email)) {
-      this.timeout('Please enter a valid email address!');
+      this.errorMessage = 'Please enter a valid email!';
+      this.inputFieldsErrorService.subject.next();
       return false;
     }
 
     return true;
-  }
-
-  timeout(message: string): void {
-    this.invalidRegister = true;
-    this.errorMessage = message;
-    setTimeout(() => {
-      this.invalidRegister = false;
-    }, 1000);
   }
 }

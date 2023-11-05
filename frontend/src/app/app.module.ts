@@ -13,19 +13,19 @@ import { ForgotPasswordComponent } from './identity/forgot-password/forgot-passw
 import {MatIconModule, MatIconRegistry} from "@angular/material/icon";
 import {AppRoutingModule} from "./app-routing.module";
 import {HttpClientModule} from "@angular/common/http";
-import { FillFieldsWarningComponent } from './shared/fill-fields-warning/fill-fields-warning.component';
+import { InputFieldsErrorComponent } from './shared/input-fields-error/input-fields-error.component';
 import { HomeComponent } from './events/home/home.component';
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {MatMenuModule} from "@angular/material/menu";
-import { NavbarComponent } from './shared/navbar/navbar.component';
+import { NavbarComponent } from './events/root/navbar/navbar.component';
 import {MatGridListModule} from "@angular/material/grid-list";
 import {MatListModule} from "@angular/material/list";
 import {MatCardModule} from "@angular/material/card";
 import { LocationComponent } from './events/location/location.component';
 import {EventComponent} from "./events/event/event.component";
 import {NgOptimizedImage} from "@angular/common";
-import { AccountMenuComponent } from './shared/navbar/account-menu/account-menu.component';
-import { LocationsMenuComponent } from './shared/navbar/locations-menu/locations-menu.component';
+import { AccountMenuComponent } from './events/root/navbar/account-menu/account-menu.component';
+import { LocationsMenuComponent } from './events/root/navbar/locations-menu/locations-menu.component';
 import { TicketsComponent } from './shared/tickets/tickets.component';
 import { AdminDashboardComponent } from './events/admin-dashboard/admin-dashboard.component';
 import {MatTabsModule} from "@angular/material/tabs";
@@ -46,24 +46,26 @@ import { ActionsDirective } from './directives/actions.directive';
 import {MatSortModule} from "@angular/material/sort";
 import { TruncateTextPipe } from './pipes/truncate-text.pipe';
 import { LocationNamePipe } from './pipes/location-name.pipe';
-import { PopupMenuComponent } from './shared/popup-menu/popup-menu.component';
+import { EditDeleteDialog } from './shared/dialog-menus/edit-delete-dialog/edit-delete-dialog.component';
 import {MatDialogModule} from "@angular/material/dialog";
 import {MatExpansionModule} from "@angular/material/expansion";
 import {MatSelectModule} from "@angular/material/select";
 import { ObjectTypeDirective } from './directives/object-type.directive';
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatNativeDateModule} from "@angular/material/core";
-import { EditLocationsComponent } from './shared/popup-menu/edit/edit-locations/edit-locations.component';
-import { EditUsersComponent } from './shared/popup-menu/edit/edit-users/edit-users.component';
-import { EditEventsComponent } from './shared/popup-menu/edit/edit-events/edit-events.component';
+import { EditLocationsComponent } from './shared/dialog-menus/edit-delete-dialog/edit/edit-locations/edit-locations.component';
+import { EditUsersComponent } from './shared/dialog-menus/edit-delete-dialog/edit/edit-users/edit-users.component';
+import { EditEventsComponent } from './shared/dialog-menus/edit-delete-dialog/edit/edit-events/edit-events.component';
 import { DialogRefDirective } from './directives/dialog-ref.directive';
-import { EditButtonsComponent } from './shared/popup-menu/edit-buttons/edit-buttons.component';
+import { EditButtonsComponent } from './shared/dialog-menus/edit-delete-dialog/edit-buttons/edit-buttons.component';
 import { FilterComponent } from './events/admin-dashboard/admin-manage/filter/filter.component';
-import { UsersFilterComponent } from './events/admin-dashboard/admin-manage/filter/users-filter/users-filter.component';
-import { LocationsFilterComponent } from './events/admin-dashboard/admin-manage/filter/locations-filter/locations-filter.component';
-import { EventsFilterComponent } from './events/admin-dashboard/admin-manage/filter/events-filter/events-filter.component';
 import { IndexDirective } from './directives/index.directive';
 import {MatRadioModule} from "@angular/material/radio";
+import { AddDialogComponent } from './shared/dialog-menus/add-dialog/add-dialog.component';
+import { AddUserComponent } from './shared/dialog-menus/add-dialog/add-user/add-user.component';
+import { AddEventComponent } from './shared/dialog-menus/add-dialog/add-event/add-event.component';
+import { AddLocationComponent } from './shared/dialog-menus/add-dialog/add-location/add-location.component';
+import { RootComponent } from './events/root/root.component';
 
 
 
@@ -73,7 +75,7 @@ import {MatRadioModule} from "@angular/material/radio";
     LoginComponent,
     RegisterComponent,
     ForgotPasswordComponent,
-    FillFieldsWarningComponent,
+    InputFieldsErrorComponent,
     EventComponent,
     HomeComponent,
     NavbarComponent,
@@ -95,7 +97,7 @@ import {MatRadioModule} from "@angular/material/radio";
     ActionsDirective,
     TruncateTextPipe,
     LocationNamePipe,
-    PopupMenuComponent,
+    EditDeleteDialog,
     ObjectTypeDirective,
     EditLocationsComponent,
     EditUsersComponent,
@@ -103,10 +105,12 @@ import {MatRadioModule} from "@angular/material/radio";
     DialogRefDirective,
     EditButtonsComponent,
     FilterComponent,
-    UsersFilterComponent,
-    LocationsFilterComponent,
-    EventsFilterComponent,
     IndexDirective,
+    AddDialogComponent,
+    AddUserComponent,
+    AddEventComponent,
+    AddLocationComponent,
+    RootComponent,
   ],
   imports: [
     BrowserModule,

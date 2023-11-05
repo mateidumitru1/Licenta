@@ -9,6 +9,7 @@ import com.matei.backend.entity.User;
 import com.matei.backend.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,19 +20,19 @@ import java.util.UUID;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final AuthenticationService authenticationService;
+    private final PasswordEncoder passwordEncoder;
 
     public UserResponseDto createUser(UserCreationRequestDto userCreationRequestDto) {
         var user = userRepository.save(User.builder()
                 .id(UUID.randomUUID())
                 .username(userCreationRequestDto.getUsername())
                 .email(userCreationRequestDto.getEmail())
-                .password(userCreationRequestDto.getPassword())
+                .password(passwordEncoder.encode(userCreationRequestDto.getPassword()))
                 .firstName(userCreationRequestDto.getFirstName())
                 .lastName(userCreationRequestDto.getLastName())
                 .role(userCreationRequestDto.getRole())
-                .build()
-        );
+                .build());
+
         return UserResponseDto.builder()
                 .id(user.getId())
                 .username(user.getUsername())

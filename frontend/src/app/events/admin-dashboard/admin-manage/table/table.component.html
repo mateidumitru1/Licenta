@@ -1,7 +1,5 @@
 <app-filter [type]="type" [data]="dataSource.data" (filteredDataEvent)="onDataFiltered($event)"></app-filter>
-<!--<app-locations-filter *ngIf="type === 'locations'" [data]="dataSource.data" (filteredDataEvent)="onDataFiltered($event)"></app-locations-filter>-->
-<!--<app-events-filter *ngIf="type === 'events'"></app-events-filter>-->
-
+<button mat-raised-button color="primary" id="add-button" (click)="onClickAdd()"> Add </button>
 <table mat-table *ngIf="dataSource.data.length != 0" [dataSource]="dataSource" matSort>
   <ng-container *ngFor="let column of displayedColumns" [matColumnDef]="column">
     <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ column | titlecase }} </th>

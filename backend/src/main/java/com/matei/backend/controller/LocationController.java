@@ -1,12 +1,13 @@
 package com.matei.backend.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.matei.backend.dto.request.LocationRequestDto;
+import com.matei.backend.dto.request.LocationCreationRequestDto;
 import com.matei.backend.dto.request.LocationUpdateRequestDto;
-import com.matei.backend.dto.response.EventResponseDto;
 import com.matei.backend.dto.response.LocationResponseDto;
+import com.matei.backend.exception.LocationAlreadyExistsException;
 import com.matei.backend.service.LocationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,8 +23,12 @@ public class LocationController {
     private final ObjectMapper objectMapper;
 
     @PostMapping
-    public ResponseEntity<LocationResponseDto> createLocation(@RequestBody LocationRequestDto LocationRequestDto) {
-        return ResponseEntity.ok(locationService.createLocation(LocationRequestDto));
+    public ResponseEntity<?> createLocation(@ModelAttribute LocationCreationRequestDto locationCreationRequestDto) throws IOException {
+        try {
+            return ResponseEntity.ok(locationService.createLocation(locationCreationRequestDto));
+        } catch (LocationAlreadyExistsException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+        }
     }
 
     @GetMapping

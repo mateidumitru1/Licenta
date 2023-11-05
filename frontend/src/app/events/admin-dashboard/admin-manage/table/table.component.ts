@@ -4,10 +4,11 @@ import {MatPaginator} from "@angular/material/paginator";
 import {AdminManageService} from "../admin-manage.service";
 import {EventService} from "../../../event/event.service";
 import {MatSort} from "@angular/material/sort";
-import {PopupMenuComponent} from "../../../../shared/popup-menu/popup-menu.component";
+import {EditDeleteDialog} from "../../../../shared/dialog-menus/edit-delete-dialog/edit-delete-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
 import {LocationService} from "../../../location/location.service";
 import {MatMenu, MatMenuTrigger} from "@angular/material/menu";
+import {AddDialogComponent} from "../../../../shared/dialog-menus/add-dialog/add-dialog.component";
 
 @Component({
   selector: 'app-table',
@@ -27,8 +28,6 @@ export class TableComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
 
   @ViewChild(MatSort) sort: MatSort | undefined;
-
-  searchText: string = '';
 
   rowData: any;
 
@@ -64,12 +63,37 @@ export class TableComponent implements OnInit, AfterViewInit {
     this.dataSource.data = filteredData;
   }
 
+  onClickAdd() {
+      let dialogRef = this.dialog.open(AddDialogComponent, {
+      width: '40%',
+      data: {
+        indexes: this.displayedColumns,
+        locations: this.locations,
+        type: this.type
+      },
+      disableClose: true
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if(result.isTrue) {
+        this.adminManageService.add(this.type, result.data).subscribe((res) => {
+          this.dataSource.data = this.dataSource.data.concat(res);
+          if(this.type === 'locations') {
+            this.locationService.fetchAllLocations().subscribe((locations: any) => {
+              this.locations = locations;
+            });
+          }
+        }, error => {
+          console.log("add failed");
+        });
+      }
+    }); }
+
   onClickEdit() {
     let indexes = this.displayedColumns;
     if(this.type !== 'users') {
       indexes = this.displayedColumns.concat(['imageUrl']);
     }
-    let dialogRef = this.dialog.open(PopupMenuComponent, {
+    let dialogRef = this.dialog.open(EditDeleteDialog, {
       width: '40%',
       data: {
         title: 'Edit',
@@ -89,6 +113,11 @@ export class TableComponent implements OnInit, AfterViewInit {
             }
             return value;
           });
+          if(this.type === 'locations') {
+            this.locationService.fetchAllLocations().subscribe((locations: any) => {
+              this.locations = locations;
+            });
+          }
         }, error => {
           console.log("update failed");
         });
@@ -97,7 +126,7 @@ export class TableComponent implements OnInit, AfterViewInit {
   }
 
   onClickDelete() {
-    let dialogRef = this.dialog.open(PopupMenuComponent, {
+    let dialogRef = this.dialog.open(EditDeleteDialog, {
       width: '250px',
       data: {
         title: 'Delete',

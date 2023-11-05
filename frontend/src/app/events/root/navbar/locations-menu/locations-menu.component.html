@@ -1,0 +1,8 @@
+<div class="locations-dropdown">
+  <div *ngFor="let location of locations">
+    <mat-card (click)="onLocationClick(location)">
+      <img src="{{ location.imageUrl }}" alt="{{ location.name }}">
+      <mat-card-subtitle>{{ location.name }}</mat-card-subtitle>
+    </mat-card>
+  </div>
+</div>

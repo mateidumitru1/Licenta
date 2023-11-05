@@ -5,11 +5,72 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0ff3fa00-627c-435d-82b1-4a1abb5b20ca" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/dto/request/EventCreationRequestDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/dto/request/LocationCreationRequestDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/exception/LocationAlreadyExistsException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/app/events/root/navbar/locations-menu/locations-menu.component.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/app/shared/input-fields-error/input-fields-error.component.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/app/shared/input-fields-error/input-fields-error.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/controller/EventController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/controller/EventController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/controller/LocationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/controller/LocationController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/dto/request/UserCreationRequestDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/dto/request/UserCreationRequestDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/EventService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/EventService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/LocationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/LocationService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/app-routing.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/app-routing.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/app.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/app.component.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/app/app.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/app.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/table/table.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/table/table.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/table/table.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/table/table.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/table/table.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/table/table.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/admin-manage.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/admin-manage.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/filter/events-filter/events-filter.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/dialog-menus/add-dialog/add.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/filter/events-filter/events-filter.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/filter/events-filter/events-filter.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/filter/locations-filter/locations-filter.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/input-fields-error/input-fields-error.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/filter/locations-filter/locations-filter.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/filter/locations-filter/locations-filter.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/filter/users-filter/users-filter.component.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/filter/users-filter/users-filter.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/filter/users-filter/users-filter.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/table/table.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/table/table.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/table/table.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/table/table.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/table/table.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/table/table.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/home/home.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/home/home.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/guards/admin.guard.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/guards/admin.guard.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/identity/forgot-password/forgot-password.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/identity/forgot-password/forgot-password.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/identity/forgot-password/forgot-password.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/identity/forgot-password/forgot-password.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/identity/login/login.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/identity/login/login.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/identity/login/login.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/identity/login/login.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/identity/register/register.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/identity/register/register.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/identity/register/register.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/identity/register/register.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/fill-fields-warning/fill-fields-warning.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/input-fields-error/input-fields-error.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/fill-fields-warning/fill-fields-warning.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/fill-fields-warning/fill-fields-warning.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/navbar/account-menu/account-menu.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/root/navbar/account-menu/account-menu.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/navbar/account-menu/account-menu.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/root/navbar/account-menu/account-menu.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/navbar/account-menu/account-menu.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/root/navbar/account-menu/account-menu.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/navbar/locations-menu/locations-menu.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/root/navbar/locations-menu/locations-menu.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/navbar/locations-menu/locations-menu.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/navbar/locations-menu/locations-menu.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/root/navbar/locations-menu/locations-menu.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/navbar/navbar.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/root/navbar/navbar.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/navbar/navbar.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/root/navbar/navbar.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/navbar/navbar.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/root/navbar/navbar.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/navbar/navbar.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/root/navbar/navbar.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/popup-menu/edit-buttons/edit-buttons.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/dialog-menus/edit-delete-dialog/edit-buttons/edit-buttons.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/popup-menu/edit-buttons/edit-buttons.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/dialog-menus/edit-delete-dialog/edit-buttons/edit-buttons.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/popup-menu/edit-buttons/edit-buttons.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/dialog-menus/edit-delete-dialog/edit-buttons/edit-buttons.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/popup-menu/edit/edit-events/edit-events.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/dialog-menus/edit-delete-dialog/edit-delete-dialog.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/popup-menu/edit/edit-events/edit-events.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/dialog-menus/edit-delete-dialog/edit/edit-events/edit-events.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/popup-menu/edit/edit-events/edit-events.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/dialog-menus/edit-delete-dialog/edit/edit-events/edit-events.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/popup-menu/edit/edit-locations/edit-locations.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/dialog-menus/edit-delete-dialog/edit/edit-events/edit-events.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/popup-menu/edit/edit-locations/edit-locations.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/dialog-menus/edit-delete-dialog/edit/edit-locations/edit-locations.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/popup-menu/edit/edit-locations/edit-locations.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/dialog-menus/edit-delete-dialog/edit/edit-locations/edit-locations.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/popup-menu/edit/edit-users/edit-users.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/dialog-menus/edit-delete-dialog/edit/edit-users/edit-users.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/popup-menu/edit/edit-users/edit-users.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/dialog-menus/edit-delete-dialog/edit/edit-users/edit-users.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/popup-menu/edit/edit-users/edit-users.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/dialog-menus/edit-delete-dialog/edit/edit-users/edit-users.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/popup-menu/popup-menu.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/dialog-menus/edit-delete-dialog/edit/edit-locations/edit-locations.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/popup-menu/popup-menu.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/dialog-menus/edit-delete-dialog/edit-delete-dialog.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/popup-menu/popup-menu.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/dialog-menus/edit-delete-dialog/edit-delete-dialog.component.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -87,11 +148,11 @@
       <recent name="C:\Users\Matei\Desktop\licenta\Licenta1\untitled\backend" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\Matei\Desktop\licenta\Licenta\frontend\src\app\events\admin-dashboard\admin-manage" />
-      <recent name="C:\Users\Matei\Desktop\licenta\Licenta\frontend\src\app\directives" />
-      <recent name="C:\Users\Matei\Desktop\licenta\Licenta\frontend\src\app\shared\popup-menu\edit" />
-      <recent name="C:\Users\Matei\Desktop\licenta\Licenta\frontend\src\app\guards" />
-      <recent name="C:\Users\Matei\Desktop\licenta\Licenta\frontend\src\app\shared" />
+      <recent name="C:\Users\Matei\Desktop\licenta\Licenta\frontend\src\app\events\root\navbar" />
+      <recent name="C:\Users\Matei\Desktop\licenta\Licenta\frontend\src\app\events\root" />
+      <recent name="C:\Users\Matei\Desktop\licenta\Licenta\frontend\src\app\shared\dialog-menus" />
+      <recent name="C:\Users\Matei\Desktop\licenta\Licenta\frontend\src\app\shared\dialog-menus\edit-delete-dialog\edit" />
+      <recent name="C:\Users\Matei\Desktop\licenta\Licenta\frontend\src\app\shared\dialog-menus\edit-delete-dialog" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="com.matei.backend.exception" />
@@ -114,6 +175,9 @@
     <configuration name="Angular Application (frontend)" type="JavascriptDebugType" uri="http://localhost:4200">
       <method v="2" />
     </configuration>
+    <configuration name="localhost:4200" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:4200/">
+      <method v="2" />
+    </configuration>
     <configuration name="BackendApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="backend" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.matei.backend.BackendApplication" />
@@ -131,6 +195,11 @@
       <envs />
       <method v="2" />
     </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JavaScript Debug.localhost:4200" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -187,7 +256,13 @@
       <workItem from="1698916188179" duration="12351000" />
       <workItem from="1698935745730" duration="11000" />
       <workItem from="1698949271148" duration="8621000" />
-      <workItem from="1699024701351" duration="4525000" />
+      <workItem from="1699024701351" duration="5617000" />
+      <workItem from="1699030445774" duration="148000" />
+      <workItem from="1699030605843" duration="1338000" />
+      <workItem from="1699089890714" duration="1641000" />
+      <workItem from="1699093979761" duration="7650000" />
+      <workItem from="1699115059615" duration="6104000" />
+      <workItem from="1699175773086" duration="338000" />
     </task>
     <servers />
   </component>

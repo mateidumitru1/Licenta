@@ -1,6 +1,6 @@
 package com.matei.backend.service;
 
-import com.matei.backend.dto.request.EventRequestDto;
+import com.matei.backend.dto.request.EventCreationRequestDto;
 import com.matei.backend.dto.request.EventUpdateRequestDto;
 import com.matei.backend.dto.response.EventResponseDto;
 import com.matei.backend.entity.Event;
@@ -10,7 +10,6 @@ import com.matei.backend.exception.LocationNotFoundException;
 import com.matei.backend.repository.EventRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -26,13 +25,13 @@ public class EventService {
     private final LocationService locationService;
     private final ImageService imageService;
 
-    public EventResponseDto createEvent(EventRequestDto eventRequestDto) {
+    public EventResponseDto createEvent(EventCreationRequestDto eventCreationRequestDto) {
         var event = eventRepository.save(Event.builder()
-                .title(eventRequestDto.getTitle())
-                .date(eventRequestDto.getDate())
-                .shortDescription(eventRequestDto.getShortDescription())
-                .description(eventRequestDto.getDescription())
-                .location(Optional.of(locationService.getLocationById(eventRequestDto.getLocationId())).map(
+                .title(eventCreationRequestDto.getTitle())
+                .date(getDateFromString(eventCreationRequestDto.getDate()))
+                .shortDescription(eventCreationRequestDto.getShortDescription())
+                .description(eventCreationRequestDto.getDescription())
+                .location(Optional.of(locationService.getLocationById(UUID.fromString(eventCreationRequestDto.getLocationId()))).map(
                         locationResponseDto -> Location.builder()
                                 .id(locationResponseDto.getId())
                                 .name(locationResponseDto.getName())
@@ -137,7 +136,7 @@ public class EventService {
             event.setTitle(updatedEvent.getTitle());
         }
 
-        var date = LocalDate.parse(updatedEvent.getDate().substring(0, 10));
+        var date = getDateFromString(updatedEvent.getDate());
         if(!Objects.equals(date, event.getDate())) {
             event.setDate(date);
         }
@@ -177,6 +176,10 @@ public class EventService {
 
     public void deleteEventById(UUID id) {
         eventRepository.deleteById(id);
+    }
+
+    private LocalDate getDateFromString(String date) {
+        return LocalDate.parse(date.substring(0, 10));
     }
 
 }

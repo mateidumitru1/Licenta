@@ -12,22 +12,26 @@ import {AdminHomeComponent} from "./events/admin-dashboard/admin-home/admin-home
 import {AdminManageComponent} from "./events/admin-dashboard/admin-manage/admin-manage.component";
 import {AdminStatisticsComponent} from "./events/admin-dashboard/admin-statistics/admin-statistics.component";
 import {AdminGuard} from "./guards/admin.guard";
+import {RootRedirectGuard} from "./guards/root-redirect-guard.service";
+import {RootComponent} from "./events/root/root.component";
 
 const appRoutes: Routes = [
-  { path: '', redirectTo: '/home', pathMatch: 'full'},
+  { path: 'home' , redirectTo: '', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },
-  { path: 'home', pathMatch: 'full', component: HomeComponent },
   { path: 'page-not-found', component: PageNotFoundComponent },
   { path: 'admin-dashboard', canActivate: [AdminGuard], component: AdminDashboardComponent, children: [
     { path: '', pathMatch: 'full', component: AdminHomeComponent },
     { path: 'manage', component: AdminManageComponent },
     { path: 'statistics', component: AdminStatisticsComponent }
     ]},
-  { path: ':location' , component: LocationComponent },
-  { path: ':location/:eventName/:eventId', component: EventComponent },
-  { path: '**', redirectTo: 'page-not-found' },
+  { path: '', canActivate: [RootRedirectGuard], component: RootComponent, children: [
+      { path: '', pathMatch: 'full', component: HomeComponent },
+      { path: ':location' , component: LocationComponent },
+      { path: ':location/:eventName/:eventId', component: EventComponent },
+  ]},
+  // { path: '**', redirectTo: 'page-not-found' },
 ];
 
 @NgModule({

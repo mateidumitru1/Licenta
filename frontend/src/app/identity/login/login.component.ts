@@ -3,6 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import {Router} from "@angular/router";
 import {JwtHandler} from "../../handlers/jwt.handler";
 import {IdentityService} from "../identity.service";
+import {InputFieldsErrorService} from "../../shared/input-fields-error/input-fields-error.service";
 
 @Component({
   selector: 'app-login',
@@ -14,9 +15,9 @@ export class LoginComponent{
   username: string = '';
   password: string = '';
   message: string = '';
-  invalidLogin: boolean = false;
 
-  constructor(private http: HttpClient, private router: Router, private identityService: IdentityService, private jwtHandler: JwtHandler) { }
+  constructor(private http: HttpClient, private router: Router, private identityService: IdentityService,
+              private jwtHandler: JwtHandler, private inputFieldsErrorService: InputFieldsErrorService) { }
 
   @HostListener('document:keydown', ['$event'])
   keyEvent(event: KeyboardEvent) {
@@ -27,9 +28,8 @@ export class LoginComponent{
 
   onLogin(): void {
     if (this.username === '' || this.password === '') {
-      this.invalidLogin = true;
       this.message = 'Please enter username and password';
-      this.timeout();
+      this.inputFieldsErrorService.subject.next();
     } else {
       this.identityService.login(this.username, this.password).subscribe((response: any) => {
         localStorage.setItem('token', response.token);
@@ -40,18 +40,9 @@ export class LoginComponent{
           this.router.navigate(['home']);
         }
       }, (error) => {
-        this.invalidLogin = true;
         this.message = 'Invalid username or password';
-        this.timeout();
+        this.inputFieldsErrorService.subject.next();
       });
     }
   }
-  timeout() {
-    setTimeout(() => {
-      this.invalidLogin = false;
-      this.message = '';
-    }, 1000);
-  }
-
-  protected readonly focus = focus;
 }

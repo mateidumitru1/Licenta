@@ -1,6 +1,6 @@
 package com.matei.backend.controller;
 
-import com.matei.backend.dto.request.EventRequestDto;
+import com.matei.backend.dto.request.EventCreationRequestDto;
 import com.matei.backend.dto.request.EventUpdateRequestDto;
 import com.matei.backend.dto.response.EventResponseDto;
 import com.matei.backend.exception.EventNotFoundException;
@@ -8,7 +8,6 @@ import com.matei.backend.service.EventService;
 import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -22,8 +21,8 @@ public class EventController {
     private final EventService eventService;
 
     @PostMapping
-    public ResponseEntity<EventResponseDto> createEvent(@RequestBody EventRequestDto eventRequestDto) {
-        return ResponseEntity.ok(eventService.createEvent(eventRequestDto));
+    public ResponseEntity<EventResponseDto> createEvent(@ModelAttribute EventCreationRequestDto eventCreationRequestDto) {
+        return ResponseEntity.ok(eventService.createEvent(eventCreationRequestDto));
     }
 
     @GetMapping("/all")
