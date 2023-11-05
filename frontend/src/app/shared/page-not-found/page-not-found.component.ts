@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {JwtHandler} from "../../handlers/jwt.handler";
+import {JwtHandler} from "../../util/handlers/jwt.handler";
 import {Router} from "@angular/router";
 
 @Component({

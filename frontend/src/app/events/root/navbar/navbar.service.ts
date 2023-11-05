@@ -7,21 +7,17 @@ export class NavbarService {
 
   showPlacesMenu: boolean = false;
 
-  placeRef: HTMLAnchorElement | undefined;
-
   constructor() { }
-  onMouseEnterPlaces(place: HTMLAnchorElement) {
-    this.placeRef = place;
+  onMouseEnterLocations() {
     this.showPlacesMenu = true;
   }
 
-  onMouseLeavePlaces() {
+  onMouseLeaveLocations() {
     this.showPlacesMenu = false;
   }
 
   onClick() {
     // @ts-ignore
-    this.placeRef.style.boxShadow = 'none';
     this.showPlacesMenu = false;
   }
 }

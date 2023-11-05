@@ -2,9 +2,9 @@
   <mat-toolbar color="primary">
     <a class="navbar-brand" routerLink="/home">Home</a>
     <div class="locations-menu"
-      (mouseenter)="onMouseEnterPlaces(locations)" (mouseleave)="onMouseLeavePlaces(locations)">
-      <a #locations>Locations</a>
-      <app-locations-menu *ngIf="getNavbarService(locations).showPlacesMenu"></app-locations-menu>
+         (mouseenter)="onMouseEnterLocations()" (mouseleave)="onMouseLeaveLocations()">
+      <a id="locations-anchor">Locations</a>
+      <app-locations-menu *ngIf="getNavbarService().showPlacesMenu"></app-locations-menu>
     </div>
     <span class="spacer"></span>
     <input placeholder="Search"/>

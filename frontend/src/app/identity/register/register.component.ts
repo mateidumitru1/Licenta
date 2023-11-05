@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {EmailHandler} from "../../handlers/email.handler";
+import {EmailHandler} from "../../util/handlers/email.handler";
 import {IdentityService} from "../identity.service";
 import {InputFieldsErrorService} from "../../shared/input-fields-error/input-fields-error.service";
 

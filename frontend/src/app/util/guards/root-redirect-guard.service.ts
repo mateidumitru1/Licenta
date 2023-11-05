@@ -7,7 +7,7 @@ import {
   Router,
   RouterStateSnapshot, UrlSegment
 } from '@angular/router';
-import {IdentityService} from "../identity/identity.service";
+import {IdentityService} from "../../identity/identity.service";
 import {Injectable} from "@angular/core";
 import {state} from "@angular/animations";
 

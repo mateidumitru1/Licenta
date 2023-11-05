@@ -2,7 +2,7 @@ import {Injectable} from "@angular/core";
 import {Observable} from "rxjs";
 import {Router} from "@angular/router";
 import {HttpClient} from "@angular/common/http";
-import {JwtHandler} from "../handlers/jwt.handler";
+import {JwtHandler} from "../util/handlers/jwt.handler";
 
 @Injectable({
   providedIn: 'root'

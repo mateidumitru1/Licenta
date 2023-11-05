@@ -1,7 +1,7 @@
 import {Component, ElementRef, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {NavbarService} from "./navbar.service";
-import {JwtHandler} from "../../../handlers/jwt.handler";
+import {JwtHandler} from "../../../util/handlers/jwt.handler";
 
 @Component({
   selector: 'app-navbar',
@@ -16,17 +16,15 @@ export class NavbarComponent implements OnInit{
   ngOnInit(): void {
   }
 
-  onMouseEnterPlaces(places: HTMLAnchorElement) {
-    this.navbarService.onMouseEnterPlaces(places);
-    places.style.boxShadow = '0 0 10px 0 rgba(0, 0, 0, 0.5)';
+  onMouseEnterLocations() {
+    this.navbarService.onMouseEnterLocations();
   }
 
-  onMouseLeavePlaces(places: HTMLAnchorElement) {
-    this.navbarService.onMouseLeavePlaces();
-    places.style.boxShadow = 'none';
+  onMouseLeaveLocations() {
+    this.navbarService.onMouseLeaveLocations();
   }
 
-  getNavbarService(places: HTMLAnchorElement) {
+  getNavbarService() {
     return this.navbarService;
   }
 }

@@ -1,7 +1,7 @@
 import {Component, OnInit, OnDestroy, HostListener, AfterViewInit} from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import {Router} from "@angular/router";
-import {JwtHandler} from "../../handlers/jwt.handler";
+import {JwtHandler} from "../../util/handlers/jwt.handler";
 import {IdentityService} from "../identity.service";
 import {InputFieldsErrorService} from "../../shared/input-fields-error/input-fields-error.service";
 

@@ -11,8 +11,8 @@ import {PageNotFoundComponent} from "./shared/page-not-found/page-not-found.comp
 import {AdminHomeComponent} from "./events/admin-dashboard/admin-home/admin-home.component";
 import {AdminManageComponent} from "./events/admin-dashboard/admin-manage/admin-manage.component";
 import {AdminStatisticsComponent} from "./events/admin-dashboard/admin-statistics/admin-statistics.component";
-import {AdminGuard} from "./guards/admin.guard";
-import {RootRedirectGuard} from "./guards/root-redirect-guard.service";
+import {AdminGuard} from "./util/guards/admin.guard";
+import {RootRedirectGuard} from "./util/guards/root-redirect-guard.service";
 import {RootComponent} from "./events/root/root.component";
 
 const appRoutes: Routes = [

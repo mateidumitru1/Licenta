@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {NavbarService} from "../navbar.service";
-import {JwtHandler} from "../../../../handlers/jwt.handler";
+import {JwtHandler} from "../../../../util/handlers/jwt.handler";
 import {HttpClient} from "@angular/common/http";
 import {IdentityService} from "../../../../identity/identity.service";
 
