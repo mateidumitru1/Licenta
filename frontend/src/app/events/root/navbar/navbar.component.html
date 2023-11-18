@@ -4,7 +4,7 @@
     <div class="locations-menu"
          (mouseenter)="onMouseEnterLocations()" (mouseleave)="onMouseLeaveLocations()">
       <a id="locations-anchor">Locations</a>
-      <app-locations-menu *ngIf="getNavbarService().showPlacesMenu"></app-locations-menu>
+      <app-locations-menu *ngIf="getNavbarService().showLocationMenu"></app-locations-menu>
     </div>
     <span class="spacer"></span>
     <input placeholder="Search"/>

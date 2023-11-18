@@ -5,19 +5,19 @@ import {Injectable} from "@angular/core";
 })
 export class NavbarService {
 
-  showPlacesMenu: boolean = false;
+  showLocationMenu: boolean = false;
 
   constructor() { }
   onMouseEnterLocations() {
-    this.showPlacesMenu = true;
+    this.showLocationMenu = true;
   }
 
   onMouseLeaveLocations() {
-    this.showPlacesMenu = false;
+    this.showLocationMenu = false;
   }
 
   onClick() {
     // @ts-ignore
-    this.showPlacesMenu = false;
+    this.showLocationMenu = false;
   }
 }

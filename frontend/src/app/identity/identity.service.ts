@@ -3,13 +3,15 @@ import {Observable} from "rxjs";
 import {Router} from "@angular/router";
 import {HttpClient} from "@angular/common/http";
 import {JwtHandler} from "../util/handlers/jwt.handler";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Injectable({
   providedIn: 'root'
 })
 export class IdentityService {
 
-  constructor(private http: HttpClient, private router: Router, private jwtHandler: JwtHandler) { }
+  constructor(private http: HttpClient, private router: Router, private jwtHandler: JwtHandler,
+              private snackBar: MatSnackBar) { }
 
   login(username: string, password: string): Observable<any> {
     return this.http.post('http://localhost:8080/api/authenticate', {
@@ -19,7 +21,6 @@ export class IdentityService {
   }
 
   register(firstName: string, lastName: string, username: string, password: string, email: string) {
-
     this.http.post('http://localhost:8080/api/register', {
       firstName: firstName,
       lastName: lastName,
@@ -27,9 +28,14 @@ export class IdentityService {
       password: password,
       email: email
     }).subscribe((response: any) => {
-      console.log(response);
+      this.snackBar.open('You have been registered successfully!', 'Close', {
+        duration: 3000
+      });
+      this.router.navigate(['/login']);
     }, (error: any) => {
-      alert(error.error)
+      this.snackBar.open(error.error.message, 'Close', {
+        duration: 3000
+      });
     });
   }
 
@@ -41,6 +47,9 @@ export class IdentityService {
     }).subscribe(() => {
       this.jwtHandler.removeJwt();
       this.router.navigate(['/home']);
+      this.snackBar.open('You have been logged out!', 'Close', {
+        duration: 3000
+      });
     });
   }
 
@@ -57,7 +66,16 @@ export class IdentityService {
   }
 
   forgotPassword(email: string) {
-     return this.http.post('http://localhost:8080/api/forgot-password?email=' + email, null);
+     this.http.post('http://localhost:8080/api/forgot-password?email=' + email, null).subscribe(() => {
+        this.snackBar.open('An email has been sent to you!', 'Close', {
+          duration: 3000
+        });
+        this.router.navigate(['/login']);
+     }, (error: any) => {
+        this.snackBar.open(error.error.message, 'Close', {
+          duration: 3000
+        });
+     });
   }
 
   resetPassword(token: string, password: string) {

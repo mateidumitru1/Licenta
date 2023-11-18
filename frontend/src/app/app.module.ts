@@ -67,6 +67,7 @@ import { AddEventComponent } from './shared/dialog-menus/add-dialog/add-event/ad
 import { AddLocationComponent } from './shared/dialog-menus/add-dialog/add-location/add-location.component';
 import { RootComponent } from './events/root/root.component';
 import { ResetPasswordComponent } from './identity/reset-password/reset-password.component';
+import {MatSnackBar, MatSnackBarModule} from "@angular/material/snack-bar";
 
 
 
@@ -140,7 +141,8 @@ import { ResetPasswordComponent } from './identity/reset-password/reset-password
     MatSelectModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatRadioModule
+    MatRadioModule,
+    MatSnackBarModule
   ],
   providers: [],
   bootstrap: [AppComponent]

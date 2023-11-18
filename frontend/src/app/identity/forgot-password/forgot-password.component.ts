@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, HostListener} from '@angular/core';
 import {EmailHandler} from "../../util/handlers/email.handler";
 import {InputFieldsErrorService} from "../../shared/input-fields-error/input-fields-error.service";
 import {IdentityService} from "../identity.service";
@@ -15,15 +15,18 @@ export class ForgotPasswordComponent {
   constructor(private emailHandler: EmailHandler, private inputFieldsErrorService: InputFieldsErrorService,
               private identityService: IdentityService) { }
 
+  @HostListener('document:keydown', ['$event'])
+  keyEvent(event: KeyboardEvent) {
+    if (event.keyCode === 13) {
+      this.changePassword();
+    }
+  }
+
   changePassword() {
     if(!this.emailHandler.isEmailValid(this.email)) {
       this.inputFieldsErrorService.subject.next('Email is not valid!');
       return;
     }
-    this.identityService.forgotPassword(this.email).subscribe(() => {
-      alert('Email sent!');
-    }, (error: any) => {
-      alert(error.error);
-    });
+    this.identityService.forgotPassword(this.email);
   }
 }
