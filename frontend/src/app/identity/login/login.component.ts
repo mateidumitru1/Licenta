@@ -14,7 +14,6 @@ export class LoginComponent{
 
   username: string = '';
   password: string = '';
-  message: string = '';
 
   constructor(private http: HttpClient, private router: Router, private identityService: IdentityService,
               private jwtHandler: JwtHandler, private inputFieldsErrorService: InputFieldsErrorService) { }

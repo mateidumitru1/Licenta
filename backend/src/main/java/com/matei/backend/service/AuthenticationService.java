@@ -53,6 +53,7 @@ public class AuthenticationService {
                 .build();
 
         userRepository.save(user);
+        emailService.sendWelcomeEmail(user.getFirstName(), user.getUsername(), user.getEmail());
 
         return RegisterResponseDto.builder()
                 .username(user.getUsername())
