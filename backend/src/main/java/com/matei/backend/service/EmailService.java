@@ -1,5 +1,6 @@
 package com.matei.backend.service;
 
+import com.matei.backend.dto.response.TicketResponseDto;
 import com.matei.backend.entity.ResetPasswordToken;
 import com.sendgrid.Method;
 import com.sendgrid.Request;
@@ -56,6 +57,23 @@ public class EmailService {
         mail.addPersonalization(personalization);
 
         send(mail);
+    }
+
+    public void sendTicketEmail(String toEmail, TicketResponseDto ticketResponseDto) {
+        Email to = new Email(toEmail);
+
+//        final String resetPasswordTemplateId = "d-761f1f0d47814e79bbee8243edd4507c";
+
+//        Personalization personalization = new Personalization();
+//        personalization.addDynamicTemplateData("url", url);
+//        personalization.addTo(to);
+//
+//        Mail mail = new Mail();
+//        mail.setFrom(from);
+//        mail.setTemplateId(resetPasswordTemplateId);
+//        mail.addPersonalization(personalization);
+
+//        send(mail);
     }
 
     private void send(Mail mail) {

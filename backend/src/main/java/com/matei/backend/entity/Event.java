@@ -10,6 +10,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -33,4 +34,8 @@ public class Event {
     @OnDelete(action = OnDeleteAction.SET_NULL)
     @JoinColumn(name = "location_id", referencedColumnName = "id")
     private Location location;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "event")
+    private List<TicketType> ticketTypes;
 }

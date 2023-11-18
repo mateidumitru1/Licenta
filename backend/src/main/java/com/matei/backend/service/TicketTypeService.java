@@ -1,0 +1,66 @@
+package com.matei.backend.service;
+
+import com.matei.backend.dto.request.TicketTypeCreationRequestDto;
+import com.matei.backend.dto.response.TicketTypeResponseDto;
+import com.matei.backend.entity.TicketType;
+import com.matei.backend.exception.TicketTypeNotFoundException;
+import com.matei.backend.repository.TicketTypeRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.UUID;
+
+@Service
+@RequiredArgsConstructor
+public class TicketTypeService {
+    private final TicketTypeRepository ticketTypeRepository;
+
+    public TicketTypeResponseDto createTicketType(TicketTypeCreationRequestDto ticketTypeCreationRequestDto) {
+        var ticketType = ticketTypeRepository.save(TicketType.builder()
+                .name(ticketTypeCreationRequestDto.getName())
+                .price(ticketTypeCreationRequestDto.getPrice())
+                .quantity(ticketTypeCreationRequestDto.getQuantity())
+                .build());
+
+        return TicketTypeResponseDto.builder()
+                .id(ticketType.getId())
+                .name(ticketType.getName())
+                .price(ticketType.getPrice())
+                .quantity(ticketType.getQuantity())
+                .build();
+    }
+
+    public TicketTypeResponseDto getTicketTypeById(UUID id) {
+        var ticketType = ticketTypeRepository.findById(id).orElseThrow(() -> new TicketTypeNotFoundException("Ticket type not found"));
+
+        return TicketTypeResponseDto.builder()
+                .id(ticketType.getId())
+                .name(ticketType.getName())
+                .price(ticketType.getPrice())
+                .quantity(ticketType.getQuantity())
+                .build();
+    }
+
+    public List<TicketTypeResponseDto> getAllTicketTypes() {
+        return ticketTypeRepository.findAll().stream()
+                .map(ticketType -> TicketTypeResponseDto.builder()
+                        .id(ticketType.getId())
+                        .name(ticketType.getName())
+                        .price(ticketType.getPrice())
+                        .quantity(ticketType.getQuantity())
+                        .build())
+                .toList();
+    }
+
+    public List<TicketTypeResponseDto> getTicketTypesByEventId(UUID eventId) {
+        return ticketTypeRepository.findByEventId(eventId).stream()
+                .map(ticketType -> TicketTypeResponseDto.builder()
+                        .id(ticketType.getId())
+                        .name(ticketType.getName())
+                        .price(ticketType.getPrice())
+                        .quantity(ticketType.getQuantity())
+                        .build())
+                .toList();
+    }
+}

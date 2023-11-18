@@ -56,6 +56,19 @@ public class UserService {
                 .build()).toList();
     }
 
+    public UserResponseDto getUserById(UUID id) {
+        var user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        return UserResponseDto.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .role(user.getRole())
+                .build();
+    }
+
     public UserResponseDto updateUser(UserRequestDto userRequestDto) {
         userRepository.partialUpdateUser(
                 userRequestDto.getId(),

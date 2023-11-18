@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Function;
 
 @Service
@@ -42,6 +43,10 @@ public class JwtService {
             "U4ZJgjO2yod1buVpPvaafBhdxVdElvYW";
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
+    }
+
+    public UUID extractId(String token) {
+        return UUID.fromString(extractClaim(token, claims -> claims.get("id", String.class)));
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
