@@ -22,6 +22,11 @@ export class EventComponent implements OnInit {
       imageUrl: string;
     };
     imageUrl: string;
+    ticketTypes: {
+      name: string;
+      price: number;
+      quantity: number;
+    }[];
   } = {
     id: '',
     title: '',
@@ -34,6 +39,7 @@ export class EventComponent implements OnInit {
       address: '',
       imageUrl: ''
     },
+    ticketTypes: [],
     imageUrl: ''
   };
 
@@ -47,5 +53,9 @@ export class EventComponent implements OnInit {
     }, error => {
       this.router.navigate(['/page-not-found']);
     });
+  }
+
+  buyTicket(ticketType: { name: string; price: number; quantity: number; }): void {
+
   }
 }

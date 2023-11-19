@@ -1,0 +1,19 @@
+<mat-dialog-content>
+  <h1>Ticket</h1>
+  <mat-form-field>
+    <input matInput placeholder="Ticket" [(ngModel)]="ticketType.name">
+  </mat-form-field>
+  <br>
+  <mat-form-field>
+    <input matInput placeholder="Price" [(ngModel)]="ticketType.price">
+  </mat-form-field>
+  <br>
+  <mat-form-field>
+    <input matInput placeholder="Quantity" [(ngModel)]="ticketType.quantity">
+  </mat-form-field>
+  <br>
+  <app-input-fields-error></app-input-fields-error>
+  <button mat-raised-button color="primary" (click)="onConfirmClick()">Confirm</button>
+  <button mat-raised-button color="warn" (click)="onCancelClick()">Cancel</button>
+</mat-dialog-content>
+

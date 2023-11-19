@@ -28,5 +28,37 @@
     <mat-icon>cancel</mat-icon>
   </button>
 </div>
+<mat-expansion-panel>
+  <mat-expansion-panel-header>
+    <mat-panel-title>Tickets</mat-panel-title>
+  </mat-expansion-panel-header>
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef> Name </th>
+      <td mat-cell *matCellDef="let data"> {{data.name}} </td>
+    </ng-container>
+    <ng-container matColumnDef="price">
+      <th mat-header-cell *matHeaderCellDef> Price </th>
+      <td mat-cell *matCellDef="let data"> {{data.price}} </td>
+    </ng-container>
+    <ng-container matColumnDef="quantity">
+      <th mat-header-cell *matHeaderCellDef> Quantity </th>
+      <td mat-cell *matCellDef="let data"> {{data.quantity}} </td>
+    </ng-container>
+    <ng-container matColumnDef="action">
+      <th mat-header-cell *matHeaderCellDef> Action </th>
+      <td mat-cell *matCellDef="let data">
+        <button mat-icon-button (click)="onDeleteTicketTypeClick(data)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="['name', 'price', 'quantity', 'action']"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['name', 'price', 'quantity', 'action'];"></tr>
+  </table>
+  <button mat-raised-button color="primary" (click)="onAddTicketTypeClick()">
+    <mat-icon>add</mat-icon>
+    Add Ticket
+  </button>
+</mat-expansion-panel>
 <app-input-fields-error></app-input-fields-error>
-

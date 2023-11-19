@@ -44,7 +44,6 @@ export class AdminManageService {
   }
 
   add(objectType: string, data: any) {
-    console.log(data);
     return this.http.post(`http://localhost:8080/api/${objectType}`, this.getFormData(objectType, data),
       {
         headers: {
@@ -63,6 +62,10 @@ export class AdminManageService {
     }
     for (const key in data) {
       if (key === 'location' || key === 'date') {
+        continue;
+      }
+      if(key === 'ticketTypes') {
+        formData.append(key, JSON.stringify(data[key]));
         continue;
       }
       formData.append(key, data[key]);

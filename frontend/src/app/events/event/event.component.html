@@ -10,7 +10,13 @@
       <a (click)="showMoreDetails = !showMoreDetails">Show more details</a>
     </div>
   </div>
-  <div>
-    <app-tickets></app-tickets>
+  <div class="tickets-class">
+    <h1>Tickets</h1>
+    <div *ngFor="let ticket of event.ticketTypes">
+      <h2>{{ ticket.name }}</h2>
+      <h3>{{ ticket.price | currency:'USD':true }}</h3>
+      <p> Remaining tickets: {{ ticket.quantity }}</p>
+      <button mat-raised-button color="primary" (click)="buyTicket(ticket)">Buy</button>
+    </div>
   </div>
 </div>

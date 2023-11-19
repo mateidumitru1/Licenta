@@ -15,8 +15,4 @@ import org.springframework.web.bind.annotation.RestController;
 public class TicketTypeController {
     private final TicketTypeService ticketTypeService;
 
-    @PostMapping
-    public ResponseEntity<?> createTicketType(@RequestBody TicketTypeCreationRequestDto ticketTypeCreationRequestDto) {
-        return ResponseEntity.ok(ticketTypeService.createTicketType(ticketTypeCreationRequestDto));
-    }
 }

@@ -2,12 +2,10 @@ import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core'
 import {MatTableDataSource} from "@angular/material/table";
 import {MatPaginator} from "@angular/material/paginator";
 import {AdminManageService} from "../admin-manage.service";
-import {EventService} from "../../../event/event.service";
 import {MatSort} from "@angular/material/sort";
 import {EditDeleteDialog} from "../../../../shared/dialog-menus/edit-delete-dialog/edit-delete-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
 import {LocationService} from "../../../location/location.service";
-import {MatMenu, MatMenuTrigger} from "@angular/material/menu";
 import {AddDialogComponent} from "../../../../shared/dialog-menus/add-dialog/add-dialog.component";
 
 @Component({

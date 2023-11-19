@@ -13,6 +13,17 @@
   justify-content: flex-end;
 }
 
+.tickets-class {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f5f5f5;
+  box-shadow: 0 0 10px #ccc;
+}
+
+
 .size-class {
   width: 500px;
 }

@@ -3,6 +3,7 @@ package com.matei.backend.controller;
 import com.matei.backend.dto.request.EventCreationRequestDto;
 import com.matei.backend.dto.request.EventUpdateRequestDto;
 import com.matei.backend.dto.response.EventResponseDto;
+import com.matei.backend.dto.response.EventWithTicketTypesResponseDto;
 import com.matei.backend.exception.EventNotFoundException;
 import com.matei.backend.service.EventService;
 import jakarta.websocket.server.PathParam;
@@ -21,18 +22,18 @@ public class EventController {
     private final EventService eventService;
 
     @PostMapping
-    public ResponseEntity<EventResponseDto> createEvent(@ModelAttribute EventCreationRequestDto eventCreationRequestDto) {
+    public ResponseEntity<EventWithTicketTypesResponseDto> createEvent(@ModelAttribute EventCreationRequestDto eventCreationRequestDto) throws IOException {
         return ResponseEntity.ok(eventService.createEvent(eventCreationRequestDto));
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<EventResponseDto>> getAllEvents() {
+    public ResponseEntity<List<EventWithTicketTypesResponseDto>> getAllEvents() {
         return ResponseEntity.ok(eventService.getAllEvents());
     }
 
-    @GetMapping("/place")
-    public ResponseEntity<List<EventResponseDto>> getEventListByPlace(@RequestParam("placeName") String placeName) {
-        return ResponseEntity.ok(eventService.getEventListByLocation(placeName));
+    @GetMapping("/location")
+    public ResponseEntity<List<EventResponseDto>> getEventListByPlace(@RequestParam("locationName") String locationName) {
+        return ResponseEntity.ok(eventService.getEventListByLocation(locationName));
     }
 
     @GetMapping("/{title}")
@@ -45,7 +46,7 @@ public class EventController {
     }
 
     @GetMapping
-    public ResponseEntity<EventResponseDto> getEventById(@PathParam("id") String id) {
+    public ResponseEntity<EventWithTicketTypesResponseDto> getEventById(@PathParam("id") String id) {
         try{
             return ResponseEntity.ok(eventService.getEventById(UUID.fromString(id)));
         } catch (EventNotFoundException e) {
@@ -54,7 +55,7 @@ public class EventController {
     }
 
     @PatchMapping
-    public ResponseEntity<EventResponseDto> updateEvent(@ModelAttribute EventUpdateRequestDto eventUpdateRequestDto) throws IOException {
+    public ResponseEntity<EventWithTicketTypesResponseDto> updateEvent(@ModelAttribute EventUpdateRequestDto eventUpdateRequestDto) throws IOException {
         return ResponseEntity.ok(eventService.updateEvent(eventUpdateRequestDto));
     }
 

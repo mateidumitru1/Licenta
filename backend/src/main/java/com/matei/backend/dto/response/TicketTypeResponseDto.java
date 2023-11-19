@@ -16,5 +16,4 @@ public class TicketTypeResponseDto {
     private String name;
     private Double price;
     private Integer quantity;
-    private EventResponseDto event;
 }

@@ -36,6 +36,6 @@ public class Event {
     private Location location;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "event")
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
     private List<TicketType> ticketTypes;
 }

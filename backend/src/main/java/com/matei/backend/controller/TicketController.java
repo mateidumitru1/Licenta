@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,5 +24,11 @@ public class TicketController {
                                           @RequestHeader("Authorization") String jwtToken) throws IOException, WriterException {
 
         return ResponseEntity.ok(ticketService.createTicket(ticketCreationRequestDto, jwtService.extractId(jwtToken)));
+    }
+
+    @PostMapping("/validate")
+    public ResponseEntity<?> validateTicket(@RequestParam("qrId") String qrId) {
+
+        return ResponseEntity.ok(ticketService.validateTicket(UUID.fromString(qrId)));
     }
 }

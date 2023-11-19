@@ -1,10 +1,11 @@
-package com.matei.backend.dto.request;
+package com.matei.backend.dto.response;
 
+import com.matei.backend.dto.request.TicketTypeCreationRequestDto;
+import com.matei.backend.entity.Location;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -14,14 +15,13 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class EventUpdateRequestDto {
+public class EventWithTicketTypesResponseDto {
     private UUID id;
     private String title;
-    private String date;
+    private LocalDate date;
     private String shortDescription;
     private String description;
+    private Location location;
     private String imageUrl;
-    private MultipartFile image;
-    private UUID locationId;
-    private String ticketTypes;
+    private List<TicketTypeResponseDto> ticketTypes;
 }

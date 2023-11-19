@@ -5,11 +5,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class TicketTypeCreationRequestDto {
+public class TicketTypeUpdateRequestDto {
+    private String id;
     private String name;
     private String price;
     private String quantity;

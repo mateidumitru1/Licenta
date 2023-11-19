@@ -26,7 +26,6 @@ import {EventComponent} from "./events/event/event.component";
 import {NgOptimizedImage} from "@angular/common";
 import { AccountMenuComponent } from './events/root/navbar/account-menu/account-menu.component';
 import { LocationsMenuComponent } from './events/root/navbar/locations-menu/locations-menu.component';
-import { TicketsComponent } from './shared/tickets/tickets.component';
 import { AdminDashboardComponent } from './events/admin-dashboard/admin-dashboard.component';
 import {MatTabsModule} from "@angular/material/tabs";
 import {MatSidenavModule} from "@angular/material/sidenav";
@@ -68,6 +67,8 @@ import { AddLocationComponent } from './shared/dialog-menus/add-dialog/add-locat
 import { RootComponent } from './events/root/root.component';
 import { ResetPasswordComponent } from './identity/reset-password/reset-password.component';
 import {MatSnackBar, MatSnackBarModule} from "@angular/material/snack-bar";
+import { AddTicketTypeComponent } from './shared/dialog-menus/add-dialog/add-event/add-ticket-type/add-ticket-type.component';
+import { TicketsComponent } from './events/event/tickets/tickets.component';
 
 
 
@@ -84,7 +85,6 @@ import {MatSnackBar, MatSnackBarModule} from "@angular/material/snack-bar";
     LocationComponent,
     AccountMenuComponent,
     LocationsMenuComponent,
-    TicketsComponent,
     AdminDashboardComponent,
     PageNotFoundComponent,
     AdminHomeComponent,
@@ -114,6 +114,8 @@ import {MatSnackBar, MatSnackBarModule} from "@angular/material/snack-bar";
     AddLocationComponent,
     RootComponent,
     ResetPasswordComponent,
+    AddTicketTypeComponent,
+    TicketsComponent,
   ],
   imports: [
     BrowserModule,
