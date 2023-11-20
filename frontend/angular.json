@@ -26,7 +26,8 @@
               { "glob": "mdi.svg", "input": "./node_modules/@mdi/angular-material", "output": "./assets" }
             ],
             "styles": [
-              "src/styles.css",
+              "@angular/material/prebuilt-themes/indigo-pink.css",
+              "src/styles.scss",
               "node_modules/bootstrap/dist/css/bootstrap.css",
               "node_modules/@mdi/font/css/materialdesignicons.min.css"
             ],

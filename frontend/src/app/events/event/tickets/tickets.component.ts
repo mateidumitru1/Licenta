@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, Input} from '@angular/core';
 
 @Component({
   selector: 'app-tickets',
@@ -7,4 +7,16 @@ import { Component } from '@angular/core';
 })
 export class TicketsComponent {
 
+  @Input() ticketTypes: {
+    name: string;
+    price: number;
+    quantity: number;
+  }[] = [];
+
+  constructor() {
+  }
+
+  buyTicket(ticketType: { name: string; price: number; quantity: number; }): void {
+    console.log(ticketType);
+  }
 }

@@ -40,8 +40,6 @@ import { AdminManageEventsComponent } from './events/admin-dashboard/admin-manag
 import {MatPaginatorModule} from "@angular/material/paginator";
 import { TableComponent } from './events/admin-dashboard/admin-manage/table/table.component';
 import { DataDirective } from './util/directives/data.directive';
-import { DisplayedColumnsDirective } from './util/directives/displayed-columns.directive';
-import { ActionsDirective } from './util/directives/actions.directive';
 import {MatSortModule} from "@angular/material/sort";
 import { TruncateTextPipe } from './util/pipes/truncate-text.pipe';
 import { LocationNamePipe } from './util/pipes/location-name.pipe';
@@ -70,6 +68,7 @@ import {MatSnackBar, MatSnackBarModule} from "@angular/material/snack-bar";
 import { AddTicketTypeComponent } from './events/admin-dashboard/admin-manage/dialog-menus/add-dialog/add-event/add-ticket-type/add-ticket-type.component';
 import { TicketsComponent } from './events/event/tickets/tickets.component';
 import { TicketTypeTableComponent } from './events/admin-dashboard/admin-manage/dialog-menus/ticket-type-table/ticket-type-table.component';
+import { FooterComponent } from './events/root/footer/footer.component';
 
 
 
@@ -95,9 +94,7 @@ import { TicketTypeTableComponent } from './events/admin-dashboard/admin-manage/
     AdminManageLocationsComponent,
     AdminManageEventsComponent,
     DataDirective,
-    DisplayedColumnsDirective,
     TableComponent,
-    ActionsDirective,
     TruncateTextPipe,
     LocationNamePipe,
     EditDeleteDialog,
@@ -118,6 +115,7 @@ import { TicketTypeTableComponent } from './events/admin-dashboard/admin-manage/
     AddTicketTypeComponent,
     TicketsComponent,
     TicketTypeTableComponent,
+    FooterComponent,
   ],
   imports: [
     BrowserModule,

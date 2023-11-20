@@ -1,22 +1,12 @@
-<div>
-  <div class="event-class">
-    <img src="{{ event.imageUrl }}">
-    <div class="event-info">
-      <h1><b>{{ event.title }}</b></h1>
-      <h2>{{ event.date }}</h2>
-      <h3 class="size-class">{{ event.location.name }}, {{ event.location.address }}</h3>
-      <p class="size-class">{{ event.shortDescription }}</p>
-      <p *ngIf="showMoreDetails" class="size-class">{{ event.description }}</p>
-      <a (click)="showMoreDetails = !showMoreDetails">Show more details</a>
-    </div>
-  </div>
-  <div class="tickets-class">
-    <h1>Tickets</h1>
-    <div *ngFor="let ticket of event.ticketTypes">
-      <h2>{{ ticket.name }}</h2>
-      <h3>{{ ticket.price | currency:'USD':true }}</h3>
-      <p> Remaining tickets: {{ ticket.quantity }}</p>
-      <button mat-raised-button color="primary" (click)="buyTicket(ticket)">Buy</button>
-    </div>
+<div class="event-class">
+  <img src="{{ event.imageUrl }}">
+  <div class="event-info">
+    <h1><b>{{ event.title }}</b></h1>
+    <h2>{{ event.date }}</h2>
+    <h3 class="size-class">{{ event.location.name }}, {{ event.location.address }}</h3>
+    <p class="size-class">{{ event.shortDescription }}</p>
+    <p *ngIf="showMoreDetails" class="size-class">{{ event.description }}</p>
+    <a (click)="showMoreDetails = !showMoreDetails">Show more details</a>
   </div>
 </div>
+<app-tickets [ticketTypes]="event.ticketTypes"></app-tickets>

@@ -27,3 +27,8 @@
 .size-class {
   width: 500px;
 }
+
+a {
+  color: #fff;
+  cursor: pointer;
+}

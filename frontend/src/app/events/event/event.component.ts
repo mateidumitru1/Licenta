@@ -50,6 +50,7 @@ export class EventComponent implements OnInit {
   ngOnInit(): void {
     this.eventService.fetchEvent(this.route.snapshot.params['eventId']).subscribe((event: any) => {
       this.event = event;
+      console.log(this.event);
     }, error => {
       this.router.navigate(['/page-not-found']);
     });
