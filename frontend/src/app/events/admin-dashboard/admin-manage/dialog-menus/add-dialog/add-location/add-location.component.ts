@@ -1,6 +1,6 @@
 import {Component, ElementRef, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
 import {AddService} from "../add.service";
-import {InputFieldsErrorService} from "../../../input-fields-error/input-fields-error.service";
+import {InputFieldsErrorService} from "../../../../../../shared/input-fields-error/input-fields-error.service";
 
 @Component({
   selector: 'app-add-location',

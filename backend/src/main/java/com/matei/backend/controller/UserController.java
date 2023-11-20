@@ -29,6 +29,11 @@ public class UserController {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<UserResponseDto> getUserById(@PathVariable("id") UUID id) {
+        return ResponseEntity.ok(userService.getUserById(id));
+    }
+
     @Transactional
     @PatchMapping
     public ResponseEntity<UserResponseDto> updateUser(@ModelAttribute UserRequestDto userRequestDto) {

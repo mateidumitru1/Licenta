@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class TicketTypeCreationRequestDto {
     private String name;
-    private String price;
-    private String quantity;
+    private Double price;
+    private Integer quantity;
 }

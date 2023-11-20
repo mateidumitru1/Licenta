@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import {MatDialogRef} from "@angular/material/dialog";
-import {InputFieldsErrorService} from "../../../../input-fields-error/input-fields-error.service";
+import {InputFieldsErrorService} from "../../../../../../../shared/input-fields-error/input-fields-error.service";
 
 @Component({
   selector: 'app-add-ticket-type',

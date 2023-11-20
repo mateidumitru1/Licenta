@@ -25,11 +25,11 @@ export class LocationComponent implements OnInit{
       }];
   } | undefined;
 
-  constructor(private route: ActivatedRoute, private router: Router, private placeEventsService: LocationService) {}
+  constructor(private route: ActivatedRoute, private router: Router, private locationService: LocationService) {}
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(queryParams => {
-      this.placeEventsService.fetchEvents(queryParams['id']).subscribe((location: any) => {
+      this.locationService.fetchLocationById(queryParams['id']).subscribe((location: any) => {
         this.location = location;
       }, error => {
         this.router.navigate(['/page-not-found']);

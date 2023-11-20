@@ -1,8 +1,8 @@
 <h1 mat-dialog-title>{{ data.title }}</h1>
 <div mat-dialog-content *ngIf="data.title === 'Edit'">
-  <app-edit-users *ngIf="data.type === 'users'" [data]="data.rowData" [dialogRef]="dialogRef"></app-edit-users>
-  <app-edit-locations *ngIf="data.type === 'locations'" [data]="data.rowData" [dialogRef]="dialogRef"></app-edit-locations>
-  <app-edit-events *ngIf="data.type === 'events'" [data]="data.rowData" [dialogRef]="dialogRef"></app-edit-events>
+  <app-edit-users *ngIf="data.type === 'users'" [userId]="data.rowData" [dialogRef]="dialogRef"></app-edit-users>
+  <app-edit-locations *ngIf="data.type === 'locations'" [locationId]="data.rowData" [dialogRef]="dialogRef"></app-edit-locations>
+  <app-edit-events *ngIf="data.type === 'events'" [eventId]="data.rowData" [dialogRef]="dialogRef"></app-edit-events>
 </div>
 <div mat-dialog-content *ngIf="data.title === 'Delete'">
   <p>Are you sure?</p>

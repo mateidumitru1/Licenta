@@ -3,10 +3,10 @@ import {MatTableDataSource} from "@angular/material/table";
 import {MatPaginator} from "@angular/material/paginator";
 import {AdminManageService} from "../admin-manage.service";
 import {MatSort} from "@angular/material/sort";
-import {EditDeleteDialog} from "../../../../shared/dialog-menus/edit-delete-dialog/edit-delete-dialog.component";
+import {EditDeleteDialog} from "../dialog-menus/edit/edit-delete-dialog/edit-delete-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
 import {LocationService} from "../../../location/location.service";
-import {AddDialogComponent} from "../../../../shared/dialog-menus/add-dialog/add-dialog.component";
+import {AddDialogComponent} from "../dialog-menus/add-dialog/add-dialog.component";
 
 @Component({
   selector: 'app-table',
@@ -95,9 +95,7 @@ export class TableComponent implements OnInit, AfterViewInit {
       width: '40%',
       data: {
         title: 'Edit',
-        rowData: this.rowData,
-        indexes: indexes,
-        locations: this.locations,
+        rowData: this.rowData.id,
         type: this.type
       },
       disableClose: true

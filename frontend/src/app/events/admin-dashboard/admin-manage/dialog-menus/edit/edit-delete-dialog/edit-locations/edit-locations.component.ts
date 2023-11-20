@@ -1,22 +1,30 @@
 import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
-import {LocationService} from "../../../../../events/location/location.service";
+import {LocationService} from "../../../../../../location/location.service";
 
 @Component({
-  selector: 'app-edit-events',
-  templateUrl: './edit-events.component.html',
-  styleUrls: ['./edit-events.component.css']
+  selector: 'app-edit-locations',
+  templateUrl: './edit-locations.component.html',
+  styleUrls: ['./edit-locations.component.css']
 })
-export class EditEventsComponent implements OnInit{
+export class EditLocationsComponent implements OnInit{
 
-  @Input() data: any = {};
+  @Input() locationId: any = {};
 
   @Input() dialogRef: any = {};
 
+  location: {
+    id: string;
+    name: string;
+    address: string;
+    imageUrl: string;
+  } = {
+    id: '',
+    name: '',
+    address: '',
+    imageUrl: ''
+  };
+
   toEditData: any = {};
-
-  indexes: any = {};
-
-  locations: any = {};
 
   imageSrc: string | ArrayBuffer | null = null;
 
@@ -25,13 +33,11 @@ export class EditEventsComponent implements OnInit{
   constructor(private locationService: LocationService) { }
 
   ngOnInit() {
-    this.indexes = Object.keys(this.data);
-    this.indexes = this.indexes.filter( (index: string) => index !== 'id');
-    this.toEditData = {...this.data};
-
-    this.locationService.fetchAllLocations().subscribe( (locations: any[]) => {
-      this.locations = locations;
+    this.locationService.fetchLocationById(this.locationId).subscribe((location: any) => {
+      this.location = location;
+      this.toEditData = {...this.location};
     });
+    this.toEditData = {...this.location};
   }
 
   onCancelButtonClick() {

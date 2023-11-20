@@ -1,6 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {AdminManageService} from "../../../events/admin-dashboard/admin-manage/admin-manage.service";
+import {AdminManageService} from "../../../admin-manage.service";
 
 @Component({
   selector: 'edit-delete-dialog',

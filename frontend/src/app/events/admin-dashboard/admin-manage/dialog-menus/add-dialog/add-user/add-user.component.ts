@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {AddService} from "../add.service";
-import {EmailHandler} from "../../../../util/handlers/email.handler";
-import {InputFieldsErrorService} from "../../../input-fields-error/input-fields-error.service";
+import {EmailHandler} from "../../../../../../util/handlers/email.handler";
+import {InputFieldsErrorService} from "../../../../../../shared/input-fields-error/input-fields-error.service";
 
 @Component({
   selector: 'app-add-user',

@@ -56,11 +56,11 @@ export class AdminManageService {
     const formData = new FormData();
 
     if (objectType === 'events') {
-      const date: Date = new Date(data.date.getFullYear(), data.date.getMonth(), data.date.getDate() + 1);
+      const date: Date = new Date(data.date);
       formData.append('locationId', data.location.id);
       formData.append('date', date.toISOString());
     }
-    for (const key in data) {
+    for (let key in data) {
       if (key === 'location' || key === 'date') {
         continue;
       }

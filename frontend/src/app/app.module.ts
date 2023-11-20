@@ -45,30 +45,31 @@ import { ActionsDirective } from './util/directives/actions.directive';
 import {MatSortModule} from "@angular/material/sort";
 import { TruncateTextPipe } from './util/pipes/truncate-text.pipe';
 import { LocationNamePipe } from './util/pipes/location-name.pipe';
-import { EditDeleteDialog } from './shared/dialog-menus/edit-delete-dialog/edit-delete-dialog.component';
+import { EditDeleteDialog } from './events/admin-dashboard/admin-manage/dialog-menus/edit/edit-delete-dialog/edit-delete-dialog.component';
 import {MatDialogModule} from "@angular/material/dialog";
 import {MatExpansionModule} from "@angular/material/expansion";
 import {MatSelectModule} from "@angular/material/select";
 import { ObjectTypeDirective } from './util/directives/object-type.directive';
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatNativeDateModule} from "@angular/material/core";
-import { EditLocationsComponent } from './shared/dialog-menus/edit-delete-dialog/edit/edit-locations/edit-locations.component';
-import { EditUsersComponent } from './shared/dialog-menus/edit-delete-dialog/edit/edit-users/edit-users.component';
-import { EditEventsComponent } from './shared/dialog-menus/edit-delete-dialog/edit/edit-events/edit-events.component';
+import { EditLocationsComponent } from './events/admin-dashboard/admin-manage/dialog-menus/edit/edit-delete-dialog/edit-locations/edit-locations.component';
+import { EditUsersComponent } from './events/admin-dashboard/admin-manage/dialog-menus/edit/edit-delete-dialog/edit-users/edit-users.component';
+import { EditEventsComponent } from './events/admin-dashboard/admin-manage/dialog-menus/edit/edit-delete-dialog/edit-events/edit-events.component';
 import { DialogRefDirective } from './util/directives/dialog-ref.directive';
-import { EditButtonsComponent } from './shared/dialog-menus/edit-delete-dialog/edit-buttons/edit-buttons.component';
+import { EditButtonsComponent } from './events/admin-dashboard/admin-manage/dialog-menus/edit/edit-buttons/edit-buttons.component';
 import { FilterComponent } from './events/admin-dashboard/admin-manage/filter/filter.component';
 import { IndexDirective } from './util/directives/index.directive';
 import {MatRadioModule} from "@angular/material/radio";
-import { AddDialogComponent } from './shared/dialog-menus/add-dialog/add-dialog.component';
-import { AddUserComponent } from './shared/dialog-menus/add-dialog/add-user/add-user.component';
-import { AddEventComponent } from './shared/dialog-menus/add-dialog/add-event/add-event.component';
-import { AddLocationComponent } from './shared/dialog-menus/add-dialog/add-location/add-location.component';
+import { AddDialogComponent } from './events/admin-dashboard/admin-manage/dialog-menus/add-dialog/add-dialog.component';
+import { AddUserComponent } from './events/admin-dashboard/admin-manage/dialog-menus/add-dialog/add-user/add-user.component';
+import { AddEventComponent } from './events/admin-dashboard/admin-manage/dialog-menus/add-dialog/add-event/add-event.component';
+import { AddLocationComponent } from './events/admin-dashboard/admin-manage/dialog-menus/add-dialog/add-location/add-location.component';
 import { RootComponent } from './events/root/root.component';
 import { ResetPasswordComponent } from './identity/reset-password/reset-password.component';
 import {MatSnackBar, MatSnackBarModule} from "@angular/material/snack-bar";
-import { AddTicketTypeComponent } from './shared/dialog-menus/add-dialog/add-event/add-ticket-type/add-ticket-type.component';
+import { AddTicketTypeComponent } from './events/admin-dashboard/admin-manage/dialog-menus/add-dialog/add-event/add-ticket-type/add-ticket-type.component';
 import { TicketsComponent } from './events/event/tickets/tickets.component';
+import { TicketTypeTableComponent } from './events/admin-dashboard/admin-manage/dialog-menus/ticket-type-table/ticket-type-table.component';
 
 
 
@@ -116,6 +117,7 @@ import { TicketsComponent } from './events/event/tickets/tickets.component';
     ResetPasswordComponent,
     AddTicketTypeComponent,
     TicketsComponent,
+    TicketTypeTableComponent,
   ],
   imports: [
     BrowserModule,

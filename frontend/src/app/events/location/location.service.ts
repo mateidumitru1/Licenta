@@ -8,7 +8,7 @@ export class LocationService {
 
   constructor(private http: HttpClient) {}
 
-  fetchEvents(id: string): Observable<any> {
+  fetchLocationById(id: string): Observable<any> {
     return this.http.get('http://localhost:8080/api/locations/' + id);
   }
 

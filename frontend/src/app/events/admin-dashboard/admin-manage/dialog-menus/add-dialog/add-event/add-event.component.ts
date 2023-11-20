@@ -1,6 +1,6 @@
 import {Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {AddService} from "../add.service";
-import {InputFieldsErrorService} from "../../../input-fields-error/input-fields-error.service";
+import {InputFieldsErrorService} from "../../../../../../shared/input-fields-error/input-fields-error.service";
 import {MatDialog} from "@angular/material/dialog";
 import {AddTicketTypeComponent} from "./add-ticket-type/add-ticket-type.component";
 import {MatTableDataSource} from "@angular/material/table";
@@ -49,6 +49,7 @@ export class AddEventComponent {
 
   ngOnInit() {
     this.addService.subject.subscribe(() => {
+      this.event.ticketTypes = this.dataSource.data as { name: string; price: number; quantity: number }[];
       if(!(this.event.title && this.event.date && this.event.location
         && this.event.image && this.event.shortDescription && this.event.description)) {
         this.inputFieldsErrorService.subject.next('Please fill all fields!');
@@ -57,7 +58,6 @@ export class AddEventComponent {
         this.inputFieldsErrorService.subject.next('Please add at least one ticket type!');
       }
       else {
-        this.event.ticketTypes = this.dataSource.data as { name: string; price: number; quantity: number }[];
         this.confirmEvent.emit(this.event);
       }
     });
@@ -94,8 +94,6 @@ export class AddEventComponent {
   }
 
   onDeleteTicketTypeClick(data: any) {
-    this.dataSource.data = this.dataSource.data.filter((ticketType) => {
-      return ticketType.name !== data.name;
-    });
+    this.dataSource.data = this.dataSource.data.splice(this.dataSource.data.indexOf(data), 1);
   }
 }

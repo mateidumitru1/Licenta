@@ -81,4 +81,12 @@ export class IdentityService {
   resetPassword(token: string, password: string) {
     return this.http.post('http://localhost:8080/api/reset-password?token=' + token + '&password=' + password, null);
   }
+
+  fetchUserById(userId: any) {
+    return this.http.get('http://localhost:8080/api/users/' + userId, {
+      headers: {
+        'Authorization': 'Bearer ' + localStorage.getItem('token')
+      }
+    });
+  }
 }

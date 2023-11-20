@@ -13,7 +13,6 @@ import com.matei.backend.entity.Event;
 import com.matei.backend.entity.Location;
 import com.matei.backend.entity.TicketType;
 import com.matei.backend.exception.EventNotFoundException;
-import com.matei.backend.exception.LocationNotFoundException;
 import com.matei.backend.repository.EventRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -163,16 +162,26 @@ public class EventService {
                         .build())
                 .orElseThrow());
         event.setImageUrl(imageUrl);
-        event.setTicketTypes(getTicketTypeUpdateRequestDtoList(updatedEvent.getTicketTypes()).stream()
-                .map(ticketTypeUpdateRequestDto -> TicketType.builder()
-                        .id(UUID.fromString(ticketTypeUpdateRequestDto.getId()))
-                        .name(ticketTypeUpdateRequestDto.getName())
-                        .price(Double.valueOf(ticketTypeUpdateRequestDto.getPrice()))
-                        .quantity(Integer.valueOf(ticketTypeUpdateRequestDto.getQuantity()))
-                        .build()).toList());
-
 
         eventRepository.save(event);
+
+        var ticketTypes = getTicketTypeUpdateRequestDtoList(updatedEvent.getTicketTypes());
+        ticketTypeService.updateTicketTypes(ticketTypes, Optional.of(event).map(event1 -> EventResponseDto.builder()
+                .id(event1.getId())
+                .title(event1.getTitle())
+                .location(event1.getLocation())
+                .date(event1.getDate())
+                .shortDescription(event1.getShortDescription())
+                .description(event1.getDescription())
+                .imageUrl(event1.getImageUrl())
+                .build()).orElseThrow());
+
+        event.setTicketTypes(ticketTypes.stream().map(ticketTypeUpdateRequestDto -> TicketType.builder()
+                .id(ticketTypeUpdateRequestDto.getId())
+                .name(ticketTypeUpdateRequestDto.getName())
+                .price(ticketTypeUpdateRequestDto.getPrice())
+                .quantity(ticketTypeUpdateRequestDto.getQuantity())
+                .build()).toList());
 
         return getEventWithTicketTypesResponseDto(event);
     }
