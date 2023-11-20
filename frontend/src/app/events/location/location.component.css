@@ -1,7 +1,3 @@
-.location-events-container {
-  z-index: 1;
-}
-
 .location-name {
   margin-top: 30px;
   margin-left: 50px;
@@ -28,9 +24,13 @@ mat-card {
   margin-bottom: 10px;
 }
 
-img {
+.card-image {
   height: 220px;
   padding-right: 15px;
+}
+
+.location-image {
+  width: 100%;
 }
 
 mat-card:hover {
