@@ -8,7 +8,7 @@
 }
 
 #locations-anchor:hover {
-  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.2); /* Add a subtle box-shadow on hover */
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.2);
 }
 
 .navbar-brand {

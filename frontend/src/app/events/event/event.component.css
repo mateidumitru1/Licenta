@@ -1,8 +1,6 @@
 .event-class {
   margin-top: 50px;
   display: flex;
-  align-items: center;
-  justify-content: center;
   gap: 200px;
 }
 
@@ -10,7 +8,6 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  justify-content: flex-end;
 }
 
 .tickets-class {
@@ -28,7 +25,15 @@
   width: 500px;
 }
 
+img {
+  max-height: 360px;
+}
+
 a {
   color: #fff;
   cursor: pointer;
+}
+
+a:hover {
+  text-decoration: underline;
 }
