@@ -18,8 +18,6 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -34,7 +32,6 @@ public class QRService {
 
         UUID uuid = UUID.randomUUID();
         String url = "http://localhost:4200/validate-ticket/" + uuid.toString();
-        String encodedUrl = URLEncoder.encode("http://localhost:4200/validate-ticket/" + uuid.toString(), StandardCharsets.UTF_8);
 
         Map<EncodeHintType, Object> hints = new HashMap<>();
         hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
