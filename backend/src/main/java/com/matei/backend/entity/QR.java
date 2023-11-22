@@ -20,7 +20,6 @@ public class QR {
     private UUID id;
 
     private Boolean used;
-
-    @Lob
-    private byte[] image;
+    
+    private String image;
 }

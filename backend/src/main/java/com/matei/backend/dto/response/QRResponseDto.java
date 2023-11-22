@@ -13,6 +13,6 @@ import java.util.UUID;
 @Builder
 public class QRResponseDto {
     private UUID id;
-    private byte[] image;
+    private String image;
     private Boolean used;
 }

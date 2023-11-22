@@ -23,7 +23,7 @@ public class TicketController {
     public ResponseEntity<?> createTicket(@RequestBody TicketCreationRequestDto ticketCreationRequestDto,
                                           @RequestHeader("Authorization") String jwtToken) throws IOException, WriterException {
 
-        return ResponseEntity.ok(ticketService.createTicket(ticketCreationRequestDto, jwtService.extractId(jwtToken)));
+        return ResponseEntity.ok(ticketService.createTicket(ticketCreationRequestDto, jwtService.extractId(jwtToken.substring(7))));
     }
 
     @PostMapping("/validate")

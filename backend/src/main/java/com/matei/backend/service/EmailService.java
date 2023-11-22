@@ -7,6 +7,7 @@ import com.sendgrid.Request;
 import com.sendgrid.Response;
 import com.sendgrid.SendGrid;
 import com.sendgrid.helpers.mail.Mail;
+import com.sendgrid.helpers.mail.objects.Attachments;
 import com.sendgrid.helpers.mail.objects.Content;
 import com.sendgrid.helpers.mail.objects.Email;
 import com.sendgrid.helpers.mail.objects.Personalization;
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.Base64;
 
 @Service
 @RequiredArgsConstructor
@@ -62,18 +64,24 @@ public class EmailService {
     public void sendTicketEmail(String toEmail, TicketResponseDto ticketResponseDto) {
         Email to = new Email(toEmail);
 
-//        final String resetPasswordTemplateId = "d-761f1f0d47814e79bbee8243edd4507c";
+        final String sendTicketTemplateId = "d-22dfa17cd6234faeb5f3bdcb9095342d";
 
-//        Personalization personalization = new Personalization();
-//        personalization.addDynamicTemplateData("url", url);
-//        personalization.addTo(to);
-//
-//        Mail mail = new Mail();
-//        mail.setFrom(from);
-//        mail.setTemplateId(resetPasswordTemplateId);
-//        mail.addPersonalization(personalization);
+        Attachments attachments = new Attachments();
+        attachments.setContent(ticketResponseDto.getQr().getImage());
+        attachments.setType("application/octet-stream");
+        attachments.setFilename("qr_code.jpg");
 
-//        send(mail);
+        Personalization personalization = new Personalization();
+        personalization.addDynamicTemplateData("image", "data:image/jpeg;base64, " + ticketResponseDto.getQr().getImage());
+        personalization.addTo(to);
+
+        Mail mail = new Mail();
+        mail.setFrom(from);
+        mail.setTemplateId(sendTicketTemplateId);
+        mail.addPersonalization(personalization);
+        mail.addAttachments(attachments);
+
+        send(mail);
     }
 
     private void send(Mail mail) {

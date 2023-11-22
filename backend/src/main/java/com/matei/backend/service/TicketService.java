@@ -34,7 +34,7 @@ public class TicketService {
                                 .price(ticketTypeResponseDto.getPrice())
                                 .quantity(ticketTypeResponseDto.getQuantity())
                                 .build()).orElseThrow())
-                        .qr(Optional.of(qrService.generateQR())
+                        .qr(Optional.of(qrService.createQR())
                                 .map(qrResponseDto -> QR.builder()
                                         .id(qrResponseDto.getId())
                                         .image(qrResponseDto.getImage())

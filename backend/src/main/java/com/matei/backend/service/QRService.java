@@ -10,11 +10,13 @@ import com.matei.backend.dto.response.QRResponseDto;
 import com.matei.backend.entity.QR;
 import com.matei.backend.repository.QRRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.codec.binary.Base64;
 import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -28,9 +30,10 @@ public class QRService {
 
     private final QRRepository qrRepository;
 
-    public QRResponseDto generateQR() throws WriterException, IOException {
+    public QRResponseDto createQR() throws WriterException, IOException {
 
         UUID uuid = UUID.randomUUID();
+        String url = "http://localhost:4200/validate-ticket/" + uuid.toString();
         String encodedUrl = URLEncoder.encode("http://localhost:4200/validate-ticket/" + uuid.toString(), StandardCharsets.UTF_8);
 
         Map<EncodeHintType, Object> hints = new HashMap<>();
@@ -41,7 +44,7 @@ public class QRService {
 
         var width = 300;
         var height = 300;
-        BitMatrix bitMatrix = qrCodeWriter.encode(encodedUrl, BarcodeFormat.QR_CODE, width, height, hints);
+        BitMatrix bitMatrix = qrCodeWriter.encode(url, BarcodeFormat.QR_CODE, width, height, hints);
 
         BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         for (int x = 0; x < width; x++) {
@@ -52,16 +55,17 @@ public class QRService {
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ImageIO.write(bufferedImage, "jpg", baos);
+        ImageIO.write(bufferedImage, "jpg", new File(uuid.toString() + ".jpg"));
         byte[] imageBytes = baos.toByteArray();
 
         var qr = qrRepository.save(QR.builder()
-                .image(imageBytes)
+                .image(Base64.encodeBase64String(imageBytes))
                 .used(false)
                 .build());
 
         return QRResponseDto.builder()
                 .id(qr.getId())
-                .image(imageBytes)
+                .image(Base64.encodeBase64String(imageBytes))
                 .used(qr.getUsed())
                 .build();
     }
