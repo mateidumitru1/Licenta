@@ -69,6 +69,7 @@ import { AddTicketTypeComponent } from './events/admin-dashboard/admin-manage/di
 import { TicketsComponent } from './events/event/tickets/tickets.component';
 import { TicketTypeTableComponent } from './events/admin-dashboard/admin-manage/dialog-menus/ticket-type-table/ticket-type-table.component';
 import { FooterComponent } from './events/root/footer/footer.component';
+import {MatTooltip, MatTooltipModule} from "@angular/material/tooltip";
 
 
 
@@ -144,7 +145,8 @@ import { FooterComponent } from './events/root/footer/footer.component';
     MatDatepickerModule,
     MatNativeDateModule,
     MatRadioModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatTooltipModule
   ],
   providers: [],
   bootstrap: [AppComponent]

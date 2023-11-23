@@ -4,6 +4,7 @@ import {JwtHandler} from "../../../../util/handlers/jwt.handler";
 import {HttpClient} from "@angular/common/http";
 import {IdentityService} from "../../../../identity/identity.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {MatTooltip} from "@angular/material/tooltip";
 
 @Component({
   selector: 'app-account-menu',
@@ -15,7 +16,7 @@ export class AccountMenuComponent implements OnInit{
   accountMenuText = '';
 
   constructor(private navbarService: NavbarService, private identityService: IdentityService, private http: HttpClient,
-              private snackBar: MatSnackBar) { }
+              private snackBar: MatSnackBar, private tooltip: MatTooltip) { }
 
   ngOnInit(): void {
     if(this.identityService.isLoggedIn()) {
