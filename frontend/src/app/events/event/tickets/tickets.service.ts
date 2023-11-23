@@ -8,7 +8,7 @@ export class TicketsService {
 
   buyTicket(ticketType: any) {
     return this.http.post(
-      'http://localhost:8080/api/ticket',
+      'http://localhost:8080/api/tickets',
       { ticketTypeId: ticketType.id },
       {
         headers: {
