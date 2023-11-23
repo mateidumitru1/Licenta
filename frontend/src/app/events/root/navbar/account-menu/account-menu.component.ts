@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {NavbarService} from "../navbar.service";
-import {JwtHandler} from "../../../../util/handlers/jwt.handler";
 import {HttpClient} from "@angular/common/http";
 import {IdentityService} from "../../../../identity/identity.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
@@ -9,7 +8,7 @@ import {MatTooltip} from "@angular/material/tooltip";
 @Component({
   selector: 'app-account-menu',
   templateUrl: './account-menu.component.html',
-  styleUrls: ['./account-menu.component.css']
+  styleUrls: ['./account-menu.component.css'],
 })
 export class AccountMenuComponent implements OnInit{
 
