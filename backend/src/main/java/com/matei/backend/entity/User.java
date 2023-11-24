@@ -1,9 +1,7 @@
 package com.matei.backend.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -34,6 +32,13 @@ public class User implements UserDetails {
     private String lastName;
     private Role role;
 
+    @JsonIgnore
+    @OneToOne(mappedBy = "user")
+    private ShoppingCart shoppingCart;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private List<Order> orderList;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

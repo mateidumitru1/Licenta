@@ -64,6 +64,7 @@ public class EventService {
                 .name(ticketTypeResponseDto.getName())
                 .price(ticketTypeResponseDto.getPrice())
                 .quantity(ticketTypeResponseDto.getQuantity())
+                .event(event)
                 .build()).toList());
         return getEventWithTicketTypesResponseDto(event);
     }
@@ -114,6 +115,15 @@ public class EventService {
                                         .name(ticketType.getName())
                                         .price(ticketType.getPrice())
                                         .quantity(ticketType.getQuantity())
+                                        .event(EventResponseDto.builder()
+                                                .id(event.getId())
+                                                .title(event.getTitle())
+                                                .date(event.getDate())
+                                                .shortDescription(event.getShortDescription())
+                                                .description(event.getDescription())
+                                                .location(event.getLocation())
+                                                .imageUrl(event.getImageUrl())
+                                                .build())
                                         .build()).toList())
                         .build())
                 .toList();
@@ -181,6 +191,7 @@ public class EventService {
                 .name(ticketTypeUpdateRequestDto.getName())
                 .price(ticketTypeUpdateRequestDto.getPrice())
                 .quantity(ticketTypeUpdateRequestDto.getQuantity())
+                .event(event)
                 .build()).toList());
 
         return getEventWithTicketTypesResponseDto(event);
@@ -209,6 +220,15 @@ public class EventService {
                                 .name(ticketType.getName())
                                 .price(ticketType.getPrice())
                                 .quantity(ticketType.getQuantity())
+                                .event(EventResponseDto.builder()
+                                        .id(event.getId())
+                                        .title(event.getTitle())
+                                        .date(event.getDate())
+                                        .shortDescription(event.getShortDescription())
+                                        .description(event.getDescription())
+                                        .location(event.getLocation())
+                                        .imageUrl(event.getImageUrl())
+                                        .build())
                                 .build()).toList())
                 .build();
     }

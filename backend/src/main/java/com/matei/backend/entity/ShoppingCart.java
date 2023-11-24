@@ -6,8 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.List;
 import java.util.UUID;
@@ -17,29 +15,24 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "ticket_types")
-public class TicketType {
+@Table(name = "shopping_carts")
+public class ShoppingCart {
     @Id
     @GeneratedValue(generator = "uuid4")
     private UUID id;
 
-    private String name;
-
     private Double price;
-
-    private Integer quantity;
 
     @JsonIgnore
     @ManyToMany
     @JoinTable(
             name = "shopping_cart_ticket_types",
-            joinColumns = @JoinColumn(name = "ticket_type_id"),
-            inverseJoinColumns = @JoinColumn(name = "shopping_cart_id")
+            joinColumns = @JoinColumn(name = "shopping_cart_id"),
+            inverseJoinColumns = @JoinColumn(name = "ticket_type_id")
     )
-    private List<ShoppingCart> shoppingCart;
+    private List<TicketType> ticketTypeList;
 
-    @ManyToOne
-    @OnDelete(action = OnDeleteAction.SET_NULL)
-    @JoinColumn(name = "event_id", referencedColumnName = "id")
-    private Event event;
+    @JsonIgnore
+    @OneToOne
+    private User user;
 }

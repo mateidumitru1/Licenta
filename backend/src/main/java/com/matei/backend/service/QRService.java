@@ -52,7 +52,7 @@ public class QRService {
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ImageIO.write(bufferedImage, "jpg", baos);
-        ImageIO.write(bufferedImage, "jpg", new File(uuid.toString() + ".jpg"));
+
         byte[] imageBytes = baos.toByteArray();
 
         var qr = qrRepository.save(QR.builder()
@@ -69,6 +69,13 @@ public class QRService {
 
     public Boolean validateQR(UUID qrId) {
         var qr = qrRepository.findById(qrId).orElseThrow(() -> new RuntimeException("QR not found"));
-        return qr.getUsed();
+
+        if(qr.getUsed()) {
+            return false;
+        }
+
+        qr.setUsed(true);
+        qrRepository.save(qr);
+        return true;
     }
 }

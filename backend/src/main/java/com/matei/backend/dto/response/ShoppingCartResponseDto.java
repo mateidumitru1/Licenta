@@ -5,16 +5,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.UUID;
 
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class TicketTypeResponseDto {
+public class ShoppingCartResponseDto {
     private UUID id;
-    private String name;
     private Double price;
-    private Integer quantity;
-    private EventResponseDto event;
+    private List<TicketTypeResponseDto> ticketTypeList;
 }

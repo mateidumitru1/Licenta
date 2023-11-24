@@ -6,9 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -16,24 +16,22 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "tickets")
-public class Ticket {
+@Table(name = "orders")
+public class Order {
     @Id
     @GeneratedValue(generator = "uuid4")
     private UUID id;
 
-    @JsonIgnore
-    @ManyToOne
-    private TicketType ticketType;
+    private Double price;
+
+    private LocalDateTime date;
 
     @JsonIgnore
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @OneToOne
-    private QR qr;
+    @OneToMany(mappedBy = "order")
+    private List<Ticket> ticketList;
 
     @JsonIgnore
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @ManyToOne
-    @JoinColumn(name = "order_id", referencedColumnName = "id")
-    private Order order;
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 }

@@ -14,7 +14,7 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/ticket")
+@RequestMapping("/api/tickets")
 public class TicketController {
     private final TicketService ticketService;
     private final JwtService jwtService;
