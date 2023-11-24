@@ -1,0 +1,22 @@
+<h1><b>Shopping cart</b></h1>
+<div>
+  <mat-card *ngFor="let ticketType of shoppingCart?.ticketTypeList">
+    <mat-card-title-group>
+      <mat-card-title>{{ticketType.event.title}}</mat-card-title>
+      <mat-card-subtitle>{{ticketType.name}}</mat-card-subtitle>
+    </mat-card-title-group>
+    <mat-card-content>
+      <p>Price: {{ticketType.price}} RON</p>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button color="primary" (click)="onRemoveClick(ticketType)">Remove</button>
+    </mat-card-actions>
+  </mat-card>
+  <div *ngIf="shoppingCart.ticketTypeList.length == 0">
+    <p>Shopping cart is empty</p>
+  </div>
+  <div *ngIf="shoppingCart.ticketTypeList.length > 0">
+    <h2>Total price: {{shoppingCart.price}} RON</h2>
+    <button mat-raised-button color="primary" (click)="onBuyClick()">Buy</button>
+  </div>
+</div>

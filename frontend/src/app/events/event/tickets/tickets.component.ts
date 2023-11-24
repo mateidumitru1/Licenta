@@ -1,5 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {TicketsService} from "./tickets.service";
+import {IdentityService} from "../../../identity/identity.service";
+import {CookieService} from "ngx-cookie-service";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-tickets',
@@ -8,26 +11,41 @@ import {TicketsService} from "./tickets.service";
 })
 export class TicketsComponent implements OnInit{
 
-  @Input() ticketTypes: {
-    name: string;
-    price: number;
-    quantity: number;
-  }[] = [];
+  @Input()
+  event!: {
+    id: string;
+    title: string;
+    shortDescription: string;
+    description: string;
+    date: string;
+    location: {
+      id: string;
+      name: string;
+      address: string;
+      imageUrl: string;
+    };
+    imageUrl: string;
+    ticketTypes: {
+      id: string;
+      name: string;
+      price: number;
+      quantity: number;
+      event: any;
+    }[];
+  };
 
-  image: string = '';
-
-  constructor(private ticketsService: TicketsService) {
+  constructor(private ticketsService: TicketsService, private snackBar: MatSnackBar) {
   }
 
   ngOnInit() {
-    this.ticketTypes.sort((a, b) => b.price - a.price);
+    this.event.ticketTypes.sort((a, b) => b.price - a.price);
   }
 
-  buyTicket(ticketType: { name: string; price: number; quantity: number; }): void {
-    this.ticketsService.buyTicket(ticketType).subscribe((ticket: any) => {
-      this.image = 'data:image/jpeg;base64, ' + ticket.qr.image;
-    }, error => {
-      console.log(error);
-    })
+  addTicketToCart(ticketType: { id: string, name: string; price: number; quantity: number, event: any;}): void {
+    this.ticketsService.buyTicket(ticketType)?.subscribe((ticket: any) => {
+      this.snackBar.open('Ticket added to shopping cart!', 'Dismiss', {duration: 3000});},
+      error => {
+      this.snackBar.open('Error while buying ticket', 'Dismiss', {duration: 3000});
+    });
   }
 }

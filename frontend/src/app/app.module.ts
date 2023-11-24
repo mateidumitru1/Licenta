@@ -146,7 +146,8 @@ import {MatTooltip, MatTooltipModule} from "@angular/material/tooltip";
     MatNativeDateModule,
     MatRadioModule,
     MatSnackBarModule,
-    MatTooltipModule
+    MatTooltipModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

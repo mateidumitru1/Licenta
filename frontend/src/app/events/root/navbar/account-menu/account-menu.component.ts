@@ -15,7 +15,7 @@ export class AccountMenuComponent implements OnInit{
   accountMenuText = '';
 
   constructor(private navbarService: NavbarService, private identityService: IdentityService, private http: HttpClient,
-              private snackBar: MatSnackBar, private tooltip: MatTooltip) { }
+              private snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
     if(this.identityService.isLoggedIn()) {

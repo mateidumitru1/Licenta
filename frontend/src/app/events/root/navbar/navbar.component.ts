@@ -16,6 +16,10 @@ export class NavbarComponent implements OnInit{
   ngOnInit(): void {
   }
 
+  onShoppingCartClick() {
+    this.navbarService.onShoppingCartClick();
+  }
+
   onMouseEnterLocations() {
     this.navbarService.onMouseEnterLocations();
   }

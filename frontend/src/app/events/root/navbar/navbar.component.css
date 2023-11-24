@@ -15,23 +15,26 @@
   margin-left: 20px;
 }
 
-input {
-  width: 700px;
-  padding: 0 10px 0 15px;
-  margin: 0 10px;
-  font-size: 14px;
-  border-radius: 5px;
+
+.search {
+  width: 100%;
   border: none;
+  margin: 30px 10px 10px;
 }
 
-input:focus {
+#searchInput {
+  border-radius: inherit;
   outline: none;
-  background-color: #f2f2f2;
+  background: none;
+  color: black;
+  font-size: 18px;
+  width: 100%;
 }
 
-input:active {
-  outline: none;
+#searchInput::placeholder {
+  color: black;
 }
+
 
 .spacer {
   flex: 1 1 auto;

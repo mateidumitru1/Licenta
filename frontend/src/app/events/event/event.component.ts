@@ -23,9 +23,11 @@ export class EventComponent implements OnInit {
     };
     imageUrl: string;
     ticketTypes: {
+      id: string;
       name: string;
       price: number;
       quantity: number;
+      event: any;
     }[];
   } = {
     id: '',

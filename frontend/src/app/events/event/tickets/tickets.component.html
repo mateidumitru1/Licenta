@@ -1,13 +1,12 @@
 <div class="tickets-class">
   <h1><b>Tickets</b></h1>
   <mat-divider></mat-divider>
-  <img src="{{image}}">
-  <div class="ticket-types" *ngFor="let ticket of ticketTypes">
+  <div class="ticket-types" *ngFor="let ticket of event.ticketTypes">
     <div class="ticket-types-info">
       <h2>{{ ticket.name }}</h2>
       <h3>{{ ticket.price | currency:'RON ' }}</h3>
       <p> Remaining tickets: {{ ticket.quantity }}</p>
     </div>
-    <button mat-raised-button color="primary" (click)="buyTicket(ticket)">Buy</button>
+    <button mat-raised-button color="primary" (click)="addTicketToCart(ticket)">Buy</button>
   </div>
 </div>

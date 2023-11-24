@@ -15,6 +15,7 @@ import {AdminGuard} from "./util/guards/admin.guard";
 import {RootRedirectGuard} from "./util/guards/root-redirect-guard.service";
 import {RootComponent} from "./events/root/root.component";
 import {ResetPasswordComponent} from "./identity/reset-password/reset-password.component";
+import {ShoppingCartComponent} from "./events/shopping-cart/shopping-cart.component";
 
 const appRoutes: Routes = [
   { path: 'home' , redirectTo: '', pathMatch: 'full' },
@@ -30,6 +31,7 @@ const appRoutes: Routes = [
     ]},
   { path: '', canActivate: [RootRedirectGuard], component: RootComponent, children: [
       { path: '', pathMatch: 'full', component: HomeComponent },
+      { path: 'shopping-cart', component: ShoppingCartComponent },
       { path: ':location' , component: LocationComponent },
       { path: ':location/:eventName/:eventId', component: EventComponent },
   ]},
