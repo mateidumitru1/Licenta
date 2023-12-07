@@ -1,5 +1,6 @@
 package com.matei.backend.dto.response;
 
+import com.matei.backend.entity.ShoppingCartItem;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,5 +16,5 @@ import java.util.UUID;
 public class ShoppingCartResponseDto {
     private UUID id;
     private Double price;
-    private List<TicketTypeResponseDto> ticketTypeList;
+    private List<ShoppingCartItemResponseDto> shoppingCartItemList;
 }

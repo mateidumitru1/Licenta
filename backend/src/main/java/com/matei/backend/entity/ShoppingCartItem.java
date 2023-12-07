@@ -1,6 +1,5 @@
 package com.matei.backend.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +8,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -17,20 +15,21 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "ticket_types")
-public class TicketType {
+@Table(name = "shopping_cart_items")
+public class ShoppingCartItem {
     @Id
     @GeneratedValue(generator = "uuid4")
     private UUID id;
 
-    private String name;
-
-    private Double price;
+    @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "ticket_type_id")
+    private TicketType ticketType;
 
     private Integer quantity;
 
     @ManyToOne
-    @OnDelete(action = OnDeleteAction.SET_NULL)
-    @JoinColumn(name = "event_id", referencedColumnName = "id")
-    private Event event;
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "shopping_cart_id", referencedColumnName = "id")
+    private ShoppingCart shoppingCart;
 }

@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.List;
 import java.util.UUID;
@@ -24,13 +26,8 @@ public class ShoppingCart {
     private Double price;
 
     @JsonIgnore
-    @ManyToMany
-    @JoinTable(
-            name = "shopping_cart_ticket_types",
-            joinColumns = @JoinColumn(name = "shopping_cart_id"),
-            inverseJoinColumns = @JoinColumn(name = "ticket_type_id")
-    )
-    private List<TicketType> ticketTypeList;
+    @OneToMany(mappedBy = "shoppingCart")
+    private List<ShoppingCartItem> shoppingCartItemList;
 
     @JsonIgnore
     @OneToOne

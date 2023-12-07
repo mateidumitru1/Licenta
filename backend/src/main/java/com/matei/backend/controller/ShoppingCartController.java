@@ -1,11 +1,13 @@
 package com.matei.backend.controller;
 
+import com.matei.backend.dto.request.ShoppingCartItemRequestDto;
 import com.matei.backend.service.JwtService;
 import com.matei.backend.service.ShoppingCartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -15,10 +17,17 @@ public class ShoppingCartController {
     private final ShoppingCartService shoppingCartService;
     private final JwtService jwtService;
 
-    @PostMapping("/{ticketTypeId}")
-    public ResponseEntity<?> addTicketToShoppingCart(@RequestHeader("Authorization") String jwtToken, @PathVariable("ticketTypeId") String ticketTypeId) {
+    @PostMapping
+    public ResponseEntity<?> addTicketToShoppingCart(@RequestHeader("Authorization") String jwtToken, @RequestBody List<ShoppingCartItemRequestDto> shoppingCartItemRequestDtoList) {
+        return ResponseEntity.ok(shoppingCartService.addTicketToShoppingCart(shoppingCartItemRequestDtoList,  jwtService.extractId(jwtToken.substring(7))));
 
-        return ResponseEntity.ok(shoppingCartService.addTicketToShoppingCart(UUID.fromString(ticketTypeId), jwtService.extractId(jwtToken.substring(7))));
+    }
+
+    @PatchMapping("/{shoppingCartItemId}")
+    public ResponseEntity<?> updateTicketQuantity(@RequestHeader("Authorization") String jwtToken, @PathVariable("shoppingCartItemId") String shoppingCartItemId,
+                                                  @RequestParam("quantity") Integer quantity) {
+
+        return ResponseEntity.ok(shoppingCartService.updateTicketQuantity(UUID.fromString(shoppingCartItemId), quantity, jwtService.extractId(jwtToken.substring(7))));
     }
 
     @GetMapping

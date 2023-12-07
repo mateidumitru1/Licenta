@@ -53,6 +53,15 @@ public class TicketTypeService {
                 .name(ticketType.getName())
                 .price(ticketType.getPrice())
                 .quantity(ticketType.getQuantity())
+                .event(EventResponseDto.builder()
+                        .id(ticketType.getEvent().getId())
+                        .title(ticketType.getEvent().getTitle())
+                        .date(ticketType.getEvent().getDate())
+                        .shortDescription(ticketType.getEvent().getShortDescription())
+                        .description(ticketType.getEvent().getDescription())
+                        .location(ticketType.getEvent().getLocation())
+                        .imageUrl(ticketType.getEvent().getImageUrl())
+                        .build())
                 .build();
     }
 
