@@ -38,4 +38,17 @@ export class ShoppingCartService {
       }
     });
   }
+
+  updateQuantity(shoppingCartItem: { id: string, quantity: number }) {
+    if (!this.identityService.isLoggedIn()) {
+      this.snackBar.open('You must be logged in to view your shopping cart', 'Dismiss', {duration: 3000});
+      return;
+    }
+
+    return this.http.patch(this.shoppingCartUrl + '/' + shoppingCartItem.id + '?quantity=' + shoppingCartItem.quantity, null, {
+      headers: {
+        'Authorization': 'Bearer ' + localStorage.getItem('token')
+      }
+    });
+  }
 }

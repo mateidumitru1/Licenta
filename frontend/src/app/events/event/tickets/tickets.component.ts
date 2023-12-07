@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnChanges, OnInit} from '@angular/core';
 import {TicketsService} from "./tickets.service";
 import {IdentityService} from "../../../identity/identity.service";
 import {CookieService} from "ngx-cookie-service";
@@ -9,7 +9,7 @@ import {MatSnackBar} from "@angular/material/snack-bar";
   templateUrl: './tickets.component.html',
   styleUrls: ['./tickets.component.css']
 })
-export class TicketsComponent implements OnInit{
+export class TicketsComponent implements OnChanges{
 
   @Input()
   event!: {
@@ -34,18 +34,48 @@ export class TicketsComponent implements OnInit{
     }[];
   };
 
+  selectedTicketTypes: {
+    ticketType: {
+      id: string;
+      name: string;
+      price: number;
+      quantity: number;
+      event: any;
+    };
+    quantity: number;
+  }[] = [];
+
   constructor(private ticketsService: TicketsService, private snackBar: MatSnackBar) {
   }
 
-  ngOnInit() {
-    this.event.ticketTypes.sort((a, b) => b.price - a.price);
-  }
 
-  addTicketToCart(ticketType: { id: string, name: string; price: number; quantity: number, event: any;}): void {
-    this.ticketsService.buyTicket(ticketType)?.subscribe((ticket: any) => {
-      this.snackBar.open('Ticket added to shopping cart!', 'Dismiss', {duration: 3000});},
-      error => {
-      this.snackBar.open('Error while buying ticket', 'Dismiss', {duration: 3000});
+  ngOnChanges() {
+    this.event.ticketTypes.sort((a, b) => b.price - a.price);
+    this.selectedTicketTypes = this.event.ticketTypes.map(ticketType => {
+      return {
+        ticketType,
+        quantity: 0
+      };
     });
   }
+
+  addTicketsToCart(): void {
+    this.ticketsService.addTicketsToCart(this.selectedTicketTypes);
+    this.selectedTicketTypes.forEach(ticket => ticket.quantity = 0);
+  }
+
+  decreaseQuantity(ticket: { ticketType: { id: string, name: string; price: number; quantity: number, event: any;}, quantity: number;}) {
+    const selectedTicketType = this.selectedTicketTypes.find(selectedTicketType => selectedTicketType.ticketType.id === ticket.ticketType.id);
+    if (selectedTicketType) {
+      selectedTicketType.quantity--;
+    }
+  }
+
+  increaseQuantity(ticket: { ticketType: { id: string, name: string; price: number; quantity: number, event: any;}, quantity: number;}) {
+    const selectedTicketType = this.selectedTicketTypes.find(selectedTicketType => selectedTicketType.ticketType.id === ticket.ticketType.id);
+    if (selectedTicketType) {
+      selectedTicketType.quantity++;
+    }
+  }
+
 }
