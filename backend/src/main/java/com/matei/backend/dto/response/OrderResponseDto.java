@@ -17,5 +17,6 @@ public class OrderResponseDto {
     private UUID id;
     private Double price;
     private LocalDateTime date;
+    private List<TicketResponseDto> ticketList;
     private UserResponseDto user;
 }
