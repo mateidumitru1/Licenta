@@ -2,16 +2,11 @@ package com.matei.backend.service;
 
 import com.google.zxing.WriterException;
 import com.matei.backend.dto.request.TicketCreationRequestDto;
-import com.matei.backend.dto.response.EventResponseDto;
-import com.matei.backend.dto.response.QRResponseDto;
-import com.matei.backend.dto.response.TicketResponseDto;
-import com.matei.backend.dto.response.TicketTypeResponseDto;
-import com.matei.backend.entity.Event;
-import com.matei.backend.entity.QR;
-import com.matei.backend.entity.Ticket;
-import com.matei.backend.entity.TicketType;
+import com.matei.backend.dto.response.*;
+import com.matei.backend.entity.*;
 import com.matei.backend.repository.TicketRepository;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -28,81 +23,44 @@ public class TicketService {
     private final QRService qrService;
     private final EmailService emailService;
     private final UserService userService;
+    private final ModelMapper modelMapper;
 
-    public List<TicketResponseDto> createTicket(TicketCreationRequestDto ticketCreationRequestDto, int quantity, UUID userId) throws IOException, WriterException {
+    public List<TicketResponseDto> createTicket(TicketCreationRequestDto ticketCreationRequestDto, int quantity, UUID userId, OrderResponseDto orderDto) {
         List<Ticket> tickets = new ArrayList<>();
         while(quantity > 0) {
-            var ticket = ticketRepository.save(Ticket.builder()
-                    .ticketType(Optional.of(ticketTypeService.getTicketTypeById(ticketCreationRequestDto.getTicketTypeId()))
-                            .map(ticketTypeResponseDto -> TicketType.builder()
-                                    .id(ticketTypeResponseDto.getId())
-                                    .name(ticketTypeResponseDto.getName())
-                                    .price(ticketTypeResponseDto.getPrice())
-                                    .quantity(ticketTypeResponseDto.getQuantity())
-                                    .event(Optional.of(ticketTypeResponseDto.getEvent())
-                                            .map(eventResponseDto -> Event.builder()
-                                                    .id(eventResponseDto.getId())
-                                                    .title(eventResponseDto.getTitle())
-                                                    .date(eventResponseDto.getDate())
-                                                    .location(eventResponseDto.getLocation())
-                                                    .build()).orElseThrow())
-                                    .build()).orElseThrow())
-                    .qr(Optional.of(qrService.createQR())
-                            .map(qrResponseDto -> QR.builder()
-                                    .id(qrResponseDto.getId())
-                                    .image(qrResponseDto.getImage())
-                                    .used(qrResponseDto.getUsed())
-                                    .build()).orElseThrow())
-                    .build());
+            Ticket ticket = null;
+            try {
+                ticket = ticketRepository.save(Ticket.builder()
+                        .ticketType(Optional.of(ticketTypeService.getTicketTypeById(ticketCreationRequestDto.getTicketTypeId()))
+                                .map(ticketTypeResponseDto -> modelMapper.map(ticketTypeResponseDto, TicketType.class)).orElseThrow())
+                        .qr(Optional.of(qrService.createQR())
+                                .map(qrResponseDto -> modelMapper.map(qrResponseDto, QR.class)).orElseThrow())
+                        .order(modelMapper.map(orderDto, Order.class))
+                        .build());
+            } catch (WriterException | IOException e) {
+                throw new RuntimeException(e);
+            }
+
             tickets.add(ticket);
             quantity--;
         }
-
 
         emailService.sendTicketEmail(userService.getUserById(userId).getEmail(), tickets.stream()
                 .map(ticket -> TicketResponseDto.builder()
                         .id(ticket.getId())
                         .ticketType(Optional.of(ticket.getTicketType())
-                                .map(ticketType -> TicketTypeResponseDto.builder()
-                                        .id(ticketType.getId())
-                                        .name(ticketType.getName())
-                                        .price(ticketType.getPrice())
-                                        .quantity(ticketType.getQuantity())
-                                        .event(Optional.of(ticketType.getEvent()).map(event -> EventResponseDto.builder()
-                                                .id(event.getId())
-                                                .title(event.getTitle())
-                                                .date(event.getDate())
-                                                .location(event.getLocation())
-                                                .build()).orElseThrow())
-                                        .build()).orElseThrow())
+                                .map(ticketType -> modelMapper.map(ticketType, TicketTypeResponseDto.class)).orElseThrow())
                         .qr(Optional.of(ticket.getQr())
-                                .map(qr -> QRResponseDto.builder()
-                                        .id(qr.getId())
-                                        .image(qr.getImage())
-                                        .build()).orElseThrow())
+                                .map(qr -> modelMapper.map(qr, QRResponseDto.class)).orElseThrow())
                         .build()).toList());
 
         return tickets.stream()
                 .map(ticket -> TicketResponseDto.builder()
                         .id(ticket.getId())
                         .ticketType(Optional.of(ticket.getTicketType())
-                                .map(ticketType -> TicketTypeResponseDto.builder()
-                                        .id(ticketType.getId())
-                                        .name(ticketType.getName())
-                                        .price(ticketType.getPrice())
-                                        .quantity(ticketType.getQuantity())
-                                        .event(Optional.of(ticketType.getEvent()).map(event -> EventResponseDto.builder()
-                                                .id(event.getId())
-                                                .title(event.getTitle())
-                                                .date(event.getDate())
-                                                .location(event.getLocation())
-                                                .build()).orElseThrow())
-                                        .build()).orElseThrow())
+                                .map(ticketType -> modelMapper.map(ticketType, TicketTypeResponseDto.class)).orElseThrow())
                         .qr(Optional.of(ticket.getQr())
-                                .map(qr -> QRResponseDto.builder()
-                                        .id(qr.getId())
-                                        .image(qr.getImage())
-                                        .build()).orElseThrow())
+                                .map(qr -> modelMapper.map(qr, QRResponseDto.class)).orElseThrow())
                         .build()).toList();
     }
 

@@ -6,6 +6,7 @@ import com.matei.backend.entity.*;
 import com.matei.backend.repository.ShoppingCartItemRepository;
 import com.matei.backend.repository.ShoppingCartRepository;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ public class ShoppingCartService {
     private final ShoppingCartItemRepository shoppingCartItemRepository;
     private final TicketTypeService ticketTypeService;
     private final UserService userService;
+    private final ModelMapper modelMapper;
 
     public ShoppingCart createEmptyShoppingCart(UUID userId) {
         return shoppingCartRepository.save(ShoppingCart.builder()
@@ -135,30 +137,6 @@ public class ShoppingCartService {
         return getShoppingCartResponseDto(shoppingCart);
     }
 
-    private ShoppingCartResponseDto getShoppingCartResponseDto(ShoppingCart shoppingCart) {
-        return ShoppingCartResponseDto.builder()
-                .id(shoppingCart.getId())
-                .price(shoppingCart.getPrice())
-                .shoppingCartItemList(shoppingCart.getShoppingCartItemList().stream().map(shoppingCartItem -> ShoppingCartItemResponseDto.builder()
-                        .id(shoppingCartItem.getId())
-                        .quantity(shoppingCartItem.getQuantity())
-                        .ticketType(TicketTypeResponseDto.builder()
-                                .id(shoppingCartItem.getTicketType().getId())
-                                .name(shoppingCartItem.getTicketType().getName())
-                                .price(shoppingCartItem.getTicketType().getPrice())
-                                .quantity(shoppingCartItem.getTicketType().getQuantity())
-                                .event(EventResponseDto.builder()
-                                        .id(shoppingCartItem.getTicketType().getEvent().getId())
-                                        .title(shoppingCartItem.getTicketType().getEvent().getTitle())
-                                        .description(shoppingCartItem.getTicketType().getEvent().getDescription())
-                                        .date(shoppingCartItem.getTicketType().getEvent().getDate())
-                                        .location(shoppingCartItem.getTicketType().getEvent().getLocation())
-                                        .build())
-                                .build())
-                        .build()).toList())
-                .build();
-    }
-
     public void clearShoppingCart(UUID userId) {
         var shoppingCart = findShoppingCartOrElseEmpty(userId);
 
@@ -168,5 +146,33 @@ public class ShoppingCartService {
         shoppingCart.getShoppingCartItemList().clear();
 
         shoppingCartRepository.save(shoppingCart);
+    }
+
+    public ShoppingCartResponseDto getShoppingCartResponseDto(ShoppingCart shoppingCart) {
+        return ShoppingCartResponseDto.builder()
+                .id(shoppingCart.getId())
+                .price(shoppingCart.getPrice())
+                .shoppingCartItemList(shoppingCart.getShoppingCartItemList().stream()
+                        .map(shoppingCartItem -> ShoppingCartItemResponseDto.builder()
+                                .id(shoppingCartItem.getId())
+                                .ticketType(TicketTypeResponseDto.builder()
+                                        .id(shoppingCartItem.getTicketType().getId())
+                                        .name(shoppingCartItem.getTicketType().getName())
+                                        .price(shoppingCartItem.getTicketType().getPrice())
+                                        .quantity(shoppingCartItem.getTicketType().getQuantity())
+                                        .event(EventResponseDto.builder()
+                                                .id(shoppingCartItem.getTicketType().getEvent().getId())
+                                                .title(shoppingCartItem.getTicketType().getEvent().getTitle())
+                                                .date(shoppingCartItem.getTicketType().getEvent().getDate())
+                                                .shortDescription(shoppingCartItem.getTicketType().getEvent().getShortDescription())
+                                                .description(shoppingCartItem.getTicketType().getEvent().getDescription())
+                                                .location(shoppingCartItem.getTicketType().getEvent().getLocation())
+                                                .imageUrl(shoppingCartItem.getTicketType().getEvent().getImageUrl())
+                                                .build())
+                                        .build())
+                                .quantity(shoppingCartItem.getQuantity())
+                                .build())
+                        .toList())
+                .build();
     }
 }

@@ -21,14 +21,11 @@ public class ResetPasswordTokenService {
     }
 
     public ResetPasswordToken generateResetPasswordToken(User user) {
-        return resetPasswordTokenRepository.findByUser(user)
-                .orElse(
-                        ResetPasswordToken.builder()
+        return resetPasswordTokenRepository.findByUser(user).orElse(ResetPasswordToken.builder()
                                 .token(UUID.randomUUID().toString())
                                 .user(user)
                                 .expiration(getExpiration())
-                                .build()
-                );
+                                .build());
     }
 
     private LocalDateTime getExpiration() {

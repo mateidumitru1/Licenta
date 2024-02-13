@@ -11,6 +11,7 @@ import com.matei.backend.exception.UserNotFoundException;
 import com.matei.backend.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,50 +24,22 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final ModelMapper modelMapper;
 
     public UserResponseDto createUser(UserCreationRequestDto userCreationRequestDto) {
-        var user = userRepository.save(User.builder()
-                .id(UUID.randomUUID())
-                .username(userCreationRequestDto.getUsername())
-                .email(userCreationRequestDto.getEmail())
-                .password(passwordEncoder.encode(userCreationRequestDto.getPassword()))
-                .firstName(userCreationRequestDto.getFirstName())
-                .lastName(userCreationRequestDto.getLastName())
-                .role(userCreationRequestDto.getRole())
-                .build());
+        var user = userRepository.save(modelMapper.map(userCreationRequestDto, User.class));
 
-        return UserResponseDto.builder()
-                .id(user.getId())
-                .username(user.getUsername())
-                .email(user.getEmail())
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName())
-                .role(user.getRole())
-                .build();
+        return modelMapper.map(user, UserResponseDto.class);
     }
 
     public List<UserResponseDto> getAllUsers() {
-        return userRepository.findAll().stream().map(user -> UserResponseDto.builder()
-                .id(user.getId())
-                .username(user.getUsername())
-                .email(user.getEmail())
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName())
-                .role(user.getRole())
-                .build()).toList();
+        return userRepository.findAll().stream().map(user -> modelMapper.map(user, UserResponseDto.class)).toList();
     }
 
     public UserResponseDto getUserById(UUID id) {
         var user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User not found"));
 
-        return UserResponseDto.builder()
-                .id(user.getId())
-                .username(user.getUsername())
-                .email(user.getEmail())
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName())
-                .role(user.getRole())
-                .build();
+        return modelMapper.map(user, UserResponseDto.class);
     }
 
     public UserResponseDto updateUser(UserRequestDto userRequestDto) {
@@ -78,14 +51,7 @@ public class UserService {
                 userRequestDto.getLastName(),
                 userRequestDto.getRole()
         );
-        return UserResponseDto.builder()
-                .id(userRequestDto.getId())
-                .username(userRequestDto.getUsername())
-                .email(userRequestDto.getEmail())
-                .firstName(userRequestDto.getFirstName())
-                .lastName(userRequestDto.getLastName())
-                .role(userRequestDto.getRole())
-                .build();
+        return getUserById(userRequestDto.getId());
     }
 
     public void deleteUser(UUID id) {

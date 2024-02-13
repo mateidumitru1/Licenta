@@ -32,4 +32,13 @@ public class ShoppingCartItem {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "shopping_cart_id", referencedColumnName = "id")
     private ShoppingCart shoppingCart;
+
+    @Override
+    public String toString() {
+        return "ShoppingCartItem{" +
+                "id=" + id +
+                ", ticketType=" + ticketType +
+                ", quantity=" + quantity +
+                '}';
+    }
 }

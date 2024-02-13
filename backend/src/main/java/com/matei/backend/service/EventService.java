@@ -15,6 +15,7 @@ import com.matei.backend.entity.TicketType;
 import com.matei.backend.exception.EventNotFoundException;
 import com.matei.backend.repository.EventRepository;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -29,44 +30,18 @@ public class EventService {
     private final LocationService locationService;
     private final ImageService imageService;
     private final ObjectMapper objectMapper;
+    private final ModelMapper modelMapper;
 
     public EventWithTicketTypesResponseDto createEvent(EventCreationRequestDto eventCreationRequestDto) throws IOException {
-        var event = eventRepository.save(Event.builder()
-                .title(eventCreationRequestDto.getTitle())
-                .date(getDateFromString(eventCreationRequestDto.getDate()))
-                .shortDescription(eventCreationRequestDto.getShortDescription())
-                .description(eventCreationRequestDto.getDescription())
-                .imageUrl(imageService.saveImage("event-images", eventCreationRequestDto.getImage()))
-                .location(Optional.of(locationService.getLocationById(UUID.fromString(eventCreationRequestDto.getLocationId()))).map(
-                        locationResponseDto -> Location.builder()
-                                .id(locationResponseDto.getId())
-                                .name(locationResponseDto.getName())
-                                .address(locationResponseDto.getAddress())
-                                .build())
-                        .orElseThrow())
-                .build());
+        var event = eventRepository.save(modelMapper.map(eventCreationRequestDto, Event.class));
 
         var ticketTypes = getTicketTypeCreationRequestDtoList(eventCreationRequestDto.getTicketTypes()).stream()
                 .map(ticketTypeCreationRequestDto -> ticketTypeService.createTicketType(ticketTypeCreationRequestDto, Optional.of(event).map(
-                        event1 -> EventResponseDto.builder()
-                                .id(event1.getId())
-                                .title(event1.getTitle())
-                                .date(event1.getDate())
-                                .shortDescription(event1.getShortDescription())
-                                .description(event1.getDescription())
-                                .location(event1.getLocation())
-                                .imageUrl(event1.getImageUrl())
-                                .build())
-                        .orElseThrow()))
+                        event1 -> modelMapper.map(event1, EventResponseDto.class)).orElseThrow()))
                 .toList();
-        event.setTicketTypes(ticketTypes.stream().map(ticketTypeResponseDto -> TicketType.builder()
-                .id(ticketTypeResponseDto.getId())
-                .name(ticketTypeResponseDto.getName())
-                .price(ticketTypeResponseDto.getPrice())
-                .quantity(ticketTypeResponseDto.getQuantity())
-                .event(event)
-                .build()).toList());
-        return getEventWithTicketTypesResponseDto(event);
+        event.setTicketTypes(ticketTypes.stream().map(ticketTypeResponseDto -> modelMapper.map(ticketTypeResponseDto, TicketType.class))
+                .toList());
+        return modelMapper.map(event, EventWithTicketTypesResponseDto.class);
     }
 
     public EventWithTicketTypesResponseDto getEventById(UUID id) {
@@ -74,7 +49,7 @@ public class EventService {
                 () -> new EventNotFoundException("Event not found")
         );
 
-        return getEventWithTicketTypesResponseDto(event);
+        return modelMapper.map(event, EventWithTicketTypesResponseDto.class);
     }
 
     public List<EventResponseDto> getEventListByLocation(String locationName) {
@@ -101,50 +76,16 @@ public class EventService {
         List<Event> events = eventList.stream().filter(event -> !event.getTicketTypes().isEmpty()).toList();
 
         return eventList.stream()
-                .map(event -> EventWithTicketTypesResponseDto.builder()
-                        .id(event.getId())
-                        .title(event.getTitle())
-                        .date(event.getDate())
-                        .shortDescription(event.getShortDescription())
-                        .description(event.getDescription())
-                        .location(event.getLocation())
-                        .imageUrl(event.getImageUrl())
-                        .ticketTypes(event.getTicketTypes().stream()
-                                .map(ticketType -> TicketTypeResponseDto.builder()
-                                        .id(ticketType.getId())
-                                        .name(ticketType.getName())
-                                        .price(ticketType.getPrice())
-                                        .quantity(ticketType.getQuantity())
-                                        .event(EventResponseDto.builder()
-                                                .id(event.getId())
-                                                .title(event.getTitle())
-                                                .date(event.getDate())
-                                                .shortDescription(event.getShortDescription())
-                                                .description(event.getDescription())
-                                                .location(event.getLocation())
-                                                .imageUrl(event.getImageUrl())
-                                                .build())
-                                        .build()).toList())
-                        .build())
+                .map(event -> modelMapper.map(event, EventWithTicketTypesResponseDto.class))
                 .toList();
     }
 
     public EventResponseDto getEventByTitle(String title) {
         var event = eventRepository
                 .findByTitle(title)
-                .orElseThrow(
-                        () -> new EventNotFoundException("Event not found")
-                );
+                .orElseThrow(() -> new EventNotFoundException("Event not found"));
 
-        return EventResponseDto.builder()
-                .id(event.getId())
-                .title(event.getTitle())
-                .date(event.getDate())
-                .shortDescription(event.getShortDescription())
-                .description(event.getDescription())
-                .location(event.getLocation())
-                .imageUrl(event.getImageUrl())
-                .build();
+        return modelMapper.map(event, EventResponseDto.class);
     }
 
     public EventWithTicketTypesResponseDto updateEvent(EventUpdateRequestDto updatedEvent) throws IOException {
@@ -164,37 +105,20 @@ public class EventService {
         event.setDate(getDateFromString(updatedEvent.getDate()));
         event.setShortDescription(updatedEvent.getShortDescription());
         event.setDescription(updatedEvent.getDescription());
-        event.setLocation(Optional.of(locationService.getLocationById(updatedEvent.getLocationId())).map(
-                locationResponseDto -> Location.builder()
-                        .id(locationResponseDto.getId())
-                        .name(locationResponseDto.getName())
-                        .address(locationResponseDto.getAddress())
-                        .build())
-                .orElseThrow());
+        event.setLocation(Optional.of(locationService.getLocationById(updatedEvent.getLocationId()))
+                .map(locationResponseDto -> modelMapper.map(locationResponseDto, Location.class)).orElseThrow());
         event.setImageUrl(imageUrl);
 
         eventRepository.save(event);
 
         var ticketTypes = getTicketTypeUpdateRequestDtoList(updatedEvent.getTicketTypes());
-        ticketTypeService.updateTicketTypes(ticketTypes, Optional.of(event).map(event1 -> EventResponseDto.builder()
-                .id(event1.getId())
-                .title(event1.getTitle())
-                .location(event1.getLocation())
-                .date(event1.getDate())
-                .shortDescription(event1.getShortDescription())
-                .description(event1.getDescription())
-                .imageUrl(event1.getImageUrl())
-                .build()).orElseThrow());
+        ticketTypeService.updateTicketTypes(ticketTypes, Optional.of(event).map(event1 ->
+                modelMapper.map(event1, EventResponseDto.class)).orElseThrow());
 
-        event.setTicketTypes(ticketTypes.stream().map(ticketTypeUpdateRequestDto -> TicketType.builder()
-                .id(ticketTypeUpdateRequestDto.getId())
-                .name(ticketTypeUpdateRequestDto.getName())
-                .price(ticketTypeUpdateRequestDto.getPrice())
-                .quantity(ticketTypeUpdateRequestDto.getQuantity())
-                .event(event)
-                .build()).toList());
+        event.setTicketTypes(ticketTypes.stream().map(ticketTypeResponseDto -> modelMapper.map(ticketTypeResponseDto, TicketType.class))
+                .toList());
 
-        return getEventWithTicketTypesResponseDto(event);
+    return modelMapper.map(event, EventWithTicketTypesResponseDto.class);
     }
 
     public void deleteEventById(UUID id) {
@@ -203,34 +127,6 @@ public class EventService {
 
     private LocalDate getDateFromString(String date) {
         return LocalDate.parse(date.substring(0, 10));
-    }
-
-    private EventWithTicketTypesResponseDto getEventWithTicketTypesResponseDto(Event event) {
-        return EventWithTicketTypesResponseDto.builder()
-                .id(event.getId())
-                .title(event.getTitle())
-                .date(event.getDate())
-                .shortDescription(event.getShortDescription())
-                .description(event.getDescription())
-                .location(event.getLocation())
-                .imageUrl(event.getImageUrl())
-                .ticketTypes(event.getTicketTypes().stream()
-                        .map(ticketType -> TicketTypeResponseDto.builder()
-                                .id(ticketType.getId())
-                                .name(ticketType.getName())
-                                .price(ticketType.getPrice())
-                                .quantity(ticketType.getQuantity())
-                                .event(EventResponseDto.builder()
-                                        .id(event.getId())
-                                        .title(event.getTitle())
-                                        .date(event.getDate())
-                                        .shortDescription(event.getShortDescription())
-                                        .description(event.getDescription())
-                                        .location(event.getLocation())
-                                        .imageUrl(event.getImageUrl())
-                                        .build())
-                                .build()).toList())
-                .build();
     }
 
     private List<TicketTypeCreationRequestDto> getTicketTypeCreationRequestDtoList(String ticketTypes) {

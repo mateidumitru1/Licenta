@@ -11,6 +11,7 @@ import com.matei.backend.entity.QR;
 import com.matei.backend.repository.QRRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.codec.binary.Base64;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
@@ -27,6 +28,7 @@ import java.util.UUID;
 public class QRService {
 
     private final QRRepository qrRepository;
+    private final ModelMapper modelMapper;
 
     public QRResponseDto createQR() throws WriterException, IOException {
 
@@ -61,11 +63,7 @@ public class QRService {
                 .used(false)
                 .build());
 
-        return QRResponseDto.builder()
-                .id(qr.getId())
-                .image(Base64.encodeBase64String(imageBytes))
-                .used(qr.getUsed())
-                .build();
+        return modelMapper.map(qr, QRResponseDto.class);
     }
 
     public Boolean validateQR(UUID qrId) {

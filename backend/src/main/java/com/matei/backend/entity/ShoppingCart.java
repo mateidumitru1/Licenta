@@ -32,4 +32,13 @@ public class ShoppingCart {
     @JsonIgnore
     @OneToOne
     private User user;
+
+    @Override
+    public String toString() {
+        return "ShoppingCart{" +
+                "id=" + id +
+                ", price=" + price +
+                ", shoppingCartItemList=" + shoppingCartItemList +
+                '}';
+    }
 }

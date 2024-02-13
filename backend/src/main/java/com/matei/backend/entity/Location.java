@@ -32,4 +32,14 @@ public class Location {
     @JsonIgnore
     @OneToMany(mappedBy = "location")
     private List<Event> eventList;
+
+    @Override
+    public String toString() {
+        return "Location{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", address='" + address + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
+                '}';
+    }
 }

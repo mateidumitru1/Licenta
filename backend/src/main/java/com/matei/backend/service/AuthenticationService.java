@@ -14,6 +14,7 @@ import com.matei.backend.exception.UserNotFoundException;
 import com.matei.backend.repository.BlackListedTokenRepository;
 import com.matei.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,13 +27,12 @@ import java.time.LocalDate;
 public class AuthenticationService {
 
     private final UserRepository userRepository;
-
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
-
     private final JwtService jwtService;
     private final EmailService emailService;
     private final ResetPasswordTokenService resetPasswordTokenService;
+    private final ModelMapper modelMapper;
 
 
     public RegisterResponseDto register(RegisterRequestDto request) {
@@ -55,11 +55,7 @@ public class AuthenticationService {
         userRepository.save(user);
         emailService.sendWelcomeEmail(user.getFirstName(), user.getUsername(), user.getEmail());
 
-        return RegisterResponseDto.builder()
-                .username(user.getUsername())
-                .email(user.getEmail())
-                .message("User registered successfully")
-                .build();
+        return modelMapper.map(user, RegisterResponseDto.class);
     }
 
     public AuthenticationResponseDto authenticate(AuthenticationRequestDto request) {
