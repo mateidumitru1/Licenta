@@ -21,8 +21,6 @@ export class TicketsService {
       }
     });
 
-    console.log(items);
-
     this.http.post(
       'http://localhost:8080/api/shopping-cart',
       items,

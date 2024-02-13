@@ -16,6 +16,7 @@ import {RootRedirectGuard} from "./util/guards/root-redirect-guard.service";
 import {RootComponent} from "./events/root/root.component";
 import {ResetPasswordComponent} from "./identity/reset-password/reset-password.component";
 import {ShoppingCartComponent} from "./events/shopping-cart/shopping-cart.component";
+import {ValidateComponent} from "./validate/validate.component";
 
 const appRoutes: Routes = [
   { path: 'home' , redirectTo: '', pathMatch: 'full' },
@@ -23,6 +24,7 @@ const appRoutes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: 'reset-password/:token', component: ResetPasswordComponent },
+  { path: 'validate-ticket/:ticketId', component: ValidateComponent },
   { path: 'page-not-found', component: PageNotFoundComponent },
   { path: 'admin-dashboard', canActivate: [AdminGuard], component: AdminDashboardComponent, children: [
     { path: '', pathMatch: 'full', component: AdminHomeComponent },

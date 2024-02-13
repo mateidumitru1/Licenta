@@ -43,7 +43,6 @@ export class ShoppingCartComponent implements OnInit{
   ngOnInit(): void {
       this.shoppingCartService.getShoppingCart()?.subscribe((shoppingCart: any) => {
         this.shoppingCart = shoppingCart;
-        console.log(this.shoppingCart);
       }, error => {
         this.snackBar.open('Error while fetching shopping cart', 'Dismiss', {duration: 3000});
       });
@@ -69,6 +68,11 @@ export class ShoppingCartComponent implements OnInit{
   }
 
   onBuyClick() {
-
+    this.shoppingCartService.buyTickets()?.subscribe(() => {
+      this.snackBar.open('Tickets reserved!', 'Dismiss', {duration: 3000});
+    }, error => {
+      this.snackBar.open('Error while reserving tickets', 'Dismiss', {duration: 3000});
+    });
+    this.shoppingCart.shoppingCartItemList = [];
   }
 }

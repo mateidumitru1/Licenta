@@ -10,6 +10,7 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 export class ShoppingCartService {
 
   private readonly shoppingCartUrl = 'http://localhost:8080/api/shopping-cart';
+  private readonly orderUrl = 'http://localhost:8080/api/order';
 
   constructor(private http: HttpClient, private identityService: IdentityService, private snackBar: MatSnackBar) {
   }
@@ -46,6 +47,14 @@ export class ShoppingCartService {
     }
 
     return this.http.patch(this.shoppingCartUrl + '/' + shoppingCartItem.id + '?quantity=' + shoppingCartItem.quantity, null, {
+      headers: {
+        'Authorization': 'Bearer ' + localStorage.getItem('token')
+      }
+    });
+  }
+
+  buyTickets() {
+    return this.http.post(this.orderUrl, null, {
       headers: {
         'Authorization': 'Bearer ' + localStorage.getItem('token')
       }
