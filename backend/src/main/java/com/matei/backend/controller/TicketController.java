@@ -19,15 +19,8 @@ public class TicketController {
     private final TicketService ticketService;
     private final JwtService jwtService;
 
-    @PostMapping
-    public ResponseEntity<?> createTicket(@RequestBody TicketCreationRequestDto ticketCreationRequestDto,
-                                          @RequestHeader("Authorization") String jwtToken) throws IOException, WriterException {
-
-        return ResponseEntity.ok(ticketService.createTicket(ticketCreationRequestDto, jwtService.extractId(jwtToken.substring(7))));
-    }
-
-    @PostMapping("/validate")
-    public ResponseEntity<?> validateTicket(@RequestParam("qrId") String qrId) {
+    @GetMapping("/validate/{qrId}")
+    public ResponseEntity<?> validateTicket(@PathVariable("qrId") String qrId) {
 
         return ResponseEntity.ok(ticketService.validateTicket(UUID.fromString(qrId)));
     }

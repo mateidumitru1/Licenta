@@ -56,6 +56,7 @@ public class QRService {
         byte[] imageBytes = baos.toByteArray();
 
         var qr = qrRepository.save(QR.builder()
+                .id(uuid)
                 .image(Base64.encodeBase64String(imageBytes))
                 .used(false)
                 .build());

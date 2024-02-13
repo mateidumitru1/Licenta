@@ -16,12 +16,14 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.Base64;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class EmailService {
 
     private final Email from = new Email("matei.dumitrud@gmail.com");
+    private final PdfService pdfService;
 
 
     public void sendWelcomeEmail(String firstName, String username, String toEmail) {
@@ -61,18 +63,20 @@ public class EmailService {
         send(mail);
     }
 
-    public void sendTicketEmail(String toEmail, TicketResponseDto ticketResponseDto) {
+    public void sendTicketEmail(String toEmail, List<TicketResponseDto> ticketResponseDtoList) {
         Email to = new Email(toEmail);
 
         final String sendTicketTemplateId = "d-22dfa17cd6234faeb5f3bdcb9095342d";
 
+        byte[] pdfBytes = pdfService.createPdf(ticketResponseDtoList);
+
         Attachments attachments = new Attachments();
-        attachments.setContent(ticketResponseDto.getQr().getImage());
-        attachments.setType("application/octet-stream");
-        attachments.setFilename("qr_code.jpg");
+        attachments.setContent(Base64.getEncoder().encodeToString(pdfBytes));
+        attachments.setType("application/pdf");
+        attachments.setFilename(ticketResponseDtoList.getFirst().getTicketType().getEvent().getTitle() + ".pdf");
 
         Personalization personalization = new Personalization();
-        personalization.addDynamicTemplateData("image", "data:image/jpeg;base64, " + ticketResponseDto.getQr().getImage());
+//        personalization.addDynamicTemplateData("image", "data:image/jpeg;base64, " + ticketResponseDto.getQr().getImage());
         personalization.addTo(to);
 
         Mail mail = new Mail();

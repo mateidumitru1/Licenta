@@ -16,10 +16,10 @@ import java.util.UUID;
 @Table(name = "qrs")
 public class QR {
     @Id
-    @GeneratedValue(generator = "uuid4")
     private UUID id;
 
     private Boolean used;
-    
+
+    @Column(length = 100000)
     private String image;
 }

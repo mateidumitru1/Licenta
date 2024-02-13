@@ -13,4 +13,5 @@ import java.util.UUID;
 @Builder
 public class TicketCreationRequestDto {
     private UUID ticketTypeId;
+
 }

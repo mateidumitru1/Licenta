@@ -2,13 +2,9 @@ package com.matei.backend.service;
 
 import com.matei.backend.dto.request.ShoppingCartItemRequestDto;
 import com.matei.backend.dto.response.*;
-import com.matei.backend.entity.Event;
-import com.matei.backend.entity.ShoppingCart;
-import com.matei.backend.entity.ShoppingCartItem;
-import com.matei.backend.entity.TicketType;
+import com.matei.backend.entity.*;
 import com.matei.backend.repository.ShoppingCartItemRepository;
 import com.matei.backend.repository.ShoppingCartRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,26 +21,17 @@ public class ShoppingCartService {
     private final TicketTypeService ticketTypeService;
     private final UserService userService;
 
-    public void createShoppingCart() {
-
-    }
-
-    public ShoppingCartResponseDto addTicketToShoppingCart(List<ShoppingCartItemRequestDto> shoppingCartItemRequestDtoList, UUID userId) {
-        var shoppingCart = shoppingCartRepository.findByUserId(userId).orElse(ShoppingCart.builder()
+    public ShoppingCart createEmptyShoppingCart(UUID userId) {
+        return shoppingCartRepository.save(ShoppingCart.builder()
                 .id(UUID.randomUUID())
                 .price(0.0)
                 .shoppingCartItemList(new ArrayList<>())
-                .user(Optional.of(userService.getUserById(userId))
-                        .map(user -> com.matei.backend.entity.User.builder()
-                                .id(user.getId())
-                                .username(user.getUsername())
-                                .email(user.getEmail())
-                                .firstName(user.getFirstName())
-                                .lastName(user.getLastName())
-                                .role(user.getRole())
-                                .build())
-                        .orElseThrow())
+                .user(User.builder().id(userId).build())
                 .build());
+    }
+
+    public ShoppingCartResponseDto addTicketToShoppingCart(List<ShoppingCartItemRequestDto> shoppingCartItemRequestDtoList, UUID userId) {
+        var shoppingCart = findShoppingCartOrElseEmpty(userId);
 
         var newPrice = shoppingCart.getPrice();
 
@@ -95,13 +82,20 @@ public class ShoppingCartService {
     }
 
     public ShoppingCartResponseDto getShoppingCart(UUID userId) {
-        var shoppingCart = shoppingCartRepository.findByUserId(userId).orElseThrow(() -> new RuntimeException("Shopping cart not found!"));
+        var shoppingCart = findShoppingCartOrElseEmpty(userId);
 
         return getShoppingCartResponseDto(shoppingCart);
     }
 
+    private ShoppingCart findShoppingCartOrElseEmpty(UUID userId) {
+        return shoppingCartRepository.findByUserId(userId).orElseGet(() -> {
+            var user = userService.getUserById(userId);
+            return createEmptyShoppingCart(user.getId());
+        });
+    }
+
     public ShoppingCartResponseDto removeTicketFromShoppingCart(UUID ticketTypeId, UUID userId) {
-        var shoppingCart = shoppingCartRepository.findByUserId(userId).orElseThrow(() -> new RuntimeException("Shopping cart not found!"));
+        var shoppingCart = findShoppingCartOrElseEmpty(userId);
 
         var ticketType = ticketTypeService.getTicketTypeById(ticketTypeId);
         var newPrice = shoppingCart.getPrice() - ticketType.getPrice() *
@@ -115,7 +109,8 @@ public class ShoppingCartService {
                 .findFirst().orElseThrow());
 
         shoppingCart.getShoppingCartItemList().removeIf(shoppingCartItem -> shoppingCartItem.getTicketType().getId().equals(ticketTypeId));
-        shoppingCart.setPrice(newPrice);
+
+        shoppingCart.setPrice((double) Math.round(newPrice * 100) / 100);
 
         shoppingCartRepository.save(shoppingCart);
 
@@ -123,7 +118,7 @@ public class ShoppingCartService {
     }
 
     public ShoppingCartResponseDto updateTicketQuantity(UUID shoppingCartItemId, Integer quantity, UUID userId) {
-        var shoppingCart = shoppingCartRepository.findByUserId(userId).orElseThrow(() -> new RuntimeException("Shopping cart not found!"));
+        var shoppingCart = findShoppingCartOrElseEmpty(userId);
 
         var shoppingCartItem = shoppingCart.getShoppingCartItemList().stream()
                 .filter(item -> item.getId().equals(shoppingCartItemId))
@@ -165,9 +160,11 @@ public class ShoppingCartService {
     }
 
     public void clearShoppingCart(UUID userId) {
-        var shoppingCart = shoppingCartRepository.findByUserId(userId).orElseThrow(() -> new RuntimeException("Shopping cart not found!"));
+        var shoppingCart = findShoppingCartOrElseEmpty(userId);
 
         shoppingCart.setPrice(0.0);
+
+        shoppingCartItemRepository.deleteAll(shoppingCart.getShoppingCartItemList());
         shoppingCart.getShoppingCartItemList().clear();
 
         shoppingCartRepository.save(shoppingCart);
