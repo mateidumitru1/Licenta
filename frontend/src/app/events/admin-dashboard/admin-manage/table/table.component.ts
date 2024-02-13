@@ -7,6 +7,7 @@ import {EditDeleteDialog} from "../dialog-menus/edit/edit-delete-dialog/edit-del
 import {MatDialog} from "@angular/material/dialog";
 import {LocationService} from "../../../location/location.service";
 import {AddDialogComponent} from "../dialog-menus/add-dialog/add-dialog.component";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-table',
@@ -34,7 +35,7 @@ export class TableComponent implements OnInit, AfterViewInit {
               address: string}[] = [];
 
   constructor(private dialog: MatDialog, private locationService: LocationService,
-              private adminManageService: AdminManageService) {}
+              private adminManageService: AdminManageService, private snackBar: MatSnackBar) {}
 
   ngOnInit() {
     this.dataSource.data = this.data;
@@ -80,8 +81,9 @@ export class TableComponent implements OnInit, AfterViewInit {
               this.locations = locations;
             });
           }
+          this.snackBar.open('Added successfully', 'Close', { duration: 3000 });
         }, error => {
-          console.log("add failed");
+          this.snackBar.open('Failed to add', 'Close', { duration: 3000 });
         });
       }
     }); }
@@ -114,8 +116,9 @@ export class TableComponent implements OnInit, AfterViewInit {
               this.locations = locations;
             });
           }
+          this.snackBar.open('Updated successfully', 'Close', { duration: 3000 });
         }, error => {
-          console.log("update failed");
+          this.snackBar.open('Failed to update', 'Close', { duration: 3000 });
         });
       }
     });
@@ -134,8 +137,9 @@ export class TableComponent implements OnInit, AfterViewInit {
           this.dataSource.data = this.dataSource.data.filter((value, key) => {
             return value.id !== this.rowData.id;
           });
+          this.snackBar.open('Deleted successfully', 'Close', { duration: 3000 });
         }, error => {
-          console.log(error);
+          this.snackBar.open('Failed to delete', 'Close', { duration: 3000 });
         });
       }
     });

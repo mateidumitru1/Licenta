@@ -64,12 +64,15 @@ import { AddEventComponent } from './events/admin-dashboard/admin-manage/dialog-
 import { AddLocationComponent } from './events/admin-dashboard/admin-manage/dialog-menus/add-dialog/add-location/add-location.component';
 import { RootComponent } from './events/root/root.component';
 import { ResetPasswordComponent } from './identity/reset-password/reset-password.component';
-import {MatSnackBar, MatSnackBarModule} from "@angular/material/snack-bar";
+import { MatSnackBarModule} from "@angular/material/snack-bar";
 import { AddTicketTypeComponent } from './events/admin-dashboard/admin-manage/dialog-menus/add-dialog/add-event/add-ticket-type/add-ticket-type.component';
 import { TicketsComponent } from './events/event/tickets/tickets.component';
 import { TicketTypeTableComponent } from './events/admin-dashboard/admin-manage/dialog-menus/ticket-type-table/ticket-type-table.component';
 import { FooterComponent } from './events/root/footer/footer.component';
-import {MatTooltip, MatTooltipModule} from "@angular/material/tooltip";
+import { MatTooltipModule} from "@angular/material/tooltip";
+import {
+  AdminManageOrdersComponent
+} from "./events/admin-dashboard/admin-manage/admin-manage-orders/admin-manage-orders.component";
 
 
 
@@ -116,7 +119,7 @@ import {MatTooltip, MatTooltipModule} from "@angular/material/tooltip";
     AddTicketTypeComponent,
     TicketsComponent,
     TicketTypeTableComponent,
-    FooterComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,
@@ -147,7 +150,8 @@ import {MatTooltip, MatTooltipModule} from "@angular/material/tooltip";
     MatRadioModule,
     MatSnackBarModule,
     MatTooltipModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    AdminManageOrdersComponent
   ],
   providers: [],
   bootstrap: [AppComponent]

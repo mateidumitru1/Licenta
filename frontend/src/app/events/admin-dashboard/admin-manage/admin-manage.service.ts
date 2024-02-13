@@ -64,13 +64,31 @@ export class AdminManageService {
       if (key === 'location' || key === 'date') {
         continue;
       }
-      if(key === 'ticketTypes') {
+      if (key === 'ticketTypes') {
         formData.append(key, JSON.stringify(data[key]));
         continue;
       }
       formData.append(key, data[key]);
     }
     return formData;
+  }
+
+  fetchOrderById(id: string) {
+    return this.http.get(`http://localhost:8080/api/orders/` + id,
+      {
+        headers: {
+          Authorization: 'Bearer ' + localStorage.getItem('token')
+        }
+      });
+  }
+
+  fetchOrdersByUserId(userId: string) {
+    return this.http.get(`http://localhost:8080/api/orders/user/` + userId,
+      {
+        headers: {
+          Authorization: 'Bearer ' + localStorage.getItem('token')
+        }
+      });
   }
 }
 

@@ -1,0 +1,24 @@
+<mat-form-field>
+  <mat-label>Order ID</mat-label>
+  <input matInput type="text" [(ngModel)]="id">
+</mat-form-field>
+<button mat-raised-button color="primary" (click)="fetchById()">Search by id</button>
+<br>
+<mat-form-field>
+  <mat-label>User ID</mat-label>
+  <input matInput type="text" [(ngModel)]="userId">
+</mat-form-field>
+<button mat-raised-button color="primary" (click)="fetchByUserId()">Search by user</button>
+<br>
+<div>
+  <mat-list>
+    <mat-list-item *ngFor="let order of orders">
+      <div>
+        <h3>Order ID: {{order.id}}</h3>
+        <p>User ID: {{order.user.id}}</p>
+        <p>Order Date: {{order.date}}</p>
+      </div>
+    </mat-list-item>
+  </mat-list>
+</div>
+
