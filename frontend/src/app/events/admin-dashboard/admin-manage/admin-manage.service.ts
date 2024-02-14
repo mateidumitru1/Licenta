@@ -3,6 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {EventService} from "../../event/event.service";
 import {LocationService} from "../../location/location.service";
+import * as global from "../../../shared/global";
 
 @Injectable({providedIn: 'root'})
 export class AdminManageService {
@@ -11,7 +12,7 @@ export class AdminManageService {
   }
 
   fetchUsers(): Observable<any> {
-    return this.http.get('http://localhost:8080/api/users', {
+    return this.http.get(global.host + '/users', {
         headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}
       }
     );
@@ -26,7 +27,7 @@ export class AdminManageService {
   }
 
   update(objectType: string, data: any): Observable<any> {
-    return this.http.patch(`http://localhost:8080/api/${objectType}`, this.getFormData(objectType, data),
+    return this.http.patch(global.host + `/${objectType}`, this.getFormData(objectType, data),
       {
         headers: {
           Authorization: 'Bearer ' + localStorage.getItem('token')
@@ -35,7 +36,7 @@ export class AdminManageService {
   }
 
   delete(objectType: string, id: string): Observable<any> {
-    return this.http.delete(`http://localhost:8080/api/${objectType}/${id}`,
+    return this.http.delete(global.host + `/${objectType}/${id}`,
       {
         headers: {
           Authorization: 'Bearer ' + localStorage.getItem('token')
@@ -44,7 +45,7 @@ export class AdminManageService {
   }
 
   add(objectType: string, data: any) {
-    return this.http.post(`http://localhost:8080/api/${objectType}`, this.getFormData(objectType, data),
+    return this.http.post(global.host + `/${objectType}`, this.getFormData(objectType, data),
       {
         headers: {
           Authorization: 'Bearer ' + localStorage.getItem('token')
@@ -73,8 +74,8 @@ export class AdminManageService {
     return formData;
   }
 
-  fetchOrderById(id: string) {
-    return this.http.get(`http://localhost:8080/api/orders/` + id,
+  fetchOrderByNumber(number: string) {
+    return this.http.get(global.host + `/orders/` + number,
       {
         headers: {
           Authorization: 'Bearer ' + localStorage.getItem('token')
@@ -83,7 +84,26 @@ export class AdminManageService {
   }
 
   fetchOrdersByUserId(userId: string) {
-    return this.http.get(`http://localhost:8080/api/orders/user/` + userId,
+    return this.http.get(global.host + `/orders/user/` + userId,
+      {
+        headers: {
+          Authorization: 'Bearer ' + localStorage.getItem('token')
+        }
+      });
+  }
+
+  cancelOrder(order: any) {
+    return this.http.put(global.host + '/orders/' + order.orderNumber + '/admin/cancel', null,
+      {
+        headers: {
+          Authorization: 'Bearer ' + localStorage.getItem('token')
+        }
+      }
+  );
+  }
+
+  cancelTicket(ticket: any) {
+    return this.http.put(global.host + '/tickets/' + ticket.id + '/admin/cancel', null,
       {
         headers: {
           Authorization: 'Bearer ' + localStorage.getItem('token')

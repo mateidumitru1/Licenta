@@ -17,6 +17,9 @@ import {RootComponent} from "./events/root/root.component";
 import {ResetPasswordComponent} from "./identity/reset-password/reset-password.component";
 import {ShoppingCartComponent} from "./events/shopping-cart/shopping-cart.component";
 import {ValidateComponent} from "./validate/validate.component";
+import {AccountComponent} from "./account/account.component";
+import {OrdersComponent} from "./account/orders/orders.component";
+import {AccountGuard} from "./util/guards/account.guard";
 
 const appRoutes: Routes = [
   { path: 'home' , redirectTo: '', pathMatch: 'full' },
@@ -26,6 +29,9 @@ const appRoutes: Routes = [
   { path: 'reset-password/:token', component: ResetPasswordComponent },
   { path: 'validate-ticket/:ticketId', component: ValidateComponent },
   { path: 'page-not-found', component: PageNotFoundComponent },
+  { path: 'account', canActivate: [AccountGuard], component: AccountComponent, children: [
+    { path: 'orders', component: OrdersComponent },
+    ]},
   { path: 'admin-dashboard', canActivate: [AdminGuard], component: AdminDashboardComponent, children: [
     { path: '', pathMatch: 'full', component: AdminHomeComponent },
     { path: 'manage', component: AdminManageComponent },

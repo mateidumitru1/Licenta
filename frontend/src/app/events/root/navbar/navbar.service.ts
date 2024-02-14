@@ -18,8 +18,7 @@ export class NavbarService {
   }
 
   onClick() {
-    // @ts-ignore
-    this.showLocationMenu = false;
+
   }
 
   onShoppingCartClick() {

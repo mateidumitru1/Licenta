@@ -2,6 +2,7 @@ import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {IdentityService} from "../../../identity/identity.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import * as global from "../../../shared/global";
 
 @Injectable({providedIn: 'root'})
 export class TicketsService {
@@ -22,7 +23,7 @@ export class TicketsService {
     });
 
     this.http.post(
-      'http://localhost:8080/api/shopping-cart',
+      global.host + '/shopping-cart',
       items,
       {
         headers: {

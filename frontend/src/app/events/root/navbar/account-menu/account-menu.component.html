@@ -8,7 +8,7 @@
     <button mat-menu-item routerLink="/register" (click)="getNavbarService().onClick()">Register</button>
   </div>
   <div *ngIf="getIdentityService().isLoggedIn()">
-    <button mat-menu-item (click)="getNavbarService().onClick()">Account</button>
+    <button mat-menu-item routerLink="/account" >Account</button>
     <br>
     <button mat-menu-item (click)="logout()">Logout</button>
   </div>

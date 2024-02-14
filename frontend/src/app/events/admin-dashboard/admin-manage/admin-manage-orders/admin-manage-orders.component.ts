@@ -7,11 +7,12 @@ import {MatButtonModule} from "@angular/material/button";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {MatLineModule} from "@angular/material/core";
 import {MatListModule} from "@angular/material/list";
+import {MatCardModule} from "@angular/material/card";
 
 @Component({
   selector: 'app-admin-manage-orders',
   standalone: true,
-  imports: [CommonModule, MatInputModule, FormsModule, MatButtonModule, MatLineModule, MatListModule],
+  imports: [CommonModule, MatInputModule, FormsModule, MatButtonModule, MatLineModule, MatListModule, MatCardModule],
   templateUrl: './admin-manage-orders.component.html',
   styleUrl: './admin-manage-orders.component.css'
 })
@@ -19,7 +20,7 @@ export class AdminManageOrdersComponent implements OnInit{
 
     orders: any[] = [];
 
-    id: string = '';
+    orderNumber: string = '';
 
     userId: string = '';
 
@@ -30,8 +31,8 @@ export class AdminManageOrdersComponent implements OnInit{
 
     fetchById() {
       this.orders = [];
-      if(this.id === '') return;
-      this.adminManageService.fetchOrderById(this.id).subscribe((res: any ) => {
+      if(this.orderNumber === '') return;
+      this.adminManageService.fetchOrderByNumber(this.orderNumber).subscribe((res: any ) => {
         this.orders.push(res);
         this.snackBar.open('Order fetched successfully', 'Close', { duration: 3000 });
         console.log(this.orders);
@@ -46,8 +47,31 @@ export class AdminManageOrdersComponent implements OnInit{
       this.adminManageService.fetchOrdersByUserId(this.userId).subscribe((res: any) => {
         this.orders = res;
         this.snackBar.open('Orders fetched successfully', 'Close', { duration: 3000 });
+        console.log(this.orders);
         }, (error) => {
           this.snackBar.open('Error fetching orders', 'Close', { duration: 3000 });
       });
     }
+
+  cancelOrder(order: any) {
+    this.adminManageService.cancelOrder(order).subscribe(() => {
+      order.status = 'CANCELED';
+      order.ticketList.forEach((ticket: any) => {
+        ticket.status = 'CANCELED';
+      });
+      this.snackBar.open('Order cancelled successfully', 'Close', { duration: 3000 });
+    }, (error) => {
+      this.snackBar.open('Error cancelling order', 'Close', { duration: 3000 });
+    });
+  }
+
+  cancelTicket(ticket: any) {
+    this.adminManageService.cancelTicket(ticket).subscribe(() => {
+      ticket.status = 'CANCELED';
+      this.snackBar.open('Ticket cancelled successfully', 'Close', { duration: 3000 });
+    }, (error) => {
+      this.snackBar.open('Error cancelling ticket', 'Close', { duration: 3000 });
+    });
+
+  }
 }

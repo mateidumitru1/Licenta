@@ -1,0 +1,24 @@
+<h1>Orders</h1>
+<div *ngFor="let order of orders">
+  <mat-card>
+    <mat-card-title>
+      <h2 (click)="order.isVisible = !order.isVisible">Order {{order.orderNumber}}</h2>
+    </mat-card-title>
+    <mat-card-content *ngIf="order.isVisible">
+      <p>Date: {{order.date}}</p>
+      <p>Total price: {{order.price}}</p>
+      <p>Status: {{order.status}}</p>
+      <h2>Tickets</h2>
+      <hr>
+      <div *ngFor="let ticket of order.ticketList">
+        <p>Event: {{ticket.ticketType.event.title}}</p>
+        <p>Price: {{ticket.ticketType.price}}</p>
+        <p>Category: {{ticket.ticketType.name}}</p>
+        <p>Status: {{ticket.status}}</p>
+        <button *ngIf="ticket.status == 'CONFIRMED'" mat-raised-button color="primary" (click)="cancelTicket(ticket)">Cancel</button>
+        <hr>
+      </div>
+      <button *ngIf="order.status == 'CONFIRMED'" mat-raised-button color="primary" (click)="cancelOrder(order)">Cancel order</button>
+    </mat-card-content>
+  </mat-card>
+</div>

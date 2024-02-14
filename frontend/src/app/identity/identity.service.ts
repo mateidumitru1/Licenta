@@ -4,6 +4,7 @@ import {Router} from "@angular/router";
 import {HttpClient} from "@angular/common/http";
 import {JwtHandler} from "../util/handlers/jwt.handler";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import * as global from "../shared/global";
 
 @Injectable({
   providedIn: 'root'
@@ -14,14 +15,14 @@ export class IdentityService {
               private snackBar: MatSnackBar) { }
 
   login(username: string, password: string): Observable<any> {
-    return this.http.post('http://localhost:8080/api/authenticate', {
+    return this.http.post(global.host + '/authenticate', {
       username: username,
       password: password
     });
   }
 
   register(firstName: string, lastName: string, username: string, password: string, email: string) {
-    this.http.post('http://localhost:8080/api/register', {
+    this.http.post(global.host + '/register', {
       firstName: firstName,
       lastName: lastName,
       username: username,
@@ -40,7 +41,7 @@ export class IdentityService {
   }
 
   logout() {
-    this.http.post('http://localhost:8080/api/logout', null, {
+    this.http.post(global.host + '/logout', null, {
       headers: {
         'Authorization': 'Bearer ' + localStorage.getItem('token')
       }
@@ -66,7 +67,7 @@ export class IdentityService {
   }
 
   forgotPassword(email: string) {
-     this.http.post('http://localhost:8080/api/forgot-password?email=' + email, null).subscribe(() => {
+     this.http.post(global.host + '/api/forgot-password?email=' + email, null).subscribe(() => {
         this.snackBar.open('An email has been sent to you!', 'Close', {
           duration: 3000
         });
@@ -79,11 +80,11 @@ export class IdentityService {
   }
 
   resetPassword(token: string, password: string) {
-    return this.http.post('http://localhost:8080/api/reset-password?token=' + token + '&password=' + password, null);
+    return this.http.post(global.host + '/reset-password?token=' + token + '&password=' + password, null);
   }
 
   fetchUserById(userId: any) {
-    return this.http.get('http://localhost:8080/api/users/' + userId, {
+    return this.http.get(global.host + '/users/' + userId, {
       headers: {
         'Authorization': 'Bearer ' + localStorage.getItem('token')
       }

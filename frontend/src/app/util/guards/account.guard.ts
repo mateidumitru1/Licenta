@@ -5,12 +5,12 @@ import {Injectable} from "@angular/core";
 @Injectable({
   providedIn: 'root'
 })
-export class AdminGuard implements CanActivate {
+export class AccountGuard implements CanActivate {
 
   constructor(private identityService: IdentityService, private router: Router) {}
 
   canActivate(route: ActivatedRouteSnapshot) {
-    if (this.identityService.isAdmin()) {
+    if (this.identityService.isLoggedIn() && !this.identityService.isAdmin()) {
       return true;
     }
     else {

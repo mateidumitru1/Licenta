@@ -10,7 +10,7 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 export class ShoppingCartService {
 
   private readonly shoppingCartUrl = 'http://localhost:8080/api/shopping-cart';
-  private readonly orderUrl = 'http://localhost:8080/api/order';
+  private readonly orderUrl = 'http://localhost:8080/api/orders';
 
   constructor(private http: HttpClient, private identityService: IdentityService, private snackBar: MatSnackBar) {
   }
