@@ -31,8 +31,20 @@ public class OrderController {
         return ResponseEntity.ok(orderService.getOrdersByUserId(id));
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getOrderById(@PathVariable UUID id){
-        return ResponseEntity.ok(orderService.getOrderById(id));
+    @GetMapping("/{number}")
+    public ResponseEntity<?> getOrderByOrderNumber(@PathVariable Long number){
+        return ResponseEntity.ok(orderService.getOrderByNumber(number));
+    }
+
+    @PutMapping("/{orderNumber}/cancel")
+    public ResponseEntity<?> cancelOrder(@RequestHeader("Authorization") String jwtToken, @PathVariable("orderNumber") Long orderNumber){
+        orderService.cancelOrder(jwtService.extractId(jwtToken.substring(7)), orderNumber);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/{orderNumber}/admin/cancel")
+    public ResponseEntity<?> adminCancelOrder(@PathVariable("orderNumber") Long orderNumber){
+        orderService.adminCancelOrder(orderNumber);
+        return ResponseEntity.ok().build();
     }
 }

@@ -22,6 +22,8 @@ public class Ticket {
     @GeneratedValue(generator = "uuid4")
     private UUID id;
 
+    private Status status;
+
     @JsonIgnore
     @ManyToOne
     private TicketType ticketType;

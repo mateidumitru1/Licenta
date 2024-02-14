@@ -30,6 +30,7 @@ public class OrderService {
                 .id(UUID.randomUUID())
                 .price(shoppingCart.getPrice())
                 .date(LocalDateTime.now())
+                .status(Status.CONFIRMED)
                 .user(Optional.of(userService.getUserById(userId)).map(user -> User.builder()
                         .id(user.getId()).build()).orElseThrow())
                 .build());
@@ -37,7 +38,7 @@ public class OrderService {
         var ticketList = shoppingCart.getShoppingCartItemList().stream().map(shoppingCartItem ->
                 ticketService.createTicket(TicketCreationRequestDto.builder()
                     .ticketTypeId(shoppingCartItem.getTicketType().getId()).build(), shoppingCartItem.getQuantity(), userId,
-                        getOrderResponseDto(order)))
+                        getCreationOrderResponseDto(order)))
                 .toList().stream().flatMap(List::stream).toList();
 
         shoppingCartService.clearShoppingCart(userId);
@@ -53,21 +54,30 @@ public class OrderService {
         return orderList.stream().map(this::getOrderResponseDto).toList();
     }
 
-    public OrderResponseDto getOrderById(UUID id) {
-        return orderRepository.findById(id).map(this::getOrderResponseDto).orElseThrow(() -> new OrderNotFoundException("Order not found"));
+    public OrderResponseDto getOrderByNumber(Long number) {
+        return orderRepository.findByOrderNumber(number).map(this::getOrderResponseDto).orElseThrow(() -> new OrderNotFoundException("Order not found"));
     }
 
     public OrderResponseDto getOrderResponseDto(Order order) {
         return OrderResponseDto.builder()
                 .id(order.getId())
+                .orderNumber(order.getOrderNumber())
                 .price(order.getPrice())
                 .date(order.getDate())
+                .status(order.getStatus())
                 .ticketList(order.getTicketList().stream().map(ticket -> TicketResponseDto.builder()
                         .id(ticket.getId())
+                        .status(ticket.getStatus())
                         .ticketType(Optional.of(ticket.getTicketType()).map(ticketType -> TicketTypeResponseDto.builder()
                                 .id(ticketType.getId())
                                 .name(ticketType.getName())
                                 .price(ticketType.getPrice())
+                                .event(EventResponseDto.builder()
+                                        .id(ticketType.getEvent().getId())
+                                        .title(ticketType.getEvent().getTitle())
+                                        .date(ticketType.getEvent().getDate())
+                                        .location(ticketType.getEvent().getLocation())
+                                        .build())
                                 .build()).orElseThrow())
                         .qr(Optional.of(ticket.getQr()).map(qr -> QRResponseDto.builder()
                                 .id(qr.getId())
@@ -82,5 +92,37 @@ public class OrderService {
                         .lastName(order.getUser().getLastName())
                         .build())
                 .build();
+    }
+
+    public OrderResponseDto getCreationOrderResponseDto(Order order) {
+        return OrderResponseDto.builder()
+                .id(order.getId())
+                .orderNumber(order.getOrderNumber())
+                .price(order.getPrice())
+                .date(order.getDate())
+                .status(order.getStatus())
+                .user(UserResponseDto.builder()
+                        .id(order.getUser().getId())
+                        .email(order.getUser().getEmail())
+                        .firstName(order.getUser().getFirstName())
+                        .lastName(order.getUser().getLastName())
+                        .build())
+                .build();
+    }
+
+    public void cancelOrder(UUID userId, Long orderNumber) {
+        var order = orderRepository.findByOrderNumber(orderNumber).orElseThrow(() -> new OrderNotFoundException("Order not found"));
+        if (order.getUser().getId().equals(userId)) {
+            order.setStatus(Status.CANCELED);
+            order.getTicketList().forEach(ticket -> ticketService.cancelTicket(userId, ticket.getId()));
+            orderRepository.save(order);
+        }
+    }
+
+    public void adminCancelOrder(Long orderNumber) {
+        var order = orderRepository.findByOrderNumber(orderNumber).orElseThrow(() -> new OrderNotFoundException("Order not found"));
+        order.setStatus(Status.CANCELED);
+        order.getTicketList().forEach(ticket -> ticketService.adminCancelTicket(ticket.getId()));
+        orderRepository.save(order);
     }
 }

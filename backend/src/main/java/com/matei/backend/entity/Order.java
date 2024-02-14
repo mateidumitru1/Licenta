@@ -22,6 +22,12 @@ public class Order {
     @GeneratedValue(generator = "uuid4")
     private UUID id;
 
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(unique = true)
+    private Long orderNumber;
+
+    private Status status;
+
     private Double price;
 
     private LocalDateTime date;

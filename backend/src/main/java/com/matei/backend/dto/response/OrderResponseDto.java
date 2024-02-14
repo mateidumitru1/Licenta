@@ -1,5 +1,6 @@
 package com.matei.backend.dto.response;
 
+import com.matei.backend.entity.Status;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,8 +16,10 @@ import java.util.UUID;
 @Builder
 public class OrderResponseDto {
     private UUID id;
+    private Long orderNumber;
     private Double price;
     private LocalDateTime date;
+    private Status status;
     private List<TicketResponseDto> ticketList;
     private UserResponseDto user;
 }

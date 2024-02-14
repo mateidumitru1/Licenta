@@ -1,2 +1,5 @@
-package com.matei.backend.entity;public enum Status {
+package com.matei.backend.entity;
+
+public enum Status {
+    CONFIRMED, CANCELED
 }

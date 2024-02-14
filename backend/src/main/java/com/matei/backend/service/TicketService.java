@@ -4,6 +4,7 @@ import com.google.zxing.WriterException;
 import com.matei.backend.dto.request.TicketCreationRequestDto;
 import com.matei.backend.dto.response.*;
 import com.matei.backend.entity.*;
+import com.matei.backend.exception.TicketNotFoundException;
 import com.matei.backend.repository.TicketRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -31,6 +32,7 @@ public class TicketService {
             Ticket ticket = null;
             try {
                 ticket = ticketRepository.save(Ticket.builder()
+                        .status(Status.CONFIRMED)
                         .ticketType(Optional.of(ticketTypeService.getTicketTypeById(ticketCreationRequestDto.getTicketTypeId()))
                                 .map(ticketTypeResponseDto -> modelMapper.map(ticketTypeResponseDto, TicketType.class)).orElseThrow())
                         .qr(Optional.of(qrService.createQR())
@@ -48,6 +50,7 @@ public class TicketService {
         emailService.sendTicketEmail(userService.getUserById(userId).getEmail(), tickets.stream()
                 .map(ticket -> TicketResponseDto.builder()
                         .id(ticket.getId())
+                        .status(ticket.getStatus())
                         .ticketType(Optional.of(ticket.getTicketType())
                                 .map(ticketType -> modelMapper.map(ticketType, TicketTypeResponseDto.class)).orElseThrow())
                         .qr(Optional.of(ticket.getQr())
@@ -57,6 +60,7 @@ public class TicketService {
         return tickets.stream()
                 .map(ticket -> TicketResponseDto.builder()
                         .id(ticket.getId())
+                        .status(ticket.getStatus())
                         .ticketType(Optional.of(ticket.getTicketType())
                                 .map(ticketType -> modelMapper.map(ticketType, TicketTypeResponseDto.class)).orElseThrow())
                         .qr(Optional.of(ticket.getQr())
@@ -66,5 +70,20 @@ public class TicketService {
 
     public Boolean validateTicket(UUID qrId) {
         return qrService.validateQR(qrId);
+    }
+
+    public void cancelTicket(UUID userId, UUID ticketId) {
+        var ticket = ticketRepository.findById(ticketId).orElseThrow(() -> new TicketNotFoundException("Ticket not found"));
+        if(!ticket.getOrder().getUser().getId().equals(userId)) {
+            throw new TicketNotFoundException("Ticket not found");
+        }
+        ticket.setStatus(Status.CANCELED);
+        ticketRepository.save(ticket);
+    }
+
+    public void adminCancelTicket(UUID ticketId) {
+        var ticket = ticketRepository.findById(ticketId).orElseThrow(() -> new TicketNotFoundException("Ticket not found"));
+        ticket.setStatus(Status.CANCELED);
+        ticketRepository.save(ticket);
     }
 }
