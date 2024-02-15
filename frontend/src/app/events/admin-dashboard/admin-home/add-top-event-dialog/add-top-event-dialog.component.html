@@ -1,0 +1,27 @@
+<div class="container">
+  <mat-form-field class="search">
+    <input matInput placeholder="Search a event" [(ngModel)]="searchText" (ngModelChange)="searchEvent()" id="in">
+  </mat-form-field>
+  <h1><b>Events</b></h1>
+  <div>
+    <div *ngFor="let event of eventList" class="event-card" [ngClass]="{'selected': event.selected}" (click)="onCardClick(event)">
+      <img src="{{event.imageUrl}}" alt="image">
+      <mat-card>
+        <mat-card-title>
+          {{event.title}}
+        </mat-card-title>
+        <mat-card-content>
+          <p>{{event.location.name}} | {{event.date}}</p>
+          <mat-icon *ngIf="event.selected" class="icon">
+            done
+          </mat-icon>
+        </mat-card-content>
+        <mat-card-actions>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </div>
+</div>
+<button mat-raised-button (click)="onConfirmClick()" class="confirm-button">Confirm</button>
+
+

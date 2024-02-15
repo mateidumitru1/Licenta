@@ -10,10 +10,6 @@ export class HomeService {
   }
 
   fetchTopEvents() {
-    return this.http.get(global.host + '/top-events', {
-      headers: {
-        'Authorization': 'Bearer ' + localStorage.getItem('token')
-      }
-    });
+    return this.http.get(global.host + '/top-events');
   }
 }

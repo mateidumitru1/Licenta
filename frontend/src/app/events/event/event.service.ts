@@ -15,6 +15,6 @@ export class EventService {
   }
 
   fetchAllEvents(): Observable<any> {
-    return this.http.get(global.host + '/events/all');
+    return this.http.get(global.host + '/events/all/available');
   }
 }
