@@ -31,6 +31,11 @@ public class EventController {
         return ResponseEntity.ok(eventService.getAllEvents());
     }
 
+    @GetMapping("/all/available")
+    public ResponseEntity<List<EventWithTicketTypesResponseDto>> getAvailableEvents() {
+        return ResponseEntity.ok(eventService.getAvailableEvents());
+    }
+
     @GetMapping("/{locationId}")
     public ResponseEntity<?> getEventListByLocation(@PathVariable("locationId") String locationId) {
         try {
@@ -40,6 +45,7 @@ public class EventController {
             return ResponseEntity.notFound().build();
         }
     }
+
 
     @GetMapping("/available/{locationId}")
     public ResponseEntity<?> getAvailableEventListByLocation(@PathVariable("locationId") String locationId) {

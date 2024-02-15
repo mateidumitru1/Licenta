@@ -22,17 +22,25 @@ public class TopEventService {
     private final EventService eventService;
     private final ModelMapper modelMapper;
 
-    public TopEventResponseDto createTopEvent(TopEventCreationRequestDto topEventCreationRequestDto) {
-        if(topEventRepository.findByEventId(topEventCreationRequestDto.getEventId()).isPresent()) {
-            throw new TopEventAlreadyExistsException("Top event already exists");
-        }
-        var event = eventService.getEventById(topEventCreationRequestDto.getEventId());
-        var topEvent = topEventRepository.save(TopEvent.builder()
-                .event(modelMapper.map(event, Event.class))
-                .customDescription(topEventCreationRequestDto.getCustomDescription())
-                .build());
+    public TopEventResponseDto createTopEventList(List<TopEventCreationRequestDto> topEventCreationRequestDtoList) {
+        var topEvents = topEventCreationRequestDtoList.stream()
+                .map(topEventCreationRequestDto -> {
+                    if(topEventRepository.findByEventId(topEventCreationRequestDto.getEventId()).isPresent()) {
+                        throw new TopEventAlreadyExistsException("Top event already exists");
+                    }
+                    var event = eventService.getEventById(topEventCreationRequestDto.getEventId());
 
-        return modelMapper.map(topEvent, TopEventResponseDto.class);
+                    var topEvent = new TopEvent();
+                    topEvent.setEvent(modelMapper.map(event, Event.class));
+                    topEvent.setCustomDescription(topEventCreationRequestDto.getCustomDescription());
+
+                    return topEvent;
+                })
+                .toList();
+
+        topEventRepository.saveAll(topEvents);
+
+        return modelMapper.map(topEvents, TopEventResponseDto.class);
     }
 
     public TopEventResponseDto updateTopEvent(UUID id, TopEventUpdateRequestDto topEventUpdateRequestDto) {

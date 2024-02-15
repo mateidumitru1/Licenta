@@ -96,6 +96,17 @@ public class EventService {
                 .toList();
     }
 
+    public List<EventWithTicketTypesResponseDto> getAvailableEvents() {
+        var eventList = eventRepository.findAll();
+
+        List<Event> events = eventList.stream().filter(event -> !event.getTicketTypes().isEmpty()).toList();
+
+        return eventList.stream()
+                .filter(event -> event.getDate().isAfter(LocalDate.now()))
+                .map(event -> modelMapper.map(event, EventWithTicketTypesResponseDto.class))
+                .toList();
+    }
+
     public EventResponseDto getEventByTitle(String title) {
         var event = eventRepository.findByTitle(title)
                 .orElseThrow(() -> new EventNotFoundException("Event not found"));

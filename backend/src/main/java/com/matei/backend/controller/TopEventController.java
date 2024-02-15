@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -19,9 +20,9 @@ public class TopEventController {
     private final TopEventService topEventService;
 
     @PostMapping
-    public ResponseEntity<?> createTopEvent(@RequestBody TopEventCreationRequestDto topEventCreationRequestDto) {
+    public ResponseEntity<?> createTopEvent(@RequestBody List<TopEventCreationRequestDto> topEventCreationRequestDtoList) {
         try {
-            return ResponseEntity.ok(topEventService.createTopEvent(topEventCreationRequestDto));
+            return ResponseEntity.ok(topEventService.createTopEventList(topEventCreationRequestDtoList));
         } catch (TopEventAlreadyExistsException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
         }
@@ -49,6 +50,8 @@ public class TopEventController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
+
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteTopEventById(@PathVariable String id) {
