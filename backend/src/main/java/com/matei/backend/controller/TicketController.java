@@ -26,14 +26,14 @@ public class TicketController {
     }
 
     @PutMapping("/{ticketId}/cancel")
-    public ResponseEntity<?> cancelTicket(@RequestHeader("Authorization") String jwtToken, @PathVariable("ticketId") UUID ticketId) {
-        ticketService.cancelTicket(jwtService.extractId(jwtToken.substring(7)), ticketId);
+    public ResponseEntity<?> cancelTicket(@RequestHeader("Authorization") String jwtToken, @PathVariable("ticketId") String ticketId) {
+        ticketService.cancelTicket(jwtService.extractId(jwtToken.substring(7)), UUID.fromString(ticketId));
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/{ticketId}/admin/cancel")
-    public ResponseEntity<?> adminCancelTicket(@PathVariable("ticketId") UUID ticketId) {
-        ticketService.adminCancelTicket(ticketId);
+    public ResponseEntity<?> adminCancelTicket(@PathVariable("ticketId") String ticketId) {
+        ticketService.adminCancelTicket(UUID.fromString(ticketId));
         return ResponseEntity.ok().build();
     }
 }

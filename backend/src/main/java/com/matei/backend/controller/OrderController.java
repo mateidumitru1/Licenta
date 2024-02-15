@@ -1,5 +1,7 @@
 package com.matei.backend.controller;
 
+import com.matei.backend.exception.OrderNotFoundException;
+import com.matei.backend.exception.QRCreationException;
 import com.matei.backend.service.JwtService;
 import com.matei.backend.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +19,13 @@ public class OrderController {
 
     @PostMapping
     public ResponseEntity<?> createOrder(@RequestHeader("Authorization") String jwtToken){
-        orderService.createOrder(jwtService.extractId(jwtToken.substring(7)));
-        return ResponseEntity.ok().build();
+        try {
+            orderService.createOrder(jwtService.extractId(jwtToken.substring(7)));
+            return ResponseEntity.ok().build();
+        }
+        catch (QRCreationException e){
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
     }
 
     @GetMapping
@@ -27,24 +34,44 @@ public class OrderController {
     }
 
     @GetMapping("/user/{id}")
-    public ResponseEntity<?> getOrdersByUserId(@PathVariable UUID id){
-        return ResponseEntity.ok(orderService.getOrdersByUserId(id));
+    public ResponseEntity<?> getOrdersByUserId(@PathVariable String id){
+        try {
+            return ResponseEntity.ok(orderService.getOrdersByUserId(UUID.fromString(id)));
+        }
+        catch(OrderNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping("/{number}")
     public ResponseEntity<?> getOrderByOrderNumber(@PathVariable Long number){
-        return ResponseEntity.ok(orderService.getOrderByNumber(number));
+        try {
+            return ResponseEntity.ok(orderService.getOrderByNumber(number));
+        }
+        catch(OrderNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PutMapping("/{orderNumber}/cancel")
     public ResponseEntity<?> cancelOrder(@RequestHeader("Authorization") String jwtToken, @PathVariable("orderNumber") Long orderNumber){
-        orderService.cancelOrder(jwtService.extractId(jwtToken.substring(7)), orderNumber);
-        return ResponseEntity.ok().build();
+        try {
+            orderService.cancelOrder(jwtService.extractId(jwtToken.substring(7)), orderNumber);
+            return ResponseEntity.ok().build();
+        }
+        catch(OrderNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PutMapping("/{orderNumber}/admin/cancel")
     public ResponseEntity<?> adminCancelOrder(@PathVariable("orderNumber") Long orderNumber){
-        orderService.adminCancelOrder(orderNumber);
-        return ResponseEntity.ok().build();
+        try {
+            orderService.adminCancelOrder(orderNumber);
+            return ResponseEntity.ok().build();
+        }
+        catch(OrderNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

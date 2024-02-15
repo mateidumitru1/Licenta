@@ -8,7 +8,6 @@ import com.matei.backend.dto.request.TicketTypeCreationRequestDto;
 import com.matei.backend.dto.request.TicketTypeUpdateRequestDto;
 import com.matei.backend.dto.response.EventResponseDto;
 import com.matei.backend.dto.response.EventWithTicketTypesResponseDto;
-import com.matei.backend.dto.response.TicketTypeResponseDto;
 import com.matei.backend.entity.Event;
 import com.matei.backend.entity.Location;
 import com.matei.backend.entity.TicketType;
@@ -32,7 +31,7 @@ public class EventService {
     private final ObjectMapper objectMapper;
     private final ModelMapper modelMapper;
 
-    public EventWithTicketTypesResponseDto createEvent(EventCreationRequestDto eventCreationRequestDto) throws IOException {
+    public EventWithTicketTypesResponseDto createEvent(EventCreationRequestDto eventCreationRequestDto) {
         var event = eventRepository.save(modelMapper.map(eventCreationRequestDto, Event.class));
 
         var ticketTypes = getTicketTypeCreationRequestDtoList(eventCreationRequestDto.getTicketTypes()).stream()
@@ -45,17 +44,15 @@ public class EventService {
     }
 
     public EventWithTicketTypesResponseDto getEventById(UUID id) {
-        var event = eventRepository.findById(id).orElseThrow(
-                () -> new EventNotFoundException("Event not found")
-        );
+        var event = eventRepository.findById(id)
+                .orElseThrow(() -> new EventNotFoundException("Event not found"));
 
         return modelMapper.map(event, EventWithTicketTypesResponseDto.class);
     }
 
-    public List<EventResponseDto> getEventListByLocation(String locationName) {
-        var eventList = eventRepository
-                .findByLocationName(locationName)
-                .orElseThrow();
+    public List<EventResponseDto> getEventListByLocation(UUID locationId) {
+        var eventList = eventRepository.findByLocationId(locationId)
+                .orElseThrow(() -> new EventNotFoundException("Event not found"));
 
         return eventList.stream()
                 .map(event -> EventResponseDto.builder()
@@ -70,6 +67,25 @@ public class EventService {
                 .toList();
     }
 
+    public List<EventResponseDto> getAvailableEventListByLocation(UUID locationId) {
+
+       var eventList = eventRepository.findByLocationId(locationId)
+                .orElseThrow(() -> new EventNotFoundException("Event not found" )).stream()
+               .filter(event -> event.getDate().isAfter(LocalDate.now()))
+               .map(event -> EventResponseDto.builder()
+                       .id(event.getId())
+                       .title(event.getTitle())
+                       .date(event.getDate())
+                       .shortDescription(event.getShortDescription())
+                       .description(event.getDescription())
+                       .location(event.getLocation())
+                       .imageUrl(event.getImageUrl())
+                       .build())
+               .toList();;
+
+        return eventList;
+    }
+
     public List<EventWithTicketTypesResponseDto> getAllEvents() {
         var eventList = eventRepository.findAll();
 
@@ -81,8 +97,7 @@ public class EventService {
     }
 
     public EventResponseDto getEventByTitle(String title) {
-        var event = eventRepository
-                .findByTitle(title)
+        var event = eventRepository.findByTitle(title)
                 .orElseThrow(() -> new EventNotFoundException("Event not found"));
 
         return modelMapper.map(event, EventResponseDto.class);
@@ -97,9 +112,8 @@ public class EventService {
             imageUrl = imageService.saveImage("event-images", updatedEvent.getImage());
         }
 
-        var event = eventRepository.findById(updatedEvent.getId()).orElseThrow(
-                () -> new EventNotFoundException("Event not found")
-        );
+        var event = eventRepository.findById(updatedEvent.getId())
+                .orElseThrow(() -> new EventNotFoundException("Event not found"));
 
         event.setTitle(updatedEvent.getTitle());
         event.setDate(getDateFromString(updatedEvent.getDate()));

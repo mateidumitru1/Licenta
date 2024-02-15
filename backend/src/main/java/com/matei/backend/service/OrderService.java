@@ -4,6 +4,7 @@ import com.matei.backend.dto.request.TicketCreationRequestDto;
 import com.matei.backend.dto.response.*;
 import com.matei.backend.entity.*;
 import com.matei.backend.exception.OrderNotFoundException;
+import com.matei.backend.exception.QRCreationException;
 import com.matei.backend.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -23,7 +24,7 @@ public class OrderService {
     private final TicketService ticketService;
     private final ModelMapper modelMapper;
 
-    public void createOrder(UUID userId) {
+    public void createOrder(UUID userId) throws QRCreationException {
         var shoppingCart = shoppingCartService.getShoppingCart(userId);
 
         var order = orderRepository.save(Order.builder()

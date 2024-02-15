@@ -3,12 +3,15 @@ package com.matei.backend.service;
 import com.matei.backend.dto.request.ShoppingCartItemRequestDto;
 import com.matei.backend.dto.response.*;
 import com.matei.backend.entity.*;
+import com.matei.backend.exception.EventPastException;
+import com.matei.backend.exception.TicketTypeNotFoundException;
 import com.matei.backend.repository.ShoppingCartItemRepository;
 import com.matei.backend.repository.ShoppingCartRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -33,6 +36,14 @@ public class ShoppingCartService {
     }
 
     public ShoppingCartResponseDto addTicketToShoppingCart(List<ShoppingCartItemRequestDto> shoppingCartItemRequestDtoList, UUID userId) {
+        shoppingCartItemRequestDtoList.stream().filter(shoppingCartItemRequestDto -> {
+            var ticketType = Optional.of(ticketTypeService.getTicketTypeById(shoppingCartItemRequestDto.getTicketTypeId()))
+                    .orElseThrow(() -> new TicketTypeNotFoundException("Ticket type not found"));
+            return ticketType.getEvent().getDate().isBefore(LocalDate.now());
+        })
+                .findFirst().ifPresent(shoppingCartItemRequestDto -> {
+                    throw new EventPastException("Event is in the past!");
+                });
         var shoppingCart = findShoppingCartOrElseEmpty(userId);
 
         var newPrice = shoppingCart.getPrice();

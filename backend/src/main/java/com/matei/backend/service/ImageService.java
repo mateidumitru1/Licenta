@@ -76,7 +76,6 @@ public class ImageService {
             return url + blob.getName();
 
         } catch (IOException e) {
-            // TODO: handle exception
             e.printStackTrace();
         }
         return "#";

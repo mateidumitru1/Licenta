@@ -30,8 +30,8 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponseDto> getUserById(@PathVariable("id") UUID id) {
-        return ResponseEntity.ok(userService.getUserById(id));
+    public ResponseEntity<UserResponseDto> getUserById(@PathVariable("id") String id) {
+        return ResponseEntity.ok(userService.getUserById(UUID.fromString(id)));
     }
 
     @Transactional
@@ -42,8 +42,8 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable("id") UUID id) {
-        userService.deleteUser(id);
+    public ResponseEntity<Void> deleteUser(@PathVariable("id") String id) {
+        userService.deleteUser(UUID.fromString(id));
         return ResponseEntity.noContent().build();
     }
 }

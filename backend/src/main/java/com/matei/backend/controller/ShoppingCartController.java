@@ -1,6 +1,7 @@
 package com.matei.backend.controller;
 
 import com.matei.backend.dto.request.ShoppingCartItemRequestDto;
+import com.matei.backend.exception.EventPastException;
 import com.matei.backend.service.JwtService;
 import com.matei.backend.service.ShoppingCartService;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +20,15 @@ public class ShoppingCartController {
 
     @PostMapping
     public ResponseEntity<?> addTicketToShoppingCart(@RequestHeader("Authorization") String jwtToken, @RequestBody List<ShoppingCartItemRequestDto> shoppingCartItemRequestDtoList) {
-        return ResponseEntity.ok(shoppingCartService.addTicketToShoppingCart(shoppingCartItemRequestDtoList,  jwtService.extractId(jwtToken.substring(7))));
-
+        try {
+            return ResponseEntity.ok(shoppingCartService.addTicketToShoppingCart(shoppingCartItemRequestDtoList,  jwtService.extractId(jwtToken.substring(7))));
+        }
+        catch (EventPastException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+        catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PatchMapping("/{shoppingCartItemId}")

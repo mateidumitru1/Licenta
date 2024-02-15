@@ -31,9 +31,24 @@ public class EventController {
         return ResponseEntity.ok(eventService.getAllEvents());
     }
 
-    @GetMapping("/location")
-    public ResponseEntity<List<EventResponseDto>> getEventListByPlace(@RequestParam("locationName") String locationName) {
-        return ResponseEntity.ok(eventService.getEventListByLocation(locationName));
+    @GetMapping("/{locationId}")
+    public ResponseEntity<?> getEventListByLocation(@PathVariable("locationId") String locationId) {
+        try {
+            return ResponseEntity.ok(eventService.getEventListByLocation(UUID.fromString(locationId)));
+        }
+        catch (EventNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/available/{locationId}")
+    public ResponseEntity<?> getAvailableEventListByLocation(@PathVariable("locationId") String locationId) {
+        try {
+            return ResponseEntity.ok(eventService.getAvailableEventListByLocation(UUID.fromString(locationId)));
+        }
+        catch (EventNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping("/{title}")
@@ -55,8 +70,12 @@ public class EventController {
     }
 
     @PatchMapping
-    public ResponseEntity<EventWithTicketTypesResponseDto> updateEvent(@ModelAttribute EventUpdateRequestDto eventUpdateRequestDto) throws IOException {
-        return ResponseEntity.ok(eventService.updateEvent(eventUpdateRequestDto));
+    public ResponseEntity<?> updateEvent(@ModelAttribute EventUpdateRequestDto eventUpdateRequestDto) throws IOException {
+        try {
+            return ResponseEntity.ok(eventService.updateEvent(eventUpdateRequestDto));
+        } catch (EventNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping("/{id}")

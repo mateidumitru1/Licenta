@@ -5,6 +5,7 @@ import com.matei.backend.dto.request.LocationCreationRequestDto;
 import com.matei.backend.dto.request.LocationUpdateRequestDto;
 import com.matei.backend.dto.response.LocationResponseDto;
 import com.matei.backend.exception.LocationAlreadyExistsException;
+import com.matei.backend.exception.LocationNotFoundException;
 import com.matei.backend.service.LocationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -37,8 +38,36 @@ public class LocationController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<LocationResponseDto> getLocationById(@PathVariable String id) {
-        return ResponseEntity.ok(locationService.getLocationById(UUID.fromString(id)));
+    public ResponseEntity<?> getLocationById(@PathVariable String id) {
+        try {
+            return ResponseEntity.ok(locationService.getLocationById(UUID.fromString(id)));
+        } catch (LocationNotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>("Invalid UUID", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/{id}/available-events")
+    public ResponseEntity<?> getLocationWithAvailableEventsById(@PathVariable String id) {
+        try {
+            return ResponseEntity.ok(locationService.getLocationWithAvailableEventsById(UUID.fromString(id)));
+        } catch (LocationNotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>("Invalid UUID", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/{id}/unavailable-events")
+    public ResponseEntity<?> getLocationWithUnavailableEventsById(@PathVariable String id) {
+        try {
+            return ResponseEntity.ok(locationService.getLocationWithUnavailableEventsById(UUID.fromString(id)));
+        } catch (LocationNotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>("Invalid UUID", HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PatchMapping

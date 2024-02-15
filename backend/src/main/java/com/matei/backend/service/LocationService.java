@@ -13,6 +13,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -42,7 +43,29 @@ public class LocationService {
     }
 
     public LocationResponseDto getLocationById(UUID id) {
-        var location = locationRepository.findById(id).orElseThrow(() -> new LocationNotFoundException("location not found"));
+        var location = locationRepository.findById(id).orElseThrow(() -> new LocationNotFoundException("Location not found"));
+
+        return modelMapper.map(location, LocationResponseDto.class);
+    }
+
+    public LocationResponseDto getLocationWithAvailableEventsById(UUID id) {
+        var location = locationRepository.findById(id).orElseThrow(() -> new LocationNotFoundException("Location not found"));
+
+        var availableEvents = location.getEventList().stream()
+                .filter(event -> event.getDate().isAfter(LocalDate.now()))
+                .toList();
+        location.setEventList(availableEvents);
+
+        return modelMapper.map(location, LocationResponseDto.class);
+    }
+
+    public LocationResponseDto getLocationWithUnavailableEventsById(UUID id) {
+        var location = locationRepository.findById(id).orElseThrow(() -> new LocationNotFoundException("Location not found"));
+
+        var unavailableEvents = location.getEventList().stream()
+                .filter(event -> event.getDate().isBefore(LocalDate.now()))
+                .toList();
+        location.setEventList(unavailableEvents);
 
         return modelMapper.map(location, LocationResponseDto.class);
     }
@@ -56,7 +79,8 @@ public class LocationService {
             imageUrl = imageService.saveImage("location-images", updatedLocation.getImage());
         }
 
-        var location = locationRepository.findById(updatedLocation.getId()).orElseThrow(() -> new LocationNotFoundException("location not found"));
+        var location = locationRepository.findById(updatedLocation.getId())
+                .orElseThrow(() -> new LocationNotFoundException("Location not found"));
 
         if(!Objects.equals(imageUrl, location.getImageUrl())) {
             location.setImageUrl(imageUrl);

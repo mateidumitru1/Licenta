@@ -4,6 +4,7 @@ import com.google.zxing.WriterException;
 import com.matei.backend.dto.request.TicketCreationRequestDto;
 import com.matei.backend.dto.response.*;
 import com.matei.backend.entity.*;
+import com.matei.backend.exception.QRCreationException;
 import com.matei.backend.exception.TicketNotFoundException;
 import com.matei.backend.repository.TicketRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,9 +30,8 @@ public class TicketService {
     public List<TicketResponseDto> createTicket(TicketCreationRequestDto ticketCreationRequestDto, int quantity, UUID userId, OrderResponseDto orderDto) {
         List<Ticket> tickets = new ArrayList<>();
         while(quantity > 0) {
-            Ticket ticket = null;
             try {
-                ticket = ticketRepository.save(Ticket.builder()
+                var ticket = ticketRepository.save(Ticket.builder()
                         .status(Status.CONFIRMED)
                         .ticketType(Optional.of(ticketTypeService.getTicketTypeById(ticketCreationRequestDto.getTicketTypeId()))
                                 .map(ticketTypeResponseDto -> modelMapper.map(ticketTypeResponseDto, TicketType.class)).orElseThrow())
@@ -39,11 +39,11 @@ public class TicketService {
                                 .map(qrResponseDto -> modelMapper.map(qrResponseDto, QR.class)).orElseThrow())
                         .order(modelMapper.map(orderDto, Order.class))
                         .build());
-            } catch (WriterException | IOException e) {
-                throw new RuntimeException(e);
-            }
 
-            tickets.add(ticket);
+                tickets.add(ticket);
+            } catch (WriterException | IOException e) {
+                throw new QRCreationException("QR Creation Exception: " + e.getMessage());
+            }
             quantity--;
         }
 
