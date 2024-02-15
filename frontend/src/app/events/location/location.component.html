@@ -1,5 +1,6 @@
 <div class="location-events-container">
   <h1 class="location-name"><b>{{ location?.name }}</b></h1>
+  <button mat-raised-button (click)="fetchArchivedEvents()">Archived events</button>
   <div>
     <img class="location-image" src="{{ location?.imageUrl }}" alt="{{ location?.name }}">
   </div>

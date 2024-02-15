@@ -45,6 +45,9 @@ export class EventComponent implements OnInit {
     imageUrl: ''
   };
 
+  currentDate = new Date();
+  eventDate = new Date(this.event.date);
+
   showMoreDetails: boolean = false;
 
   constructor(private eventService: EventService, private router: Router, private route: ActivatedRoute) { }
@@ -53,8 +56,11 @@ export class EventComponent implements OnInit {
     this.eventService.fetchEvent(this.route.snapshot.params['eventId']).subscribe((event: any) => {
       this.event = event;
       this.event.ticketTypes.sort((a, b) => b.price - a.price);
+      var dateParts = this.event.date.split("-");
+      this.eventDate = new Date(Number(dateParts[0]), Number(dateParts[1]) - 1, Number(dateParts[2]));
     }, error => {
       this.router.navigate(['/page-not-found']);
     });
+
   }
 }

@@ -12,6 +12,7 @@
       <hr>
       <div *ngFor="let ticket of order.ticketList">
         <p>Event: {{ticket.ticketType.event.title}}</p>
+        <p>Date: {{ticket.ticketType.event.date}}</p>
         <p>Price: {{ticket.ticketType.price}}</p>
         <p>Category: {{ticket.ticketType.name}}</p>
         <p>Status: {{ticket.status}}</p>

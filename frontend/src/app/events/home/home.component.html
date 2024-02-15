@@ -1,2 +1,19 @@
-<h1><b>Evenimente recomandate</b></h1>
+<h1><b>Recommended events</b></h1>
+<div>
+  <mat-card *ngFor="let event of topEvents" class="event-card">
+    <mat-card-header>
+      <mat-card-title>{{event.name}}</mat-card-title>
+      <mat-card-subtitle>{{event.date}}</mat-card-subtitle>
+    </mat-card-header>
+    <img mat-card-image [src]="event.image">
+    <mat-card-content>
+      <p>
+        {{event.description}}
+      </p>
+    </mat-card-content>
+    <mat-card-actions>
+<!--      <button mat-button (click)="onDetails(event.id)">Detalii</button>-->
+    </mat-card-actions>
+  </mat-card>
+</div>
 <router-outlet></router-outlet>

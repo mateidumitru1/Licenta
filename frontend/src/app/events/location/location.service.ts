@@ -13,7 +13,15 @@ export class LocationService {
     return this.http.get(global.host + '/locations/' + id);
   }
 
+  fetchLocationWithAvailableEventsById(id: string): Observable<any> {
+    return this.http.get(global.host + '/locations/' + id + '/available-events');
+  }
+
   fetchAllLocations(): Observable<any> {
     return this.http.get(global.host + '/locations');
+  }
+
+  fetchArchivedEvents(id: string): Observable<any> {
+    return this.http.get(global.host + '/locations/' + id + '/unavailable-events');
   }
 }

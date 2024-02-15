@@ -9,4 +9,5 @@
     <a (click)="showMoreDetails = !showMoreDetails">Show more details</a>
   </div>
 </div>
-<app-tickets [event]="event"></app-tickets>
+<app-tickets *ngIf="eventDate > currentDate" [event]="event"></app-tickets>
+<div *ngIf="eventDate <= currentDate" class="past-event">Event is in the past!</div>
