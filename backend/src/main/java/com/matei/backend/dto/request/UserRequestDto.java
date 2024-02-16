@@ -1,6 +1,6 @@
 package com.matei.backend.dto.request;
 
-import com.matei.backend.entity.Role;
+import com.matei.backend.entity.util.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

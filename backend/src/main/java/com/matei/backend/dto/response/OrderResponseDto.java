@@ -1,6 +1,6 @@
 package com.matei.backend.dto.response;
 
-import com.matei.backend.entity.Status;
+import com.matei.backend.entity.util.Status;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

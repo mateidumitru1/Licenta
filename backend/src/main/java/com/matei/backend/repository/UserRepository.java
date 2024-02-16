@@ -1,6 +1,6 @@
 package com.matei.backend.repository;
 
-import com.matei.backend.entity.Role;
+import com.matei.backend.entity.util.Role;
 import com.matei.backend.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

@@ -4,6 +4,7 @@ import com.google.zxing.WriterException;
 import com.matei.backend.dto.request.TicketCreationRequestDto;
 import com.matei.backend.dto.response.*;
 import com.matei.backend.entity.*;
+import com.matei.backend.entity.util.Status;
 import com.matei.backend.exception.QRCreationException;
 import com.matei.backend.exception.TicketNotFoundException;
 import com.matei.backend.repository.TicketRepository;
@@ -85,5 +86,19 @@ public class TicketService {
         var ticket = ticketRepository.findById(ticketId).orElseThrow(() -> new TicketNotFoundException("Ticket not found"));
         ticket.setStatus(Status.CANCELED);
         ticketRepository.save(ticket);
+    }
+
+    public List<TicketResponseDto> getTickets(UUID uuid) {
+        return ticketRepository.findAllByOrderUserId(uuid).orElseThrow(() -> new TicketNotFoundException("Ticket not found"))
+                .stream()
+                .map(ticket -> TicketResponseDto.builder()
+                        .id(ticket.getId())
+                        .status(ticket.getStatus())
+                        .ticketType(Optional.of(ticket.getTicketType())
+                                .map(ticketType -> modelMapper.map(ticketType, TicketTypeResponseDto.class)).orElseThrow())
+                        .qr(Optional.of(ticket.getQr())
+                                .map(qr -> modelMapper.map(qr, QRResponseDto.class)).orElseThrow())
+                        .build())
+                .toList();
     }
 }

@@ -6,8 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.List;
 import java.util.UUID;
@@ -28,6 +26,9 @@ public class Location {
 
     private String address;
     private String imageUrl;
+
+    private Double latitude;
+    private Double longitude;
 
     @JsonIgnore
     @OneToMany(mappedBy = "location")
