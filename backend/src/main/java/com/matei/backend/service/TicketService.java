@@ -4,7 +4,7 @@ import com.google.zxing.WriterException;
 import com.matei.backend.dto.request.TicketCreationRequestDto;
 import com.matei.backend.dto.response.*;
 import com.matei.backend.entity.*;
-import com.matei.backend.entity.util.Status;
+import com.matei.backend.entity.enums.Status;
 import com.matei.backend.exception.QRCreationException;
 import com.matei.backend.exception.TicketNotFoundException;
 import com.matei.backend.repository.TicketRepository;

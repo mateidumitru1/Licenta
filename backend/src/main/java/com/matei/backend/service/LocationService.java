@@ -24,13 +24,21 @@ public class LocationService {
     private final LocationRepository locationRepository;
     private final ImageService imageService;
     private final ModelMapper modelMapper;
+    private final MapBoxService mapBoxService;
 
     public LocationResponseDto createLocation(LocationCreationRequestDto locationCreationRequestDto) throws IOException {
         if(locationRepository.findByName(locationCreationRequestDto.getName()).isPresent()) {
             throw new LocationAlreadyExistsException("Location already exists");
         }
 
-        var location = locationRepository.save(modelMapper.map(locationCreationRequestDto, Location.class));
+        var mapBoxGeocodingResponse = mapBoxService.getCoordinates(locationCreationRequestDto.getAddress());
+
+        var locationToSave = modelMapper.map(locationCreationRequestDto, Location.class);
+        locationToSave.setImageUrl(imageService.saveImage("location-images", locationCreationRequestDto.getImage()));
+        locationToSave.setLatitude(mapBoxGeocodingResponse.getFeatures().getFirst().getCenter().get(1));
+        locationToSave.setLongitude(mapBoxGeocodingResponse.getFeatures().getFirst().getCenter().get(0));
+
+        var location = locationRepository.save(locationToSave);
 
         return modelMapper.map(location, LocationResponseDto.class);
     }

@@ -4,7 +4,7 @@ import com.matei.backend.dto.request.AuthenticationRequestDto;
 import com.matei.backend.dto.request.RegisterRequestDto;
 import com.matei.backend.dto.response.AuthenticationResponseDto;
 import com.matei.backend.dto.response.RegisterResponseDto;
-import com.matei.backend.entity.util.Role;
+import com.matei.backend.entity.enums.Role;
 import com.matei.backend.entity.User;
 import com.matei.backend.exception.InvalidCredentialsException;
 import com.matei.backend.exception.ResetPasswordTokenExpiredException;

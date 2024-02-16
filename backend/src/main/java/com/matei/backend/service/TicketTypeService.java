@@ -24,7 +24,9 @@ public class TicketTypeService {
     private final ModelMapper modelMapper;
 
     public TicketTypeResponseDto createTicketType(TicketTypeCreationRequestDto ticketTypeCreationRequestDto, EventResponseDto eventResponseDto) {
-        var ticketType = ticketTypeRepository.save(modelMapper.map(ticketTypeCreationRequestDto, TicketType.class));
+        var ticketTypeToAdd = modelMapper.map(ticketTypeCreationRequestDto, TicketType.class);
+        ticketTypeToAdd.setEvent(modelMapper.map(eventResponseDto, Event.class));
+        var ticketType = ticketTypeRepository.save(ticketTypeToAdd);
 
         return modelMapper.map(ticketType, TicketTypeResponseDto.class);
     }

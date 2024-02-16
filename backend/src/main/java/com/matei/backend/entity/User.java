@@ -1,7 +1,7 @@
 package com.matei.backend.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.matei.backend.entity.util.Role;
+import com.matei.backend.entity.enums.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

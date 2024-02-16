@@ -31,8 +31,13 @@ public class EventService {
     private final ObjectMapper objectMapper;
     private final ModelMapper modelMapper;
 
-    public EventWithTicketTypesResponseDto createEvent(EventCreationRequestDto eventCreationRequestDto) {
-        var event = eventRepository.save(modelMapper.map(eventCreationRequestDto, Event.class));
+    public EventWithTicketTypesResponseDto createEvent(EventCreationRequestDto eventCreationRequestDto) throws IOException {
+        var eventToSave = modelMapper.map(eventCreationRequestDto, Event.class);
+        eventToSave.setLocation(Optional.of(locationService.getLocationById(UUID.fromString(eventCreationRequestDto.getLocationId())))
+                .map(locationResponseDto -> modelMapper.map(locationResponseDto, Location.class)).orElseThrow());
+        eventToSave.setImageUrl(imageService.saveImage("event-images", eventCreationRequestDto.getImage()));
+        eventToSave.setDate(LocalDate.parse(eventCreationRequestDto.getDate().substring(0, 10)));
+        var event = eventRepository.save(eventToSave);
 
         var ticketTypes = getTicketTypeCreationRequestDtoList(eventCreationRequestDto.getTicketTypes()).stream()
                 .map(ticketTypeCreationRequestDto -> ticketTypeService.createTicketType(ticketTypeCreationRequestDto, Optional.of(event).map(
@@ -91,7 +96,7 @@ public class EventService {
 
         List<Event> events = eventList.stream().filter(event -> !event.getTicketTypes().isEmpty()).toList();
 
-        return eventList.stream()
+        return events.stream()
                 .map(event -> modelMapper.map(event, EventWithTicketTypesResponseDto.class))
                 .toList();
     }
@@ -101,7 +106,7 @@ public class EventService {
 
         List<Event> events = eventList.stream().filter(event -> !event.getTicketTypes().isEmpty()).toList();
 
-        return eventList.stream()
+        return events.stream()
                 .filter(event -> event.getDate().isAfter(LocalDate.now()))
                 .map(event -> modelMapper.map(event, EventWithTicketTypesResponseDto.class))
                 .toList();
