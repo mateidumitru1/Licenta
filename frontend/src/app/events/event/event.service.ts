@@ -11,10 +11,10 @@ export class EventService {
   constructor(private http: HttpClient) {}
 
   fetchEvent(eventId: string): Observable<any> {
-    return this.http.get(global.host + '/events?id=' + eventId);
+    return this.http.get(global.apiURL + '/events?id=' + eventId);
   }
 
   fetchAllEvents(): Observable<any> {
-    return this.http.get(global.host + '/events/all/available');
+    return this.http.get(global.apiURL + '/events/all/available');
   }
 }

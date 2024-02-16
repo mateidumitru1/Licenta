@@ -15,14 +15,14 @@ export class IdentityService {
               private snackBar: MatSnackBar) { }
 
   login(username: string, password: string): Observable<any> {
-    return this.http.post(global.host + '/authenticate', {
+    return this.http.post(global.apiURL + '/authenticate', {
       username: username,
       password: password
     });
   }
 
   register(firstName: string, lastName: string, username: string, password: string, email: string) {
-    this.http.post(global.host + '/register', {
+    this.http.post(global.apiURL + '/register', {
       firstName: firstName,
       lastName: lastName,
       username: username,
@@ -41,7 +41,7 @@ export class IdentityService {
   }
 
   logout() {
-    this.http.post(global.host + '/logout', null, {
+    this.http.post(global.apiURL + '/logout', null, {
       headers: {
         'Authorization': 'Bearer ' + localStorage.getItem('token')
       }
@@ -67,7 +67,7 @@ export class IdentityService {
   }
 
   forgotPassword(email: string) {
-     this.http.post(global.host + '/api/forgot-password?email=' + email, null).subscribe(() => {
+     this.http.post(global.apiURL + '/api/forgot-password?email=' + email, null).subscribe(() => {
         this.snackBar.open('An email has been sent to you!', 'Close', {
           duration: 3000
         });
@@ -80,11 +80,11 @@ export class IdentityService {
   }
 
   resetPassword(token: string, password: string) {
-    return this.http.post(global.host + '/reset-password?token=' + token + '&password=' + password, null);
+    return this.http.post(global.apiURL + '/reset-password?token=' + token + '&password=' + password, null);
   }
 
   fetchUserById(userId: any) {
-    return this.http.get(global.host + '/users/' + userId, {
+    return this.http.get(global.apiURL + '/users/' + userId, {
       headers: {
         'Authorization': 'Bearer ' + localStorage.getItem('token')
       }

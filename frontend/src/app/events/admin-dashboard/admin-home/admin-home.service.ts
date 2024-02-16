@@ -10,11 +10,11 @@ export class AdminHomeService {
   }
 
   getTopEvents() {
-    return this.http.get(global.host + '/top-events');
+    return this.http.get(global.apiURL + '/top-events');
   }
 
   addTopEventList(topEventList: any) {
-    return this.http.post(global.host + '/top-events', topEventList, {
+    return this.http.post(global.apiURL + '/top-events', topEventList, {
       headers: {
         'Authorization': 'Bearer ' + localStorage.getItem('token')
       }
@@ -22,7 +22,7 @@ export class AdminHomeService {
   }
 
   deleteTopEvent(id: string) {
-    return this.http.delete(global.host + '/top-events/' + id, {
+    return this.http.delete(global.apiURL + '/top-events/' + id, {
       headers: {
         'Authorization': 'Bearer ' + localStorage.getItem('token')
       }

@@ -53,7 +53,10 @@ export class EventComponent implements OnInit {
   constructor(private eventService: EventService, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.eventService.fetchEvent(this.route.snapshot.params['eventId']).subscribe((event: any) => {
+    if(!this.route.snapshot.queryParams['id']) {
+      this.router.navigate(['/page-not-found']);
+    }
+    this.eventService.fetchEvent(this.route.snapshot.queryParams['id']).subscribe((event: any) => {
       this.event = event;
       this.event.ticketTypes.sort((a, b) => b.price - a.price);
       var dateParts = this.event.date.split("-");

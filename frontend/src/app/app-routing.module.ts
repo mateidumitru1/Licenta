@@ -20,6 +20,8 @@ import {ValidateComponent} from "./validate/validate.component";
 import {AccountComponent} from "./account/account.component";
 import {OrdersComponent} from "./account/orders/orders.component";
 import {AccountGuard} from "./util/guards/account.guard";
+import {TrackEventComponent} from "./track-event/track-event.component";
+import {TrackEventDetailsComponent} from "./track-event/track-event-details/track-event-details.component";
 
 const appRoutes: Routes = [
   { path: 'home' , redirectTo: '', pathMatch: 'full' },
@@ -39,9 +41,11 @@ const appRoutes: Routes = [
     ]},
   { path: '', canActivate: [RootRedirectGuard], component: RootComponent, children: [
       { path: '', pathMatch: 'full', component: HomeComponent },
+      { path: 'track', component: TrackEventComponent },
+      { path: 'track/:event', component: TrackEventDetailsComponent },
       { path: 'shopping-cart', component: ShoppingCartComponent },
       { path: ':location' , component: LocationComponent },
-      { path: ':location/:eventName/:eventId', component: EventComponent },
+      { path: ':location/:event', component: EventComponent },
   ]},
   { path: '**', redirectTo: 'page-not-found' },
 ];

@@ -10,6 +10,8 @@
   <div *ngIf="getIdentityService().isLoggedIn()">
     <button mat-menu-item routerLink="/account" >Account</button>
     <br>
+    <button mat-menu-item routerLink="/track" >Track events</button>
+    <br>
     <button mat-menu-item (click)="logout()">Logout</button>
   </div>
 </mat-menu>

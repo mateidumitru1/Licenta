@@ -10,6 +10,6 @@ export class HomeService {
   }
 
   fetchTopEvents() {
-    return this.http.get(global.host + '/top-events');
+    return this.http.get(global.apiURL + '/top-events');
   }
 }

@@ -1,15 +1,9 @@
 <h1><b>Recommended events</b></h1>
-<div *ngFor="let topEvent of topEvents" class="event-card">
-  <img mat-card-image [src]="topEvent.event.imageUrl">
-  <mat-card>
-    <mat-card-header>
-      <mat-card-title>{{topEvent.event.title}}</mat-card-title>
-      <mat-card-subtitle>{{topEvent.event.date}}</mat-card-subtitle>
-    </mat-card-header>
-    <mat-card-content>
-    </mat-card-content>
-    <mat-card-actions>
-    </mat-card-actions>
-  </mat-card>
+<div class="event-container">
+  <div *ngFor="let topEvent of topEvents" class="event-card" (click)="onEventClick(topEvent)">
+    <img mat-card-image [src]="topEvent.event.imageUrl">
+    <h3 class="event-title"><b>{{ topEvent.event.title }}</b></h3>
+  </div>
 </div>
+
 <router-outlet></router-outlet>

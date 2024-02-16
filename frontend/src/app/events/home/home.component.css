@@ -1,25 +1,38 @@
-mat-card {
-  margin: 30px;
-  width: 300px;
-  height: 300px;
-  display: inline-block;
-  background-color: #fff;
-  box-shadow: 1px 1px 2px 1px #ccc;
-}
-
-mat-card:hover {
-  cursor: pointer;
-  box-shadow: 2px 2px 4px 3px #ccc;
+h1 {
+  text-align: center;
 }
 
 img {
-  width: 100%;
+  width: auto;
   height: 100%;
 }
 
-.home-items {
-  margin: 20px 90px 50px 50px;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+.event-title {
+  font-size: 20px;
+  text-align: center;
+  padding: 10px;
+}
+
+.event-card {
+  margin: 10px;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  width: 400px;
+  height: 200px;
+  user-select: none;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+.event-card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+.event-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 10px;
 }

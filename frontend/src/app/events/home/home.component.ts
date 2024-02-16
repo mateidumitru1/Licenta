@@ -23,4 +23,10 @@ export class HomeComponent implements OnInit{
       this.snackBar.open('Error fetching top events', 'Close', { duration: 3000 });
     });
   }
+
+  onEventClick(topEvent: any) {
+    this.router.navigate(['/', topEvent.event.location.name, topEvent.event.title], {
+      queryParams: {id: topEvent.event.id}
+    });
+  }
 }

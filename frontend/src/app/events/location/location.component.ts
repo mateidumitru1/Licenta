@@ -47,7 +47,9 @@ export class LocationComponent implements OnInit{
   }
 
   onEventClick(event: any) {
-    this.router.navigate(['/' + this.location?.name + '/' + event.title + '/' + event.id]);
+    this.router.navigate(['/',this.location?.name, event.title], {
+      queryParams: {id: event.id}
+    });
   }
 
   fetchArchivedEvents() {

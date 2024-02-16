@@ -26,7 +26,7 @@ export class TicketsService {
       return;
     }
     this.http.post(
-      global.host + '/shopping-cart',
+      global.apiURL + '/shopping-cart',
       items,
       {
         headers: {

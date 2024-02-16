@@ -10,18 +10,18 @@ export class LocationService {
   constructor(private http: HttpClient) {}
 
   fetchLocationById(id: string): Observable<any> {
-    return this.http.get(global.host + '/locations/' + id);
+    return this.http.get(global.apiURL + '/locations/' + id);
   }
 
   fetchLocationWithAvailableEventsById(id: string): Observable<any> {
-    return this.http.get(global.host + '/locations/' + id + '/available-events');
+    return this.http.get(global.apiURL + '/locations/' + id + '/available-events');
   }
 
   fetchAllLocations(): Observable<any> {
-    return this.http.get(global.host + '/locations');
+    return this.http.get(global.apiURL + '/locations');
   }
 
   fetchArchivedEvents(id: string): Observable<any> {
-    return this.http.get(global.host + '/locations/' + id + '/unavailable-events');
+    return this.http.get(global.apiURL + '/locations/' + id + '/unavailable-events');
   }
 }

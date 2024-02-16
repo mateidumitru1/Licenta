@@ -12,7 +12,7 @@ export class AdminManageService {
   }
 
   fetchUsers(): Observable<any> {
-    return this.http.get(global.host + '/users', {
+    return this.http.get(global.apiURL + '/users', {
         headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}
       }
     );
@@ -27,7 +27,7 @@ export class AdminManageService {
   }
 
   update(objectType: string, data: any): Observable<any> {
-    return this.http.patch(global.host + `/${objectType}`, this.getFormData(objectType, data),
+    return this.http.patch(global.apiURL + `/${objectType}`, this.getFormData(objectType, data),
       {
         headers: {
           Authorization: 'Bearer ' + localStorage.getItem('token')
@@ -36,7 +36,7 @@ export class AdminManageService {
   }
 
   delete(objectType: string, id: string): Observable<any> {
-    return this.http.delete(global.host + `/${objectType}/${id}`,
+    return this.http.delete(global.apiURL + `/${objectType}/${id}`,
       {
         headers: {
           Authorization: 'Bearer ' + localStorage.getItem('token')
@@ -45,7 +45,7 @@ export class AdminManageService {
   }
 
   add(objectType: string, data: any) {
-    return this.http.post(global.host + `/${objectType}`, this.getFormData(objectType, data),
+    return this.http.post(global.apiURL + `/${objectType}`, this.getFormData(objectType, data),
       {
         headers: {
           Authorization: 'Bearer ' + localStorage.getItem('token')
@@ -75,7 +75,7 @@ export class AdminManageService {
   }
 
   fetchOrderByNumber(number: string) {
-    return this.http.get(global.host + `/orders/` + number,
+    return this.http.get(global.apiURL + `/orders/` + number,
       {
         headers: {
           Authorization: 'Bearer ' + localStorage.getItem('token')
@@ -84,7 +84,7 @@ export class AdminManageService {
   }
 
   fetchOrdersByUserId(userId: string) {
-    return this.http.get(global.host + `/orders/user/` + userId,
+    return this.http.get(global.apiURL + `/orders/user/` + userId,
       {
         headers: {
           Authorization: 'Bearer ' + localStorage.getItem('token')
@@ -93,7 +93,7 @@ export class AdminManageService {
   }
 
   cancelOrder(order: any) {
-    return this.http.put(global.host + '/orders/' + order.orderNumber + '/admin/cancel', null,
+    return this.http.put(global.apiURL + '/orders/' + order.orderNumber + '/admin/cancel', null,
       {
         headers: {
           Authorization: 'Bearer ' + localStorage.getItem('token')
@@ -103,7 +103,7 @@ export class AdminManageService {
   }
 
   cancelTicket(ticket: any) {
-    return this.http.put(global.host + '/tickets/' + ticket.id + '/admin/cancel', null,
+    return this.http.put(global.apiURL + '/tickets/' + ticket.id + '/admin/cancel', null,
       {
         headers: {
           Authorization: 'Bearer ' + localStorage.getItem('token')
