@@ -1,2 +1,10 @@
-package com.matei.backend.configuration;public class CacheConfiguration {
+package com.matei.backend.configuration;
+
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+@EnableCaching
+public class CacheConfiguration {
+
 }
