@@ -8,6 +8,12 @@
 
 .main-content {
   margin-top: 15px;
-  flex: 1;
+  flex: auto;
   height: auto;
 }
+
+app-footer {
+  flex: initial;
+  flex-shrink: 3;
+}
+

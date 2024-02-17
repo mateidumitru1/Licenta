@@ -10,6 +10,7 @@ import {MatSidenavModule} from "@angular/material/sidenav";
 import {MatButtonModule} from "@angular/material/button";
 import {Router, RouterLink, RouterOutlet} from "@angular/router";
 import mapboxgl from "mapbox-gl";
+import { environment } from 'src/app/shared/environment';
 
 
 @Component({
@@ -63,7 +64,7 @@ export class TrackEventComponent implements OnInit {
   }
 
   initMap() {
-    mapboxgl.accessToken = "pk.eyJ1IjoibWF0ZHVtIiwiYSI6ImNsc29uZXR3MTBlZ3oyaXA5dXdtOTRvOG4ifQ.cIPt8cb_-af1nuOvBazeGQ";
+    mapboxgl.accessToken = environment.apiKey;
 
     navigator.geolocation.getCurrentPosition((position) => {
       this.lat = position.coords.latitude;

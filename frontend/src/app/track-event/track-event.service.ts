@@ -16,4 +16,12 @@ export class TrackEventService {
       }
     });
   }
+
+  fetchTicketsByEventId(id: string) {
+    return this.http.get(global.apiURL + '/tickets/' + id, {
+      headers: {
+        'Authorization': 'Bearer ' + localStorage.getItem('token')
+      }
+    });
+  }
 }
