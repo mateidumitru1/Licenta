@@ -101,4 +101,18 @@ public class TicketService {
                         .build())
                 .toList();
     }
+
+    public List<TicketResponseDto> getTicketsForEvent(UUID userId, UUID eventId) {
+        return ticketRepository.findAllByOrderUserIdAndTicketTypeEventId(userId, eventId).orElseThrow(() -> new TicketNotFoundException("Ticket not found"))
+                .stream()
+                .map(ticket -> TicketResponseDto.builder()
+                        .id(ticket.getId())
+                        .status(ticket.getStatus())
+                        .ticketType(Optional.of(ticket.getTicketType())
+                                .map(ticketType -> modelMapper.map(ticketType, TicketTypeResponseDto.class)).orElseThrow())
+                        .qr(Optional.of(ticket.getQr())
+                                .map(qr -> modelMapper.map(qr, QRResponseDto.class)).orElseThrow())
+                        .build())
+                .toList();
+    }
 }

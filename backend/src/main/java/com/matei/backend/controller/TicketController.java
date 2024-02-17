@@ -29,6 +29,11 @@ public class TicketController {
         return ResponseEntity.ok(ticketService.getTickets(jwtService.extractId(jwtToken)));
     }
 
+    @GetMapping("/{eventId}")
+    public ResponseEntity<?> getTicketsForEvent(@RequestHeader("Authorization") String jwtToken, @PathVariable("eventId") String eventId) {
+        return ResponseEntity.ok(ticketService.getTicketsForEvent(jwtService.extractId(jwtToken), UUID.fromString(eventId)));
+    }
+
     @PutMapping("/{ticketId}/cancel")
     public ResponseEntity<?> cancelTicket(@RequestHeader("Authorization") String jwtToken, @PathVariable("ticketId") String ticketId) {
         ticketService.cancelTicket(jwtService.extractId(jwtToken), UUID.fromString(ticketId));

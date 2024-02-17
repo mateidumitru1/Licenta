@@ -11,6 +11,9 @@ import com.matei.backend.repository.LocationRepository;
 import com.matei.backend.entity.Location;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -49,6 +52,7 @@ public class LocationService {
 
         return modelMapper.map(location, LocationResponseDto.class);
     }
+
     public List<LocationResponseDto> getAllLocations() {
         var locations = locationRepository.findAll();
 

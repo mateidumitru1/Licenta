@@ -21,7 +21,7 @@ public class EventWithTicketTypesResponseDto {
     private LocalDate date;
     private String shortDescription;
     private String description;
-    private Location location;
+    private LocationResponseDto location;
     private String imageUrl;
     private List<TicketTypeResponseDto> ticketTypes;
 }

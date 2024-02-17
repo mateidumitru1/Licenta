@@ -34,17 +34,16 @@ public class EntryPoint implements AuthenticationEntryPoint {
 
     public boolean isExistingEndpoint(HttpServletRequest request) {
         String uri = request.getRequestURI();
-        boolean ok = false;
 
         Map<RequestMappingInfo, HandlerMethod> mappings = handlerMapping.getHandlerMethods();
 
         for (RequestMappingInfo mapping : mappings.keySet()) {
             var a = mapping.getPathPatternsCondition().getPatterns().stream().findFirst().get().getPatternString();
             if (uri.startsWith(mapping.getPathPatternsCondition().getPatterns().stream().findFirst().get().getPatternString())){
-                ok = true;
+                return true;
             }
         }
 
-        return ok;
+        return false;
     }
 }
