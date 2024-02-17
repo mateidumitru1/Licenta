@@ -20,33 +20,22 @@ public class ShoppingCartController {
 
     @PostMapping
     public ResponseEntity<?> addTicketToShoppingCart(@RequestHeader("Authorization") String jwtToken, @RequestBody List<ShoppingCartItemRequestDto> shoppingCartItemRequestDtoList) {
-        try {
-            return ResponseEntity.ok(shoppingCartService.addTicketToShoppingCart(shoppingCartItemRequestDtoList,  jwtService.extractId(jwtToken.substring(7))));
-        }
-        catch (EventPastException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-        catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        return ResponseEntity.ok(shoppingCartService.addTicketToShoppingCart(shoppingCartItemRequestDtoList,  jwtService.extractId(jwtToken)));
     }
 
     @PatchMapping("/{shoppingCartItemId}")
     public ResponseEntity<?> updateTicketQuantity(@RequestHeader("Authorization") String jwtToken, @PathVariable("shoppingCartItemId") String shoppingCartItemId,
                                                   @RequestParam("quantity") Integer quantity) {
-
-        return ResponseEntity.ok(shoppingCartService.updateTicketQuantity(UUID.fromString(shoppingCartItemId), quantity, jwtService.extractId(jwtToken.substring(7))));
+        return ResponseEntity.ok(shoppingCartService.updateTicketQuantity(UUID.fromString(shoppingCartItemId), quantity, jwtService.extractId(jwtToken)));
     }
 
     @GetMapping
     public ResponseEntity<?> getShoppingCart(@RequestHeader("Authorization") String jwtToken) {
-
-        return ResponseEntity.ok(shoppingCartService.getShoppingCart(jwtService.extractId(jwtToken.substring(7))));
+        return ResponseEntity.ok(shoppingCartService.getShoppingCart(jwtService.extractId(jwtToken)));
     }
 
     @PutMapping("/{ticketTypeId}")
     public ResponseEntity<?> removeTicketFromShoppingCart(@RequestHeader("Authorization") String jwtToken, @PathVariable("ticketTypeId") String ticketTypeId) {
-
-        return ResponseEntity.ok(shoppingCartService.removeTicketFromShoppingCart(UUID.fromString(ticketTypeId), jwtService.extractId(jwtToken.substring(7))));
+        return ResponseEntity.ok(shoppingCartService.removeTicketFromShoppingCart(UUID.fromString(ticketTypeId), jwtService.extractId(jwtToken)));
     }
 }

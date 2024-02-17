@@ -27,20 +27,12 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequestDto request) {
-        try {
-            return ResponseEntity.ok(authenticationService.register(request));
-        } catch (UserAlreadyExistsException exception) {
-            return new ResponseEntity<>(exception.getMessage(), HttpStatus.CONFLICT);
-        }
+        return ResponseEntity.ok(authenticationService.register(request));
     }
 
     @PostMapping("/authenticate")
     public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequestDto request) {
-        try {
-            return ResponseEntity.ok(authenticationService.authenticate(request));
-        } catch (InvalidCredentialsException exception) {
-            return new ResponseEntity<>(exception.getMessage(), HttpStatus.UNAUTHORIZED);
-        }
+        return ResponseEntity.ok(authenticationService.authenticate(request));
     }
 
     @PostMapping("/logout")
@@ -56,17 +48,8 @@ public class AuthenticationController {
     }
 
     @PostMapping("/reset-password")
-    public ResponseEntity<?> resetPassword(@RequestParam("token") String token,
-                                              @RequestParam("password") String password) {
-        try {
-            authenticationService.resetPassword(token, password);
-            return ResponseEntity.ok().build();
-        }
-        catch (ResetPasswordTokenNotFoundException exception) {
-            return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
-        }
-        catch (ResetPasswordTokenExpiredException exception) {
-            return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<?> resetPassword(@RequestParam("token") String token, @RequestParam("password") String password) {
+        authenticationService.resetPassword(token, password);
+        return ResponseEntity.ok().build();
     }
 }

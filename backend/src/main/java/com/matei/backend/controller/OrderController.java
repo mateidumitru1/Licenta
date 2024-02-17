@@ -20,7 +20,7 @@ public class OrderController {
     @PostMapping
     public ResponseEntity<?> createOrder(@RequestHeader("Authorization") String jwtToken){
         try {
-            orderService.createOrder(jwtService.extractId(jwtToken.substring(7)));
+            orderService.createOrder(jwtService.extractId(jwtToken));
             return ResponseEntity.ok().build();
         }
         catch (QRCreationException e){
@@ -30,7 +30,7 @@ public class OrderController {
 
     @GetMapping
     public ResponseEntity<?> getOrders(@RequestHeader("Authorization") String jwtToken){
-        return ResponseEntity.ok(orderService.getOrders(jwtService.extractId(jwtToken.substring(7))));
+        return ResponseEntity.ok(orderService.getOrders(jwtService.extractId(jwtToken)));
     }
 
     @GetMapping("/user/{id}")
@@ -55,23 +55,13 @@ public class OrderController {
 
     @PutMapping("/{orderNumber}/cancel")
     public ResponseEntity<?> cancelOrder(@RequestHeader("Authorization") String jwtToken, @PathVariable("orderNumber") Long orderNumber){
-        try {
-            orderService.cancelOrder(jwtService.extractId(jwtToken.substring(7)), orderNumber);
-            return ResponseEntity.ok().build();
-        }
-        catch(OrderNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
+        orderService.cancelOrder(jwtService.extractId(jwtToken), orderNumber);
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping("/{orderNumber}/admin/cancel")
     public ResponseEntity<?> adminCancelOrder(@PathVariable("orderNumber") Long orderNumber){
-        try {
-            orderService.adminCancelOrder(orderNumber);
-            return ResponseEntity.ok().build();
-        }
-        catch(OrderNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
+        orderService.adminCancelOrder(orderNumber);
+        return ResponseEntity.ok().build();
     }
 }

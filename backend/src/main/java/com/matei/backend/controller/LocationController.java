@@ -6,10 +6,12 @@ import com.matei.backend.dto.request.LocationUpdateRequestDto;
 import com.matei.backend.dto.response.LocationResponseDto;
 import com.matei.backend.exception.LocationAlreadyExistsException;
 import com.matei.backend.exception.LocationNotFoundException;
+import com.matei.backend.service.JwtService;
 import com.matei.backend.service.LocationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -22,14 +24,11 @@ import java.util.UUID;
 public class LocationController {
     private final LocationService locationService;
     private final ObjectMapper objectMapper;
+    private final JwtService jwtService;
 
     @PostMapping
-    public ResponseEntity<?> createLocation(@ModelAttribute LocationCreationRequestDto locationCreationRequestDto) throws IOException {
-        try {
-            return ResponseEntity.ok(locationService.createLocation(locationCreationRequestDto));
-        } catch (LocationAlreadyExistsException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
-        }
+    public ResponseEntity<?> createLocation(@RequestHeader("Authorization") String jwtToken, @ModelAttribute LocationCreationRequestDto locationCreationRequestDto) throws IOException {
+        return ResponseEntity.ok(locationService.createLocation(locationCreationRequestDto, jwtService.extractId(jwtToken)));
     }
 
     @GetMapping
@@ -41,8 +40,6 @@ public class LocationController {
     public ResponseEntity<?> getLocationById(@PathVariable String id) {
         try {
             return ResponseEntity.ok(locationService.getLocationById(UUID.fromString(id)));
-        } catch (LocationNotFoundException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>("Invalid UUID", HttpStatus.BAD_REQUEST);
         }
@@ -52,8 +49,6 @@ public class LocationController {
     public ResponseEntity<?> getLocationWithAvailableEventsById(@PathVariable String id) {
         try {
             return ResponseEntity.ok(locationService.getLocationWithAvailableEventsById(UUID.fromString(id)));
-        } catch (LocationNotFoundException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>("Invalid UUID", HttpStatus.BAD_REQUEST);
         }
@@ -63,18 +58,17 @@ public class LocationController {
     public ResponseEntity<?> getLocationWithUnavailableEventsById(@PathVariable String id) {
         try {
             return ResponseEntity.ok(locationService.getLocationWithUnavailableEventsById(UUID.fromString(id)));
-        } catch (LocationNotFoundException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>("Invalid UUID", HttpStatus.BAD_REQUEST);
         }
     }
 
     @PatchMapping
-    public ResponseEntity<LocationResponseDto> updateLocation(@ModelAttribute LocationUpdateRequestDto locationUpdateRequestDto) throws IOException {
-        return ResponseEntity.ok(locationService.updateLocation(locationUpdateRequestDto));
+    public ResponseEntity<LocationResponseDto> updateLocation(@RequestHeader("Authorization") String jwtToken, @ModelAttribute LocationUpdateRequestDto locationUpdateRequestDto) throws IOException {
+        return ResponseEntity.ok(locationService.updateLocation(locationUpdateRequestDto, jwtService.extractId(jwtToken)));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteLocationById(@PathVariable String id) {
         locationService.deleteLocation(UUID.fromString(id));

@@ -17,14 +17,18 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfiguration {
-
     private final JwtAuthenticationFilter jwtAuthFilter;
+    private final CorsFilter corsFilter;
+    private final RequestMappingHandlerMapping handlerMapping;
     private final AuthenticationProvider authenticationProvider;
+
+
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -43,8 +47,9 @@ public class SecurityConfiguration {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authenticationProvider(authenticationProvider)
-                .addFilterBefore(new CorsFilter(), ChannelProcessingFilter.class)
+                .addFilterBefore(corsFilter, ChannelProcessingFilter.class)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling(exception -> exception.authenticationEntryPoint(new EntryPoint(handlerMapping)))
                 .logout(logout -> logout
                         .logoutUrl("/api/logout")
                         .logoutSuccessHandler((req, resp, auth) -> resp.setStatus(200))

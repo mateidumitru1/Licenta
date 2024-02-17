@@ -38,50 +38,28 @@ public class EventController {
 
     @GetMapping("/{locationId}")
     public ResponseEntity<?> getEventListByLocation(@PathVariable("locationId") String locationId) {
-        try {
-            return ResponseEntity.ok(eventService.getEventListByLocation(UUID.fromString(locationId)));
-        }
-        catch (EventNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok(eventService.getEventListByLocation(UUID.fromString(locationId)));
     }
 
 
     @GetMapping("/available/{locationId}")
     public ResponseEntity<?> getAvailableEventListByLocation(@PathVariable("locationId") String locationId) {
-        try {
-            return ResponseEntity.ok(eventService.getAvailableEventListByLocation(UUID.fromString(locationId)));
-        }
-        catch (EventNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok(eventService.getAvailableEventListByLocation(UUID.fromString(locationId)));
     }
 
     @GetMapping("/{title}")
     public ResponseEntity<EventResponseDto> getEventByTitle(@PathVariable("title") String title) {
-        try{
-            return ResponseEntity.ok(eventService.getEventByTitle(title));
-        } catch (EventNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok(eventService.getEventByTitle(title));
     }
 
     @GetMapping
     public ResponseEntity<EventWithTicketTypesResponseDto> getEventById(@PathParam("id") String id) {
-        try{
-            return ResponseEntity.ok(eventService.getEventById(UUID.fromString(id)));
-        } catch (EventNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok(eventService.getEventById(UUID.fromString(id)));
     }
 
     @PatchMapping
     public ResponseEntity<?> updateEvent(@ModelAttribute EventUpdateRequestDto eventUpdateRequestDto) throws IOException {
-        try {
-            return ResponseEntity.ok(eventService.updateEvent(eventUpdateRequestDto));
-        } catch (EventNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok(eventService.updateEvent(eventUpdateRequestDto));
     }
 
     @DeleteMapping("/{id}")

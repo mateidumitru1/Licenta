@@ -21,11 +21,7 @@ public class TopEventController {
 
     @PostMapping
     public ResponseEntity<?> createTopEvent(@RequestBody List<TopEventCreationRequestDto> topEventCreationRequestDtoList) {
-        try {
-            return ResponseEntity.ok(topEventService.createTopEventList(topEventCreationRequestDtoList));
-        } catch (TopEventAlreadyExistsException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
-        }
+        return ResponseEntity.ok(topEventService.createTopEventList(topEventCreationRequestDtoList));
     }
 
     @GetMapping
@@ -35,20 +31,12 @@ public class TopEventController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getTopEventById(@PathVariable String id) {
-        try {
-            return ResponseEntity.ok(topEventService.getTopEventById(UUID.fromString(id)));
-        } catch (TopEventNotFoundException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
+        return ResponseEntity.ok(topEventService.getTopEventById(UUID.fromString(id)));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateTopEvent(@PathVariable String id, @RequestBody TopEventUpdateRequestDto topEventUpdateRequestDto) {
-        try {
-            return ResponseEntity.ok(topEventService.updateTopEvent(UUID.fromString(id), topEventUpdateRequestDto));
-        } catch (TopEventNotFoundException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
+        return ResponseEntity.ok(topEventService.updateTopEvent(UUID.fromString(id), topEventUpdateRequestDto));
     }
 
 

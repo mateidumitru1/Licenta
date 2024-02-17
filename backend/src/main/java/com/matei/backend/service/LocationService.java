@@ -4,6 +4,7 @@ import com.matei.backend.dto.request.LocationCreationRequestDto;
 import com.matei.backend.dto.request.LocationUpdateRequestDto;
 import com.matei.backend.dto.response.EventResponseDto;
 import com.matei.backend.dto.response.LocationResponseDto;
+import com.matei.backend.exception.AdminResourceAccessException;
 import com.matei.backend.exception.LocationAlreadyExistsException;
 import com.matei.backend.exception.LocationNotFoundException;
 import com.matei.backend.repository.LocationRepository;
@@ -13,6 +14,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.nio.file.AccessDeniedException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
@@ -25,8 +27,13 @@ public class LocationService {
     private final ImageService imageService;
     private final ModelMapper modelMapper;
     private final MapBoxService mapBoxService;
+    private final UserService userService;
 
-    public LocationResponseDto createLocation(LocationCreationRequestDto locationCreationRequestDto) throws IOException {
+    public LocationResponseDto createLocation(LocationCreationRequestDto locationCreationRequestDto, UUID userId) throws IOException {
+        if(!userService.isAdmin(userId)) {
+            throw new AdminResourceAccessException("You are not authorized to perform this action");
+        }
+
         if(locationRepository.findByName(locationCreationRequestDto.getName()).isPresent()) {
             throw new LocationAlreadyExistsException("Location already exists");
         }
@@ -78,7 +85,10 @@ public class LocationService {
         return modelMapper.map(location, LocationResponseDto.class);
     }
 
-    public LocationResponseDto updateLocation(LocationUpdateRequestDto updatedLocation) throws IOException {
+    public LocationResponseDto updateLocation(LocationUpdateRequestDto updatedLocation, UUID userId) throws IOException {
+        if(!userService.isAdmin(userId)) {
+            throw new AdminResourceAccessException("You are not authorized to perform this action");
+        }
         String imageUrl = updatedLocation.getImageUrl();
         if(updatedLocation.getImage() != null) {
             if(imageUrl != null) {

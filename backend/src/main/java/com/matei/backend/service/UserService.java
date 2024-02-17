@@ -7,6 +7,8 @@ import com.matei.backend.dto.request.UserRequestDto;
 import com.matei.backend.dto.response.UserResponseDto;
 import com.matei.backend.entity.ResetPasswordToken;
 import com.matei.backend.entity.User;
+import com.matei.backend.entity.enums.Role;
+import com.matei.backend.exception.AdminResourceAccessException;
 import com.matei.backend.exception.UserNotFoundException;
 import com.matei.backend.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -26,14 +28,29 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
 
-    public UserResponseDto createUser(UserCreationRequestDto userCreationRequestDto) {
+    public UserResponseDto createUser(UUID currentUserId, UserCreationRequestDto userCreationRequestDto) {
+        if (!isAdmin(currentUserId)) {
+            throw new AdminResourceAccessException("You are not authorized to perform this action");
+        }
         var user = userRepository.save(modelMapper.map(userCreationRequestDto, User.class));
 
         return modelMapper.map(user, UserResponseDto.class);
     }
 
-    public List<UserResponseDto> getAllUsers() {
+    public List<UserResponseDto> getAllUsers(UUID currentUserId) {
+        if (!isAdmin(currentUserId)) {
+            throw new AdminResourceAccessException("You are not authorized to perform this action");
+        }
         return userRepository.findAll().stream().map(user -> modelMapper.map(user, UserResponseDto.class)).toList();
+    }
+
+    public UserResponseDto adminGetUserById(UUID currentUserId, UUID id) {
+        if (!isAdmin(currentUserId)) {
+            throw new AdminResourceAccessException("You are not authorized to perform this action");
+        }
+        var user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        return modelMapper.map(user, UserResponseDto.class);
     }
 
     public UserResponseDto getUserById(UUID id) {
@@ -42,7 +59,10 @@ public class UserService {
         return modelMapper.map(user, UserResponseDto.class);
     }
 
-    public UserResponseDto updateUser(UserRequestDto userRequestDto) {
+    public UserResponseDto updateUser(UUID currentUserId, UserRequestDto userRequestDto) {
+        if (!isAdmin(currentUserId)) {
+            throw new AdminResourceAccessException("You are not authorized to perform this action");
+        }
         userRepository.partialUpdateUser(
                 userRequestDto.getId(),
                 userRequestDto.getUsername(),
@@ -51,10 +71,19 @@ public class UserService {
                 userRequestDto.getLastName(),
                 userRequestDto.getRole()
         );
-        return getUserById(userRequestDto.getId());
+        return modelMapper.map(userRepository.findById(userRequestDto.getId()).orElseThrow(() -> new UserNotFoundException("User not found")), UserResponseDto.class);
     }
 
-    public void deleteUser(UUID id) {
+    public void deleteUser(UUID currentUserId, UUID id) {
+        if (!isAdmin(currentUserId)) {
+            throw new AdminResourceAccessException("You are not authorized to perform this action");
+        }
         userRepository.deleteById(id);
+    }
+
+    public boolean isAdmin(UUID userId) {
+        var user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        return user.getRole().equals(Role.ADMIN);
     }
 }

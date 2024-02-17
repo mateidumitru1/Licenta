@@ -21,18 +21,17 @@ public class TicketController {
 
     @GetMapping("/validate/{qrId}")
     public ResponseEntity<?> validateTicket(@PathVariable("qrId") String qrId) {
-
         return ResponseEntity.ok(ticketService.validateTicket(UUID.fromString(qrId)));
     }
 
     @GetMapping
     public ResponseEntity<?> getTickets(@RequestHeader("Authorization") String jwtToken) {
-        return ResponseEntity.ok(ticketService.getTickets(jwtService.extractId(jwtToken.substring(7))));
+        return ResponseEntity.ok(ticketService.getTickets(jwtService.extractId(jwtToken)));
     }
 
     @PutMapping("/{ticketId}/cancel")
     public ResponseEntity<?> cancelTicket(@RequestHeader("Authorization") String jwtToken, @PathVariable("ticketId") String ticketId) {
-        ticketService.cancelTicket(jwtService.extractId(jwtToken.substring(7)), UUID.fromString(ticketId));
+        ticketService.cancelTicket(jwtService.extractId(jwtToken), UUID.fromString(ticketId));
         return ResponseEntity.ok().build();
     }
 

@@ -3,6 +3,7 @@ package com.matei.backend.controller;
 import com.matei.backend.dto.request.UserCreationRequestDto;
 import com.matei.backend.dto.request.UserRequestDto;
 import com.matei.backend.dto.response.UserResponseDto;
+import com.matei.backend.service.JwtService;
 import com.matei.backend.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -16,34 +17,33 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
 public class UserController {
-
     private final UserService userService;
+    private final JwtService jwtService;
 
     @PostMapping
-    public ResponseEntity<UserResponseDto> createUser(@ModelAttribute UserCreationRequestDto userCreationRequestDto) {
-        return ResponseEntity.ok(userService.createUser(userCreationRequestDto));
+    public ResponseEntity<UserResponseDto> createUser(@RequestHeader("Authorization") String jwtToken, @ModelAttribute UserCreationRequestDto userCreationRequestDto) {
+        return ResponseEntity.ok(userService.createUser(jwtService.extractId(jwtToken), userCreationRequestDto));
     }
 
     @GetMapping
-    public ResponseEntity<List<UserResponseDto>> getAllUsers() {
-        return ResponseEntity.ok(userService.getAllUsers());
+    public ResponseEntity<List<UserResponseDto>> getAllUsers(@RequestHeader("Authorization") String jwtToken) {
+        return ResponseEntity.ok(userService.getAllUsers(jwtService.extractId(jwtToken)));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponseDto> getUserById(@PathVariable("id") String id) {
-        return ResponseEntity.ok(userService.getUserById(UUID.fromString(id)));
+    public ResponseEntity<UserResponseDto> getUserById(@RequestHeader("Authorization") String jwtToken, @PathVariable("id") String id) {
+        return ResponseEntity.ok(userService.adminGetUserById(jwtService.extractId(jwtToken), UUID.fromString(id)));
     }
 
     @Transactional
     @PatchMapping
-    public ResponseEntity<UserResponseDto> updateUser(@ModelAttribute UserRequestDto userRequestDto) {
-
-        return ResponseEntity.ok(userService.updateUser(userRequestDto));
+    public ResponseEntity<UserResponseDto> updateUser(@RequestHeader("Authorization") String jwtToken, @ModelAttribute UserRequestDto userRequestDto) {
+        return ResponseEntity.ok(userService.updateUser(jwtService.extractId(jwtToken), userRequestDto));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable("id") String id) {
-        userService.deleteUser(UUID.fromString(id));
+    public ResponseEntity<Void> deleteUser(@RequestHeader("Authorization") String jwtToken, @PathVariable("id") String id) {
+        userService.deleteUser(jwtService.extractId(jwtToken), UUID.fromString(id));
         return ResponseEntity.noContent().build();
     }
 }
