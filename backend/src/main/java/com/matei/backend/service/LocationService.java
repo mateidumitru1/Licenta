@@ -41,7 +41,7 @@ public class LocationService {
             throw new LocationAlreadyExistsException("Location already exists");
         }
 
-        var mapBoxGeocodingResponse = mapBoxService.getCoordinates(locationCreationRequestDto.getAddress());
+        var mapBoxGeocodingResponse = mapBoxService.getCoordinates(locationCreationRequestDto.getName());
 
         var locationToSave = modelMapper.map(locationCreationRequestDto, Location.class);
         locationToSave.setImageUrl(imageService.saveImage("location-images", locationCreationRequestDto.getImage()));

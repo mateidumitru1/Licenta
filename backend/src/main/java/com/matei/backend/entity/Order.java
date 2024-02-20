@@ -41,4 +41,15 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id=" + id +
+                ", orderNumber=" + orderNumber +
+                ", status=" + status +
+                ", price=" + price +
+                ", date=" + date +
+                '}';
+    }
 }

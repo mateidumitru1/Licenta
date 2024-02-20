@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -67,26 +68,44 @@ public class OrderService {
                 .price(order.getPrice())
                 .date(order.getDate())
                 .status(order.getStatus())
-                .ticketList(order.getTicketList().stream().map(ticket -> TicketResponseDto.builder()
-                        .id(ticket.getId())
-                        .status(ticket.getStatus())
-                        .ticketType(Optional.of(ticket.getTicketType()).map(ticketType -> TicketTypeResponseDto.builder()
-                                .id(ticketType.getId())
-                                .name(ticketType.getName())
-                                .price(ticketType.getPrice())
-                                .event(EventResponseDto.builder()
-                                        .id(ticketType.getEvent().getId())
-                                        .title(ticketType.getEvent().getTitle())
-                                        .date(ticketType.getEvent().getDate())
-                                        .location(ticketType.getEvent().getLocation())
-                                        .build())
-                                .build()).orElseThrow())
-                        .qr(Optional.of(ticket.getQr()).map(qr -> QRResponseDto.builder()
-                                .id(qr.getId())
-                                .used(qr.getUsed())
-                                .image(qr.getImage())
-                                .build()).orElseThrow())
-                        .build()).toList())
+                .ticketList(order.getTicketList().stream().map(ticket -> {
+                    TicketResponseDto.TicketResponseDtoBuilder ticketResponseDtoBuilder = TicketResponseDto.builder()
+                            .id(ticket.getId())
+                            .status(ticket.getStatus());
+
+                    TicketTypeResponseDto ticketTypeResponseDto = null;
+                    if (ticket.getTicketType() != null) {
+                        ticketTypeResponseDto = TicketTypeResponseDto.builder()
+                                .id(ticket.getTicketType().getId())
+                                .name(ticket.getTicketType().getName())
+                                .price(ticket.getTicketType().getPrice())
+                                .build();
+
+                        EventResponseDto eventResponseDto = null;
+                        if (ticket.getTicketType().getEvent() != null) {
+                            eventResponseDto = EventResponseDto.builder()
+                                    .id(ticket.getTicketType().getEvent().getId())
+                                    .title(ticket.getTicketType().getEvent().getTitle())
+                                    .date(ticket.getTicketType().getEvent().getDate())
+                                    .location(ticket.getTicketType().getEvent().getLocation())
+                                    .build();
+                        }
+                        ticketTypeResponseDto.setEvent(eventResponseDto);
+                    }
+
+                    QRResponseDto qrResponseDto = null;
+                    if (ticket.getQr() != null) {
+                        qrResponseDto = QRResponseDto.builder()
+                                .id(ticket.getQr().getId())
+                                .used(ticket.getQr().getUsed())
+                                .image(ticket.getQr().getImage())
+                                .build();
+                    }
+
+                    ticketResponseDtoBuilder.ticketType(ticketTypeResponseDto);
+                    ticketResponseDtoBuilder.qr(qrResponseDto);
+                    return ticketResponseDtoBuilder.build();
+                }).collect(Collectors.toList()))
                 .user(UserResponseDto.builder()
                         .id(order.getUser().getId())
                         .email(order.getUser().getEmail())
@@ -95,6 +114,7 @@ public class OrderService {
                         .build())
                 .build();
     }
+
 
     public OrderResponseDto getCreationOrderResponseDto(Order order) {
         return OrderResponseDto.builder()
