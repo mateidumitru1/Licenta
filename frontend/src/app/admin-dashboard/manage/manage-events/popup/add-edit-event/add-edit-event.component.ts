@@ -70,7 +70,6 @@ export class AddEditEventComponent implements OnInit{
   }
 
   ngOnInit() {
-    console.log(this.data.event);
     this.dataSource.data = this.data.event.ticketTypes;
     this.today = new Date().toISOString().split('T')[0];
     this.imageSrc = this.data.event.imageUrl;

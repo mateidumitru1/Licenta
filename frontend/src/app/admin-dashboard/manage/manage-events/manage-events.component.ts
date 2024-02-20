@@ -117,6 +117,7 @@ export class ManageEventsComponent implements OnInit{
     });
     dialogRef.afterClosed().subscribe((event: any) => {
       if(event) {
+        event.ticketTypes = JSON.stringify(event.ticketTypes);
         this.manageEventsService.addEvent(event).subscribe({
           next: (event: any) => {
             this.dataSource.data = [...this.dataSource.data, event];
