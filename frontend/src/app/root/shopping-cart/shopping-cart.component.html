@@ -1,0 +1,27 @@
+<div class="container-fluid">
+  <h1>Cos</h1>
+  <h4 *ngIf="shoppingCart?.shoppingCartItemList?.length === 0">Cosul de cumparaturi este gol</h4>
+  <div *ngIf="shoppingCart?.shoppingCartItemList?.length > 0">
+    <div *ngFor="let shoppingCartItem of shoppingCart.shoppingCartItemList" class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-9">
+            <h4 class="card-title">{{shoppingCartItem.ticketType.event.title}}</h4>
+            <h5 class="card-subtitle mb-2 text-muted">{{shoppingCartItem.ticketType.event.location.name}} | {{shoppingCartItem.ticketType.event.date}}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">{{shoppingCartItem.ticketType.name}}</h6>
+            <p class="card-text">{{shoppingCartItem.ticketType.price}} RON x {{shoppingCartItem.quantity}} = {{shoppingCartItem.ticketType.price * shoppingCartItem.quantity}} RON</p>
+          </div>
+          <div class="col-md-3">
+            <select class="custom-select mb-4" (change)="onQuantityChange($event, shoppingCartItem)">
+              <option [selected]="shoppingCartItem.quantity">{{ shoppingCartItem.quantity }}</option>
+              <option *ngFor="let i of generateQuantityList(shoppingCartItem.quantity)">{{ i }}</option>
+            </select>
+            <button class="btn btn-danger" (click)="removeFromCart(shoppingCartItem)">Sterge</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <h4 class="mt-3">Total: {{shoppingCart.price}} RON</h4>
+    <button class="btn btn-primary mt-3" (click)="onBuyClick()">Cumpara</button>
+  </div>
+</div>

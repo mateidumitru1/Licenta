@@ -1,45 +1,46 @@
-import {Component, OnInit, OnDestroy, HostListener, AfterViewInit} from '@angular/core';
-import { HttpClient } from "@angular/common/http";
-import {Router} from "@angular/router";
-import {JwtHandler} from "../../util/handlers/jwt.handler";
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Router, RouterLink} from "@angular/router";
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {IdentityService} from "../identity.service";
-import {InputFieldsErrorService} from "../../shared/input-fields-error/input-fields-error.service";
+import {MdbValidationModule} from "mdb-angular-ui-kit/validation";
+import {NgIf} from "@angular/common";
+import {MdbFormsModule} from "mdb-angular-ui-kit/forms";
+import {JwtHandler} from "../jwt.handler";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-login',
+  standalone: true,
+  imports: [
+    RouterLink,
+    FormsModule,
+    MdbValidationModule,
+    ReactiveFormsModule,
+    NgIf,
+    MdbFormsModule
+  ],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'],
+  styleUrl: './login.component.scss'
 })
-export class LoginComponent{
+export class LoginComponent implements OnInit{
+  registrationForm: FormGroup;
 
-  username: string = '';
-  password: string = '';
-
-  constructor(private http: HttpClient, private router: Router, private identityService: IdentityService,
-              private jwtHandler: JwtHandler, private inputFieldsErrorService: InputFieldsErrorService) { }
-
-  @HostListener('document:keydown', ['$event'])
-  keyEvent(event: KeyboardEvent) {
-    if (event.keyCode === 13) {
-      this.onLogin();
-    }
+  constructor(private router: Router, private identityService: IdentityService, private fb: FormBuilder) {
+    this.registrationForm = this.fb.group({
+      username: ['', Validators.required],
+      password: ['', [Validators.required]]
+    });
   }
 
-  onLogin(): void {
-    if (this.username === '' || this.password === '') {
-      this.inputFieldsErrorService.subject.next('Please enter username and password!');
-    } else {
-      this.identityService.login(this.username, this.password).subscribe((response: any) => {
-        localStorage.setItem('token', response.token);
-        if(this.jwtHandler.getRole() === 'ADMIN') {
-          this.router.navigate(['admin-dashboard']);
-        }
-        else {
-          this.router.navigate(['home']);
-        }
-      }, (error) => {
-        this.inputFieldsErrorService.subject.next('Invalid username or password!');
-      });
+  ngOnInit() {}
+
+  onLogin() {
+    this.registrationForm.markAllAsTouched();
+    if (this.registrationForm.valid) {
+      const username = this.registrationForm.get('username')?.value;
+      const password = this.registrationForm.get('password')?.value;
+
+      this.identityService.login(username, password);
     }
   }
 }

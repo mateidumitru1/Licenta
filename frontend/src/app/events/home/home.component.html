@@ -1,7 +1,0 @@
-<h1><b>Recommended events</b></h1>
-<div class="event-container">
-  <div *ngFor="let topEvent of topEvents" class="event-card" (click)="onEventClick(topEvent)">
-    <img mat-card-image [src]="topEvent.event.imageUrl">
-    <h3 class="event-title"><b>{{ topEvent.event.title }}</b></h3>
-  </div>
-</div>

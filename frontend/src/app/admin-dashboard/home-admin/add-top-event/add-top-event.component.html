@@ -1,0 +1,25 @@
+<div class="container-fluid">
+  <div class="input-group rounded pt-2">
+    <input type="search" class="form-control rounded" placeholder="Cauta" aria-label="Search" aria-describedby="search-addon"
+           [(ngModel)]="searchText" (ngModelChange)="searchEvent()"/>
+    <span class="input-group-text border-0" id="search-addon">
+      <i class="fas fa-search"></i>
+    </span>
+    <button type="button" class="btn-close" aria-label="Close" (click)="onCloseClick()"></button>
+  </div>
+  <h1 class="text-center mb-2 mt-2">Evenimente</h1>
+  <div class="cards-container">
+    <div class="card" *ngFor="let event of filteredEventList" [ngClass]="{'selected': event.selected}" (click)="onCardClick(event)">
+      <img [src]="event.imageUrl" class="card-img-top" alt="...">
+      <div class="card-body">
+        <h5 class="card-title">{{event.title}}</h5>
+        <p class="card-text">{{event.location.name}} | {{event.date}}</p>
+      </div>
+      <div *ngIf="event.selected" class="icon-container">
+        <i class="fa-solid fa-check fa-lg"></i>
+      </div>
+    </div>
+  </div>
+  <button class="btn btn-danger mt-2 mb-4 me-3" (click)="onCloseClick()">Anuleaza</button>
+  <button class="btn btn-primary mt-2 mb-4" (click)="onConfirmClick()">Adauga</button>
+</div>

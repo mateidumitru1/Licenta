@@ -1,0 +1,50 @@
+<header>
+  <nav #sidebarMenu="mdbCollapse" id="sidebarMenu" class="collapse d-lg-block sidebar collapse bg-white" mdbCollapse>
+    <div class="position-sticky">
+      <div class="list-group list-group-flush mx-3 mt-4">
+        <ng-container *ngFor="let item of menuItems">
+          <ng-container *ngIf="!item.submenu">
+            <a class="list-group-item list-group-item-action py-2 ripple" aria-current="true"
+               [ngClass]="{ 'active': isCurrentPage(item.label) }" (click)="onMenuItemClick(item)">
+              <i *ngIf="item.icon" class="{{ item.icon }}"></i><span>{{ item.label }}</span>
+            </a>
+          </ng-container>
+          <ng-container *ngIf="item.submenu">
+            <a class="list-group-item list-group-item-action py-2 ripple" aria-controls="submenu"
+               (click)="submenu.toggle();onMenuItemClick(item)" [attr.aria-expanded]="!submenu.collapsed"
+               [ngClass]="{ 'active': isCurrentPage(item.label) }"
+            >
+              <i *ngIf="item.icon" class="{{ item.icon }}"></i><span>{{ item.label }}</span>
+              <i class="fa fa-chevron-right fa-fw" [class.rotate]="item.expanded"></i>
+            </a>
+            <ul id="submenu" mdbCollapse #submenu="mdbCollapse">
+              <li class="list-group-item list-group-item-action py-2 ripple" *ngFor="let subItem of item.submenu"
+                  [ngClass]="{ 'active': isCurrentPage(subItem.label) }" (click)="onMenuItemClick(subItem)"
+                  role="button"
+              >
+                  <i *ngIf="subItem.icon" class="{{ subItem.icon }}"></i><span>{{ subItem.label }}</span>
+              </li>
+            </ul>
+          </ng-container>
+        </ng-container>
+        <a class="list-group-item list-group-item-action py-2 ripple" (click)="onLogoutClick()">
+          <i class="fas fa-sign-out-alt fa-fw me-3"></i><span>Logout</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+  <nav id="main-navbar" class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <div class="container-fluid">
+      <button class="navbar-toggler" type="button" (click)="sidebarMenu.toggle()" [attr.aria-expanded]="!sidebarMenu.collapsed"
+              aria-controls="sidebarMenu">
+        <i class="fas fa-bars"></i>
+      </button>
+      <a class="navbar-brand" routerLink="">{{ brand }}</a>
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" >{{ page }}</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</header>

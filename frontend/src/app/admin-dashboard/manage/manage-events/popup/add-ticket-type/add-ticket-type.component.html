@@ -1,0 +1,37 @@
+<div class="modal-content">
+  <div class="modal-header mb-5">
+    <h5 class="modal-title" id="exampleModalLabel">Add ticket</h5>
+    <button type="button" class="btn-close" aria-label="Close" (click)="onCloseClick()"></button>
+  </div>
+  <div class="modal-body mb-3">
+    <form [formGroup]="registrationForm">
+      <mdb-form-control class="mb-3">
+        <input #name mdbInput type="text" id="name" class="form-control" formControlName="name"/>
+        <label mdbLabel class="form-label" for="name">Name</label>
+      </mdb-form-control>
+      <div *ngIf="registrationForm.get('name')?.invalid && registrationForm.get('name')?.touched" class="text-danger mb-4">
+        Title is required
+      </div>
+
+      <mdb-form-control class="mb-3">
+        <input #price mdbInput type="text" id="price" class="form-control" formControlName="price"/>
+        <label mdbLabel class="form-label" for="price">Price</label>
+      </mdb-form-control>
+      <div *ngIf="registrationForm.get('price')?.invalid && registrationForm.get('price')?.touched" class="text-danger mb-4">
+        Price is invalid
+      </div>
+
+      <mdb-form-control class="mb-3">
+        <input #quantity mdbInput type="text" id="quantity" class="form-control" formControlName="quantity"/>
+        <label mdbLabel class="form-label" for="quantity">Price</label>
+      </mdb-form-control>
+      <div *ngIf="registrationForm.get('quantity')?.invalid && registrationForm.get('quantity')?.touched" class="text-danger mb-4">
+        Quantity is invalid
+      </div>
+    </form>
+    <div class="modal-footer mt-2">
+      <button type="button" class="btn btn-secondary me-1" (click)="onCloseClick()">Cancel</button>
+      <button type="button" class="btn btn-primary" (click)="onConfirmClick()">Save changes</button>
+    </div>
+  </div>
+</div>

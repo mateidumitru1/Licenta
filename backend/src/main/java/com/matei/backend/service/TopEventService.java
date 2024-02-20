@@ -22,7 +22,7 @@ public class TopEventService {
     private final EventService eventService;
     private final ModelMapper modelMapper;
 
-    public TopEventResponseDto createTopEventList(List<TopEventCreationRequestDto> topEventCreationRequestDtoList) {
+    public List<TopEventResponseDto> createTopEventList(List<TopEventCreationRequestDto> topEventCreationRequestDtoList) {
         var topEvents = topEventCreationRequestDtoList.stream()
                 .map(topEventCreationRequestDto -> {
                     if(topEventRepository.findByEventId(topEventCreationRequestDto.getEventId()).isPresent()) {
@@ -38,9 +38,11 @@ public class TopEventService {
                 })
                 .toList();
 
-        topEventRepository.saveAll(topEvents);
+        var events = topEventRepository.saveAll(topEvents);
 
-        return modelMapper.map(topEvents, TopEventResponseDto.class);
+        return events.stream()
+                .map(event -> modelMapper.map(event, TopEventResponseDto.class))
+                .toList();
     }
 
     public TopEventResponseDto updateTopEvent(UUID id, TopEventUpdateRequestDto topEventUpdateRequestDto) {

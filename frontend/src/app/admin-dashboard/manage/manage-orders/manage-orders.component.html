@@ -1,0 +1,45 @@
+<div class="container-fluid">
+  <div class="input-group rounded pt-2">
+    <input type="search" class="form-control rounded" placeholder="Cauta numarul comenzii"
+           aria-label="Search" aria-describedby="search-addon" [(ngModel)]="orderNumber"/>
+    <span class="input-group-text border-0 spacer" id="search-order">
+    <button type="button" class="btn btn-primary btn-search" data-mdb-ripple-init (click)="fetchOrderById()">
+      <i class="fas fa-search"></i>
+    </button>
+  </span>
+  </div>
+  <div class="input-group rounded pt-2 mt-4">
+    <input type="search" class="form-control rounded" placeholder="Cauta id-ul utilizatorului"
+           aria-label="Search" aria-describedby="search-addon" [(ngModel)]="userId"/>
+    <span class="input-group-text border-0 spacer" id="search-user">
+      <button type="button" class="btn btn-primary btn-search" data-mdb-ripple-init (click)="fetchOrderByUserId()">
+        <i class="fas fa-search"></i>
+      </button>
+    </span>
+    </div>
+    <div class="card mt-3" *ngFor="let order of orders">
+      <div class="card-header">
+        <h5 class="card-title">Comanda numarul {{order.orderNumber}}</h5>
+      </div>
+      <div class="card-body">
+        <p class="card-text">Id-ul utilizatorului: {{order.userId}}</p>
+        <p class="card-text">Data comenzii: {{order.orderDate}}</p>
+        <p class="card-text">Status: {{order.status}}</p>
+        <p class="card-text">Total: {{order.price}}</p>
+        <div>
+          <h3>Tickets</h3>
+          <div class="card ticket-card mt-1 mb-3" *ngFor="let ticket of order.ticketList">
+            <div class="card-header">
+              <h5 class="card-title">Eveniment: {{ticket.ticketType.event.title}}</h5>
+              <p class="card-text">Data: {{ticket.ticketType.event.date}}</p>
+              <p class="card-text">Categoria: {{ticket.ticketType.name}}</p>
+              <p class="card-text">Pret: {{ticket.ticketType.price}}</p>
+              <p class="card-text">Status: {{ticket.status}}</p>
+              <button *ngIf="ticket.status === 'CONFIRMED'" class="btn btn-danger" (click)="cancelTicket(ticket)">Anuleaza</button>
+            </div>
+        </div>
+      </div>
+    </div>
+      <button *ngIf="order.status === 'CONFIRMED'" class="btn btn-danger" (click)="cancelOrder(order)">Anuleaza comanda</button>
+  </div>
+</div>

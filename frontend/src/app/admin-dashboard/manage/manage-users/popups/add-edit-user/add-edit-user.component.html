@@ -1,0 +1,61 @@
+<div class="modal-content">
+  <div class="modal-header mb-5">
+    <h5 class="modal-title" id="exampleModalLabel">{{ data.title }}</h5>
+    <button type="button" class="btn-close" aria-label="Close" (click)="onCloseClick()"></button>
+  </div>
+  <div class="modal-body mb-3">
+    <form [formGroup]="registrationForm">
+      <mdb-form-control class="mb-3">
+        <input #firstName mdbInput type="text" id="firstName" class="form-control" formControlName="firstName"/>
+        <label mdbLabel class="form-label" for="firstName">First name</label>
+      </mdb-form-control>
+      <div *ngIf="registrationForm.get('firstName')?.invalid && registrationForm.get('firstName')?.touched" class="text-danger mb-4">
+        First name is required
+      </div>
+
+      <mdb-form-control class="mb-4">
+        <input #lastName mdbInput type="text" id="lastName" class="form-control" formControlName="lastName" required/>
+        <label mdbLabel class="form-label" for="lastName">Last name</label>
+      </mdb-form-control>
+      <div *ngIf="registrationForm.get('lastName')?.invalid && registrationForm.get('lastName')?.touched" class="text-danger mb-4">
+        Last name is required
+      </div>
+
+      <mdb-form-control class="mb-4">
+        <input #username mdbInput type="text" id="username" class="form-control" formControlName="username" required/>
+        <label mdbLabel class="form-label" for="username">Username</label>
+      </mdb-form-control>
+      <div *ngIf="registrationForm.get('username')?.invalid && registrationForm.get('username')?.touched" class="text-danger mb-4">
+        Username is required
+      </div>
+
+      <mdb-form-control class="mb-4">
+        <input #email mdbInput type="text" id="email" class="form-control" formControlName="email" required/>
+        <label mdbLabel class="form-label" for="email">Email address</label>
+      </mdb-form-control>
+      <div *ngIf="registrationForm.get('email')?.errors?.['required'] && registrationForm.get('email')?.touched" class="text-danger mb-4">
+        Email is required
+      </div>
+      <div *ngIf="registrationForm.get('email')?.errors?.['email'] && registrationForm.get('email')?.touched" class="text-danger mb-4">
+        Invalid email format
+      </div>
+
+      <div class="mb-3">
+        <label for="role" class="form-label">Role</label>
+        <select class="form-select" id="role" name="role" formControlName="role" required>
+          <option value="ADMIN">ADMIN</option>
+          <option value="USER">USER</option>
+        </select>
+      </div>
+      <div *ngIf="registrationForm.get('role')?.errors?.['required'] && registrationForm.get('role')?.touched" class="text-danger mb-4">
+        Role is required
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary me-1" (click)="onCloseClick()">
+      Cancel
+    </button>
+    <button type="button" class="btn btn-primary" (click)="onConfirmClick()">Save changes</button>
+  </div>
+</div>

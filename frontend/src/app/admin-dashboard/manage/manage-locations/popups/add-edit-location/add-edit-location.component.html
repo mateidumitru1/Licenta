@@ -1,0 +1,40 @@
+<div class="modal-content">
+  <div class="modal-header mb-5">
+    <h5 class="modal-title" id="exampleModalLabel">{{ data.title }}</h5>
+    <button type="button" class="btn-close" aria-label="Close" (click)="onCloseClick()"></button>
+  </div>
+  <div class="modal-body mb-3">
+    <form [formGroup]="registrationForm">
+      <mdb-form-control class="mb-3">
+        <input #name mdbInput type="text" id="name" class="form-control" formControlName="name"/>
+        <label mdbLabel class="form-label" for="name">Nume</label>
+      </mdb-form-control>
+      <div *ngIf="registrationForm.get('name')?.invalid && registrationForm.get('name')?.touched" class="text-danger mb-4">
+        Name is required
+      </div>
+
+      <mdb-form-control class="mb-4">
+        <input #address mdbInput type="text" id="address" class="form-control" formControlName="address" required/>
+        <label mdbLabel class="form-label" for="address">Adresa</label>
+      </mdb-form-control>
+      <div *ngIf="registrationForm.get('address')?.invalid && registrationForm.get('address')?.touched" class="text-danger mb-4">
+        Address is required
+      </div>
+    </form>
+  </div>
+  <input #fileInput  type="file" id="image" class="form-control"
+         accept=".jpg, .jpeg, .png, .bmp" (change)="onFileSelected($event)"/>
+  <div class="mt-2 ms-1" *ngIf="imageSrc !== ''">
+    <img [src]="imageSrc" alt="image" class="img-fluid" style="max-height: 200px; max-width: 200px;"/>
+    <button class="btn btn-tertiary ms-2" (click)="removeImage()"><i class="fa-solid fa-x"></i></button>
+  </div>
+  <div *ngIf="isImageNull" class="text-danger mb-4">
+    Image is required
+  </div>
+  <div class="modal-footer mt-2">
+    <button type="button" class="btn btn-secondary me-1" (click)="onCloseClick()">
+      Cancel
+    </button>
+    <button type="button" class="btn btn-primary" (click)="onConfirmClick()">Save changes</button>
+  </div>
+</div>

@@ -1,0 +1,34 @@
+.locations-container {
+  //padding: 10px;
+  background-color: #f8f9fa;
+  box-shadow: 0 0 10px #ccc;
+}
+
+.card {
+  margin: 10px;
+  cursor: pointer;
+  max-height: 200px;
+  max-width: 250px;
+  overflow: hidden;
+}
+
+.img-fluid {
+  object-fit: cover;
+  max-height: 80px;
+}
+
+a {
+  color: black;
+}
+
+.shopping-cart-button {
+  border: none;
+  background: none;
+}
+
+.shopping-cart-button:hover {
+  cursor: pointer;
+  background: #ccc;
+  box-shadow: 0 0 10px #ccc;
+  border-radius: 25px;
+}

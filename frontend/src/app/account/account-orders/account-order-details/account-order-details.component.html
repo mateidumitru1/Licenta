@@ -1,0 +1,26 @@
+<div class="container-fluid">
+  <h1>Comanda numarul {{ order.orderNumber }}</h1>
+  <h4>Data: {{ order.date | date }}</h4>
+  <h4>Status: {{ order.status }}</h4>
+  <hr>
+  <h3>Bilete</h3>
+  <div>
+    <div class="card" *ngFor="let ticket of order.ticketList">
+      <div class="card-header">
+        <h5 class="card-title">{{ ticket.ticketType.event.title }}</h5>
+      </div>
+      <div class="card-body">
+        <p class="card-text">Data: {{ ticket.ticketType.event.date | date }}</p>
+        <p class="card-text">Locatie: {{ ticket.ticketType.event.location.name }}</p>
+        <p class="card-text">Categoria: {{ ticket.ticketType.name }}</p>
+        <p class="card-text">Pret: {{ ticket.ticketType.price }} RON</p>
+        <p class="card-text">Status: {{ ticket.status }}</p>
+        <button *ngIf="order.ticketList.length > 1" [ngClass]="{'disabled': ticket.status == 'CANCELED'}" class="btn btn-danger" (click)="cancelTicket(ticket)">
+          {{ ticket.status == 'CANCELED' ? 'Anulat' : 'Anuleaza' }}</button>
+      </div>
+    </div>
+  </div>
+  <hr>
+  <h4>Total: {{ order.price }}</h4>
+  <button [ngClass]="{'disabled': order.status == 'CANCELED'}" class="btn btn-danger mb-5 mt-1" (click)="cancelOrder()">{{ order.status == 'CANCELED' ? 'Anulata' : 'Anuleaza comanda' }}</button>
+</div>

@@ -1,0 +1,11 @@
+<div class="container-fluid">
+  <h1 class="text-center">Top Events</h1>
+  <div class="cards-container">
+    <div class="card" *ngFor="let event of topEvents" (click)="onEventClick(event)">
+      <img alt="" class="card-img-top" src="{{ event.event.imageUrl }}"/>
+      <div class="card-body">
+        <p class="card-text">{{ event.event.title }}</p>
+      </div>
+    </div>
+  </div>
+</div>

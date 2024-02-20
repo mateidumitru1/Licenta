@@ -105,5 +105,13 @@ public class ExceptionHandlerController {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(IncorrectOldPasswordException.class)
+    public ResponseEntity<?> handleIncorrectOldPasswordException(IncorrectOldPasswordException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+    }
 
+    @ExceptionHandler(PasswordNotMatchingException.class)
+    public ResponseEntity<?> handlePasswordNotMatchingException(PasswordNotMatchingException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+    }
 }

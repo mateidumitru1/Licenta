@@ -41,6 +41,9 @@ public class OrderController {
         catch(OrderNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
+        catch(IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body("Invalid UUID");
+        }
     }
 
     @GetMapping("/{number}")

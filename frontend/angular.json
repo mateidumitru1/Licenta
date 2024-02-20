@@ -5,33 +5,35 @@
   "projects": {
     "frontend": {
       "projectType": "application",
-      "schematics": {},
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-devkit/build-angular:application",
           "options": {
             "outputPath": "dist/frontend",
             "index": "src/index.html",
-            "main": "src/main.ts",
+            "browser": "src/main.ts",
             "polyfills": [
               "zone.js"
             ],
             "tsConfig": "tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
             "assets": [
               "src/favicon.ico",
-              "src/assets",
-              { "glob": "mdi.svg", "input": "./node_modules/@mdi/angular-material", "output": "./assets" }
+              "src/assets"
             ],
             "styles": [
               "@angular/material/prebuilt-themes/indigo-pink.css",
-              "src/styles.scss",
-              "node_modules/bootstrap/dist/css/bootstrap.css",
-              "node_modules/@mdi/font/css/materialdesignicons.min.css"
+              "src/styles.scss"
             ],
-            "scripts": ["node_modules/bootstrap/dist/js/bootstrap.js"]
+            "scripts": []
           },
           "configurations": {
             "production": {
@@ -50,12 +52,9 @@
               "outputHashing": "all"
             },
             "development": {
-              "buildOptimizer": false,
               "optimization": false,
-              "vendorChunk": true,
               "extractLicenses": false,
-              "sourceMap": true,
-              "namedChunks": true
+              "sourceMap": true
             }
           },
           "defaultConfiguration": "production"
@@ -86,21 +85,19 @@
               "zone.js/testing"
             ],
             "tsConfig": "tsconfig.spec.json",
+            "inlineStyleLanguage": "scss",
             "assets": [
               "src/favicon.ico",
               "src/assets"
             ],
             "styles": [
               "@angular/material/prebuilt-themes/indigo-pink.css",
-              "src/styles.css"
+              "src/styles.scss"
             ],
             "scripts": []
           }
         }
       }
     }
-  },
-  "cli": {
-    "analytics": "8847c1fc-7de7-4b16-a812-74698972346e"
   }
 }

@@ -1,12 +1,4 @@
-<mat-sidenav-container class="account-container">
-  <mat-sidenav class="sidenav" mode="side" opened>
-    <h1>Account</h1>
-    <button mat-button routerLink="">Home</button>
-    <br>
-    <button mat-button routerLink="orders">Orders</button>
-    <br>
-  </mat-sidenav>
-  <mat-sidenav-content>
-    <router-outlet></router-outlet>
-  </mat-sidenav-content>
-</mat-sidenav-container>
+<app-sidebar [menuItems]="menuItems" [brand]="'Contul meu'"></app-sidebar>
+<main>
+  <router-outlet></router-outlet>
+</main>

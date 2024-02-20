@@ -1,0 +1,19 @@
+<div class="container-fluid">
+  <h1>{{ location.name }}</h1>
+  <img class="img-fluid location-image d-none d-sm-block" src="{{ location.imageUrl }}" alt="">
+  <div class="row">
+    <div class="col-12">
+      <div role="button" *ngFor="let event of location.eventList"
+           class="card event-card rounded mb-3 mt-3" (click)="onEventClick(event)">
+        <div class="d-flex justify-content-center align-items-center">
+          <img class="img-fluid event-image" src="{{ event.imageUrl }}" alt="">
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">{{ event.title }}</h5>
+          <p class="card-text card-date">{{ event.date }}</p>
+          <p class="card-text">{{ event.shortDescription.substring(0, 600) }} ...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

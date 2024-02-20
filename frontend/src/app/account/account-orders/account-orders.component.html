@@ -1,0 +1,16 @@
+<div class="container-fluid">
+  <h1>Comenzi</h1>
+  <div>
+    <div class="card mt-4" *ngFor="let order of orders">
+      <div class="card-header d-flex flex-row ">
+        <div>
+          <h2>Comanda numarul {{ order.orderNumber }}</h2>
+          <p>{{ order.date | date }} <span><i class="fa-solid fa-ticket fa-fw ms-1 me-1"></i></span> {{ order.price }} RON</p>
+        </div>
+        <div class="view-details-container">
+          <a class="ps-4" [routerLink]="['/account/orders', order.orderNumber]">Vezi comanda</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

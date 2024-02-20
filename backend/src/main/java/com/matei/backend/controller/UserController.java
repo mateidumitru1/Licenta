@@ -1,8 +1,10 @@
 package com.matei.backend.controller;
 
+import com.matei.backend.dto.request.ChangePasswordRequestDto;
 import com.matei.backend.dto.request.UserCreationRequestDto;
 import com.matei.backend.dto.request.UserRequestDto;
 import com.matei.backend.dto.response.UserResponseDto;
+import com.matei.backend.dto.response.UserWithOrdersResponseDto;
 import com.matei.backend.service.JwtService;
 import com.matei.backend.service.UserService;
 import jakarta.transaction.Transactional;
@@ -35,10 +37,28 @@ public class UserController {
         return ResponseEntity.ok(userService.adminGetUserById(jwtService.extractId(jwtToken), UUID.fromString(id)));
     }
 
+    @GetMapping("/me")
+    public ResponseEntity<UserWithOrdersResponseDto> getMe(@RequestHeader("Authorization") String jwtToken) {
+        return ResponseEntity.ok(userService.getUserById(jwtService.extractId(jwtToken)));
+    }
+
+    @Transactional
+    @PatchMapping("/me")
+    public ResponseEntity<UserWithOrdersResponseDto> updateMe(@RequestHeader("Authorization") String jwtToken,
+                                                              @RequestBody UserRequestDto userRequestDto) {
+        return ResponseEntity.ok(userService.updateMe(jwtService.extractId(jwtToken), userRequestDto));
+    }
+
     @Transactional
     @PatchMapping
     public ResponseEntity<UserResponseDto> updateUser(@RequestHeader("Authorization") String jwtToken, @ModelAttribute UserRequestDto userRequestDto) {
         return ResponseEntity.ok(userService.updateUser(jwtService.extractId(jwtToken), userRequestDto));
+    }
+
+    @PatchMapping("/me/change-password")
+    public ResponseEntity<Void> changePassword(@RequestHeader("Authorization") String jwtToken, @RequestBody ChangePasswordRequestDto changePasswordRequestDto) {
+        userService.changePassword(jwtService.extractId(jwtToken), changePasswordRequestDto);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")

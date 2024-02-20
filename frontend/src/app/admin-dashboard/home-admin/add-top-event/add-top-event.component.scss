@@ -1,0 +1,37 @@
+.cards-container {
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.card {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  border: 1px solid #ccc;
+  margin: 10px;
+  cursor: pointer;
+}
+
+.card:hover {
+  background-color: #f4f4f4;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+}
+
+.card img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.selected {
+  opacity: 70%;
+}
+
+.icon-container {
+  display: flex;
+  justify-content: right;
+  align-items: flex-end;
+}
+
+i {
+  margin: 15px;
+}

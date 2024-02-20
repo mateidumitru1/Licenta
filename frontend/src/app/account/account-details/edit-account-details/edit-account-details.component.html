@@ -1,0 +1,42 @@
+<div class="modal-content">
+  <div class="modal-header mb-5">
+    <h5 class="modal-title" id="exampleModalLabel">Modifica datele</h5>
+    <button type="button" class="btn-close" aria-label="Close" (click)="onCloseClick()"></button>
+  </div>
+  <div class="modal-body mb-3">
+    <form [formGroup]="form">
+      <mdb-form-control class="mb-4">
+        <input #firstName mdbInput type="text" id="firstName" class="form-control" formControlName="firstName" required/>
+        <label mdbLabel class="form-label" for="firstName">Prenume</label>
+      </mdb-form-control>
+      <div *ngIf="form.get('firstName')?.invalid && form.get('firstName')?.touched" class="text-danger mb-4">
+        Prenumele este obligatoriu
+      </div>
+
+      <mdb-form-control class="mb-4">
+        <input #lastName mdbInput type="text" id="lastName" class="form-control" formControlName="lastName" required/>
+        <label mdbLabel class="form-label" for="lastName">Nume</label>
+      </mdb-form-control>
+      <div *ngIf="form.get('lastName')?.invalid && form.get('lastName')?.touched" class="text-danger mb-4">
+        Numele este obligatoriu
+      </div>
+
+      <mdb-form-control class="mb-4">
+        <input #email mdbInput type="text" id="email" class="form-control" formControlName="email" required/>
+        <label mdbLabel class="form-label" for="email">Email</label>
+      </mdb-form-control>
+      <div *ngIf="form.get('email')?.errors?.['required'] && form.get('email')?.touched" class="text-danger mb-4">
+        Email-ul este obligatoriu
+      </div>
+      <div *ngIf="form.get('email')?.errors?.['email'] && form.get('email')?.touched" class="text-danger mb-4">
+        Email-ul are un format invalid
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer mt-2">
+    <button type="button" class="btn btn-secondary me-1" (click)="onCloseClick()">
+      Anuleaza
+    </button>
+    <button type="button" class="btn btn-primary" (click)="onConfirmClick()">Salveaza</button>
+  </div>
+</div>

@@ -5,39 +5,104 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0ff3fa00-627c-435d-82b1-4a1abb5b20ca" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/entity/ResetPasswordToken.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/exception/ResetPasswordTokenExpiredException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/exception/ResetPasswordTokenNotFoundException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/exception/UserNotFoundException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/repository/ResetPasswordTokenRespository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/ResetPasswordTokenService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/configuration/SecurityConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/configuration/SecurityConfiguration.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/configuration/SendGridConfiguration.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/controller/AuthenticationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/controller/AuthenticationController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/controller/EmailController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/repository/LocationRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/repository/LocationRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/AuthenticationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/AuthenticationService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/EmailService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/EmailService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/app-routing.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/app-routing.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/angular.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/angular.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/account/account.component.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/account/account.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/account/account.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/account/orders/orders.component.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/account/orders/orders.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/account/orders/orders.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/app.component.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/app.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/app.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/app/app.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/app.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/identity/forgot-password/forgot-password.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/identity/forgot-password/forgot-password.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-dashboard.component.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-dashboard.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-dashboard.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-home/add-top-event-dialog/add-top-event-dialog.component.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-home/add-top-event-dialog/add-top-event-dialog.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-home/add-top-event-dialog/add-top-event-dialog.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-home/admin-home.component.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-home/admin-home.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-home/admin-home.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/admin-manage-events/admin-manage-events.component.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/admin-manage-events/admin-manage-events.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/admin-manage-events/admin-manage-events.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/admin-manage-locations/admin-manage-locations.component.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/admin-manage-locations/admin-manage-locations.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/admin-manage-locations/admin-manage-locations.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/admin-manage-orders/admin-manage-orders.component.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/admin-manage-orders/admin-manage-orders.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/admin-manage-orders/admin-manage-orders.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/admin-manage-users/admin-manage-users.component.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/admin-manage-users/admin-manage-users.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/admin-manage-users/admin-manage-users.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/admin-manage.component.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/admin-manage.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/admin-manage.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/dialog-menus/add-dialog/add-dialog.component.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/dialog-menus/add-dialog/add-dialog.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/dialog-menus/add-dialog/add-dialog.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/dialog-menus/add-dialog/add-event/add-event.component.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/dialog-menus/add-dialog/add-event/add-event.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/dialog-menus/add-dialog/add-event/add-event.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/dialog-menus/add-dialog/add-event/add-ticket-type/add-ticket-type.component.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/dialog-menus/add-dialog/add-event/add-ticket-type/add-ticket-type.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/dialog-menus/add-dialog/add-event/add-ticket-type/add-ticket-type.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/dialog-menus/add-dialog/add-location/add-location.component.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/dialog-menus/add-dialog/add-location/add-location.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/dialog-menus/add-dialog/add-location/add-location.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/dialog-menus/add-dialog/add-user/add-user.component.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/dialog-menus/add-dialog/add-user/add-user.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/dialog-menus/add-dialog/add-user/add-user.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/dialog-menus/edit/edit-buttons/edit-buttons.component.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/dialog-menus/edit/edit-buttons/edit-buttons.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/dialog-menus/edit/edit-buttons/edit-buttons.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/dialog-menus/edit/edit-delete-dialog/edit-delete-dialog.component.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/dialog-menus/edit/edit-delete-dialog/edit-delete-dialog.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/dialog-menus/edit/edit-delete-dialog/edit-delete-dialog.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/dialog-menus/edit/edit-delete-dialog/edit-events/edit-events.component.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/dialog-menus/edit/edit-delete-dialog/edit-events/edit-events.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/dialog-menus/edit/edit-delete-dialog/edit-events/edit-events.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/dialog-menus/edit/edit-delete-dialog/edit-locations/edit-locations.component.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/dialog-menus/edit/edit-delete-dialog/edit-locations/edit-locations.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/dialog-menus/edit/edit-delete-dialog/edit-locations/edit-locations.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/dialog-menus/edit/edit-delete-dialog/edit-users/edit-users.component.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/dialog-menus/edit/edit-delete-dialog/edit-users/edit-users.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/dialog-menus/edit/edit-delete-dialog/edit-users/edit-users.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/dialog-menus/ticket-type-table/ticket-type-table.component.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/dialog-menus/ticket-type-table/ticket-type-table.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/dialog-menus/ticket-type-table/ticket-type-table.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/filter/filter.component.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/filter/filter.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/filter/filter.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/table/table.component.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/table/table.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-manage/table/table.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-statistics/admin-statistics.component.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-statistics/admin-statistics.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/admin-dashboard/admin-statistics/admin-statistics.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/event/event.component.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/event/event.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/event/event.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/event/tickets/tickets.component.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/event/tickets/tickets.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/event/tickets/tickets.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/home/home.component.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/home/home.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/home/home.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/location/location.component.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/location/location.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/location/location.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/root/footer/footer.component.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/root/footer/footer.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/root/footer/footer.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/root/navbar/account-menu/account-menu.component.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/root/navbar/account-menu/account-menu.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/root/navbar/account-menu/account-menu.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/root/navbar/locations-menu/locations-menu.component.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/root/navbar/locations-menu/locations-menu.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/root/navbar/locations-menu/locations-menu.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/root/navbar/navbar.component.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/root/navbar/navbar.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/root/navbar/navbar.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/root/root.component.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/root/root.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/root/root.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/root/root.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/root/root.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/shopping-cart/shopping-cart.component.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/events/shopping-cart/shopping-cart.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/events/shopping-cart/shopping-cart.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/identity/forgot-password/forgot-password.component.css" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/app/identity/forgot-password/forgot-password.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/identity/forgot-password/forgot-password.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/identity/identity.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/identity/identity.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/identity/login/login.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/identity/login/login.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/identity/login/login.component.css" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/app/identity/login/login.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/identity/login/login.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/identity/register/register.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/identity/register/register.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/identity/register/register.component.css" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/app/identity/register/register.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/identity/register/register.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/dialog-menus/add-dialog/add-event/add-event.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/dialog-menus/add-dialog/add-event/add-event.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/dialog-menus/add-dialog/add-event/add-event.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/dialog-menus/add-dialog/add-event/add-event.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/dialog-menus/add-dialog/add-location/add-location.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/dialog-menus/add-dialog/add-location/add-location.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/dialog-menus/add-dialog/add-location/add-location.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/dialog-menus/add-dialog/add-location/add-location.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/dialog-menus/add-dialog/add-user/add-user.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/dialog-menus/add-dialog/add-user/add-user.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/dialog-menus/add-dialog/add-user/add-user.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/dialog-menus/add-dialog/add-user/add-user.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/input-fields-error/input-fields-error.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/input-fields-error/input-fields-error.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/identity/reset-password/reset-password.component.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/identity/reset-password/reset-password.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/identity/reset-password/reset-password.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/input-fields-error/input-fields-error.component.css" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/input-fields-error/input-fields-error.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/input-fields-error/input-fields-error.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/page-not-found/page-not-found.component.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/page-not-found/page-not-found.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/page-not-found/page-not-found.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/track-event/track-event-details/map/map.component.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/track-event/track-event-details/map/map.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/track-event/track-event-details/map/map.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/track-event/track-event-details/track-event-details.component.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/track-event/track-event-details/track-event-details.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/track-event/track-event-details/track-event-details.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/track-event/track-event.component.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/track-event/track-event.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/track-event/track-event.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/validate/validate.component.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/validate/validate.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/validate/validate.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/styles.scss" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/styles.scss" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -93,7 +158,7 @@
     &quot;extract.method.default.visibility&quot;: &quot;private&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;jdk.selected.JAVA_MODULE&quot;: &quot;openjdk-20&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Matei/Desktop/licenta/Licenta&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/matei/Desktop/proiect-licenta/Licenta&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -235,6 +300,7 @@
       <workItem from="1699193653961" duration="256000" />
       <workItem from="1699193920827" duration="4384000" />
       <workItem from="1699205393941" duration="1831000" />
+      <workItem from="1708335174508" duration="231000" />
     </task>
     <servers />
   </component>

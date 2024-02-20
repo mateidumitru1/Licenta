@@ -1,0 +1,95 @@
+<header>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      <div class="d-flex ">
+        <a class="navbar-brand" routerLink="/">Bileteria</a>
+        <a
+          class="mt-2"
+          type="button"
+          (click)="externalContent.toggle()"
+          aria-controls="navbarToggleExternalContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          Locatii
+        </a>
+      </div>
+      <button
+        class="navbar-toggler"
+        type="button"
+        (click)="noListNav.toggle()"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="collapse navbar-collapse"
+           id="navbarNavAltMarkup"
+           mdbCollapse
+           #noListNav="mdbCollapse">
+
+        <form class="d-flex input-group w-auto flex-grow-1 ms-4 me-1">
+          <input
+            type="search"
+            class="form-control rounded form-control-lg"
+            placeholder="Cauta"
+            aria-label="Search"
+          />
+          <span class="input-group-text border-0" id="search-addon">
+          <i class="fas fa-search"></i>
+        </span>
+        </form>
+        <div class="d-flex">
+          <button class="me-5 shopping-cart-button" (click)="onShoppingCartClick()">
+            <i class="fas fa-shopping-cart"></i>
+          </button>
+          <div mdbDropdown class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle"
+              id="navbarDropdownMenuLink"
+              role="button"
+              mdbDropdownToggle
+              aria-expanded="false"
+            >
+              {{ dropDownText }}
+            </a>
+            <ul mdbDropdownMenu class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
+              <li *ngIf="!getIdentityService().isLoggedIn()">
+                <a class="dropdown-item" routerLink="/login">Login</a>
+              </li>
+              <li *ngIf="getIdentityService().isLoggedIn()">
+                <a class="dropdown-item" routerLink="/account">Contul meu</a>
+              </li>
+              <li *ngIf="getIdentityService().isLoggedIn()">
+                <a class="dropdown-item" routerLink="/track">Urmareste evenimentele</a>
+              </li>
+              <li *ngIf="getIdentityService().isLoggedIn()">
+                <a role="button" class="dropdown-item" (click)="logout()">Logout</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <div
+    class="collapse"
+    id="navbarToggleExternalContent"
+    mdbCollapse
+    #externalContent="mdbCollapse"
+  >
+    <div class="locations-container d-flex flex-row flex-wrap">
+      <div class="card col-6 col-md-4 col-lg-2" *ngFor="let location of locationsToDisplay" (click)="onLocationClick(location)">
+        <img alt="" class="img-fluid" src="{{ location.imageUrl }}" />
+        <div class="card-body">
+          <h5 class="card-title">{{ location.name }}</h5>
+        </div>
+      </div>
+      <button class="btn" (click)="scrollToNext()">
+        <i class="fas fa-angle-right"></i>
+      </button>
+    </div>
+
+  </div>
+</header>
+

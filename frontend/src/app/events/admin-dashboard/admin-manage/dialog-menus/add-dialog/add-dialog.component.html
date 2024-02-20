@@ -1,9 +1,0 @@
-<h1 mat-dialog-title>Add</h1>
-<div mat-dialog-content>
-  <app-add-user *ngIf="data.type === 'users'" (confirmEvent)="onConfirmEvent($event)"></app-add-user>
-  <app-add-event *ngIf="data.type === 'events'" [locations]="data.locations" (confirmEvent)="onConfirmEvent($event)"></app-add-event>
-  <app-add-location *ngIf="data.type === 'locations'" (confirmEvent)="onConfirmEvent($event)"></app-add-location>
-  <br>
-  <button mat-raised-button color="primary" (click)="onClickConfirm()">Confirm</button>
-  <button mat-raised-button color="warn" (click)="onClickCancel()">Cancel</button>
-</div>

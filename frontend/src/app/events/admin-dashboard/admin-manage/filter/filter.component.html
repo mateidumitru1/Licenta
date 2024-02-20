@@ -1,9 +1,0 @@
-<div class="search-bar">
-  <mat-form-field>
-    <input matInput placeholder="Search" [(ngModel)]="searchText" (ngModelChange)="applyFilter()">
-    <mat-icon matPrefix>search</mat-icon>
-  </mat-form-field>
-</div>
-<mat-radio-group [(ngModel)]="selectedIndex">
-  <mat-radio-button *ngFor="let index of indexes" [value]="index">{{ index }}</mat-radio-button>
-</mat-radio-group>

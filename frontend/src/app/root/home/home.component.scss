@@ -1,0 +1,20 @@
+.cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.card {
+  margin: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 3px #ccc;
+  width: 300px;
+  display: inline-block;
+  text-align: center;
+  background-color: #f8f8f8;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
