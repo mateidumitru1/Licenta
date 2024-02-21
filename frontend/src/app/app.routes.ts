@@ -29,6 +29,11 @@ import {
 import {AccountDetailsComponent} from "./account/account-details/account-details.component";
 import {TrackEventComponent} from "./root/track-event/track-event.component";
 import {TrackEventDetailsComponent} from "./root/track-event/track-event-details/track-event-details.component";
+import {ValidatorDashboardComponent} from "./validator-dashboard/validator-dashboard.component";
+import {HomeValidatorComponent} from "./validator-dashboard/home-validator/home-validator.component";
+import {ValidatorGuard} from "./util/guards/validator.guard";
+import {ScannerComponent} from "./validator-dashboard/scanner/scanner.component";
+import {ValidateComponent} from "./validator-dashboard/scanner/validate/validate.component";
 
 export const routes: Routes = [
   { path: 'home' , redirectTo: '', pathMatch: 'full' },
@@ -52,13 +57,18 @@ export const routes: Routes = [
       { path: 'statistics', component: StatisticsComponent },
       { path: 'settings', component: SettingsComponent },
     ]},
+  { path: 'validator-dashboard', canActivate: [ValidatorGuard], component: ValidatorDashboardComponent, children: [
+      { path: '', pathMatch: 'full', component: HomeValidatorComponent},
+      { path: 'scanner', component: ScannerComponent },
+      { path: 'validate-ticket/:ticketId', component: ValidateComponent }
+    ]},
   { path: '', canActivate: [RootGuard], component: RootComponent, children: [
       { path: '', pathMatch: 'full', component: HomeComponent },
       { path: 'track', component: TrackEventComponent },
       { path: 'track/:event', component: TrackEventDetailsComponent },
       { path: 'shopping-cart', component: ShoppingCartComponent },
-      { path: ':location' , component: LocationComponent },
-      { path: ':location/:event', component: EventComponent },
+      { path: ':location' , pathMatch: 'full', component: LocationComponent },
+      { path: ':location/:event', pathMatch: 'full', component: EventComponent },
       { path: 'page-not-found', component: PageNotFoundComponent }
     ]},
 ];

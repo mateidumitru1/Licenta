@@ -1,20 +1,24 @@
 import {Component, OnInit} from '@angular/core';
-import {NgForOf} from "@angular/common";
+import {NgForOf, NgIf} from "@angular/common";
 import {HomeAdminService} from "./home-admin.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {MatDialog} from "@angular/material/dialog";
 import {AddTopEventComponent} from "./add-top-event/add-top-event.component";
+import {LoadingComponent} from "../../shared/loading/loading.component";
 
 @Component({
   selector: 'app-home-admin',
   standalone: true,
   imports: [
-    NgForOf
+    NgForOf,
+    NgIf,
+    LoadingComponent
   ],
   templateUrl: './home-admin.component.html',
   styleUrl: './home-admin.component.scss'
 })
 export class HomeAdminComponent implements OnInit {
+  loading: boolean = true;
 
   topEventList: any = [];
   constructor(private homeAdminService: HomeAdminService, private snackBar: MatSnackBar, private dialog: MatDialog) { }
@@ -26,6 +30,9 @@ export class HomeAdminComponent implements OnInit {
       },
       error: (error: any) => {
         this.snackBar.open('Error fetching top events', 'Close', {duration: 3000});
+      },
+      complete: () => {
+        this.loading = false;
       }
     });
   }

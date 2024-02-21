@@ -1,7 +1,17 @@
-.btn {
-  height: 50px;
-  width: 150px;
+.container-fluid {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
+
+.btn-filter {
+  width: 150px;
+  height: 20px;
+  padding: 0;
+}
+
 
 .card {
   width: 600px;
@@ -10,4 +20,19 @@
 .view-details-container {
   display: flex;
   justify-content: right;
+}
+
+.page-nav-buttons {
+  padding: 0;
+  margin: 1px;
+  width: 30px;
+  height: 30px;
+  align-items: center;
+}
+
+.prev-next-buttons {
+  padding: 0;
+  margin: 1px;
+  width: 70px;
+  height: 30px;
 }

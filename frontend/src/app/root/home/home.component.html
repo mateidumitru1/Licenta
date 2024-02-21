@@ -1,6 +1,7 @@
 <div class="container-fluid">
   <h1 class="text-center">Top Events</h1>
-  <div class="cards-container">
+  <app-loading *ngIf="loading"></app-loading>
+  <div *ngIf="!loading" class="cards-container">
     <div class="card" *ngFor="let event of topEvents" (click)="onEventClick(event)">
       <img alt="" class="card-img-top" src="{{ event.event.imageUrl }}"/>
       <div class="card-body">

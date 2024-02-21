@@ -12,7 +12,7 @@
             <p class="card-text">{{shoppingCartItem.ticketType.price}} RON x {{shoppingCartItem.quantity}} = {{shoppingCartItem.ticketType.price * shoppingCartItem.quantity}} RON</p>
           </div>
           <div class="col-md-3">
-            <select class="custom-select mb-4" (change)="onQuantityChange($event, shoppingCartItem)">
+            <select class="custom-select me-2" (change)="onQuantityChange($event, shoppingCartItem)">
               <option [selected]="shoppingCartItem.quantity">{{ shoppingCartItem.quantity }}</option>
               <option *ngFor="let i of generateQuantityList(shoppingCartItem.quantity)">{{ i }}</option>
             </select>

@@ -31,7 +31,4 @@ export class AdminDashboardComponent {
     { label: 'Statistici', route: 'admin-dashboard/statistics', icon: 'fa-solid fa-chart-bar fa-fw me-3' },
     { label: 'Setari', route: 'admin-dashboard/settings', icon: 'fa-solid fa-gear fa-fw me-3' }
   ];
-
-  constructor(private identityService: IdentityService, private router: Router) { }
-
 }

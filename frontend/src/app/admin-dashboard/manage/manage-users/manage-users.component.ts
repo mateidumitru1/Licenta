@@ -22,6 +22,7 @@ import {MatDialog} from "@angular/material/dialog";
 import {DeleteComponent} from "../shared/delete/delete.component";
 import {MdbRadioModule} from "mdb-angular-ui-kit/radio";
 import {FormsModule} from "@angular/forms";
+import {LoadingComponent} from "../../../shared/loading/loading.component";
 
 @Component({
   selector: 'app-manage-users',
@@ -50,12 +51,14 @@ import {FormsModule} from "@angular/forms";
     MatMenuItem,
     MatButton,
     MdbRadioModule,
-    FormsModule
+    FormsModule,
+    LoadingComponent
   ],
   templateUrl: './manage-users.component.html',
   styleUrl: './manage-users.component.scss'
 })
 export class ManageUsersComponent implements OnInit {
+  loading: boolean = true;
 
   dataSource = new MatTableDataSource<any>();
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
@@ -93,6 +96,9 @@ export class ManageUsersComponent implements OnInit {
         this.snackBar.open('Error fetching users', 'Close', {
           duration: 3000
         });
+      },
+      complete: () => {
+        this.loading = false;
       }
     });
   }

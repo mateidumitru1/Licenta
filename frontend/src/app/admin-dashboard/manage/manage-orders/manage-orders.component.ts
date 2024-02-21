@@ -3,6 +3,7 @@ import {FormsModule} from "@angular/forms";
 import {NgForOf, NgIf} from "@angular/common";
 import {ManageOrderService} from "./manage-order.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {LoadingComponent} from "../../../shared/loading/loading.component";
 
 @Component({
   selector: 'app-manage-orders',
@@ -10,12 +11,15 @@ import {MatSnackBar} from "@angular/material/snack-bar";
   imports: [
     FormsModule,
     NgForOf,
-    NgIf
+    NgIf,
+    LoadingComponent
   ],
   templateUrl: './manage-orders.component.html',
   styleUrl: './manage-orders.component.scss'
 })
-export class ManageOrdersComponent implements OnInit {
+export class ManageOrdersComponent {
+  loading: boolean = true;
+  shouldDisplaySpinner: boolean = false;
 
   orders: any[] = [];
   orderNumber: string = '';
@@ -23,34 +27,59 @@ export class ManageOrdersComponent implements OnInit {
 
   constructor(private manageOrdersService: ManageOrderService, private snackBar: MatSnackBar) {}
 
-  ngOnInit(): void {
-
+  handleNullEvent(order: any) {
+    order.ticketList.forEach((ticket: any) => {
+      if(ticket.ticketType.event == null) {
+        ticket.ticketType.event = {
+          title: 'Evenimentul a fost sters',
+        };
+      }
+    });
+    return order;
   }
 
-  fetchOrderById() {
-    this.orders = [];
+  fetchOrderByNumber() {
     if(this.orderNumber === '') return;
+
+    this.shouldDisplaySpinner = true;
+    this.loading = true;
+
+    this.orders = [];
     this.manageOrdersService.fetchOrderByNumber(this.orderNumber).subscribe({
       next: (order: any) => {
-        this.orders.push(order);
+        console.log(order);
+        this.orders.push(this.handleNullEvent(order));
         this.snackBar.open('Order fetched successfully', 'Close', {duration: 3000});
       },
       error: (error) => {
         this.snackBar.open('Error fetching order', 'Close', {duration: 3000});
+      },
+      complete: () => {
+        this.shouldDisplaySpinner = false;
+        this.loading = false;
       }
     });
   }
 
   fetchOrderByUserId() {
-    this.orders = [];
     if(this.userId === '') return;
+
+    this.shouldDisplaySpinner = true;
+    this.loading = true;
+
+    this.orders = [];
     this.manageOrdersService.fetchOrdersByUserId(this.userId).subscribe({
       next: (orders: any) => {
+        this.orders = orders.map((order: any) => this.handleNullEvent(order));
         this.orders = orders;
         this.snackBar.open('Orders fetched successfully', 'Close', {duration: 3000});
       },
       error: (error) => {
         this.snackBar.open(error.error, 'Close', {duration: 3000});
+      },
+      complete: () => {
+        this.shouldDisplaySpinner = false;
+        this.loading = false;
       }
     });
   }

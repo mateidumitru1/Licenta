@@ -1,0 +1,10 @@
+<!-- For camera -->
+<ngx-scanner-qrcode
+  #action="scanner"
+  [config]="{'isBeep': false}"
+
+></ngx-scanner-qrcode>
+
+<app-loading *ngIf="action.isLoading"></app-loading>
+
+<button class="btn btn-primary" (click)="onStartClick()">{{action.isStart ? 'Stop' : 'Start'}}</button>

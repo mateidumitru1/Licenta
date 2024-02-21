@@ -4,6 +4,7 @@ import {MatDialogRef} from "@angular/material/dialog";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {ManageEventsService} from "../../manage/manage-events/manage-events.service";
 import {NgClass, NgForOf, NgIf} from "@angular/common";
+import {LoadingComponent} from "../../../shared/loading/loading.component";
 
 @Component({
   selector: 'app-add-top-event',
@@ -12,12 +13,14 @@ import {NgClass, NgForOf, NgIf} from "@angular/common";
     FormsModule,
     NgForOf,
     NgClass,
-    NgIf
+    NgIf,
+    LoadingComponent
   ],
   templateUrl: './add-top-event.component.html',
   styleUrl: './add-top-event.component.scss'
 })
 export class AddTopEventComponent implements OnInit {
+  loading: boolean = true;
 
   eventList: any[] = [];
   filteredEventList: any[] = [];
@@ -33,6 +36,9 @@ export class AddTopEventComponent implements OnInit {
       },
       error: (error: any) => {
         this.snackBar.open('Error fetching events', 'Close', {duration: 3000});
+      },
+      complete: () => {
+        this.loading = false;
       }
     });
     this.eventList.forEach((event: any) => {

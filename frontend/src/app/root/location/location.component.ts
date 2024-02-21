@@ -1,18 +1,22 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {LocationService} from "./location.service";
-import {NgForOf} from "@angular/common";
+import {NgForOf, NgIf} from "@angular/common";
+import {LoadingComponent} from "../../shared/loading/loading.component";
 
 @Component({
   selector: 'app-location',
   standalone: true,
   imports: [
-    NgForOf
+    NgForOf,
+    LoadingComponent,
+    NgIf
   ],
   templateUrl: './location.component.html',
   styleUrl: './location.component.scss'
 })
 export class LocationComponent implements OnInit{
+  loading: boolean = true;
 
   location: any = {};
   constructor(private route: ActivatedRoute, private router: Router, private locationService: LocationService) {}
@@ -29,6 +33,9 @@ export class LocationComponent implements OnInit{
         if(error.status === 404 && error.error === 'Location not found') {
           this.router.navigate(['/page-not-found']);
         }
+      },
+      complete: () => {
+        this.loading = false;
       }
     });
   }

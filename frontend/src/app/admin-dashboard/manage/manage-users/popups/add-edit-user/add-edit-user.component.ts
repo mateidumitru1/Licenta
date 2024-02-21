@@ -16,20 +16,31 @@ import {MdbFormsModule} from "mdb-angular-ui-kit/forms";
   templateUrl: './add-edit-user.component.html',
   styleUrl: './add-edit-user.component.scss'
 })
-export class AddEditUserComponent implements OnInit {
+export class AddEditUserComponent {
   registrationForm: FormGroup;
   constructor(public dialogRef: MatDialogRef<AddEditUserComponent>, @Inject(MAT_DIALOG_DATA) public data: any,
               private fb: FormBuilder) {
-    this.registrationForm = this.fb.group({
-      firstName: [this.data.user.firstName, Validators.required],
-      lastName: [this.data.user.lastName, Validators.required],
-      username: [this.data.user.username, Validators.required],
-      email: [this.data.user.email, [Validators.required, Validators.email]],
-      role: [this.data.user.role, Validators.required]
-    });
-  }
 
-  ngOnInit() {}
+    if(data.title == 'Adauga user') {
+      this.registrationForm = this.fb.group({
+        firstName: [this.data.user.firstName, Validators.required],
+        lastName: [this.data.user.lastName, Validators.required],
+        username: [this.data.user.username, Validators.required],
+        email: [this.data.user.email, [Validators.required, Validators.email]],
+        password: ['', [Validators.required, Validators.minLength(6)]],
+        role: [this.data.user.role, Validators.required]
+      });
+    }
+    else {
+      this.registrationForm = this.fb.group({
+        firstName: [this.data.user.firstName, Validators.required],
+        lastName: [this.data.user.lastName, Validators.required],
+        username: [this.data.user.username, Validators.required],
+        email: [this.data.user.email, [Validators.required, Validators.email]],
+        role: [this.data.user.role, Validators.required]
+      });
+    }
+  }
 
   onCloseClick() {
     this.dialogRef.close();

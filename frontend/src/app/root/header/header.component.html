@@ -51,7 +51,7 @@
               mdbDropdownToggle
               aria-expanded="false"
             >
-              {{ dropDownText }}
+              <i class="fa-solid fa-user"></i>
             </a>
             <ul mdbDropdownMenu class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
               <li *ngIf="!getIdentityService().isLoggedIn()">
@@ -59,6 +59,9 @@
               </li>
               <li *ngIf="getIdentityService().isLoggedIn()">
                 <a class="dropdown-item" routerLink="/account">Contul meu</a>
+              </li>
+              <li *ngIf="getIdentityService().isLoggedIn()">
+                <a class="dropdown-item" routerLink="/account/orders">Comenzile mele</a>
               </li>
               <li *ngIf="getIdentityService().isLoggedIn()">
                 <a class="dropdown-item" routerLink="/track">Urmareste evenimentele</a>
@@ -78,18 +81,19 @@
     mdbCollapse
     #externalContent="mdbCollapse"
   >
-    <div class="locations-container d-flex flex-row flex-wrap">
-      <div class="card col-6 col-md-4 col-lg-2" *ngFor="let location of locationsToDisplay" (click)="onLocationClick(location)">
+    <app-loading *ngIf="loading"></app-loading>
+    <div *ngIf="!loading" class="locations-container d-flex flex-row flex-wrap">
+      <a role="button" class="card col-6 col-md-4 col-lg-2" href="{{ location + '?id=' + location.id}}"
+         *ngFor="let location of locationsToDisplay" (click)="externalContent.toggle()">
         <img alt="" class="img-fluid" src="{{ location.imageUrl }}" />
         <div class="card-body">
           <h5 class="card-title">{{ location.name }}</h5>
         </div>
-      </div>
+      </a>
       <button class="btn" (click)="scrollToNext()">
         <i class="fas fa-angle-right"></i>
       </button>
     </div>
-
   </div>
 </header>
 

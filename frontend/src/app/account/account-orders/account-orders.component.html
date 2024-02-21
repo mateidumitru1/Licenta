@@ -1,7 +1,24 @@
 <div class="container-fluid">
   <h1>Comenzi</h1>
+  <hr>
+  <div mdbDropdown class="btn-group dropend">
+    <button
+      type="button"
+      class="btn btn-primary dropdown-toggle"
+      mdbDropdownToggle
+      aria-expanded="false"
+    >
+      {{ getSelectedFilterLabel() }}
+    </button>
+    <ul mdbDropdownMenu class="dropdown-menu">
+      <li>
+        <button class="dropdown-item" *ngFor="let option of filterOptions" (click)="selectedFilter = option.value; onFilterChange()">{{ option.label }}</button>
+      </li>
+    </ul>
+  </div>
+
   <div>
-    <div class="card mt-4" *ngFor="let order of orders">
+    <div class="card mt-4" *ngFor="let order of paginatedOrders">
       <div class="card-header d-flex flex-row ">
         <div>
           <h2>Comanda numarul {{ order.orderNumber }}</h2>
@@ -12,5 +29,12 @@
         </div>
       </div>
     </div>
+  </div>
+  <div class="page-navigation mt-4">
+    <button class="btn btn-secondary prev-next-buttons" *ngIf="currentPage > 1" (click)="prevPage()">Previous</button>
+    <ng-container *ngFor="let pageNumber of pageNumbers">
+      <button class="btn btn-secondary page-nav-buttons" [class.active]="pageNumber === currentPage" (click)="goToPage(pageNumber)">{{ pageNumber }}</button>
+    </ng-container>
+    <button class="btn btn-secondary prev-next-nav" *ngIf="currentPage < totalPages" (click)="nextPage()">Next</button>
   </div>
 </div>

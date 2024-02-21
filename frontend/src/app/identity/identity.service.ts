@@ -10,8 +10,6 @@ import {Subject} from "rxjs";
   providedIn: 'root'
 })
 export class IdentityService {
-  dropDownText: Subject<string> = new Subject<string>();
-
   constructor(private http: HttpClient, private jwtHandler: JwtHandler, private snackBar: MatSnackBar,
               private router: Router) { }
 
@@ -24,13 +22,14 @@ export class IdentityService {
         localStorage.setItem('token', response.token);
         if (this.jwtHandler.getRole() === 'ADMIN') {
           this.router.navigate(['admin-dashboard']);
-        } else {
-          this.dropDownText.next('Salut, ' + username);
+        } else if(this.jwtHandler.getRole() === 'USER') {
           this.router.navigate(['home']);
+        } else {
+          this.router.navigate(['validator-dashboard'])
         }
       },
       error: (error) => {
-        this.snackBar.open('Invalid username or password!', 'Dismiss', {duration: 3000});
+        this.snackBar.open(error.error, 'Dismiss', {duration: 3000});
       }
     });
   }
@@ -44,7 +43,6 @@ export class IdentityService {
       next: () => {
         this.router.navigate(['']);
         this.jwtHandler.removeJwt();
-        this.dropDownText.next('Login');
         this.snackBar.open('You have been logged out!', 'Close', {
           duration: 3000
         });
@@ -71,8 +69,16 @@ export class IdentityService {
     return this.jwtHandler.isLoggedIn();
   }
 
+  isUser() {
+    return this.jwtHandler.getRole() === 'USER';
+  }
+
   isAdmin() {
-    return this.jwtHandler.isAdmin();
+    return this.jwtHandler.getRole() === 'ADMIN';
+  }
+
+  isValidator() {
+    return this.jwtHandler.getRole() === 'TICKET_VALIDATOR';
   }
 
   forgotPassword(email: string) {
@@ -83,7 +89,7 @@ export class IdentityService {
         });
       },
       error: (error: any) => {
-        this.snackBar.open(error.error.message, 'Close', {
+        this.snackBar.open(error.error, 'Close', {
           duration: 300
         });
       }

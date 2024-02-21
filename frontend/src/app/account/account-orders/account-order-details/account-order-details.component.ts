@@ -27,6 +27,15 @@ export class AccountOrderDetailsComponent implements OnInit{
     this.accountOrderService.fetchOrderByOrderNumber(orderNumber).subscribe({
       next: (order: any) => {
         this.order = order;
+        this.order.ticketList.forEach((ticket: any) => {
+          if(ticket.ticketType.event === null) {
+            ticket.ticketType.event = {
+              title: 'Evenimentul a fost sters',
+              date: '',
+              location: {name: ''}
+            }
+          }
+        });
       },
       error: (error: any) => {
         this.snackBar.open(error.error, 'Close', {

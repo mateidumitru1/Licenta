@@ -12,7 +12,7 @@ import {
 import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort, MatSortHeader} from "@angular/material/sort";
-import {NgForOf} from "@angular/common";
+import {NgForOf, NgIf} from "@angular/common";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatDialog} from "@angular/material/dialog";
 import {MatSnackBar} from "@angular/material/snack-bar";
@@ -20,6 +20,7 @@ import {ManageUsersService} from "../manage-users/manage-users.service";
 import {ManageLocationsService} from "./manage-locations.service";
 import {AddEditLocationComponent} from "./popups/add-edit-location/add-edit-location.component";
 import {DeleteComponent} from "../shared/delete/delete.component";
+import {LoadingComponent} from "../../../shared/loading/loading.component";
 
 @Component({
   selector: 'app-manage-locations',
@@ -44,12 +45,16 @@ import {DeleteComponent} from "../shared/delete/delete.component";
     ReactiveFormsModule,
     FormsModule,
     MatHeaderCellDef,
-    MatMenuTrigger
+    MatMenuTrigger,
+    NgIf,
+    LoadingComponent
   ],
   templateUrl: './manage-locations.component.html',
   styleUrl: './manage-locations.component.scss'
 })
 export class ManageLocationsComponent implements OnInit{
+  loading: boolean = true;
+
   dataSource = new MatTableDataSource<any>();
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
   @ViewChild(MatSort) sort: MatSort | undefined;
@@ -83,6 +88,9 @@ export class ManageLocationsComponent implements OnInit{
         this.snackBar.open('Error fetching users', 'Close', {
           duration: 3000
         });
+      },
+      complete: () => {
+        this.loading = false;
       }
     });
   }

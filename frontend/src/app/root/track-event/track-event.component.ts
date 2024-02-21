@@ -4,15 +4,20 @@ import mapboxgl from "mapbox-gl";
 import {TrackEventService} from "./track-event.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {Router} from "@angular/router";
+import {NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-track-event',
   standalone: true,
-  imports: [],
+  imports: [
+    NgIf
+  ],
   templateUrl: './track-event.component.html',
   styleUrl: './track-event.component.scss'
 })
 export class TrackEventComponent implements OnInit{
+  loading = true;
+
   map: mapboxgl.Map | undefined;
   style = 'mapbox://styles/mapbox/streets-v11';
   lat: number = 0;
@@ -24,37 +29,37 @@ export class TrackEventComponent implements OnInit{
 
   upcomingEvents: any[] = [];
 
-  constructor(private trackEventService: TrackEventService, private snackBar: MatSnackBar, private router: Router) {
-  }
+  constructor(private trackEventService: TrackEventService, private snackBar: MatSnackBar, private router: Router) {}
 
   ngOnInit() {
     this.fetchTickets();
     this.initMap();
+    this.loading = false;
   }
 
   fetchTickets() {
     this.trackEventService.fetchTickets().subscribe({
       next: (tickets: any) => {
         this.tickets = tickets;
-        const eventsMap: { [eventId: string]: boolean } = {};
-        tickets.forEach((ticket: any) => {
+        const upcomingEventsMap: { [eventId: string]: boolean } = {}; // Define upcoming events map
+        this.upcomingTickets = tickets.filter((ticket: any) => {
           const event = ticket.ticketType.event;
-          if (!eventsMap[event.id]) {
-            eventsMap[event.id] = true;
+          if (event !== null && !upcomingEventsMap[event.id]) {
+            upcomingEventsMap[event.id] = true;
             this.upcomingEvents.push(event);
+            const parts = event.date.split('-');
+            const date = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+            return date > new Date();
           }
-        });
-        this.upcomingTickets = this.tickets.filter((ticket) => {
-          const parts = ticket.ticketType.event.date.split('-');
-          const date = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
-          return date > new Date();
+          return false;
         });
       },
       error: (error: any) => {
-        this.snackBar.open('Error fetching tickets', 'Close', {duration: 3000,});
+        this.snackBar.open(error.error, 'Close', {duration: 3000});
       }
     });
   }
+
 
   initMap() {
     mapboxgl.accessToken = mapBoxToken;
@@ -97,7 +102,7 @@ export class TrackEventComponent implements OnInit{
             `<div class="popup-content">
             <h5 style="user-select: none; cursor: pointer;">${event.title}</h5>
             <p style="user-select: none; cursor: pointer;">${event.location.name} | ${event.date}</p>
-            <button mat-raised-button class="view-details" color="primary">View details</button>
+            <button class="btn btn-primary view-details">View details</button>
           </div>`
           )
         )

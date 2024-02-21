@@ -3,7 +3,7 @@
     <input type="search" class="form-control rounded" placeholder="Cauta numarul comenzii"
            aria-label="Search" aria-describedby="search-addon" [(ngModel)]="orderNumber"/>
     <span class="input-group-text border-0 spacer" id="search-order">
-    <button type="button" class="btn btn-primary btn-search" data-mdb-ripple-init (click)="fetchOrderById()">
+    <button type="button" class="btn btn-primary btn-search" data-mdb-ripple-init (click)="fetchOrderByNumber()">
       <i class="fas fa-search"></i>
     </button>
   </span>
@@ -16,14 +16,16 @@
         <i class="fas fa-search"></i>
       </button>
     </span>
-    </div>
+  </div>
+  <app-loading *ngIf="loading && shouldDisplaySpinner"></app-loading>
+  <div *ngIf="!loading">
     <div class="card mt-3" *ngFor="let order of orders">
       <div class="card-header">
         <h5 class="card-title">Comanda numarul {{order.orderNumber}}</h5>
       </div>
       <div class="card-body">
-        <p class="card-text">Id-ul utilizatorului: {{order.userId}}</p>
-        <p class="card-text">Data comenzii: {{order.orderDate}}</p>
+        <p class="card-text">Id-ul utilizatorului: {{order.user.id}}</p>
+        <p class="card-text">Data comenzii: {{order.date}}</p>
         <p class="card-text">Status: {{order.status}}</p>
         <p class="card-text">Total: {{order.price}}</p>
         <div>
@@ -37,9 +39,10 @@
               <p class="card-text">Status: {{ticket.status}}</p>
               <button *ngIf="ticket.status === 'CONFIRMED'" class="btn btn-danger" (click)="cancelTicket(ticket)">Anuleaza</button>
             </div>
+          </div>
         </div>
       </div>
-    </div>
       <button *ngIf="order.status === 'CONFIRMED'" class="btn btn-danger" (click)="cancelOrder(order)">Anuleaza comanda</button>
+    </div>
   </div>
 </div>

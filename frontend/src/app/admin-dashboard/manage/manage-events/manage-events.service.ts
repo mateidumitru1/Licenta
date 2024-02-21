@@ -15,7 +15,6 @@ export class ManageEventsService {
   }
 
   addEvent(event: any) {
-    console.log(event);
     return this.http.post(apiURL + '/events', getFormData(event), {
       headers: {
         Authorization: 'Bearer ' + localStorage.getItem('token')
