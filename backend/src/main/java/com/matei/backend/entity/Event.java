@@ -36,8 +36,7 @@ public class Event {
     private Location location;
 
     @JsonIgnore
-    @OnDelete(action = OnDeleteAction.SET_NULL)
-    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "event")
     private List<TicketType> ticketTypes;
 
     @Override

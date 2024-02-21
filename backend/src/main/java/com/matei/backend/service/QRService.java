@@ -33,7 +33,7 @@ public class QRService {
     public QRResponseDto createQR() throws WriterException, IOException {
 
         UUID uuid = UUID.randomUUID();
-        String url = "http://localhost:4200/validate-ticket/" + uuid.toString();
+        String url = "/validator-dashboard/validate-ticket/" + uuid.toString();
 
         Map<EncodeHintType, Object> hints = new HashMap<>();
         hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);

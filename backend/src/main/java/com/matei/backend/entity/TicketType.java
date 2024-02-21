@@ -30,7 +30,6 @@ public class TicketType {
     private Integer quantity;
 
     @ManyToOne
-    @OnDelete(action = OnDeleteAction.SET_NULL)
     @JoinColumn(name = "event_id", referencedColumnName = "id")
     private Event event;
 }

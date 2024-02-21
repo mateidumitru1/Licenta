@@ -26,7 +26,7 @@ public class Ticket {
     private Status status;
 
     @JsonIgnore
-    @ManyToOne
+    @OneToOne
     private TicketType ticketType;
 
     @JsonIgnore

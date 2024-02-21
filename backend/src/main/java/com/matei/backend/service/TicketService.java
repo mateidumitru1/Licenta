@@ -4,9 +4,11 @@ import com.google.zxing.WriterException;
 import com.matei.backend.dto.request.TicketCreationRequestDto;
 import com.matei.backend.dto.response.*;
 import com.matei.backend.entity.*;
+import com.matei.backend.entity.enums.Role;
 import com.matei.backend.entity.enums.Status;
 import com.matei.backend.exception.QRCreationException;
 import com.matei.backend.exception.TicketNotFoundException;
+import com.matei.backend.exception.ValidatorResourceAccessException;
 import com.matei.backend.repository.TicketRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -69,7 +71,11 @@ public class TicketService {
                         .build()).toList();
     }
 
-    public Boolean validateTicket(UUID qrId) {
+    public Boolean validateTicket(UUID userId, UUID qrId) {
+        if(!userService.getUserById(userId).getRole().equals(Role.TICKET_VALIDATOR)) {
+            throw new ValidatorResourceAccessException("You are not authorized to perform this action");
+        }
+
         return qrService.validateQR(qrId);
     }
 
@@ -79,12 +85,14 @@ public class TicketService {
             throw new TicketNotFoundException("Ticket not found");
         }
         ticket.setStatus(Status.CANCELED);
+        ticket.getQr().setUsed(true);
         ticketRepository.save(ticket);
     }
 
     public void adminCancelTicket(UUID ticketId) {
         var ticket = ticketRepository.findById(ticketId).orElseThrow(() -> new TicketNotFoundException("Ticket not found"));
         ticket.setStatus(Status.CANCELED);
+        ticket.getQr().setUsed(true);
         ticketRepository.save(ticket);
     }
 

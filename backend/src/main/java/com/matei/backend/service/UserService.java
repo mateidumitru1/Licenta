@@ -32,6 +32,8 @@ public class UserService {
         if (!isAdmin(currentUserId)) {
             throw new AdminResourceAccessException("You are not authorized to perform this action");
         }
+        userCreationRequestDto.setPassword(passwordEncoder.encode(userCreationRequestDto.getPassword()));
+
         var user = userRepository.save(modelMapper.map(userCreationRequestDto, User.class));
 
         return modelMapper.map(user, UserResponseDto.class);
