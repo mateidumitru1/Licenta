@@ -9,8 +9,8 @@ import {ForgotPasswordComponent} from "./identity/forgot-password/forgot-passwor
 import {ShoppingCartComponent} from "./root/shopping-cart/shopping-cart.component";
 import {AccountComponent} from "./account/account.component";
 import {AdminDashboardComponent} from "./admin-dashboard/admin-dashboard.component";
-import {AdminGuard} from "./util/guards/admin.guard";
-import {RootGuard} from "./util/guards/root.guard";
+import {AdminGuard} from "./util/guards/can-activate/admin.guard";
+import {RootGuard} from "./util/guards/can-activate/root.guard";
 import {HomeAdminComponent} from "./admin-dashboard/home-admin/home-admin.component";
 import {StatisticsComponent} from "./admin-dashboard/statistics/statistics.component";
 import {SettingsComponent} from "./admin-dashboard/settings/settings.component";
@@ -19,7 +19,7 @@ import {ManageLocationsComponent} from "./admin-dashboard/manage/manage-location
 import {ManageEventsComponent} from "./admin-dashboard/manage/manage-events/manage-events.component";
 import {ManageOrdersComponent} from "./admin-dashboard/manage/manage-orders/manage-orders.component";
 import {PageNotFoundComponent} from "./root/page-not-found/page-not-found.component";
-import {AccountGuard} from "./util/guards/account.guard";
+import {AccountGuard} from "./util/guards/can-activate/account.guard";
 import {AccountOrdersComponent} from "./account/account-orders/account-orders.component";
 import {AccountSettingsComponent} from "./account/account-settings/account-settings.component";
 import {ResetPasswordComponent} from "./identity/reset-password/reset-password.component";
@@ -31,9 +31,8 @@ import {TrackEventComponent} from "./root/track-event/track-event.component";
 import {TrackEventDetailsComponent} from "./root/track-event/track-event-details/track-event-details.component";
 import {ValidatorDashboardComponent} from "./validator-dashboard/validator-dashboard.component";
 import {HomeValidatorComponent} from "./validator-dashboard/home-validator/home-validator.component";
-import {ValidatorGuard} from "./util/guards/validator.guard";
+import {ValidatorGuard} from "./util/guards/can-activate/validator.guard";
 import {ScannerComponent} from "./validator-dashboard/scanner/scanner.component";
-import {ValidateComponent} from "./validator-dashboard/scanner/validate/validate.component";
 
 export const routes: Routes = [
   { path: 'home' , redirectTo: '', pathMatch: 'full' },
@@ -60,7 +59,6 @@ export const routes: Routes = [
   { path: 'validator-dashboard', canActivate: [ValidatorGuard], component: ValidatorDashboardComponent, children: [
       { path: '', pathMatch: 'full', component: HomeValidatorComponent},
       { path: 'scanner', component: ScannerComponent },
-      { path: 'validate-ticket/:ticketId', component: ValidateComponent }
     ]},
   { path: '', canActivate: [RootGuard], component: RootComponent, children: [
       { path: '', pathMatch: 'full', component: HomeComponent },

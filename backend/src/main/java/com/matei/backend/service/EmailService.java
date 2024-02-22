@@ -1,5 +1,6 @@
 package com.matei.backend.service;
 
+import com.matei.backend.dto.response.EventResponseDto;
 import com.matei.backend.dto.response.TicketResponseDto;
 import com.matei.backend.entity.ResetPasswordToken;
 import com.sendgrid.Method;
@@ -15,8 +16,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -63,17 +66,23 @@ public class EmailService {
         send(mail);
     }
 
-    public void sendTicketEmail(String toEmail, List<TicketResponseDto> ticketResponseDtoList) {
+    public void sendTicketEmail(String toEmail, Map<EventResponseDto, List<TicketResponseDto>> eventTicketMap) {
         Email to = new Email(toEmail);
 
         final String sendTicketTemplateId = "d-22dfa17cd6234faeb5f3bdcb9095342d";
 
-        byte[] pdfBytes = pdfService.createPdf(ticketResponseDtoList);
+        List<Attachments> attachmentsList = new ArrayList<>();
 
-        Attachments attachments = new Attachments();
-        attachments.setContent(Base64.getEncoder().encodeToString(pdfBytes));
-        attachments.setType("application/pdf");
-        attachments.setFilename(ticketResponseDtoList.getFirst().getTicketType().getEvent().getTitle() + ".pdf");
+        eventTicketMap.forEach((eventResponseDto, ticketResponseDtoList) -> {
+            byte[] pdfBytes = pdfService.createPdf(eventResponseDto, ticketResponseDtoList);
+
+            Attachments attachments = new Attachments();
+            attachments.setContent(Base64.getEncoder().encodeToString(pdfBytes));
+            attachments.setType("application/pdf");
+            attachments.setFilename(eventResponseDto.getTitle() + ".pdf");
+
+            attachmentsList.add(attachments);
+        });
 
         Personalization personalization = new Personalization();
 //        personalization.addDynamicTemplateData("image", "data:image/jpeg;base64, " + ticketResponseDto.getQr().getImage());
@@ -83,7 +92,8 @@ public class EmailService {
         mail.setFrom(from);
         mail.setTemplateId(sendTicketTemplateId);
         mail.addPersonalization(personalization);
-        mail.addAttachments(attachments);
+
+        attachmentsList.forEach(mail::addAttachments);
 
         send(mail);
     }

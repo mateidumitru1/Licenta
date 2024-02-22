@@ -89,7 +89,8 @@ export class TrackEventComponent implements OnInit{
       });
 
     }, (error) => {
-      this.snackBar.open('Error getting location', 'Close', {duration: 3000,});
+      console.error(error);
+      this.snackBar.open('', 'Close', {duration: 3000,});
     });
   }
 

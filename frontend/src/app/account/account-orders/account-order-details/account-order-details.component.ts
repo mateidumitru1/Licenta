@@ -27,6 +27,7 @@ export class AccountOrderDetailsComponent implements OnInit{
     this.accountOrderService.fetchOrderByOrderNumber(orderNumber).subscribe({
       next: (order: any) => {
         this.order = order;
+        console.log(order)
         this.order.ticketList.forEach((ticket: any) => {
           if(ticket.ticketType.event === null) {
             ticket.ticketType.event = {

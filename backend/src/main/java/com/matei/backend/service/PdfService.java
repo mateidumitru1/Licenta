@@ -1,6 +1,7 @@
 package com.matei.backend.service;
 
 import com.itextpdf.xmp.impl.Base64;
+import com.matei.backend.dto.response.EventResponseDto;
 import com.matei.backend.dto.response.TicketResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -34,7 +35,7 @@ public class PdfService {
         letterMap.put('Ț', 'T');
     }
 
-    public byte[] createPdf(List<TicketResponseDto> ticketResponseDtoList) {
+    public byte[] createPdf(EventResponseDto eventResponseDto, List<TicketResponseDto> ticketResponseDtoList) {
         PDDocument document = new PDDocument();
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
@@ -43,22 +44,34 @@ public class PdfService {
 
             document.addPage(firstPage);
             PDPageContentStream firstPageContentStream  = new PDPageContentStream(document, firstPage);
-            firstPageContentStream .setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA), 12);
-            firstPageContentStream .beginText();
-            firstPageContentStream .newLineAtOffset(20, 700);
-            firstPageContentStream .showText("These are your tickets for the event: " + removeDiacritics(ticketResponseDtoList.getFirst().getTicketType().getEvent().getTitle()));
-            firstPageContentStream .endText();
-            firstPageContentStream .close();
+            firstPageContentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA), 12);
+            firstPageContentStream.beginText();
+            firstPageContentStream.newLineAtOffset(20, 700);
+            firstPageContentStream.showText(removeDiacritics(eventResponseDto.getTitle()));
+            firstPageContentStream.newLineAtOffset(0, -20);
+            firstPageContentStream.showText("Data: " + eventResponseDto.getDate().toString());
+            firstPageContentStream.newLineAtOffset(0, -20);
+            firstPageContentStream.showText("Locatie: " + removeDiacritics(eventResponseDto.getLocation().getName()) + ", " + removeDiacritics(eventResponseDto.getLocation().getAddress()));
+            firstPageContentStream.endText();
+            firstPageContentStream.close();
 
             List<byte[]> imageBytes = ticketResponseDtoList.stream().map(ticketResponseDto -> ticketResponseDto.getImage().getBytes()).toList();
 
             for (TicketResponseDto ticketResponseDto : ticketResponseDtoList) {
                 PDPage page = new PDPage();
                 document.addPage(page);
-                PDPageContentStream contentStream = new PDPageContentStream(document, page);
+                PDPageContentStream detailsContentStream = new PDPageContentStream(document, page);
+                detailsContentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA), 12);
+                detailsContentStream.beginText();
+                detailsContentStream.newLineAtOffset(20, 700);
+                detailsContentStream.showText("Event: " + removeDiacritics(ticketResponseDto.getTicketType().getName()));
+                detailsContentStream.endText();
+                detailsContentStream.close();
+
+                PDPageContentStream imageContentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true);
                 PDImageXObject pdImage = PDImageXObject.createFromByteArray(document, Base64.decode(ticketResponseDto.getImage().getBytes()), "qr");
-                contentStream.drawImage(pdImage, 150, 280);
-                contentStream.close();
+                imageContentStream.drawImage(pdImage, 150, 280);
+                imageContentStream.close();
             }
 
             document.save(byteArrayOutputStream);

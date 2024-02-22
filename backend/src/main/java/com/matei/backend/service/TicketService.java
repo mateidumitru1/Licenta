@@ -15,10 +15,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -30,47 +27,36 @@ public class TicketService {
     private final UserService userService;
     private final ModelMapper modelMapper;
 
-    public List<TicketResponseDto> createTicket(TicketCreationRequestDto ticketCreationRequestDto, int quantity, UUID userId, OrderResponseDto orderDto) {
-        List<Ticket> tickets = new ArrayList<>();
-        while(quantity > 0) {
-            try {
-                UUID id = UUID.randomUUID();
-                var ticket = ticketRepository.save(Ticket.builder()
-                        .id(id)
-                        .status(Status.CONFIRMED)
-                        .ticketType(Optional.of(ticketTypeService.getTicketTypeById(ticketCreationRequestDto.getTicketTypeId()))
-                                .map(ticketTypeResponseDto -> modelMapper.map(ticketTypeResponseDto, TicketType.class)).orElseThrow())
-                        .image(qrService.createQRImage(id))
-                        .scanned(false)
-                        .order(modelMapper.map(orderDto, Order.class))
-                        .build());
+    public void createTickets(Map<EventResponseDto, List<ShoppingCartItemResponseDto>> eventShoppingCartMap, UUID userId, OrderResponseDto orderDto) {
+        Map<EventResponseDto, List<TicketResponseDto>> eventTicketMap = new HashMap<>();
 
-                tickets.add(ticket);
-            } catch (WriterException | IOException e) {
-                throw new TicketCreationException("QR Creation Exception: " + e.getMessage());
-            }
-            quantity--;
-        }
+        eventShoppingCartMap.forEach((eventResponseDto, shoppingCartItemResponseDtoList) -> {
+            List<Ticket> tickets = new ArrayList<>();
+            shoppingCartItemResponseDtoList.forEach(shoppingCartItemResponseDto -> {
+                while(shoppingCartItemResponseDto.getQuantity() > 0) {
+                    try {
+                        UUID id = UUID.randomUUID();
+                        var ticket = ticketRepository.save(Ticket.builder()
+                                .id(id)
+                                .status(Status.CONFIRMED)
+                                .ticketType(Optional.of(ticketTypeService.getTicketTypeById(shoppingCartItemResponseDto.getTicketType().getId()))
+                                        .map(ticketTypeResponseDto -> modelMapper.map(ticketTypeResponseDto, TicketType.class)).orElseThrow())
+                                .image(qrService.createQRImage(id))
+                                .scanned(false)
+                                .order(modelMapper.map(orderDto, Order.class))
+                                .build());
 
-        emailService.sendTicketEmail(userService.getUserById(userId).getEmail(), tickets.stream()
-                .map(ticket -> TicketResponseDto.builder()
-                        .id(ticket.getId())
-                        .status(ticket.getStatus())
-                        .ticketType(Optional.of(ticket.getTicketType())
-                                .map(ticketType -> modelMapper.map(ticketType, TicketTypeResponseDto.class)).orElseThrow())
-                        .image(ticket.getImage())
-                        .scanned(ticket.getScanned())
-                        .build()).toList());
+                        tickets.add(ticket);
+                    } catch (WriterException | IOException e) {
+                        throw new TicketCreationException("QR Creation Exception: " + e.getMessage());
+                    }
+                    shoppingCartItemResponseDto.setQuantity(shoppingCartItemResponseDto.getQuantity() - 1);
+                }
+            });
+            eventTicketMap.put(eventResponseDto, tickets.stream().map(ticket -> modelMapper.map(ticket, TicketResponseDto.class)).toList());
+        });
 
-        return tickets.stream()
-                .map(ticket -> TicketResponseDto.builder()
-                        .id(ticket.getId())
-                        .status(ticket.getStatus())
-                        .ticketType(Optional.of(ticket.getTicketType())
-                                .map(ticketType -> modelMapper.map(ticketType, TicketTypeResponseDto.class)).orElseThrow())
-                        .image(ticket.getImage())
-                        .scanned(ticket.getScanned())
-                        .build()).toList();
+        emailService.sendTicketEmail(userService.getUserById(userId).getEmail(), eventTicketMap);
     }
 
     public TicketResponseDto validateTicket(UUID userId, UUID ticketId) {

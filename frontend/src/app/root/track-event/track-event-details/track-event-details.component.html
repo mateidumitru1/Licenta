@@ -6,11 +6,11 @@
       <h2>Tickets</h2>
       <div *ngFor="let ticket of tickets">
         <p>{{ticket.ticketType.name}} | {{ticket.ticketType.price}} RON | {{tickets.length}}</p>
-        <button mat-raised-button color="primary" (click)="displayQR(ticket)">View QR</button>
+        <button class="btn btn-primary" (click)="displayQR(ticket)">View QR</button>
         <br>
-        <img *ngIf="ticket.shouldDisplayQR" src="data:image/png;base64, {{ticket.qr.image}}">
+        <img *ngIf="ticket.shouldDisplayQR" src="data:image/png;base64, {{ticket.image}}">
       </div>
     </div>
-    <button mat-raised-button color="primary" (click)="showMap()" class="map-button">Show map</button>
+    <button class="btn btn-primary" (click)="showMap()" class="map-button">Show map</button>
   </div>
 </div>

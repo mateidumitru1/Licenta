@@ -21,6 +21,6 @@
     </div>
   </div>
   <hr>
-  <h4>Total: {{ order.price }}</h4>
+  <h4>Total: {{ order.price }} RON</h4>
   <button [ngClass]="{'disabled': order.status == 'CANCELED'}" class="btn btn-danger mb-5 mt-1" (click)="cancelOrder()">{{ order.status == 'CANCELED' ? 'Anulata' : 'Anuleaza comanda' }}</button>
 </div>

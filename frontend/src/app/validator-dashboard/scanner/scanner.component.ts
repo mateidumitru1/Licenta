@@ -5,6 +5,8 @@ import {LoadingComponent} from "../../shared/loading/loading.component";
 import {NgxScannerQrcodeModule} from "ngx-scanner-qrcode";
 import {BehaviorSubject, Subject, Subscription} from "rxjs";
 import {Router} from "@angular/router";
+import {MatDialog, MatDialogRef} from "@angular/material/dialog";
+import {ValidateComponent} from "./validate/validate.component";
 
 @Component({
   selector: 'app-validate',
@@ -19,21 +21,37 @@ import {Router} from "@angular/router";
   templateUrl: './scanner.component.html',
   styleUrl: './scanner.component.scss'
 })
-export class ScannerComponent implements AfterViewInit {
-  cameraOpened = true;
-
+export class ScannerComponent implements AfterViewInit, OnDestroy {
   @ViewChild('action') action: any;
+  dialogRef: MatDialogRef<any> | null = null;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private dialog: MatDialog) {}
 
   ngAfterViewInit(): void {
     this.action.data.subscribe((data: any) => {
       let url = data[0]
-      if(url.value) {
-        const parts = url.value.split('/');
-        this.router.navigate([parts[1], parts[2], parts[3]]);
+      if(url?.value) {
+        this.action.stop();
+        const ticketId = url.value;
+        this.dialogRef = this.dialog.open(ValidateComponent, {
+          data: ticketId
+        });
+        this.dialogRef.afterClosed().subscribe(() => {
+          this.dialogRef = null;
+          this.action.start();
+        });
       }
     });
+  }
+
+  ngOnDestroy() {
+    this.action.data.unsubscribe();
+    if(this.dialogRef) {
+      this.dialogRef.close();
+    }
+    if(this.action.isStart) {
+      this.action.stop();
+    }
   }
 
   onStartClick() {

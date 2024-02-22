@@ -1,5 +1,5 @@
 <div class="container-fluid">
-  <h1 class="text-center">Top Events</h1>
+  <h1 class="text-center">Evenimente recomandate</h1>
   <app-loading *ngIf="loading"></app-loading>
   <div *ngIf="!loading" class="cards-container">
     <div class="card" *ngFor="let event of topEvents" (click)="onEventClick(event)">

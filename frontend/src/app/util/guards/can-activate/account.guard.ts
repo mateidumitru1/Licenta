@@ -1,4 +1,4 @@
-import {IdentityService} from "../../identity/identity.service";
+import {IdentityService} from "../../../identity/identity.service";
 import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from "@angular/router";
 import {Injectable} from "@angular/core";
 

@@ -1,6 +1,7 @@
 package com.matei.backend.service;
 
 import com.matei.backend.dto.request.TicketCreationRequestDto;
+import com.matei.backend.dto.request.TicketTypeCreationRequestDto;
 import com.matei.backend.dto.response.*;
 import com.matei.backend.entity.*;
 import com.matei.backend.entity.enums.Status;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -37,11 +39,11 @@ public class OrderService {
                         .id(user.getId()).build()).orElseThrow())
                 .build());
 
-        var ticketList = shoppingCart.getShoppingCartItemList().stream().map(shoppingCartItem ->
-                ticketService.createTicket(TicketCreationRequestDto.builder()
-                    .ticketTypeId(shoppingCartItem.getTicketType().getId()).build(), shoppingCartItem.getQuantity(), userId,
-                        getCreationOrderResponseDto(order)))
-                .toList().stream().flatMap(List::stream).toList();
+        Map<EventResponseDto, List<ShoppingCartItemResponseDto>> eventShoppingCartMap = shoppingCart.getShoppingCartItemList().stream()
+                .collect(Collectors.groupingBy(shoppingCartItem ->
+                        shoppingCartItem.getTicketType().getEvent(), Collectors.toList()));
+
+        ticketService.createTickets(eventShoppingCartMap, userId, getCreationOrderResponseDto(order));
 
         shoppingCartService.clearShoppingCart(userId);
     }

@@ -1,0 +1,27 @@
+<app-loading *ngIf="loading"></app-loading>
+<div *ngIf="!loading" class="modal-content">
+  <div class="modal-header mb-4">
+    <h4 class="modal-title" id="exampleModalLabel">Detalii bilet</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="onCloseClick()"></button>
+  </div>
+  <div class="modal-body">
+    <h6>{{ ticket.ticketType?.event.title }}</h6>
+    <p>Categorie bilet: {{ ticket.ticketType?.name }}</p>
+    <div *ngIf="ticket.alreadyScanned == false && ticket.status == 'CONFIRMED'" class="text-success" >
+      <p>Biletul a fost scanat cu succes!</p>
+      <p>Data scanarii: {{ ticket.scannedAt | date: 'dd/MM/yyyy HH:mm' }}</p>
+    </div>
+    <div *ngIf="ticket.alreadyScanned == true && ticket.status == 'CONFIRMED'" class="text-danger">
+      <p>Biletul a fost deja scanat!</p>
+      <p>Data scanarii: {{ ticket.scannedAt | date: 'dd/MM/yyyy HH:mm' }}</p>
+    </div>
+    <p *ngIf="ticket.status == 'CANCELED'" class="text-danger" >Biletul a fost anulat!</p>
+    <h6>Detalii cumparator</h6>
+    <p>Nume: {{ ticket.userFirstName }} {{ ticket.userLastName }}</p>
+    <p>Username: {{ ticket.username }}</p>
+    <p>Email: {{ ticket.userEmail }}</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="onCloseClick()">Inchide</button>
+  </div>
+</div>
