@@ -1,6 +1,5 @@
 package com.matei.backend.service;
 
-import com.google.zxing.Result;
 import com.itextpdf.xmp.impl.Base64;
 import com.matei.backend.dto.response.TicketResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -11,9 +10,6 @@ import org.apache.pdfbox.pdmodel.font.*;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.springframework.stereotype.Service;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
@@ -54,13 +50,13 @@ public class PdfService {
             firstPageContentStream .endText();
             firstPageContentStream .close();
 
-            List<byte[]> imageBytes = ticketResponseDtoList.stream().map(ticketResponseDto -> ticketResponseDto.getQr().getImage().getBytes()).toList();
+            List<byte[]> imageBytes = ticketResponseDtoList.stream().map(ticketResponseDto -> ticketResponseDto.getImage().getBytes()).toList();
 
             for (TicketResponseDto ticketResponseDto : ticketResponseDtoList) {
                 PDPage page = new PDPage();
                 document.addPage(page);
                 PDPageContentStream contentStream = new PDPageContentStream(document, page);
-                PDImageXObject pdImage = PDImageXObject.createFromByteArray(document, Base64.decode(ticketResponseDto.getQr().getImage().getBytes()), "qr");
+                PDImageXObject pdImage = PDImageXObject.createFromByteArray(document, Base64.decode(ticketResponseDto.getImage().getBytes()), "qr");
                 contentStream.drawImage(pdImage, 150, 280);
                 contentStream.close();
             }

@@ -6,9 +6,6 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
-import com.matei.backend.dto.response.QRResponseDto;
-import com.matei.backend.entity.QR;
-import com.matei.backend.repository.QRRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.codec.binary.Base64;
 import org.modelmapper.ModelMapper;
@@ -17,7 +14,6 @@ import org.springframework.stereotype.Service;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,13 +23,11 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class QRService {
 
-    private final QRRepository qrRepository;
     private final ModelMapper modelMapper;
 
-    public QRResponseDto createQR() throws WriterException, IOException {
+    public String createQRImage(UUID ticketId) throws WriterException, IOException {
 
-        UUID uuid = UUID.randomUUID();
-        String url = "/validator-dashboard/validate-ticket/" + uuid.toString();
+        String data =  ticketId.toString();
 
         Map<EncodeHintType, Object> hints = new HashMap<>();
         hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
@@ -43,7 +37,7 @@ public class QRService {
 
         var width = 300;
         var height = 300;
-        BitMatrix bitMatrix = qrCodeWriter.encode(url, BarcodeFormat.QR_CODE, width, height, hints);
+        BitMatrix bitMatrix = qrCodeWriter.encode(data, BarcodeFormat.QR_CODE, width, height, hints);
 
         BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         for (int x = 0; x < width; x++) {
@@ -57,24 +51,6 @@ public class QRService {
 
         byte[] imageBytes = baos.toByteArray();
 
-        var qr = qrRepository.save(QR.builder()
-                .id(uuid)
-                .image(Base64.encodeBase64String(imageBytes))
-                .used(false)
-                .build());
-
-        return modelMapper.map(qr, QRResponseDto.class);
-    }
-
-    public Boolean validateQR(UUID qrId) {
-        var qr = qrRepository.findById(qrId).orElseThrow(() -> new RuntimeException("QR not found"));
-
-        if(qr.getUsed()) {
-            return false;
-        }
-
-        qr.setUsed(true);
-        qrRepository.save(qr);
-        return true;
+        return Base64.encodeBase64String(imageBytes);
     }
 }

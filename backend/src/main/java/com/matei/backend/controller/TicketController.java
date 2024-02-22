@@ -19,8 +19,8 @@ public class TicketController {
     private final TicketService ticketService;
     private final JwtService jwtService;
 
-    @GetMapping("/validate/{qrId}")
-    public ResponseEntity<?> validateTicket(@RequestHeader("Authorization") String jwtToken, @PathVariable("qrId") String qrId) {
+    @GetMapping("/validate/{ticketId}")
+    public ResponseEntity<?> validateTicket(@RequestHeader("Authorization") String jwtToken, @PathVariable("ticketId") String qrId) {
         return ResponseEntity.ok(ticketService.validateTicket(jwtService.extractId(jwtToken), UUID.fromString(qrId)));
     }
 

@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
@@ -16,5 +18,12 @@ public class TicketResponseDto {
     private UUID id;
     private TicketTypeResponseDto ticketType;
     private Status status;
-    private QRResponseDto qr;
+    private String image;
+    private Boolean scanned;
+    private Boolean alreadyScanned;
+    private LocalDateTime scannedAt;
+    private String username;
+    private String userFirstName;
+    private String userLastName;
+    private String userEmail;
 }

@@ -45,14 +45,9 @@ public class ExceptionHandlerController {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(QRCreationException.class)
-    public ResponseEntity<?> handleQRCreationException(QRCreationException exception) {
+    @ExceptionHandler(TicketCreationException.class)
+    public ResponseEntity<?> handleQRCreationException(TicketCreationException exception) {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-
-    @ExceptionHandler(QRNotFoundException.class)
-    public ResponseEntity<?> handleQRNotFoundException(QRNotFoundException exception) {
-        return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(ResetPasswordTokenExpiredException.class)

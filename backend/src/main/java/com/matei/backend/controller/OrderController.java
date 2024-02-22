@@ -1,7 +1,6 @@
 package com.matei.backend.controller;
 
 import com.matei.backend.exception.OrderNotFoundException;
-import com.matei.backend.exception.QRCreationException;
 import com.matei.backend.service.JwtService;
 import com.matei.backend.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -19,13 +18,8 @@ public class OrderController {
 
     @PostMapping
     public ResponseEntity<?> createOrder(@RequestHeader("Authorization") String jwtToken){
-        try {
-            orderService.createOrder(jwtService.extractId(jwtToken));
-            return ResponseEntity.ok().build();
-        }
-        catch (QRCreationException e){
-            return ResponseEntity.internalServerError().body(e.getMessage());
-        }
+        orderService.createOrder(jwtService.extractId(jwtToken));
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping
@@ -35,25 +29,12 @@ public class OrderController {
 
     @GetMapping("/user/{id}")
     public ResponseEntity<?> getOrdersByUserId(@PathVariable String id){
-        try {
-            return ResponseEntity.ok(orderService.getOrdersByUserId(UUID.fromString(id)));
-        }
-        catch(OrderNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
-        catch(IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body("Invalid UUID");
-        }
+        return ResponseEntity.ok(orderService.getOrdersByUserId(UUID.fromString(id)));
     }
 
     @GetMapping("/{number}")
     public ResponseEntity<?> getOrderByOrderNumber(@PathVariable Long number){
-        try {
-            return ResponseEntity.ok(orderService.getOrderByNumber(number));
-        }
-        catch(OrderNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok(orderService.getOrderByNumber(number));
     }
 
     @PutMapping("/{orderNumber}/cancel")

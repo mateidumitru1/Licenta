@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
@@ -20,19 +21,18 @@ import java.util.UUID;
 @Table(name = "tickets")
 public class Ticket {
     @Id
-    @GeneratedValue(generator = "uuid4")
     private UUID id;
-
     private Status status;
+    private Boolean scanned;
+
+    @Column(length = 100000)
+    private String image;
+
+    private LocalDateTime scannedAt;
 
     @JsonIgnore
     @OneToOne
     private TicketType ticketType;
-
-    @JsonIgnore
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @OneToOne
-    private QR qr;
 
     @JsonIgnore
     @OnDelete(action = OnDeleteAction.CASCADE)

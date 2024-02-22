@@ -5,7 +5,6 @@ import com.matei.backend.dto.response.*;
 import com.matei.backend.entity.*;
 import com.matei.backend.entity.enums.Status;
 import com.matei.backend.exception.OrderNotFoundException;
-import com.matei.backend.exception.QRCreationException;
 import com.matei.backend.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -26,7 +25,7 @@ public class OrderService {
     private final TicketService ticketService;
     private final ModelMapper modelMapper;
 
-    public void createOrder(UUID userId) throws QRCreationException {
+    public void createOrder(UUID userId) {
         var shoppingCart = shoppingCartService.getShoppingCart(userId);
 
         var order = orderRepository.save(Order.builder()
@@ -71,7 +70,9 @@ public class OrderService {
                 .ticketList(order.getTicketList().stream().map(ticket -> {
                     TicketResponseDto.TicketResponseDtoBuilder ticketResponseDtoBuilder = TicketResponseDto.builder()
                             .id(ticket.getId())
-                            .status(ticket.getStatus());
+                            .status(ticket.getStatus())
+                            .image(ticket.getImage())
+                            .scanned(ticket.getScanned());
 
                     TicketTypeResponseDto ticketTypeResponseDto = null;
                     if (ticket.getTicketType() != null) {
@@ -93,17 +94,7 @@ public class OrderService {
                         ticketTypeResponseDto.setEvent(eventResponseDto);
                     }
 
-                    QRResponseDto qrResponseDto = null;
-                    if (ticket.getQr() != null) {
-                        qrResponseDto = QRResponseDto.builder()
-                                .id(ticket.getQr().getId())
-                                .used(ticket.getQr().getUsed())
-                                .image(ticket.getQr().getImage())
-                                .build();
-                    }
-
                     ticketResponseDtoBuilder.ticketType(ticketTypeResponseDto);
-                    ticketResponseDtoBuilder.qr(qrResponseDto);
                     return ticketResponseDtoBuilder.build();
                 }).collect(Collectors.toList()))
                 .user(UserResponseDto.builder()
