@@ -1,17 +1,18 @@
 import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {apiURL} from "../../../app.config";
+import {JwtHandler} from "../../../identity/jwt.handler";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ManageOrderService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private jwtHandler: JwtHandler) {}
 
   fetchOrders() {
     return this.http.get(apiURL + '/orders', {
       headers: {
-        Authorization: 'Bearer ' + localStorage.getItem('token')
+        Authorization: 'Bearer ' + this.jwtHandler.getToken()
       }
     });
   }
@@ -20,7 +21,7 @@ export class ManageOrderService {
     return this.http.get(apiURL + `/orders/` + number,
       {
         headers: {
-          Authorization: 'Bearer ' + localStorage.getItem('token')
+          Authorization: 'Bearer ' + this.jwtHandler.getToken()
         }
       });
   }
@@ -29,7 +30,7 @@ export class ManageOrderService {
     return this.http.get(apiURL + `/orders/user/` + userId,
       {
         headers: {
-          Authorization: 'Bearer ' + localStorage.getItem('token')
+          Authorization: 'Bearer ' + this.jwtHandler.getToken()
         }
       });
   }
@@ -39,7 +40,7 @@ export class ManageOrderService {
     return this.http.put(apiURL + `/orders/` + order.orderNumber + '/admin/cancel', null,
       {
         headers: {
-          Authorization: 'Bearer ' + localStorage.getItem('token')
+          Authorization: 'Bearer ' + this.jwtHandler.getToken()
         }
       });
   }
@@ -48,7 +49,7 @@ export class ManageOrderService {
     return this.http.put(apiURL + `/tickets/` + ticket.id + '/admin/cancel', null,
       {
         headers: {
-          Authorization: 'Bearer ' + localStorage.getItem('token')
+          Authorization: 'Bearer ' + this.jwtHandler.getToken()
         }
       });
   }

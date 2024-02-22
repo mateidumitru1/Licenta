@@ -1,17 +1,18 @@
 import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {apiURL} from "../../app.config";
+import {JwtHandler} from "../../identity/jwt.handler";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AccountOrdersService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private jwtHandler: JwtHandler) {}
 
   fetchOrders() {
     return this.http.get(apiURL + '/orders', {
       headers: {
-        'Authorization': 'Bearer ' + localStorage.getItem('token')
+        'Authorization': 'Bearer ' + this.jwtHandler.getToken()
       }
     });
   }
@@ -19,7 +20,7 @@ export class AccountOrdersService {
   fetchOrderByOrderNumber(orderNumber: number) {
     return this.http.get(apiURL + '/orders/' + orderNumber, {
       headers: {
-        'Authorization': 'Bearer ' + localStorage.getItem('token')
+        'Authorization': 'Bearer ' + this.jwtHandler.getToken()
       }
     });
   }
@@ -27,7 +28,7 @@ export class AccountOrdersService {
   cancelTicket(ticket: any) {
     return this.http.put(apiURL + '/tickets/' + ticket.id + '/cancel', null, {
       headers: {
-        'Authorization': 'Bearer ' + localStorage.getItem('token')
+        'Authorization': 'Bearer ' + this.jwtHandler.getToken()
       }
     });
   }
@@ -35,7 +36,7 @@ export class AccountOrdersService {
   cancelOrder(order: any) {
     return this.http.put(apiURL + '/orders/' + Number(order.orderNumber) + '/cancel', null, {
       headers: {
-        'Authorization': 'Bearer ' + localStorage.getItem('token')
+        'Authorization': 'Bearer ' + this.jwtHandler.getToken()
       }
     });
   }

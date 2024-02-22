@@ -11,8 +11,4 @@ export class EventService {
   fetchEventById(id: string) {
     return this.http.get(apiURL + '/events', {params: {id: id}});
   }
-
-  addTicketsToCart(selectedTicketsList: any) {
-    // return this.http.post(apiURL + '/shopping-cart', items);
-  }
 }

@@ -3,17 +3,19 @@ import {HttpClient} from "@angular/common/http";
 import {apiURL} from "../../app.config";
 import {IdentityService} from "../../identity/identity.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {JwtHandler} from "../../identity/jwt.handler";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ShoppingCartService{
-  constructor(private http: HttpClient, private identityService: IdentityService, private snackBar: MatSnackBar) {}
+  constructor(private http: HttpClient, private identityService: IdentityService,
+              private snackBar: MatSnackBar, private jwtHandler: JwtHandler) {}
 
   fetchShoppingCart() {
     return this.http.get(apiURL + '/shopping-cart', {
       headers: {
-        'Authorization': 'Bearer ' + localStorage.getItem('token')
+        'Authorization': 'Bearer ' + this.jwtHandler.getToken()
       }
     });
   }
@@ -26,7 +28,7 @@ export class ShoppingCartService{
     console.log(shoppingCartItem);
     return this.http.patch(apiURL + '/shopping-cart/' + shoppingCartItem.id + '?quantity=' + shoppingCartItem.quantity, null, {
       headers: {
-        'Authorization': 'Bearer ' + localStorage.getItem('token')
+        'Authorization': 'Bearer ' + this.jwtHandler.getToken()
       }
     });
   }
@@ -38,7 +40,7 @@ export class ShoppingCartService{
     }
     return this.http.put(apiURL + '/shopping-cart/' + ticketType.id, null,{
       headers: {
-        'Authorization': 'Bearer ' + localStorage.getItem('token')
+        'Authorization': 'Bearer ' + this.jwtHandler.getToken()
       }
     });
   }
@@ -46,7 +48,7 @@ export class ShoppingCartService{
   buyTickets() {
     return this.http.post(apiURL + '/orders', null, {
       headers: {
-        'Authorization': 'Bearer ' + localStorage.getItem('token')
+        'Authorization': 'Bearer ' + this.jwtHandler.getToken()
       }
     });
   }

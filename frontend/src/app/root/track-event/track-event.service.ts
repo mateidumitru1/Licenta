@@ -1,18 +1,19 @@
 import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {apiURL} from "../../app.config";
+import {JwtHandler} from "../../identity/jwt.handler";
 
 @Injectable({
   providedIn: 'root'
 })
 export class TrackEventService {
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private jwtHandler: JwtHandler) {
   }
 
   fetchTickets() {
     return this.http.get(apiURL + '/tickets', {
       headers: {
-        'Authorization': 'Bearer ' + localStorage.getItem('token')
+        'Authorization': 'Bearer ' + this.jwtHandler.getToken()
       }
     });
   }
@@ -20,7 +21,7 @@ export class TrackEventService {
   fetchTicketsByEventId(id: string) {
     return this.http.get(apiURL + '/tickets/' + id, {
       headers: {
-        'Authorization': 'Bearer ' + localStorage.getItem('token')
+        'Authorization': 'Bearer ' + this.jwtHandler.getToken()
       }
     });
   }

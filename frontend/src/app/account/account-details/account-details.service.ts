@@ -7,13 +7,13 @@ import {JwtHandler} from "../../identity/jwt.handler";
   providedIn: 'root'
 })
 export class AccountDetailsService {
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private jwtHandler: JwtHandler) {
   }
 
   fetchUser() {
     return this.http.get(apiURL + '/users/me', {
       headers: {
-        'Authorization': 'Bearer ' + localStorage.getItem('token')
+        'Authorization': 'Bearer ' + this.jwtHandler.getToken()
       }
     });
   }
@@ -21,7 +21,7 @@ export class AccountDetailsService {
   editUser(result: any) {
     return this.http.patch(apiURL + '/users/me', result, {
       headers: {
-        'Authorization': 'Bearer ' + localStorage.getItem('token')
+        'Authorization': 'Bearer ' + this.jwtHandler.getToken()
       }
     });
   }
@@ -33,7 +33,7 @@ export class AccountDetailsService {
       confirmPassword: result.confirmPassword
     }, {
       headers: {
-        'Authorization': 'Bearer ' + localStorage.getItem('token')
+        'Authorization': 'Bearer ' + this.jwtHandler.getToken()
       }
     });
   }

@@ -14,7 +14,7 @@ export class JwtHandler {
   }
 
   isLoggedIn() {
-    const token = localStorage.getItem('token');
+    const token = this.getToken();
     if (token === null) {
       return false;
     }
@@ -25,12 +25,8 @@ export class JwtHandler {
     return jwt.exp > nowTime;
   }
 
-  removeJwt() {
-    localStorage.removeItem('token');
-  }
-
   getRole(): string {
-    const token = localStorage.getItem('token');
+    const token = this.getToken();
     if (token === null) {
       return '';
     }
@@ -39,11 +35,30 @@ export class JwtHandler {
   }
 
   getUserName(): string {
-    const token = localStorage.getItem('token');
+    const token = this.getToken();
     if (token === null) {
       return '';
     }
     const jwt = this.parseJwt(token);
     return jwt.sub;
+  }
+
+  setToken(token: string, rememberMe: boolean) {
+    if(rememberMe) {
+      localStorage.setItem('token', token);
+    }
+    else {
+      sessionStorage.setItem('token', token);
+    }
+  }
+
+  removeToken() {
+    localStorage.removeItem('token');
+    sessionStorage.removeItem('token');
+    localStorage.removeItem('rememberMe');
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem('token') || sessionStorage.getItem('token') || null;
   }
 }

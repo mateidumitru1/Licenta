@@ -3,12 +3,14 @@ import {IdentityService} from "../../identity/identity.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {HttpClient} from "@angular/common/http";
 import {apiURL} from "../../app.config";
+import {JwtHandler} from "../../identity/jwt.handler";
 
 @Injectable({
   providedIn: 'root'
 })
 export class TicketService {
-  constructor(private http: HttpClient, private identityService: IdentityService, private snackBar: MatSnackBar) {}
+  constructor(private http: HttpClient, private identityService: IdentityService,
+              private snackBar: MatSnackBar, private jwtHandler: JwtHandler) {}
 
   buyTickets(selectedTicketTypes: any[]) {
     if (!this.identityService.isLoggedIn()) {
@@ -24,7 +26,7 @@ export class TicketService {
       selectedTicketTypes,
       {
         headers: {
-          'Authorization': 'Bearer ' + localStorage.getItem('token')
+          'Authorization': 'Bearer ' + this.jwtHandler.getToken()
         }
       }).subscribe({
       next: (response: any) => {

@@ -28,7 +28,8 @@ export class LoginComponent implements OnInit{
   constructor(private router: Router, private identityService: IdentityService, private fb: FormBuilder) {
     this.registrationForm = this.fb.group({
       username: ['', Validators.required],
-      password: ['', [Validators.required]]
+      password: ['', [Validators.required]],
+      rememberMe: [false]
     });
   }
 
@@ -39,8 +40,9 @@ export class LoginComponent implements OnInit{
     if (this.registrationForm.valid) {
       const username = this.registrationForm.get('username')?.value;
       const password = this.registrationForm.get('password')?.value;
+      const rememberMe = this.registrationForm.get('rememberMe')?.value;
 
-      this.identityService.login(username, password);
+      this.identityService.login(username, password, rememberMe);
     }
   }
 }

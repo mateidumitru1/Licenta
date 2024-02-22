@@ -1,4 +1,4 @@
-import {Injectable} from "@angular/core";
+import {HostListener, Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {apiURL} from "../app.config";
 import {JwtHandler} from "./jwt.handler";
@@ -13,13 +13,13 @@ export class IdentityService {
   constructor(private http: HttpClient, private jwtHandler: JwtHandler, private snackBar: MatSnackBar,
               private router: Router) { }
 
-  login(username: string, password: string) {
+  login(username: string, password: string, rememberMe: boolean) {
     this.http.post(apiURL + '/authenticate', {
       username: username,
       password: password
     }).subscribe({
       next: (response: any) => {
-        localStorage.setItem('token', response.token);
+        this.jwtHandler.setToken(response.token, rememberMe);
         if (this.jwtHandler.getRole() === 'ADMIN') {
           this.router.navigate(['admin-dashboard']);
         } else if(this.jwtHandler.getRole() === 'USER') {
@@ -37,12 +37,12 @@ export class IdentityService {
   logout() {
     this.http.post(apiURL + '/logout', null, {
       headers: {
-        'Authorization': 'Bearer ' + localStorage.getItem('token')
+        'Authorization': 'Bearer ' + this.jwtHandler.getToken()
       }
     }).subscribe({
       next: () => {
         this.router.navigate(['']);
-        this.jwtHandler.removeJwt();
+        this.jwtHandler.removeToken();
         this.snackBar.open('You have been logged out!', 'Close', {
           duration: 3000
         });
@@ -64,23 +64,6 @@ export class IdentityService {
       email: email
     });
   }
-
-  isLoggedIn() {
-    return this.jwtHandler.isLoggedIn();
-  }
-
-  isUser() {
-    return this.jwtHandler.getRole() === 'USER';
-  }
-
-  isAdmin() {
-    return this.jwtHandler.getRole() === 'ADMIN';
-  }
-
-  isValidator() {
-    return this.jwtHandler.getRole() === 'TICKET_VALIDATOR';
-  }
-
   forgotPassword(email: string) {
     this.http.post(apiURL + '/forgot-password?email=' + email, null).subscribe({
       next: () => {
@@ -109,5 +92,21 @@ export class IdentityService {
         });
       }
     });
+  }
+
+  isLoggedIn() {
+    return this.jwtHandler.isLoggedIn();
+  }
+
+  isUser() {
+    return this.jwtHandler.getRole() === 'USER';
+  }
+
+  isAdmin() {
+    return this.jwtHandler.getRole() === 'ADMIN';
+  }
+
+  isValidator() {
+    return this.jwtHandler.getRole() === 'TICKET_VALIDATOR';
   }
 }

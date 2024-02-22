@@ -54,7 +54,7 @@ public class ImageService {
         return "#";
     }
 
-    public String saveImage(String directoryName,  MultipartFile image) throws IOException {
+    public String saveImage(String directoryName, MultipartFile image) throws IOException {
 
         GoogleCredentials credentials = GoogleCredentials.fromStream(new ClassPathResource("gcp-credentials.json").getInputStream());
 
