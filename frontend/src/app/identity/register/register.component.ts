@@ -53,7 +53,7 @@ export class RegisterComponent {
 
       this.identityService.register(firstName, lastName, username, password, email).subscribe({
         next: (response: any) => {
-          this.snackBar.open('You have been registered successfully!', 'Close', {duration: 3000});
+          this.snackBar.open('A fost trimis un email pentru verificarea contului!', 'Close', {duration: 3000});
           this.router.navigate(['/login']);
         },
         error: (error) => {

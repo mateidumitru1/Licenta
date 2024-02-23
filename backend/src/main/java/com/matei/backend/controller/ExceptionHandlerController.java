@@ -30,6 +30,11 @@ public class ExceptionHandlerController {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.UNAUTHORIZED);
     }
 
+    @ExceptionHandler(UserNotEnabledException.class)
+    public ResponseEntity<?> handleUserNotEnabledException(UserNotEnabledException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.UNAUTHORIZED);
+    }
+
     @ExceptionHandler(LocationAlreadyExistsException.class)
     public ResponseEntity<?> handleLocationAlreadyExistsException(LocationAlreadyExistsException exception) {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.CONFLICT);
@@ -58,6 +63,21 @@ public class ExceptionHandlerController {
     @ExceptionHandler(ResetPasswordTokenNotFoundException.class)
     public ResponseEntity<?> handleResetPasswordTokenNotFoundException(ResetPasswordTokenNotFoundException exception) {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(VerifyAccountTokenExpiredException.class)
+    public ResponseEntity<?> handleVerifyAccountTokenExpiredException(VerifyAccountTokenExpiredException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(VerifyAccountTokenNotFoundException.class)
+    public ResponseEntity<?> handleVerifyAccountTokenNotFoundException(VerifyAccountTokenNotFoundException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(UserAlreadyEnabledException.class)
+    public ResponseEntity<?> handleUserAlreadyEnabledException(UserAlreadyEnabledException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(ShoppingCartItemNotFoundException.class)

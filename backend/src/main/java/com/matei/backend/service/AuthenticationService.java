@@ -6,35 +6,34 @@ import com.matei.backend.dto.response.AuthenticationResponseDto;
 import com.matei.backend.dto.response.RegisterResponseDto;
 import com.matei.backend.entity.enums.Role;
 import com.matei.backend.entity.User;
-import com.matei.backend.exception.InvalidCredentialsException;
-import com.matei.backend.exception.ResetPasswordTokenExpiredException;
-import com.matei.backend.exception.UserAlreadyExistsException;
-import com.matei.backend.exception.UserNotFoundException;
+import com.matei.backend.exception.*;
 import com.matei.backend.repository.UserRepository;
+import com.matei.backend.repository.VerifyAccountTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
-
     private final UserRepository userRepository;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final EmailService emailService;
     private final ResetPasswordTokenService resetPasswordTokenService;
+    private final VerifyAccountTokenService verifyAccountTokenService;
     private final ModelMapper modelMapper;
 
 
     public RegisterResponseDto register(RegisterRequestDto request) {
-
         if(userRepository.findByUsername(request.getUsername()).isPresent()
                 || userRepository.findByEmail(request.getEmail()).isPresent()) {
 
@@ -48,23 +47,26 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .email(request.getEmail())
                 .role(Role.USER)
+                .enabled(false)
                 .build();
 
-        userRepository.save(user);
-        emailService.sendWelcomeEmail(user.getFirstName(), user.getUsername(), user.getEmail());
+        var createdUser = userRepository.save(user);
 
-        return modelMapper.map(user, RegisterResponseDto.class);
+//        emailService.sendWelcomeEmail(createdUser.getFirstName(), createdUser.getUsername(), createdUser.getEmail());
+        var token = verifyAccountTokenService.save(verifyAccountTokenService.generateVerifyAccountToken(user));
+        emailService.sendVerifyAccountEmail(user.getEmail(), user.getUsername(), token.getToken());
+
+        return modelMapper.map(createdUser, RegisterResponseDto.class);
     }
 
-    public AuthenticationResponseDto authenticate(AuthenticationRequestDto request) {
+    public AuthenticationResponseDto authenticate(AuthenticationRequestDto loginRequest) {
         try {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
-        } catch (Exception e) {
-            throw new InvalidCredentialsException("Invalid username or password");
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+        } catch (DisabledException e) {
+            throw new UserNotEnabledException("User not enabled");
         }
 
-        var user = userRepository.findByUsername(request.getUsername()).orElseThrow();
+        var user = userRepository.findByUsername(loginRequest.getUsername()).orElseThrow(() -> new InvalidCredentialsException("Invalid credentials"));
 
         var jwtToken = jwtService.generateToken(user);
 
@@ -74,7 +76,6 @@ public class AuthenticationService {
     }
 
     public void logout(String token) {
-
         jwtService.addToBlackList(token);
     }
 
@@ -97,5 +98,30 @@ public class AuthenticationService {
         userRepository.save(user);
 
         resetPasswordTokenService.delete(resetPasswordToken);
+    }
+
+    public void resendVerifyAccountEmail(String email) {
+        var user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("User not found"));
+        if(user.isEnabled()) {
+            throw new UserAlreadyEnabledException("User already enabled");
+        }
+        var token = verifyAccountTokenService.save(verifyAccountTokenService.generateVerifyAccountToken(user));
+        emailService.sendVerifyAccountEmail(user.getEmail(), user.getUsername(), token.getToken());
+    }
+
+    public void verifyAccount(String token) {
+        var verifyAccountToken = verifyAccountTokenService.findByToken(token);
+        if(verifyAccountToken.getUser().isEnabled()) {
+            throw new UserAlreadyEnabledException("User already enabled");
+        }
+        if(verifyAccountToken.getExpiration().isBefore(LocalDate.now().atStartOfDay())) {
+            throw new VerifyAccountTokenExpiredException("Verify account token expired");
+        }
+
+        var user = verifyAccountToken.getUser();
+        user.setEnabled(true);
+        userRepository.save(user);
+
+        verifyAccountTokenService.delete(verifyAccountToken);
     }
 }

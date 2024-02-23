@@ -94,6 +94,14 @@ export class IdentityService {
     });
   }
 
+  verifyAccount(token: string) {
+    return this.http.post(apiURL + '/verify-account?token=' + token, null);
+  }
+
+  resendVerifyAccountEmail(email: string) {
+    return this.http.post(apiURL + '/resend-verify-account-email?email=' + email, null);
+  }
+
   isLoggedIn() {
     return this.jwtHandler.isLoggedIn();
   }

@@ -16,16 +16,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
 public class EmailService {
-
     private final Email from = new Email("matei.dumitrud@gmail.com");
+    private final String urlPrefix = "http://localhost:4200/";
     private final PdfService pdfService;
 
 
@@ -51,7 +48,7 @@ public class EmailService {
     public void sendResetPasswordEmail(String toEmail, ResetPasswordToken token) {
         Email to = new Email(toEmail);
 
-        var url = "http://localhost:4200/reset-password/" + token.getToken();
+        var url = urlPrefix + "/reset-password/" + token.getToken();
         final String resetPasswordTemplateId = "d-761f1f0d47814e79bbee8243edd4507c";
 
         Personalization personalization = new Personalization();
@@ -85,7 +82,7 @@ public class EmailService {
         });
 
         Personalization personalization = new Personalization();
-//        personalization.addDynamicTemplateData("image", "data:image/jpeg;base64, " + ticketResponseDto.getQr().getImage());
+//        personalization.addDynamicTemplateData("image", "data:image/jpeg;base64, " + ticketResponseDto.getImage());
         personalization.addTo(to);
 
         Mail mail = new Mail();
@@ -94,6 +91,27 @@ public class EmailService {
         mail.addPersonalization(personalization);
 
         attachmentsList.forEach(mail::addAttachments);
+
+        send(mail);
+    }
+
+    public void sendVerifyAccountEmail(String email, String username, String token) {
+        String url = urlPrefix + "/verify-account/" + token;
+        String resendUrl = urlPrefix + "/resend-verify-account-email/" + email;
+        Email to = new Email(email);
+
+        final String verifyAccountTemplateId = "d-5a4b16b54cf5430dab56719a141d4d8d";
+
+        Personalization personalization = new Personalization();
+        personalization.addDynamicTemplateData("username", username);
+        personalization.addDynamicTemplateData("url", url);
+        personalization.addDynamicTemplateData("resendUrl", resendUrl);
+        personalization.addTo(to);
+
+        Mail mail = new Mail();
+        mail.setFrom(from);
+        mail.setTemplateId(verifyAccountTemplateId);
+        mail.addPersonalization(personalization);
 
         send(mail);
     }

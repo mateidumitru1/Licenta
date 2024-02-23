@@ -52,4 +52,16 @@ public class AuthenticationController {
         authenticationService.resetPassword(token, password);
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping("/verify-account")
+    public ResponseEntity<?> verifyAccount(@RequestParam("token") String token) {
+        authenticationService.verifyAccount(token);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/resened-verify-account-email")
+    public ResponseEntity<?> resendVerifyAccountEmail(@RequestParam("email") String email) {
+        authenticationService.resendVerifyAccountEmail(email);
+        return ResponseEntity.ok().build();
+    }
 }

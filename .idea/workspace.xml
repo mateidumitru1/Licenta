@@ -5,27 +5,29 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0ff3fa00-627c-435d-82b1-4a1abb5b20ca" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/entity/VerifyAccountToken.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/exception/UserAlreadyEnabledException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/exception/UserNotEnabledException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/exception/VerifyAccountTokenExpiredException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/exception/VerifyAccountTokenNotFoundException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/repository/VerifyAccountTokenRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/VerifyAccountTokenService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/app/util/guards/can-activate/identity.guard.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/ImageService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/ImageService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/account/account-details/account-details.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/account/account-details/account-details.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/account/account-orders/account-orders.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/account/account-orders/account-orders.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/account/account-settings/account-settings.component.spec.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/admin-dashboard/home-admin/home-admin.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/admin-dashboard/home-admin/home-admin.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/admin-dashboard/manage/manage-events/manage-events.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/admin-dashboard/manage/manage-events/manage-events.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/admin-dashboard/manage/manage-locations/manage-locations.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/admin-dashboard/manage/manage-locations/manage-locations.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/admin-dashboard/manage/manage-orders/manage-order.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/admin-dashboard/manage/manage-orders/manage-order.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/admin-dashboard/manage/manage-users/manage-users.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/admin-dashboard/manage/manage-users/manage-users.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/admin-dashboard/statistics/statistics.component.spec.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/app.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/app.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/configuration/SecurityConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/configuration/SecurityConfiguration.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/controller/AuthenticationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/controller/AuthenticationController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/controller/ExceptionHandlerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/controller/ExceptionHandlerController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/entity/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/entity/Order.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/entity/ShoppingCart.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/entity/ShoppingCart.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/entity/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/AuthenticationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/AuthenticationService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/EmailService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/EmailService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/ResetPasswordTokenService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/ResetPasswordTokenService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/app.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/app.config.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/app.routes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/app.routes.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/app/identity/identity.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/identity/identity.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/identity/jwt.handler.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/identity/jwt.handler.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/identity/login/login.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/identity/login/login.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/identity/login/login.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/identity/login/login.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/root/event/event.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/root/event/event.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/root/event/ticket.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/root/event/ticket.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/root/shopping-cart/shopping-cart.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/root/shopping-cart/shopping-cart.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/root/track-event/track-event.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/root/track-event/track-event.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/validator-dashboard/scanner/validate/validate.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/validator-dashboard/scanner/validate/validate.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/identity/register/register.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/identity/register/register.component.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -234,7 +236,8 @@
       <workItem from="1708608168746" duration="6600000" />
       <workItem from="1708622320309" duration="2045000" />
       <workItem from="1708625643752" duration="1549000" />
-      <workItem from="1708634941951" duration="4249000" />
+      <workItem from="1708634941951" duration="5217000" />
+      <workItem from="1708680563796" duration="2861000" />
     </task>
     <servers />
   </component>

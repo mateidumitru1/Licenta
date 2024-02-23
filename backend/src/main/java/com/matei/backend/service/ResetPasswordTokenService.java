@@ -12,8 +12,6 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Service
 public class ResetPasswordTokenService {
-
-
     private final ResetPasswordTokenRespository resetPasswordTokenRepository;
 
     public ResetPasswordToken save(ResetPasswordToken resetPasswordToken) {

@@ -33,6 +33,8 @@ public class User implements UserDetails {
     private String lastName;
     private Role role;
 
+    private Boolean enabled;
+
     @JsonIgnore
     @OneToOne(mappedBy = "user")
     private ShoppingCart shoppingCart;
@@ -63,6 +65,6 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return enabled;
     }
 }

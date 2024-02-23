@@ -9,7 +9,7 @@ import {LOAD_WASM} from "ngx-scanner-qrcode";
 
 LOAD_WASM().subscribe();
 
-export const apiURL = 'http://192.168.100.249:8080/api';
+export const apiURL = 'http://localhost:8080/api';
 export const mapBoxToken = 'pk.eyJ1IjoibWF0ZHVtIiwiYSI6ImNsc29uNHdldTBoZ2cycmx6dGU1em0xNngifQ.CNxZncBUud9hmoevWrxSyg';
 
 export const appConfig: ApplicationConfig = {

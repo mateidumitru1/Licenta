@@ -31,6 +31,7 @@ public class ShoppingCart {
 
     @JsonIgnore
     @OneToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
     @Override

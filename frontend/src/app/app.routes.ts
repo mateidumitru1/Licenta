@@ -33,13 +33,18 @@ import {ValidatorDashboardComponent} from "./validator-dashboard/validator-dashb
 import {HomeValidatorComponent} from "./validator-dashboard/home-validator/home-validator.component";
 import {ValidatorGuard} from "./util/guards/can-activate/validator.guard";
 import {ScannerComponent} from "./validator-dashboard/scanner/scanner.component";
+import {VerifyAccountComponent} from "./identity/verify-account/verify-account.component";
+import {
+  ResendVerifyAccountEmailComponent
+} from "./identity/resend-verify-account-email/resend-verify-account-email.component";
+import {IdentityGuard} from "./util/guards/can-activate/identity.guard";
 
 export const routes: Routes = [
   { path: 'home' , redirectTo: '', pathMatch: 'full' },
-  { path: 'login', component: LoginComponent },
-  { path: 'register', component: RegisterComponent },
-  { path: 'forgot-password', component: ForgotPasswordComponent },
-  { path: 'reset-password/:token', component: ResetPasswordComponent },
+  { path: 'login', canActivate: [IdentityGuard], component: LoginComponent },
+  { path: 'register', canActivate: [IdentityGuard], component: RegisterComponent },
+  { path: 'forgot-password', canActivate: [IdentityGuard], component: ForgotPasswordComponent },
+  { path: 'reset-password/:token', canActivate: [IdentityGuard], component: ResetPasswordComponent },
   { path: 'account', canActivate: [AccountGuard], component: AccountComponent, children: [
       { path: '', pathMatch: 'full', component: AccountDetailsComponent },
       { path: 'orders', component: AccountOrdersComponent },
@@ -65,6 +70,8 @@ export const routes: Routes = [
       { path: 'track', component: TrackEventComponent },
       { path: 'track/:event', component: TrackEventDetailsComponent },
       { path: 'shopping-cart', component: ShoppingCartComponent },
+      { path: 'verify-account/:token', canActivate: [IdentityGuard], component: VerifyAccountComponent },
+      { path: 'resend-verifiy-account', canActivate: [IdentityGuard], component: ResendVerifyAccountEmailComponent },
       { path: ':location' , pathMatch: 'full', component: LocationComponent },
       { path: ':location/:event', pathMatch: 'full', component: EventComponent },
       { path: 'page-not-found', component: PageNotFoundComponent }
