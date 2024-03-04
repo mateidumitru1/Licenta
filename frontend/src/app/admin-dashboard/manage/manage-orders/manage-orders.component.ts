@@ -47,12 +47,10 @@ export class ManageOrdersComponent {
     this.orders = [];
     this.manageOrdersService.fetchOrderByNumber(this.orderNumber).subscribe({
       next: (order: any) => {
-        console.log(order);
         this.orders.push(this.handleNullEvent(order));
-        this.snackBar.open('Order fetched successfully', 'Close', {duration: 3000});
       },
       error: (error) => {
-        this.snackBar.open('Error fetching order', 'Close', {duration: 3000});
+        this.snackBar.open(error.error, 'Close', {duration: 3000});
       },
       complete: () => {
         this.shouldDisplaySpinner = false;

@@ -59,7 +59,7 @@ public class AuthenticationController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/resened-verify-account-email")
+    @PostMapping("/resend-verify-account-email")
     public ResponseEntity<?> resendVerifyAccountEmail(@RequestParam("email") String email) {
         authenticationService.resendVerifyAccountEmail(email);
         return ResponseEntity.ok().build();

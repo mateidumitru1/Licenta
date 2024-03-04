@@ -28,17 +28,18 @@
            mdbCollapse
            #noListNav="mdbCollapse">
 
-        <form class="d-flex input-group w-auto flex-grow-1 ms-4 me-1">
-          <input
-            type="search"
-            class="form-control rounded form-control-lg"
-            placeholder="Cauta"
-            aria-label="Search"
-          />
-          <span class="input-group-text border-0" id="search-addon">
-          <i class="fas fa-search"></i>
-        </span>
-        </form>
+        <input
+          #searchInput
+          type="search"
+          class="form-control rounded form-control-lg ms-3"
+          placeholder="Cauta"
+          aria-label="Search"
+          [(ngModel)]="searchText"
+          (ngModelChange)="onSearchTextChange($event)"
+        />
+        <span class="input-group-text border-0 me-4" id="search-addon">
+            <i class="fas fa-search"></i>
+          </span>
         <div class="d-flex">
           <button class="me-5 shopping-cart-button" (click)="onShoppingCartClick()">
             <i class="fas fa-shopping-cart"></i>
@@ -83,17 +84,29 @@
   >
     <app-loading *ngIf="loading"></app-loading>
     <div *ngIf="!loading" class="locations-container d-flex flex-row flex-wrap">
-      <a role="button" class="card col-6 col-md-4 col-lg-2" href="{{ location + '?id=' + location.id}}"
+      <a role="button" class="card col-6 col-md-4 col-lg-2" href="{{ location.name + '?id=' + location.id}}"
          *ngFor="let location of locationsToDisplay" (click)="externalContent.toggle()">
         <img alt="" class="img-fluid" src="{{ location.imageUrl }}" />
         <div class="card-body">
           <h5 class="card-title">{{ location.name }}</h5>
         </div>
       </a>
-      <button class="btn" (click)="scrollToNext()">
+      <button class="btn next-button" (click)="scrollToNext()">
         <i class="fas fa-angle-right"></i>
       </button>
     </div>
   </div>
-</header>
 
+</header>
+<div #searchDropdown *ngIf="showDropdown && (searchLocations.length > 0 || searchEvents.length > 0)" class="search-dropdown">
+  <ul>
+    <h4 *ngIf="searchLocations.length > 0">Locatii</h4>
+    <li *ngFor="let searchLocation of searchLocations">
+      <a href="{{ searchLocation.name + '?id=' + searchLocation.id }}">{{ searchLocation?.name }}</a>
+    </li>
+    <h4 *ngIf="searchEvents.length > 0" class="mt-2">Evenimente</h4>
+    <li *ngFor="let searchEvent of searchEvents">
+      <a href="{{ searchEvent.locationName + '/' + searchEvent.title + '?id=' + searchEvent.id }}">{{ searchEvent?.title }}</a>
+    </li>
+  </ul>
+</div>

@@ -42,7 +42,7 @@ public class Order {
 
     @JsonIgnore
     @ManyToOne
-    @OnDelete(action = OnDeleteAction.SET_NULL)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 

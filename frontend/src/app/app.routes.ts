@@ -67,11 +67,11 @@ export const routes: Routes = [
     ]},
   { path: '', canActivate: [RootGuard], component: RootComponent, children: [
       { path: '', pathMatch: 'full', component: HomeComponent },
-      { path: 'track', component: TrackEventComponent },
-      { path: 'track/:event', component: TrackEventDetailsComponent },
-      { path: 'shopping-cart', component: ShoppingCartComponent },
+      { path: 'track', canActivate: [AccountGuard], component: TrackEventComponent },
+      { path: 'track/:event', canActivate: [AccountGuard], component: TrackEventDetailsComponent },
+      { path: 'shopping-cart', canActivate: [AccountGuard], component: ShoppingCartComponent },
       { path: 'verify-account/:token', canActivate: [IdentityGuard], component: VerifyAccountComponent },
-      { path: 'resend-verifiy-account', canActivate: [IdentityGuard], component: ResendVerifyAccountEmailComponent },
+      { path: 'resend-verify-account-email/:email', canActivate: [IdentityGuard], component: ResendVerifyAccountEmailComponent },
       { path: ':location' , pathMatch: 'full', component: LocationComponent },
       { path: ':location/:event', pathMatch: 'full', component: EventComponent },
       { path: 'page-not-found', component: PageNotFoundComponent }

@@ -25,10 +25,11 @@ export class ResendVerifyAccountEmailComponent implements OnInit {
     const email = this.route.snapshot.params['email'];
     this.identityService.resendVerifyAccountEmail(email).subscribe({
       next: () => {
+        this.loading = false;
 
       },
       error: (error) => {
-        this.snackBar.open(error.error, 'Dismiss', {duration: 3000});
+        console.error(error);
       },
       complete: () => {
         this.loading = false;

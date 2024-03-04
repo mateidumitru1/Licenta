@@ -52,7 +52,7 @@ public class AuthenticationService {
 
         var createdUser = userRepository.save(user);
 
-//        emailService.sendWelcomeEmail(createdUser.getFirstName(), createdUser.getUsername(), createdUser.getEmail());
+        emailService.sendWelcomeEmail(createdUser.getFirstName(), createdUser.getUsername(), createdUser.getEmail());
         var token = verifyAccountTokenService.save(verifyAccountTokenService.generateVerifyAccountToken(user));
         emailService.sendVerifyAccountEmail(user.getEmail(), user.getUsername(), token.getToken());
 
@@ -104,6 +104,10 @@ public class AuthenticationService {
         var user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("User not found"));
         if(user.isEnabled()) {
             throw new UserAlreadyEnabledException("User already enabled");
+        }
+        var verifyAccountToken = verifyAccountTokenService.findByUser(user);
+        if(verifyAccountToken != null) {
+            verifyAccountTokenService.delete(verifyAccountToken);
         }
         var token = verifyAccountTokenService.save(verifyAccountTokenService.generateVerifyAccountToken(user));
         emailService.sendVerifyAccountEmail(user.getEmail(), user.getUsername(), token.getToken());

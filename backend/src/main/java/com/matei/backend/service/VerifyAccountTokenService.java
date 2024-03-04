@@ -40,4 +40,9 @@ public class VerifyAccountTokenService {
     public void delete(VerifyAccountToken verifyAccountToken) {
         verifyAccountTokenRepository.delete(verifyAccountToken);
     }
+
+    public VerifyAccountToken findByUser(User user) {
+        return verifyAccountTokenRepository.findByUser(user)
+                .orElseThrow(() -> new VerifyAccountTokenNotFoundException("Verify account token not found"));
+    }
 }
