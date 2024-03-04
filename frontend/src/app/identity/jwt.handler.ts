@@ -61,4 +61,8 @@ export class JwtHandler {
   getToken(): string | null {
     return localStorage.getItem('token') || sessionStorage.getItem('token') || null;
   }
+
+  getUsername() {
+    return this.parseJwt(<string>this.getToken()).sub;
+  }
 }

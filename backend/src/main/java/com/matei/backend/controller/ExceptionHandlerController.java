@@ -100,6 +100,11 @@ public class ExceptionHandlerController {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(TicketTypeQuantityException.class)
+    public ResponseEntity<?> handleTicketTypeQuantityException(TicketTypeQuantityException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(TopEventAlreadyExistsException.class)
     public ResponseEntity<?> handleTopEventAlreadyExistsException(TopEventAlreadyExistsException exception) {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.CONFLICT);

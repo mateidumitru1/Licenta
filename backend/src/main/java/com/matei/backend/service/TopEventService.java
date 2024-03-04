@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -61,6 +62,13 @@ public class TopEventService {
 
     public List<TopEventResponseDto> getTopEvents() {
         var topEvents = topEventRepository.findAll();
+        topEvents.forEach(topEvent -> {
+            if (topEvent.getEvent().getDate().isBefore(LocalDate.now())) {
+                topEventRepository.delete(topEvent);
+            }
+        });
+
+        topEvents = topEventRepository.findAll();
 
         return topEvents.stream()
                 .map(topEvent -> modelMapper.map(topEvent, TopEventResponseDto.class))

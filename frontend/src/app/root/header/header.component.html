@@ -52,7 +52,10 @@
               mdbDropdownToggle
               aria-expanded="false"
             >
-              <i class="fa-solid fa-user"></i>
+              <i *ngIf="!getIdentityService().isLoggedIn()" class="fa-solid fa-user"></i>
+              <div *ngIf="getIdentityService().isLoggedIn()">
+                Salut, {{ getIdentityService().getUsername() }}
+              </div>
             </a>
             <ul mdbDropdownMenu class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
               <li *ngIf="!getIdentityService().isLoggedIn()">

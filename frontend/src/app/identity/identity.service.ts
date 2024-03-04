@@ -117,4 +117,8 @@ export class IdentityService {
   isValidator() {
     return this.jwtHandler.getRole() === 'TICKET_VALIDATOR';
   }
+
+  getUsername() {
+    return this.jwtHandler.getUsername();
+  }
 }

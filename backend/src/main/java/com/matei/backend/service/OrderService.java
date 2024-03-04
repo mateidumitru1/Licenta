@@ -5,12 +5,16 @@ import com.matei.backend.dto.request.TicketTypeCreationRequestDto;
 import com.matei.backend.dto.response.*;
 import com.matei.backend.entity.*;
 import com.matei.backend.entity.enums.Status;
+import com.matei.backend.exception.EventPastException;
 import com.matei.backend.exception.OrderNotFoundException;
+import com.matei.backend.exception.ShoppingCartItemNotFoundException;
+import com.matei.backend.exception.TicketTypeQuantityException;
 import com.matei.backend.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +33,19 @@ public class OrderService {
 
     public void createOrder(UUID userId) {
         var shoppingCart = shoppingCartService.getShoppingCart(userId);
+
+        if(shoppingCart.getShoppingCartItemList().isEmpty()) {
+            throw new ShoppingCartItemNotFoundException("Shopping cart is empty");
+        }
+
+        shoppingCart.getShoppingCartItemList().forEach(shoppingCartItem -> {
+            if (shoppingCartItem.getTicketType().getEvent().getDate().isBefore(LocalDate.now())) {
+                throw new EventPastException("Event is in the past");
+            }
+            if(shoppingCartItem.getTicketType().getQuantity() < shoppingCartItem.getQuantity()) {
+                throw new TicketTypeQuantityException("Not enough tickets available");
+            }
+        });
 
         var order = orderRepository.save(Order.builder()
                 .id(UUID.randomUUID())
@@ -136,6 +153,9 @@ public class OrderService {
 
     public void adminCancelOrder(Long orderNumber) {
         var order = orderRepository.findByOrderNumber(orderNumber).orElseThrow(() -> new OrderNotFoundException("Order not found"));
+        if(order.getDate().isBefore(LocalDateTime.now())) {
+            throw new EventPastException("Event has already passed");
+        }
         order.setStatus(Status.CANCELED);
         order.getTicketList().forEach(ticket -> ticketService.adminCancelTicket(ticket.getId()));
         orderRepository.save(order);

@@ -35,12 +35,14 @@ public class TicketService {
             shoppingCartItemResponseDtoList.forEach(shoppingCartItemResponseDto -> {
                 while(shoppingCartItemResponseDto.getQuantity() > 0) {
                     try {
+                        var ticketType = modelMapper.map(ticketTypeService.getTicketTypeById(shoppingCartItemResponseDto.getTicketType().getId()), TicketType.class);
+                        ticketType.setQuantity(ticketType.getQuantity() - 1);
+                        ticketType = ticketTypeService.save(ticketType);
                         UUID id = UUID.randomUUID();
                         var ticket = ticketRepository.save(Ticket.builder()
                                 .id(id)
                                 .status(Status.CONFIRMED)
-                                .ticketType(Optional.of(ticketTypeService.getTicketTypeById(shoppingCartItemResponseDto.getTicketType().getId()))
-                                        .map(ticketTypeResponseDto -> modelMapper.map(ticketTypeResponseDto, TicketType.class)).orElseThrow())
+                                .ticketType(ticketType)
                                 .image(qrService.createQRImage(id))
                                 .scanned(false)
                                 .order(modelMapper.map(orderDto, Order.class))
@@ -102,14 +104,18 @@ public class TicketService {
         if(!ticket.getOrder().getUser().getId().equals(userId)) {
             throw new TicketNotFoundException("Ticket not found");
         }
-        ticket.setStatus(Status.CANCELED);
-        ticket.setScanned(true);
-        ticket.setScannedAt(LocalDateTime.now());
-        ticketRepository.save(ticket);
+        cancel(ticket);
     }
 
     public void adminCancelTicket(UUID ticketId) {
         var ticket = ticketRepository.findById(ticketId).orElseThrow(() -> new TicketNotFoundException("Ticket not found"));
+        cancel(ticket);
+    }
+
+    private void cancel(Ticket ticket) {
+        var ticketType = ticket.getTicketType();
+        ticketType.setQuantity(ticketType.getQuantity() + 1);
+        ticketTypeService.save(ticketType);
         ticket.setStatus(Status.CANCELED);
         ticket.setScanned(true);
         ticket.setScannedAt(LocalDateTime.now());
