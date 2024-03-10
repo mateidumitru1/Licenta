@@ -1,12 +1,10 @@
 package com.matei.backend.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.matei.backend.dto.request.LocationCreationRequestDto;
-import com.matei.backend.dto.request.LocationUpdateRequestDto;
-import com.matei.backend.dto.response.LocationResponseDto;
-import com.matei.backend.exception.LocationAlreadyExistsException;
-import com.matei.backend.exception.LocationNotFoundException;
-import com.matei.backend.service.JwtService;
+import com.matei.backend.dto.request.location.LocationCreationRequestDto;
+import com.matei.backend.dto.request.location.LocationUpdateRequestDto;
+import com.matei.backend.dto.response.location.LocationResponseDto;
+import com.matei.backend.service.auth.JwtService;
 import com.matei.backend.service.LocationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -34,6 +32,11 @@ public class LocationController {
     @GetMapping
     public ResponseEntity<List<LocationResponseDto>> getAllLocations() {
         return ResponseEntity.ok(locationService.getAllLocations());
+    }
+
+    @GetMapping("/available-events")
+    public ResponseEntity<List<LocationResponseDto>> getAllLocationsWithAvailableEvents() {
+        return ResponseEntity.ok(locationService.getAllLocationsWithAvailableEvents());
     }
 
     @GetMapping("/{id}")

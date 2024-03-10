@@ -1,0 +1,21 @@
+<div *ngIf="artist" class="container-fluid">
+  <h1>{{ artist.name }}</h1>
+  <img class="img-fluid artist-image d-none d-sm-block" src="{{ artist.imageUrl }}" alt="">
+  <div class="row">
+    <div class="col-12">
+      <app-loading *ngIf="loading"></app-loading>
+      <div role="button" *ngFor="let event of artist.eventList"
+           class="card event-card rounded mb-3 mt-3"
+           [routerLink]="['/', event.location.name, event.title]" [queryParams]="{id: event.id}">
+        <div class="d-flex justify-content-center align-items-center">
+          <img class="img-fluid event-image" src="{{ event.imageUrl }}" alt="">
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">{{ event.title }}</h5>
+          <p class="card-text card-date">{{ event.date }}</p>
+          <p class="card-text">{{ event.shortDescription.substring(0, 600) }} ...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

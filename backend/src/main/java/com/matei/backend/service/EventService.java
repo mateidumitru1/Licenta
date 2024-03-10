@@ -2,22 +2,22 @@ package com.matei.backend.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.matei.backend.dto.request.EventCreationRequestDto;
-import com.matei.backend.dto.request.EventUpdateRequestDto;
-import com.matei.backend.dto.request.TicketTypeCreationRequestDto;
-import com.matei.backend.dto.request.TicketTypeUpdateRequestDto;
-import com.matei.backend.dto.response.EventResponseDto;
-import com.matei.backend.dto.response.EventWithTicketTypesResponseDto;
+import com.matei.backend.dto.request.event.EventCreationRequestDto;
+import com.matei.backend.dto.request.event.EventUpdateRequestDto;
+import com.matei.backend.dto.request.ticketType.TicketTypeCreationRequestDto;
+import com.matei.backend.dto.request.ticketType.TicketTypeUpdateRequestDto;
+import com.matei.backend.dto.response.event.EventWithoutArtistListResponseDto;
+import com.matei.backend.dto.response.event.EventWithTicketTypesResponseDto;
+import com.matei.backend.dto.response.location.LocationWithoutEventListResponseDto;
+import com.matei.backend.dto.response.ticketType.TicketTypeWithoutEventResponseDto;
 import com.matei.backend.entity.Event;
 import com.matei.backend.entity.Location;
 import com.matei.backend.entity.TicketType;
 import com.matei.backend.exception.EventNotFoundException;
 import com.matei.backend.repository.EventRepository;
+import com.matei.backend.service.util.ImageService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -42,9 +42,9 @@ public class EventService {
         eventToSave.setDate(LocalDate.parse(eventCreationRequestDto.getDate().substring(0, 10)));
         var event = eventRepository.save(eventToSave);
 
-        var ticketTypes = getTicketTypeCreationRequestDtoList(eventCreationRequestDto.getTicketTypes()).stream()
+        var ticketTypes = getTicketTypeCreationRequestDtoList(eventCreationRequestDto.getTicketTypesList()).stream()
                 .map(ticketTypeCreationRequestDto -> ticketTypeService.createTicketType(ticketTypeCreationRequestDto, Optional.of(event).map(
-                        event1 -> modelMapper.map(event1, EventResponseDto.class)).orElseThrow()))
+                        event1 -> modelMapper.map(event1, EventWithoutArtistListResponseDto.class)).orElseThrow()))
                 .toList();
         event.setTicketTypes(ticketTypes.stream().map(ticketTypeResponseDto -> modelMapper.map(ticketTypeResponseDto, TicketType.class))
                 .toList());
@@ -55,38 +55,43 @@ public class EventService {
         var event = eventRepository.findById(id)
                 .orElseThrow(() -> new EventNotFoundException("Event not found"));
 
-        return modelMapper.map(event, EventWithTicketTypesResponseDto.class);
+        var eventResponse = modelMapper.map(event, EventWithTicketTypesResponseDto.class);
+        eventResponse.setTicketTypes(event.getTicketTypes().stream()
+                .map(ticketType -> modelMapper.map(ticketType, TicketTypeWithoutEventResponseDto.class))
+                .toList());
+
+        return eventResponse;
     }
 
-    public List<EventResponseDto> getEventListByLocation(UUID locationId) {
+    public List<EventWithoutArtistListResponseDto> getEventListByLocation(UUID locationId) {
         var eventList = eventRepository.findByLocationId(locationId)
                 .orElseThrow(() -> new EventNotFoundException("Event not found"));
 
         return eventList.stream()
-                .map(event -> EventResponseDto.builder()
+                .map(event -> EventWithoutArtistListResponseDto.builder()
                         .id(event.getId())
                         .title(event.getTitle())
                         .date(event.getDate())
                         .shortDescription(event.getShortDescription())
                         .description(event.getDescription())
-                        .location(event.getLocation())
+                        .location(modelMapper.map(event.getLocation(), LocationWithoutEventListResponseDto.class))
                         .imageUrl(event.getImageUrl())
                         .build())
                 .toList();
     }
 
-    public List<EventResponseDto> getAvailableEventListByLocation(UUID locationId) {
+    public List<EventWithoutArtistListResponseDto> getAvailableEventListByLocation(UUID locationId) {
 
        var eventList = eventRepository.findByLocationId(locationId)
                 .orElseThrow(() -> new EventNotFoundException("Event not found" )).stream()
                .filter(event -> event.getDate().isAfter(LocalDate.now()))
-               .map(event -> EventResponseDto.builder()
+               .map(event -> EventWithoutArtistListResponseDto.builder()
                        .id(event.getId())
                        .title(event.getTitle())
                        .date(event.getDate())
                        .shortDescription(event.getShortDescription())
                        .description(event.getDescription())
-                       .location(event.getLocation())
+                       .location(modelMapper.map(event.getLocation(), LocationWithoutEventListResponseDto.class))
                        .imageUrl(event.getImageUrl())
                        .build())
                .toList();;
@@ -115,11 +120,11 @@ public class EventService {
                 .toList();
     }
 
-    public EventResponseDto getEventByTitle(String title) {
+    public EventWithoutArtistListResponseDto getEventByTitle(String title) {
         var event = eventRepository.findByTitle(title)
                 .orElseThrow(() -> new EventNotFoundException("Event not found"));
 
-        return modelMapper.map(event, EventResponseDto.class);
+        return modelMapper.map(event, EventWithoutArtistListResponseDto.class);
     }
 
     public EventWithTicketTypesResponseDto updateEvent(EventUpdateRequestDto updatedEvent) throws IOException {
@@ -144,9 +149,9 @@ public class EventService {
 
         eventRepository.save(event);
 
-        var ticketTypes = getTicketTypeUpdateRequestDtoList(updatedEvent.getTicketTypes());
+        var ticketTypes = getTicketTypeUpdateRequestDtoList(updatedEvent.getTicketTypesList());
         ticketTypeService.updateTicketTypes(ticketTypes, Optional.of(event).map(event1 ->
-                modelMapper.map(event1, EventResponseDto.class)).orElseThrow());
+                modelMapper.map(event1, EventWithoutArtistListResponseDto.class)).orElseThrow());
 
         event.setTicketTypes(ticketTypes.stream().map(ticketTypeResponseDto -> modelMapper.map(ticketTypeResponseDto, TicketType.class))
                 .toList());

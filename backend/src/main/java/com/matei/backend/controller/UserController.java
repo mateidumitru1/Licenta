@@ -1,11 +1,11 @@
 package com.matei.backend.controller;
 
-import com.matei.backend.dto.request.ChangePasswordRequestDto;
-import com.matei.backend.dto.request.UserCreationRequestDto;
-import com.matei.backend.dto.request.UserRequestDto;
-import com.matei.backend.dto.response.UserResponseDto;
-import com.matei.backend.dto.response.UserWithOrdersResponseDto;
-import com.matei.backend.service.JwtService;
+import com.matei.backend.dto.request.auth.ChangePasswordRequestDto;
+import com.matei.backend.dto.request.user.UserCreationRequestDto;
+import com.matei.backend.dto.request.user.UserRequestDto;
+import com.matei.backend.dto.response.user.UserResponseDto;
+import com.matei.backend.dto.response.user.UserWithOrdersResponseDto;
+import com.matei.backend.service.auth.JwtService;
 import com.matei.backend.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

@@ -35,7 +35,8 @@ public class SecurityConfiguration {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.GET, "api/top-events", "/api/events/**", "api/locations/**")
+                        .requestMatchers(HttpMethod.GET, "api/top-events", "/api/events/**", "api/locations/**",
+                                "api/artists/**", "api/genres/**")
                         .permitAll()
                         .requestMatchers("/api/authenticate", "/api/register", "/api/forgot-password",
                                 "/api/reset-password", "api/resend-verify-account-email", "api/verify-account")

@@ -1,7 +1,6 @@
 package com.matei.backend.controller;
 
-import com.matei.backend.exception.OrderNotFoundException;
-import com.matei.backend.service.JwtService;
+import com.matei.backend.service.auth.JwtService;
 import com.matei.backend.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

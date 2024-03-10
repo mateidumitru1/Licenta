@@ -1,8 +1,7 @@
 package com.matei.backend.controller;
 
-import com.matei.backend.dto.request.ShoppingCartItemRequestDto;
-import com.matei.backend.exception.EventPastException;
-import com.matei.backend.service.JwtService;
+import com.matei.backend.dto.request.shoppingCart.ShoppingCartItemRequestDto;
+import com.matei.backend.service.auth.JwtService;
 import com.matei.backend.service.ShoppingCartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

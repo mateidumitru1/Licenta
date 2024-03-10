@@ -13,6 +13,7 @@
         >
           Locatii
         </a>
+        <a class="ms-3 mt-2" routerLink="/artists/A">Artisti</a>
       </div>
       <button
         class="navbar-toggler"
@@ -52,7 +53,7 @@
               mdbDropdownToggle
               aria-expanded="false"
             >
-              <i *ngIf="!getIdentityService().isLoggedIn()" class="fa-solid fa-user"></i>
+              <i *ngIf="!getIdentityService().isLoggedIn()" class="fa-solid fa-user me-4"></i>
               <div *ngIf="getIdentityService().isLoggedIn()">
                 Salut, {{ getIdentityService().getUsername() }}
               </div>
@@ -87,7 +88,7 @@
   >
     <app-loading *ngIf="loading"></app-loading>
     <div *ngIf="!loading" class="locations-container d-flex flex-row flex-wrap">
-      <a role="button" class="card col-6 col-md-4 col-lg-2" href="{{ location.name + '?id=' + location.id}}"
+      <a role="button" class="card col-6 col-md-4 col-lg-2" [routerLink]="[location.name]" [queryParams]="{ id: location.id }"
          *ngFor="let location of locationsToDisplay" (click)="externalContent.toggle()">
         <img alt="" class="img-fluid" src="{{ location.imageUrl }}" />
         <div class="card-body">
@@ -104,12 +105,18 @@
 <div #searchDropdown *ngIf="showDropdown && (searchLocations.length > 0 || searchEvents.length > 0)" class="search-dropdown">
   <ul>
     <h4 *ngIf="searchLocations.length > 0">Locatii</h4>
-    <li *ngFor="let searchLocation of searchLocations">
-      <a href="{{ searchLocation.name + '?id=' + searchLocation.id }}">{{ searchLocation?.name }}</a>
+    <li *ngFor="let searchLocation of searchLocations"
+        [routerLink]="[searchLocation.name]" [queryParams]="{ id: searchLocation.id }">
+      <a>{{ searchLocation?.name }}</a>
     </li>
     <h4 *ngIf="searchEvents.length > 0" class="mt-2">Evenimente</h4>
-    <li *ngFor="let searchEvent of searchEvents">
-      <a href="{{ searchEvent.locationName + '/' + searchEvent.title + '?id=' + searchEvent.id }}">{{ searchEvent?.title }}</a>
+    <li *ngFor="let searchEvent of searchEvents"
+        [routerLink]="[searchEvent.locationName, searchEvent.title]" [queryParams]="{ id: searchEvent.id }">
+      <a>{{ searchEvent?.title }}</a>
     </li>
+    <h4 *ngIf="searchArtists.length > 0" class="mt-2">Artisti</h4>
+    <li *ngFor="let searchArtist of searchArtists"
+        [routerLink]="['artist', searchArtist.name]" [queryParams]="{ id: searchArtist.id }">
+      <a>{{ searchArtist?.name }}</a>
   </ul>
 </div>

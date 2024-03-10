@@ -1,9 +1,9 @@
 package com.matei.backend.service;
 
-import com.matei.backend.dto.request.TicketTypeCreationRequestDto;
-import com.matei.backend.dto.request.TicketTypeUpdateRequestDto;
-import com.matei.backend.dto.response.EventResponseDto;
-import com.matei.backend.dto.response.TicketTypeResponseDto;
+import com.matei.backend.dto.request.ticketType.TicketTypeCreationRequestDto;
+import com.matei.backend.dto.request.ticketType.TicketTypeUpdateRequestDto;
+import com.matei.backend.dto.response.event.EventWithoutArtistListResponseDto;
+import com.matei.backend.dto.response.ticketType.TicketTypeResponseDto;
 import com.matei.backend.entity.Event;
 import com.matei.backend.entity.TicketType;
 import com.matei.backend.exception.TicketTypeNotFoundException;
@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -27,7 +26,7 @@ public class TicketTypeService {
         return ticketTypeRepository.save(ticketType);
     }
 
-    public TicketTypeResponseDto createTicketType(TicketTypeCreationRequestDto ticketTypeCreationRequestDto, EventResponseDto eventResponseDto) {
+    public TicketTypeResponseDto createTicketType(TicketTypeCreationRequestDto ticketTypeCreationRequestDto, EventWithoutArtistListResponseDto eventResponseDto) {
         var ticketTypeToAdd = modelMapper.map(ticketTypeCreationRequestDto, TicketType.class);
         ticketTypeToAdd.setEvent(modelMapper.map(eventResponseDto, Event.class));
         var ticketType = ticketTypeRepository.save(ticketTypeToAdd);
@@ -53,7 +52,7 @@ public class TicketTypeService {
                 .toList();
     }
 
-    public void updateTicketTypes(List<TicketTypeUpdateRequestDto> ticketTypeUpdateRequestDtoList, EventResponseDto event) {
+    public void updateTicketTypes(List<TicketTypeUpdateRequestDto> ticketTypeUpdateRequestDtoList, EventWithoutArtistListResponseDto event) {
         var ticketTypes = ticketTypeRepository.findByEventId(event.getId()).orElseThrow(() -> new TicketTypeNotFoundException("Ticket types not found"));
 
         ticketTypeUpdateRequestDtoList = ticketTypeUpdateRequestDtoList.stream()

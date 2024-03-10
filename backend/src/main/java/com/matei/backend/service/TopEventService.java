@@ -1,8 +1,8 @@
 package com.matei.backend.service;
 
-import com.matei.backend.dto.request.TopEventCreationRequestDto;
-import com.matei.backend.dto.request.TopEventUpdateRequestDto;
-import com.matei.backend.dto.response.TopEventResponseDto;
+import com.matei.backend.dto.request.topEvent.TopEventCreationRequestDto;
+import com.matei.backend.dto.request.topEvent.TopEventUpdateRequestDto;
+import com.matei.backend.dto.response.topEvent.TopEventResponseDto;
 import com.matei.backend.entity.Event;
 import com.matei.backend.entity.TopEvent;
 import com.matei.backend.exception.TopEventAlreadyExistsException;

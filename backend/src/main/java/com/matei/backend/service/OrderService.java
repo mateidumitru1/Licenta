@@ -1,8 +1,12 @@
 package com.matei.backend.service;
 
-import com.matei.backend.dto.request.TicketCreationRequestDto;
-import com.matei.backend.dto.request.TicketTypeCreationRequestDto;
-import com.matei.backend.dto.response.*;
+import com.matei.backend.dto.response.event.EventWithoutArtistListResponseDto;
+import com.matei.backend.dto.response.location.LocationWithoutEventListResponseDto;
+import com.matei.backend.dto.response.order.OrderResponseDto;
+import com.matei.backend.dto.response.shoppingCart.ShoppingCartItemResponseDto;
+import com.matei.backend.dto.response.ticket.TicketResponseDto;
+import com.matei.backend.dto.response.ticketType.TicketTypeResponseDto;
+import com.matei.backend.dto.response.user.UserResponseDto;
 import com.matei.backend.entity.*;
 import com.matei.backend.entity.enums.Status;
 import com.matei.backend.exception.EventPastException;
@@ -56,7 +60,7 @@ public class OrderService {
                         .id(user.getId()).build()).orElseThrow())
                 .build());
 
-        Map<EventResponseDto, List<ShoppingCartItemResponseDto>> eventShoppingCartMap = shoppingCart.getShoppingCartItemList().stream()
+        Map<EventWithoutArtistListResponseDto, List<ShoppingCartItemResponseDto>> eventShoppingCartMap = shoppingCart.getShoppingCartItemList().stream()
                 .collect(Collectors.groupingBy(shoppingCartItem ->
                         shoppingCartItem.getTicketType().getEvent(), Collectors.toList()));
 
@@ -101,13 +105,13 @@ public class OrderService {
                                 .price(ticket.getTicketType().getPrice())
                                 .build();
 
-                        EventResponseDto eventResponseDto = null;
+                        EventWithoutArtistListResponseDto eventResponseDto = null;
                         if (ticket.getTicketType().getEvent() != null) {
-                            eventResponseDto = EventResponseDto.builder()
+                            eventResponseDto = EventWithoutArtistListResponseDto.builder()
                                     .id(ticket.getTicketType().getEvent().getId())
                                     .title(ticket.getTicketType().getEvent().getTitle())
                                     .date(ticket.getTicketType().getEvent().getDate())
-                                    .location(ticket.getTicketType().getEvent().getLocation())
+                                    .location(modelMapper.map(ticket.getTicketType().getEvent().getLocation(), LocationWithoutEventListResponseDto.class))
                                     .build();
                         }
                         ticketTypeResponseDto.setEvent(eventResponseDto);

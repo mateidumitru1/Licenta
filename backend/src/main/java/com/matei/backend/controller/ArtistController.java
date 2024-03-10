@@ -1,0 +1,50 @@
+package com.matei.backend.controller;
+
+import com.matei.backend.dto.request.artist.ArtistCreationRequestDto;
+import com.matei.backend.dto.request.artist.ArtistUpdateRequestDto;
+import com.matei.backend.dto.response.artist.ArtistResponseDto;
+import com.matei.backend.service.ArtistService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.UUID;
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/api/artists")
+public class ArtistController {
+    private final ArtistService artistService;
+
+    @PostMapping
+    public ResponseEntity<ArtistResponseDto> createArtist(@RequestBody ArtistCreationRequestDto artistCreationRequestDto) {
+        return ResponseEntity.ok(artistService.createArtist(artistCreationRequestDto));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ArtistResponseDto> getArtistById(@PathVariable String id) {
+        return ResponseEntity.ok(artistService.getArtistById(UUID.fromString(id)));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ArtistResponseDto>> getAllArtists() {
+        return ResponseEntity.ok(artistService.getAllArtists());
+    }
+
+    @GetMapping("/first-letter/{firstLetter}")
+    public ResponseEntity<List<ArtistResponseDto>> getAllArtistsByFirstLetter(@PathVariable String firstLetter) {
+        return ResponseEntity.ok(artistService.getAllArtistsByFirstLetter(firstLetter));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ArtistResponseDto> updateArtistById(@PathVariable String id, @RequestBody ArtistUpdateRequestDto artistUpdateRequestDto) {
+        return ResponseEntity.ok(artistService.updateArtistById(UUID.fromString(id), artistUpdateRequestDto));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteArtistById(@PathVariable String id) {
+        artistService.deleteArtistById(UUID.fromString(id));
+        return ResponseEntity.noContent().build();
+    }
+}

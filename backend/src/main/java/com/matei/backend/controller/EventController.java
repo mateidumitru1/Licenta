@@ -1,10 +1,9 @@
 package com.matei.backend.controller;
 
-import com.matei.backend.dto.request.EventCreationRequestDto;
-import com.matei.backend.dto.request.EventUpdateRequestDto;
-import com.matei.backend.dto.response.EventResponseDto;
-import com.matei.backend.dto.response.EventWithTicketTypesResponseDto;
-import com.matei.backend.exception.EventNotFoundException;
+import com.matei.backend.dto.request.event.EventCreationRequestDto;
+import com.matei.backend.dto.request.event.EventUpdateRequestDto;
+import com.matei.backend.dto.response.event.EventWithoutArtistListResponseDto;
+import com.matei.backend.dto.response.event.EventWithTicketTypesResponseDto;
 import com.matei.backend.service.EventService;
 import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
@@ -48,7 +47,7 @@ public class EventController {
     }
 
     @GetMapping("/{title}")
-    public ResponseEntity<EventResponseDto> getEventByTitle(@PathVariable("title") String title) {
+    public ResponseEntity<EventWithoutArtistListResponseDto> getEventByTitle(@PathVariable("title") String title) {
         return ResponseEntity.ok(eventService.getEventByTitle(title));
     }
 

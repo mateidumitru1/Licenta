@@ -39,6 +39,15 @@ public class Event {
     @OneToMany(mappedBy = "event")
     private List<TicketType> ticketTypes;
 
+    @ManyToMany
+    @JoinTable(
+            name = "event_artists",
+            joinColumns = @JoinColumn(name = "event_id"),
+            inverseJoinColumns = @JoinColumn(name = "artist_id")
+    )
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private List<Artist> artists;
+
     @Override
     public String toString() {
         return "Event{" +

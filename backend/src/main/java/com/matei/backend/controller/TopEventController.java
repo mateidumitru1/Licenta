@@ -1,12 +1,9 @@
 package com.matei.backend.controller;
 
-import com.matei.backend.dto.request.TopEventCreationRequestDto;
-import com.matei.backend.dto.request.TopEventUpdateRequestDto;
-import com.matei.backend.exception.TopEventAlreadyExistsException;
-import com.matei.backend.exception.TopEventNotFoundException;
+import com.matei.backend.dto.request.topEvent.TopEventCreationRequestDto;
+import com.matei.backend.dto.request.topEvent.TopEventUpdateRequestDto;
 import com.matei.backend.service.TopEventService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

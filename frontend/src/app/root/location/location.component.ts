@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {LocationService} from "./location.service";
 import {NgForOf, NgIf} from "@angular/common";
 import {LoadingComponent} from "../../shared/loading/loading.component";
@@ -10,7 +10,8 @@ import {LoadingComponent} from "../../shared/loading/loading.component";
   imports: [
     NgForOf,
     LoadingComponent,
-    NgIf
+    NgIf,
+    RouterLink
   ],
   templateUrl: './location.component.html',
   styleUrl: './location.component.scss'
@@ -25,17 +26,19 @@ export class LocationComponent implements OnInit{
     if(!this.route.snapshot.queryParams['id']) {
       this.router.navigate(['/page-not-found']);
     }
-    this.locationService.fetchLocationWithAvailableEventsById(this.route.snapshot.queryParams['id']).subscribe({
-      next: (location: any) => {
-        this.location = location;
-      },
-      error: (error: any) => {
-        if(error.status === 404 && error.error === 'Location not found') {
-          this.router.navigate(['/page-not-found']);
-        }
-      },
-      complete: () => {
-        this.loading = false;
+    this.route.queryParams.subscribe({
+      next: (params: any) => {
+        this.locationService.fetchLocationWithAvailableEventsById(params.id).subscribe({
+          next: (location: any) => {
+            this.location = location;
+          },
+          error: (error: any) => {
+            this.router.navigate(['/page-not-found']);
+          },
+          complete: () => {
+            this.loading = false;
+          }
+        });
       }
     });
   }

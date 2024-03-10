@@ -15,6 +15,26 @@ public class ExceptionHandlerController {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.FORBIDDEN);
     }
 
+    @ExceptionHandler(ArtistAlreadyExistsException.class)
+    public ResponseEntity<?> handleArtistAlreadyExistsException(ArtistAlreadyExistsException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(ArtistNotFoundException.class)
+    public ResponseEntity<?> handleArtistNotFoundException(ArtistNotFoundException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(GenreNotFoundException.class)
+    public ResponseEntity<?> handleGenreNotFoundException(GenreNotFoundException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(GenreAlreadyExistsException.class)
+    public ResponseEntity<?> handleGenreAlreadyExistsException(GenreAlreadyExistsException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.CONFLICT);
+    }
+
     @ExceptionHandler(EventNotFoundException.class)
     public ResponseEntity<?> handleEventNotFoundException(EventNotFoundException exception) {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);

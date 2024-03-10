@@ -11,4 +11,8 @@ export class HeaderService {
   fetchLocations() {
     return this.http.get(apiURL + '/locations');
   }
+
+  fetchLocationsWithAvailableEvents() {
+    return this.http.get(apiURL + '/locations/available-events');
+  }
 }

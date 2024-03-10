@@ -1,7 +1,11 @@
 package com.matei.backend.service;
 
-import com.matei.backend.dto.request.ShoppingCartItemRequestDto;
-import com.matei.backend.dto.response.*;
+import com.matei.backend.dto.request.shoppingCart.ShoppingCartItemRequestDto;
+import com.matei.backend.dto.response.event.EventWithoutArtistListResponseDto;
+import com.matei.backend.dto.response.location.LocationWithoutEventListResponseDto;
+import com.matei.backend.dto.response.shoppingCart.ShoppingCartItemResponseDto;
+import com.matei.backend.dto.response.shoppingCart.ShoppingCartResponseDto;
+import com.matei.backend.dto.response.ticketType.TicketTypeResponseDto;
 import com.matei.backend.entity.*;
 import com.matei.backend.exception.EventPastException;
 import com.matei.backend.exception.TicketTypeNotFoundException;
@@ -71,7 +75,7 @@ public class ShoppingCartService {
                                         .date(ticketType.getEvent().getDate())
                                         .shortDescription(ticketType.getEvent().getShortDescription())
                                         .description(ticketType.getEvent().getDescription())
-                                        .location(ticketType.getEvent().getLocation())
+                                        .location(modelMapper.map(ticketType.getEvent().getLocation(), Location.class))
                                         .imageUrl(ticketType.getEvent().getImageUrl())
                                         .build())
                                 .build())
@@ -171,13 +175,14 @@ public class ShoppingCartService {
                                         .name(shoppingCartItem.getTicketType().getName())
                                         .price(shoppingCartItem.getTicketType().getPrice())
                                         .quantity(shoppingCartItem.getTicketType().getQuantity())
-                                        .event(EventResponseDto.builder()
+                                        .event(EventWithoutArtistListResponseDto.builder()
                                                 .id(shoppingCartItem.getTicketType().getEvent().getId())
                                                 .title(shoppingCartItem.getTicketType().getEvent().getTitle())
                                                 .date(shoppingCartItem.getTicketType().getEvent().getDate())
                                                 .shortDescription(shoppingCartItem.getTicketType().getEvent().getShortDescription())
                                                 .description(shoppingCartItem.getTicketType().getEvent().getDescription())
-                                                .location(shoppingCartItem.getTicketType().getEvent().getLocation())
+                                                .location(modelMapper.map(shoppingCartItem.getTicketType().getEvent().getLocation(),
+                                                        LocationWithoutEventListResponseDto.class))
                                                 .imageUrl(shoppingCartItem.getTicketType().getEvent().getImageUrl())
                                                 .build())
                                         .build())

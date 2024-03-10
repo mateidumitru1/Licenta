@@ -8,6 +8,7 @@ import {MatInput} from "@angular/material/input";
 import {MatButton} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
 import {TicketService} from "./ticket.service";
+import {LoadingComponent} from "../../shared/loading/loading.component";
 
 @Component({
   selector: 'app-event',
@@ -20,12 +21,14 @@ import {TicketService} from "./ticket.service";
     FormsModule,
     MatInput,
     MatButton,
-    MatIcon
+    MatIcon,
+    LoadingComponent
   ],
   templateUrl: './event.component.html',
   styleUrl: './event.component.scss'
 })
 export class EventComponent implements OnInit{
+  loading: boolean = true;
 
   event: any = {};
 
@@ -38,18 +41,25 @@ export class EventComponent implements OnInit{
     if(!this.route.snapshot.queryParams['id']) {
       this.router.navigate(['/page-not-found']);
     }
-    this.eventService.fetchEventById(this.route.snapshot.queryParams['id']).subscribe({
-      next: (event: any) => {
-        this.event = event;
-        this.event.ticketTypes.forEach((ticket: any) => {
-          ticket.reservedQuantity = 0;
+    this.route.queryParams.subscribe( {
+      next: (params: any) => {
+        this.eventService.fetchEventById(this.route.snapshot.queryParams['id']).subscribe({
+          next: (event: any) => {
+            this.event = event;
+            this.event.ticketTypes.forEach((ticket: any) => {
+              ticket.reservedQuantity = 0;
+            });
+            this.event.ticketTypes.sort((a: any, b: any) => b.price - a.price);
+          },
+          error: (error: any) => {
+            if(error.status === 404 && error.error === 'Event not found') {
+              this.router.navigate(['/page-not-found']);
+            }
+          },
+          complete: () => {
+            this.loading = false;
+          }
         });
-        this.event.ticketTypes.sort((a: any, b: any) => b.price - a.price);
-      },
-      error: (error: any) => {
-        if(error.status === 404 && error.error === 'Event not found') {
-          this.router.navigate(['/page-not-found']);
-        }
       }
     });
   }

@@ -38,6 +38,8 @@ import {
   ResendVerifyAccountEmailComponent
 } from "./identity/resend-verify-account-email/resend-verify-account-email.component";
 import {IdentityGuard} from "./util/guards/can-activate/identity.guard";
+import {ArtistsListComponent} from "./root/artists-list/artists-list.component";
+import {ArtistComponent} from "./root/artists-list/artist/artist.component";
 
 export const routes: Routes = [
   { path: 'home' , redirectTo: '', pathMatch: 'full' },
@@ -68,12 +70,15 @@ export const routes: Routes = [
   { path: '', canActivate: [RootGuard], component: RootComponent, children: [
       { path: '', pathMatch: 'full', component: HomeComponent },
       { path: 'track', canActivate: [AccountGuard], component: TrackEventComponent },
+      { path: 'page-not-found', component: PageNotFoundComponent },
+      { path: 'artists', redirectTo: 'artists/A', pathMatch: 'full' },
+      { path: 'artists/:letter', component: ArtistsListComponent },
+      { path: 'artist/:artist', component: ArtistComponent },
       { path: 'track/:event', canActivate: [AccountGuard], component: TrackEventDetailsComponent },
       { path: 'shopping-cart', canActivate: [AccountGuard], component: ShoppingCartComponent },
       { path: 'verify-account/:token', canActivate: [IdentityGuard], component: VerifyAccountComponent },
       { path: 'resend-verify-account-email/:email', canActivate: [IdentityGuard], component: ResendVerifyAccountEmailComponent },
       { path: ':location' , pathMatch: 'full', component: LocationComponent },
       { path: ':location/:event', pathMatch: 'full', component: EventComponent },
-      { path: 'page-not-found', component: PageNotFoundComponent }
     ]},
 ];

@@ -5,7 +5,8 @@
     <div class="col-12">
       <app-loading *ngIf="loading"></app-loading>
       <div role="button" *ngFor="let event of location.eventList"
-           class="card event-card rounded mb-3 mt-3" (click)="onEventClick(event)">
+           class="card event-card rounded mb-3 mt-3"
+           [routerLink]="[event.title]" [queryParams]="{ id: event.id }">
         <div class="d-flex justify-content-center align-items-center">
           <img class="img-fluid event-image" src="{{ event.imageUrl }}" alt="">
         </div>

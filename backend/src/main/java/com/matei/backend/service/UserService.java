@@ -1,9 +1,10 @@
 package com.matei.backend.service;
 
-import com.matei.backend.dto.request.*;
-import com.matei.backend.dto.response.UserResponseDto;
-import com.matei.backend.dto.response.UserWithOrdersResponseDto;
-import com.matei.backend.entity.ResetPasswordToken;
+import com.matei.backend.dto.request.auth.ChangePasswordRequestDto;
+import com.matei.backend.dto.request.user.UserCreationRequestDto;
+import com.matei.backend.dto.request.user.UserRequestDto;
+import com.matei.backend.dto.response.user.UserResponseDto;
+import com.matei.backend.dto.response.user.UserWithOrdersResponseDto;
 import com.matei.backend.entity.User;
 import com.matei.backend.entity.enums.Role;
 import com.matei.backend.exception.AdminResourceAccessException;
@@ -11,7 +12,6 @@ import com.matei.backend.exception.IncorrectOldPasswordException;
 import com.matei.backend.exception.PasswordNotMatchingException;
 import com.matei.backend.exception.UserNotFoundException;
 import com.matei.backend.repository.UserRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;

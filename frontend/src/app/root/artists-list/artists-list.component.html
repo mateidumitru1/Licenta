@@ -1,0 +1,24 @@
+<div class="container-fluid">
+  <h1 class="h3 mb-4 text-gray-800">Artisti</h1>
+  <div class="links-container">
+    <a *ngFor="let letter of letters" [routerLink]="['/artists', letter]"
+       routerLinkActive="active"
+       class="letter-link">{{ letter }}</a>
+  </div>
+  <hr>
+  <div class="artist-list-container">
+    <div *ngFor="let artist of artists"
+         [routerLink]="['/artist', artist.name]" [queryParams]="{ id: artist.id}"
+         class="artist-list-item card">
+      <img [src]="artist.imageUrl" class="card-img-top" alt="{{ artist.name }} image">
+      <div class="card-header">
+        <h5 class="card-title">{{ artist.name }}</h5>
+      </div>
+      <div class="card-body">
+        <p class="card-text">
+          <span *ngFor="let genre of artist.genres" class="badge badge-primary">{{ genre.name }}</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
