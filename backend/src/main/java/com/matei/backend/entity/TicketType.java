@@ -1,15 +1,11 @@
 package com.matei.backend.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
-import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -25,7 +21,8 @@ public class TicketType {
 
     private String name;
     private Double price;
-    private Integer quantity;
+    private Integer totalQuantity;
+    private Integer remainingQuantity;
 
     @ManyToOne
     @JoinColumn(name = "event_id", referencedColumnName = "id")

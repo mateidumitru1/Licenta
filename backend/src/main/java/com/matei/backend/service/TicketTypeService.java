@@ -29,6 +29,7 @@ public class TicketTypeService {
     public TicketTypeResponseDto createTicketType(TicketTypeCreationRequestDto ticketTypeCreationRequestDto, EventWithoutArtistListResponseDto eventResponseDto) {
         var ticketTypeToAdd = modelMapper.map(ticketTypeCreationRequestDto, TicketType.class);
         ticketTypeToAdd.setEvent(modelMapper.map(eventResponseDto, Event.class));
+        ticketTypeToAdd.setRemainingQuantity(ticketTypeCreationRequestDto.getQuantity());
         var ticketType = ticketTypeRepository.save(ticketTypeToAdd);
 
         return modelMapper.map(ticketType, TicketTypeResponseDto.class);
@@ -77,7 +78,7 @@ public class TicketTypeService {
 
                 ticketType.setName(ticketTypeUpdateRequestDto.getName());
                 ticketType.setPrice(ticketTypeUpdateRequestDto.getPrice());
-                ticketType.setQuantity(ticketTypeUpdateRequestDto.getQuantity());
+                ticketType.setTotalQuantity(ticketTypeUpdateRequestDto.getQuantity());
 
                 ticketTypeRepository.save(ticketType);
             } else {

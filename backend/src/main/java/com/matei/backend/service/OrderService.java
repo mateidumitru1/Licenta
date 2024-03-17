@@ -46,7 +46,7 @@ public class OrderService {
             if (shoppingCartItem.getTicketType().getEvent().getDate().isBefore(LocalDate.now())) {
                 throw new EventPastException("Event is in the past");
             }
-            if(shoppingCartItem.getTicketType().getQuantity() < shoppingCartItem.getQuantity()) {
+            if(shoppingCartItem.getTicketType().getRemainingQuantity() < shoppingCartItem.getQuantity()) {
                 throw new TicketTypeQuantityException("Not enough tickets available");
             }
         });
@@ -103,6 +103,8 @@ public class OrderService {
                                 .id(ticket.getTicketType().getId())
                                 .name(ticket.getTicketType().getName())
                                 .price(ticket.getTicketType().getPrice())
+                                .totalQuantity(ticket.getTicketType().getTotalQuantity())
+                                .remainingQuantity(ticket.getTicketType().getRemainingQuantity())
                                 .build();
 
                         EventWithoutArtistListResponseDto eventResponseDto = null;

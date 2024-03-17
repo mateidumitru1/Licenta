@@ -41,7 +41,7 @@ public class TicketService {
                 while(shoppingCartItemResponseDto.getQuantity() > 0) {
                     try {
                         var ticketType = modelMapper.map(ticketTypeService.getTicketTypeById(shoppingCartItemResponseDto.getTicketType().getId()), TicketType.class);
-                        ticketType.setQuantity(ticketType.getQuantity() - 1);
+                        ticketType.setRemainingQuantity(ticketType.getRemainingQuantity() - 1);
                         ticketType = ticketTypeService.save(ticketType);
                         UUID id = UUID.randomUUID();
                         var ticket = ticketRepository.save(Ticket.builder()
@@ -119,7 +119,7 @@ public class TicketService {
 
     private void cancel(Ticket ticket) {
         var ticketType = ticket.getTicketType();
-        ticketType.setQuantity(ticketType.getQuantity() + 1);
+        ticketType.setTotalQuantity(ticketType.getRemainingQuantity() + 1);
         ticketTypeService.save(ticketType);
         ticket.setStatus(Status.CANCELED);
         ticket.setScanned(true);

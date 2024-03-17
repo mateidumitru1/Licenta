@@ -19,7 +19,9 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.loadingService.loading$.subscribe(loading => {
-      this.loading = loading;
+      setTimeout(() => {
+        this.loading = loading;
+      }, 0);
     });
   }
 }

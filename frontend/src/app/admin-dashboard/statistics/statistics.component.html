@@ -1,9 +1,9 @@
 <div class="container-fluid">
-  <h1>Statistici</h1>
+  <h1 class="text-center pt-2 pb-4">Statistici</h1>
   <div class="d-flex justify-content-center align-items-center">
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
       <div class="col-lg-4" *ngFor="let cardStatistic of cardStatistics">
-        <div class="card mb-4">
+        <div class="card mb-4 stat">
           <div class="card-header d-flex text-center justify-content-center align-items-center"><strong>{{ cardStatistic.title }}</strong></div>
           <div class="card-text d-flex justify-content-center align-items-center">
             <strong>{{ cardStatistic.value }}</strong>
@@ -12,15 +12,22 @@
       </div>
     </div>
   </div>
+  <hr class="pt-3 pb-3">
   <div class="charts-container">
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-md-6 stat">
         <h3 class="text-center">Locatii si numarul total de evenimente</h3>
         <canvas id="location-with-all-events-chart" width="400" height="250"></canvas>
       </div>
-      <div class="col-md-6">
+      <div class="col-md-6 stat">
         <h3 class="text-center">Locatii si numarul de evenimente disponibile</h3>
         <canvas id="location-with-available-events-chart" width="400" height="250"></canvas>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 stat">
+        <h3 class="text-center">Evenimente cu cele mai multe bilete vandute</h3>
+        <canvas id="events-with-most-tickets-sold-chart" width="400" height="250"></canvas>
       </div>
     </div>
   </div>

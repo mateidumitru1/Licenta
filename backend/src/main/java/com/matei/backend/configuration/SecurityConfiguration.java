@@ -28,8 +28,6 @@ public class SecurityConfiguration {
     private final RequestMappingHandlerMapping handlerMapping;
     private final AuthenticationProvider authenticationProvider;
 
-
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http

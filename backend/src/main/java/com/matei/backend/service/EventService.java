@@ -9,6 +9,7 @@ import com.matei.backend.dto.request.ticketType.TicketTypeUpdateRequestDto;
 import com.matei.backend.dto.response.event.EventWithoutArtistListResponseDto;
 import com.matei.backend.dto.response.event.EventWithTicketTypesResponseDto;
 import com.matei.backend.dto.response.location.LocationWithoutEventListResponseDto;
+import com.matei.backend.dto.response.statistics.EventWithTicketsSoldCount;
 import com.matei.backend.dto.response.ticketType.TicketTypeWithoutEventResponseDto;
 import com.matei.backend.entity.Event;
 import com.matei.backend.entity.Location;
@@ -196,20 +197,16 @@ public class EventService {
                 .count();
     }
 
-//    public List<EventWithoutArtistListResponseDto> getTop5EventsWithMostTicketsSold() {
-//        return eventRepository.findAll().stream()
-//                .sorted(Comparator.comparing(event -> event.getTicketTypes().stream()
-//                        .mapToLong(TicketType::getNumberOfTicketsSold).sum()).reversed())
-//                .limit(5)
-//                .map(event -> EventWithoutArtistListResponseDto.builder()
-//                        .id(event.getId())
-//                        .title(event.getTitle())
-//                        .date(event.getDate())
-//                        .shortDescription(event.getShortDescription())
-//                        .description(event.getDescription())
-//                        .location(modelMapper.map(event.getLocation(), LocationWithoutEventListResponseDto.class))
-//                        .imageUrl(event.getImageUrl())
-//                        .build())
-//                .toList();
-//    }
+    public List<EventWithTicketsSoldCount> getEventsWithTicketsSoldCount() {
+        return eventRepository.findAll().stream()
+                .map(event -> EventWithTicketsSoldCount.builder()
+                        .event(modelMapper.map(event, EventWithoutArtistListResponseDto.class))
+                        .ticketsSoldCount(event.getTicketTypes().stream()
+                                .map(ticketType -> ticketType.getTotalQuantity() - ticketType.getRemainingQuantity())
+                                .reduce(0, Integer::sum))
+                        .build())
+                .sorted(Comparator.comparingInt(EventWithTicketsSoldCount::getTicketsSoldCount).reversed())
+                .limit(10)
+                .toList();
+    }
 }

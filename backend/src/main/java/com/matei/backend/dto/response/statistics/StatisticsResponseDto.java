@@ -20,4 +20,5 @@ public class StatisticsResponseDto {
     private Long totalNumberOfTicketsSold;
     private List<LocationWithEventsCountResponseDto> locationsWithAllEventsCount;
     private List<LocationWithEventsCountResponseDto> locationsWithAvailableEventsCount;
+    private List<EventWithTicketsSoldCount> eventsWithTicketsSoldCount;
 }

@@ -9,9 +9,5 @@ export function getFormData(data: any) {
     }
   }
 
-  formData.forEach((value, key) => {
-    console.log(key + ' ' + value);
-  });
-
   return formData;
 }

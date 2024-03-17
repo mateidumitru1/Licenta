@@ -18,6 +18,7 @@ Chart.register(...registerables);
 export class StatisticsComponent implements OnInit {
   locationWithAllEventsChart: any = [];
   locationWithAvailableEventsChart: any = [];
+  eventsWithTicketsSoldChart: any = [];
 
   statistics: any = {};
 
@@ -41,8 +42,9 @@ export class StatisticsComponent implements OnInit {
         return { [location.location.name]: this.predefinedColors.pop() };
       });
       this.setCardStatistics();
-      this.drawChart(this.locationWithAllEventsChart, this.statistics.locationsWithAllEventsCount, 'location-with-all-events-chart');
-      this.drawChart(this.locationWithAvailableEventsChart, this.statistics.locationsWithAvailableEventsCount, 'location-with-available-events-chart');
+      this.drawLocationsChart(this.locationWithAllEventsChart, this.statistics.locationsWithAllEventsCount, 'location-with-all-events-chart');
+      this.drawLocationsChart(this.locationWithAvailableEventsChart, this.statistics.locationsWithAvailableEventsCount, 'location-with-available-events-chart');
+      this.drawEventsChart(this.eventsWithTicketsSoldChart, this.statistics.eventsWithTicketsSoldCount, 'events-with-most-tickets-sold-chart');
     });
   }
 
@@ -75,7 +77,7 @@ export class StatisticsComponent implements OnInit {
     ]
   }
 
-  drawChart(chart: any, locations: any[], chartId: string) {
+  drawLocationsChart(chart: any, locations: any[], chartId: string) {
     chart = new Chart(chartId, {
       type: 'bar',
       data: {
@@ -87,6 +89,32 @@ export class StatisticsComponent implements OnInit {
             const colorObj = this.locationsColors.find((color) => color.hasOwnProperty(location.location.name));
             return colorObj ? colorObj[location.location.name] : '';
           }),
+        }],
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+          },
+        },
+        plugins: {
+          legend: {
+            display: false,
+          }
+        }
+      },
+    });
+  }
+
+  drawEventsChart(chart: any, events: any[], chartId: string) {
+    chart = new Chart(chartId, {
+      type: 'bar',
+      data: {
+        labels: events.map((event: any) => event.event.title),
+        datasets: [{
+          data: events.map((event: any) => event.ticketsSoldCount),
+          borderWidth: 1,
+          backgroundColor: this.predefinedColors,
         }],
       },
       options: {

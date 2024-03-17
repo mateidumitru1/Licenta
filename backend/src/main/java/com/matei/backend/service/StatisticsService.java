@@ -1,5 +1,6 @@
 package com.matei.backend.service;
 
+import com.matei.backend.dto.response.statistics.EventWithTicketsSoldCount;
 import com.matei.backend.dto.response.statistics.LocationWithEventsCountResponseDto;
 import com.matei.backend.dto.response.statistics.StatisticsResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -26,38 +27,34 @@ public class StatisticsService {
                 .totalNumberOfTicketsSold(getTotalNumberOfTicketsSold())
                 .locationsWithAllEventsCount(getLocationsWithAllEventsCount())
                 .locationsWithAvailableEventsCount(getLocationsWithAvailableEventsCount())
+                .eventsWithTicketsSoldCount(getEventsWithTicketsSoldCount())
                 .build();
     }
-
     private Long getTotalNumberOfUsers() {
         return userService.getTotalNumberOfUsers();
     }
-
     private Long getTotalNumberOfOrders() {
         return orderService.getTotalNumberOfOrders();
     }
-
     private Long getTotalNumberOfEvents() {
         return eventService.getTotalNumberOfEvents();
     }
-
     private Long getTotalNumberOfAvailableEvents() {
         return eventService.getTotalNumberOfAvailableEvents();
     }
-
     private Long getTotalNumberOfLocations() {
         return locationService.getTotalNumberOfLocations();
     }
-
     private Long getTotalNumberOfTicketsSold() {
         return ticketService.getTotalNumberOfTicketsSold();
     }
-
     private List<LocationWithEventsCountResponseDto> getLocationsWithAllEventsCount() {
         return locationService.getLocationsWithAllEventsCount();
     }
-
     private List<LocationWithEventsCountResponseDto> getLocationsWithAvailableEventsCount() {
         return locationService.getLocationsWithAvailableEventsCount();
+    }
+    private List<EventWithTicketsSoldCount> getEventsWithTicketsSoldCount() {
+        return eventService.getEventsWithTicketsSoldCount();
     }
 }

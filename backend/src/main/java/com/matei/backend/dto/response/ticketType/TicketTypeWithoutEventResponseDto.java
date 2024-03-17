@@ -15,5 +15,6 @@ public class TicketTypeWithoutEventResponseDto {
     private UUID id;
     private String name;
     private Double price;
-    private Integer quantity;
+    private Integer totalQuantity;
+    private Integer remainingQuantity;
 }

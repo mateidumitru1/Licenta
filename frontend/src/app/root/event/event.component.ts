@@ -64,7 +64,7 @@ export class EventComponent implements OnInit{
   }
 
   incrementQuantity(ticket: any) {
-    if(ticket.quantity > ticket.reservedQuantity && ticket.reservedQuantity < 10) {
+    if(ticket.remainingQuantity > ticket.reservedQuantity && ticket.reservedQuantity < 10) {
       ticket.reservedQuantity++;
     }
   }

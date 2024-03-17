@@ -1,4 +1,4 @@
-package com.matei.backend.dto.response.ticketType;
+package com.matei.backend.dto.response.statistics;
 
 import com.matei.backend.dto.response.event.EventWithoutArtistListResponseDto;
 import lombok.AllArgsConstructor;
@@ -6,17 +6,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.UUID;
-
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class TicketTypeResponseDto {
-    private UUID id;
-    private String name;
-    private Double price;
-    private Integer totalQuantity;
-    private Integer remainingQuantity;
+public class EventWithTicketsSoldCount {
     private EventWithoutArtistListResponseDto event;
+    private Integer ticketsSoldCount;
 }
