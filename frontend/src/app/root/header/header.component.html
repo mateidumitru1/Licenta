@@ -86,8 +86,7 @@
     mdbCollapse
     #externalContent="mdbCollapse"
   >
-    <app-loading *ngIf="loading"></app-loading>
-    <div *ngIf="!loading" class="locations-container d-flex flex-row flex-wrap">
+    <div class="locations-container d-flex flex-row flex-wrap">
       <a role="button" class="card col-6 col-md-4 col-lg-2" [routerLink]="[location.name]" [queryParams]="{ id: location.id }"
          *ngFor="let location of locationsToDisplay" (click)="externalContent.toggle()">
         <img alt="" class="img-fluid" src="{{ location.imageUrl }}" />

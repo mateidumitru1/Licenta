@@ -53,8 +53,6 @@ import {LoadingComponent} from "../../../shared/loading/loading.component";
   styleUrl: './manage-locations.component.scss'
 })
 export class ManageLocationsComponent implements OnInit{
-  loading: boolean = true;
-
   dataSource = new MatTableDataSource<any>();
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
   @ViewChild(MatSort) sort: MatSort | undefined;
@@ -88,9 +86,6 @@ export class ManageLocationsComponent implements OnInit{
         this.snackBar.open('Error fetching users', 'Close', {
           duration: 3000
         });
-      },
-      complete: () => {
-        this.loading = false;
       }
     });
   }

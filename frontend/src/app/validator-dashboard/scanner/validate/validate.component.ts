@@ -20,8 +20,6 @@ import {DatePipe, NgIf} from "@angular/common";
   styleUrl: './validate.component.scss'
 })
 export class ValidateComponent implements OnInit{
-  loading: boolean = true;
-
   ticket: any = {};
 
   constructor(private validateService: ValidateService, public dialogRef: MatDialogRef<ValidateComponent>,
@@ -35,9 +33,6 @@ export class ValidateComponent implements OnInit{
       },
       error: (error: any) => {
         this.snackBar.open(error.error, 'Close', {duration: 3000});
-      },
-      complete: () => {
-        this.loading = false;
       }
     });
   }

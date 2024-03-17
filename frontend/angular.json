@@ -33,7 +33,9 @@
               "@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/canvasjs/dist/canvasjs.min.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -94,7 +96,9 @@
               "@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/canvasjs/dist/canvasjs.min.js"
+            ]
           }
         }
       }

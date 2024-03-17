@@ -56,7 +56,7 @@ public class EventController {
         return ResponseEntity.ok(eventService.getEventById(UUID.fromString(id)));
     }
 
-    @PatchMapping
+    @PutMapping
     public ResponseEntity<?> updateEvent(@ModelAttribute EventUpdateRequestDto eventUpdateRequestDto) throws IOException {
         return ResponseEntity.ok(eventService.updateEvent(eventUpdateRequestDto));
     }

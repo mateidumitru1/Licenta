@@ -91,7 +91,7 @@ export class AddEditEventComponent implements OnInit{
   onConfirmClick() {
     this.registrationForm.markAllAsTouched();
     if (this.registrationForm.valid) {
-      let event = { ...this.registrationForm.value, id: this.data.event.id, imageUrl: this.imageSrc , ticketTypes: this.dataSource.data};
+      let event = { ...this.registrationForm.value, id: this.data.event.id, imageUrl: this.imageSrc , ticketTypesList: this.dataSource.data};
       event.locationId = this.locations.find((location: any) => location.name === event.location).id;
       delete event.location;
       if (this.imageFile === null && this.imageSrc != '') {

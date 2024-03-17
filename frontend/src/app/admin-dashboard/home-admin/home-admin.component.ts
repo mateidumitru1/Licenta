@@ -18,8 +18,6 @@ import {LoadingComponent} from "../../shared/loading/loading.component";
   styleUrl: './home-admin.component.scss'
 })
 export class HomeAdminComponent implements OnInit {
-  loading: boolean = true;
-
   topEventList: any = [];
   constructor(private homeAdminService: HomeAdminService, private snackBar: MatSnackBar, private dialog: MatDialog) { }
 
@@ -30,9 +28,6 @@ export class HomeAdminComponent implements OnInit {
       },
       error: (error: any) => {
         this.snackBar.open('Error fetching top events', 'Close', {duration: 3000});
-      },
-      complete: () => {
-        this.loading = false;
       }
     });
   }

@@ -15,7 +15,6 @@ import {ArtistsService} from "./artists.service";
   styleUrl: './artists-list.component.scss'
 })
 export class ArtistsListComponent implements OnInit{
-
   letters: any[] = [];
   artists: any[] = [];
 

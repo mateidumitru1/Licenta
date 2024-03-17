@@ -17,8 +17,6 @@ import {LoadingComponent} from "../../shared/loading/loading.component";
   styleUrl: './location.component.scss'
 })
 export class LocationComponent implements OnInit{
-  loading: boolean = true;
-
   location: any = {};
   constructor(private route: ActivatedRoute, private router: Router, private locationService: LocationService) {}
 
@@ -34,18 +32,9 @@ export class LocationComponent implements OnInit{
           },
           error: (error: any) => {
             this.router.navigate(['/page-not-found']);
-          },
-          complete: () => {
-            this.loading = false;
           }
         });
       }
-    });
-  }
-
-  onEventClick(event: any) {
-    this.router.navigate(['/', this.location.name, event.title], {
-      queryParams: {id: event.id}
     });
   }
 }

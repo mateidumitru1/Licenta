@@ -26,8 +26,6 @@ import {FormsModule} from "@angular/forms";
   styleUrl: './header.component.scss',
 })
 export class HeaderComponent implements OnInit {
-  loading: boolean = true;
-
   locations: any[] = [];
   locationsToDisplay: any[] = [];
   startIndex: number = 0;
@@ -59,10 +57,7 @@ export class HeaderComponent implements OnInit {
       },
       error: (error: any) => {
         console.error('Error fetching locations', error);
-      },
-      complete: () => {
-        this.loading = false;
-      },
+      }
     });
     this.headerService.fetchLocationsWithAvailableEvents().subscribe({
       next: (locations: any) => {
@@ -70,9 +65,6 @@ export class HeaderComponent implements OnInit {
       },
       error: (error: any) => {
         console.error('Error fetching locations with available events', error);
-      },
-      complete: () => {
-        this.loading = false;
       }
     });
   }

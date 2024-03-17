@@ -16,8 +16,6 @@ import {NgIf} from "@angular/common";
   styleUrl: './track-event.component.scss'
 })
 export class TrackEventComponent implements OnInit{
-  loading = true;
-
   map: mapboxgl.Map | undefined;
   style = 'mapbox://styles/mapbox/streets-v11';
   lat: number = 0;
@@ -34,7 +32,6 @@ export class TrackEventComponent implements OnInit{
   ngOnInit() {
     this.fetchTickets();
     this.initMap();
-    this.loading = false;
   }
 
   fetchTickets() {

@@ -10,6 +10,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,6 +29,7 @@ public class Event {
     private String shortDescription;
     private String description;
     private String imageUrl;
+    private LocalDateTime createdAt;
 
     @JsonIgnore
     @ManyToOne

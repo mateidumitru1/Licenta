@@ -16,23 +16,16 @@ import {NgIf} from "@angular/common";
   styleUrl: './resend-verify-account-email.component.scss'
 })
 export class ResendVerifyAccountEmailComponent implements OnInit {
-  loading: boolean = true;
-
-
   constructor(private route: ActivatedRoute, private identityService: IdentityService, private snackBar: MatSnackBar) {}
 
   ngOnInit() {
     const email = this.route.snapshot.params['email'];
     this.identityService.resendVerifyAccountEmail(email).subscribe({
-      next: () => {
-        this.loading = false;
-
-      },
+      next: () => {},
       error: (error) => {
-        console.error(error);
-      },
-      complete: () => {
-        this.loading = false;
+        this.snackBar.open('Error sending email: ' + error.error, 'Close', {
+          duration: 5000
+        });
       }
     });
   }

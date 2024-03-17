@@ -24,7 +24,7 @@ export class ManageEventsService {
   }
 
   updateEvent(event: any) {
-    return this.http.patch(apiURL + '/events', getFormData(event), {
+    return this.http.put(apiURL + '/events', getFormData(event), {
       headers: {
         Authorization: 'Bearer ' + this.jwtHandler.getToken()
       }

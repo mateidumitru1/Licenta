@@ -114,4 +114,8 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(changePasswordRequestDto.getNewPassword()));
         userRepository.save(user);
     }
+
+    public Long getTotalNumberOfUsers() {
+        return userRepository.count();
+    }
 }

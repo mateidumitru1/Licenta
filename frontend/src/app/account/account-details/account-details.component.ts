@@ -20,7 +20,6 @@ import {
   styleUrl: './account-details.component.scss'
 })
 export class AccountDetailsComponent implements OnInit{
-
   user: any = {};
   orderList: any = [];
 

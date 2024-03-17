@@ -40,6 +40,7 @@ import {
 import {IdentityGuard} from "./util/guards/can-activate/identity.guard";
 import {ArtistsListComponent} from "./root/artists-list/artists-list.component";
 import {ArtistComponent} from "./root/artists-list/artist/artist.component";
+import {ManageArtistsComponent} from "./admin-dashboard/manage/manage-artists/manage-artists.component";
 
 export const routes: Routes = [
   { path: 'home' , redirectTo: '', pathMatch: 'full' },
@@ -59,6 +60,7 @@ export const routes: Routes = [
       { path: 'manage/users', component: ManageUsersComponent },
       { path: 'manage/locations', component: ManageLocationsComponent },
       { path: 'manage/events', component: ManageEventsComponent },
+      { path: 'manage/artists', component: ManageArtistsComponent },
       { path: 'manage/orders', component: ManageOrdersComponent },
       { path: 'statistics', component: StatisticsComponent },
       { path: 'settings', component: SettingsComponent },

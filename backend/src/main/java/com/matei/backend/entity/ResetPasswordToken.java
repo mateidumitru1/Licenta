@@ -29,4 +29,5 @@ public class ResetPasswordToken {
 
     private String token;
     private LocalDateTime expiration;
+    private LocalDateTime createdAt;
 }

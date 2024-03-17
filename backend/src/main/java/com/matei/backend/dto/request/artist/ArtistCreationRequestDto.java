@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @Builder
@@ -11,8 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ArtistCreationRequestDto {
     private String name;
-    private String genre;
-    private String imageUrl;
-    private String eventIdList;
-    private String genreIdList;
+    private MultipartFile image;
+    private String eventList;
+    private String genreList;
 }

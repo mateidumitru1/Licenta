@@ -11,7 +11,7 @@
           </ng-container>
           <ng-container *ngIf="item.submenu">
             <a class="list-group-item list-group-item-action py-2 ripple" aria-controls="submenu"
-               (click)="submenu.toggle();onMenuItemClick(item)" [attr.aria-expanded]="!submenu.collapsed"
+               (click)="submenu.toggle()" [attr.aria-expanded]="!submenu.collapsed"
                [ngClass]="{ 'active': isCurrentPage(item.label) }"
             >
               <i *ngIf="item.icon" class="{{ item.icon }}"></i><span>{{ item.label }}</span>
@@ -42,7 +42,7 @@
       <a class="navbar-brand" routerLink="">{{ brand }}</a>
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link" >{{ page }}</a>
+          <a class="nav-link" >{{ pageNameMap[page] }}</a>
         </li>
       </ul>
     </div>

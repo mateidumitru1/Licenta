@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,7 +19,7 @@ public class ArtistController {
     private final ArtistService artistService;
 
     @PostMapping
-    public ResponseEntity<ArtistResponseDto> createArtist(@RequestBody ArtistCreationRequestDto artistCreationRequestDto) {
+    public ResponseEntity<ArtistResponseDto> createArtist(@ModelAttribute ArtistCreationRequestDto artistCreationRequestDto) throws IOException {
         return ResponseEntity.ok(artistService.createArtist(artistCreationRequestDto));
     }
 
@@ -37,9 +38,9 @@ public class ArtistController {
         return ResponseEntity.ok(artistService.getAllArtistsByFirstLetter(firstLetter));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<ArtistResponseDto> updateArtistById(@PathVariable String id, @RequestBody ArtistUpdateRequestDto artistUpdateRequestDto) {
-        return ResponseEntity.ok(artistService.updateArtistById(UUID.fromString(id), artistUpdateRequestDto));
+    @PutMapping
+    public ResponseEntity<ArtistResponseDto> updateArtistById(@ModelAttribute ArtistUpdateRequestDto artistUpdateRequestDto) throws IOException {
+        return ResponseEntity.ok(artistService.updateArtist(artistUpdateRequestDto));
     }
 
     @DeleteMapping("/{id}")

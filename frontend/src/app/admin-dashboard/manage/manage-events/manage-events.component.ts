@@ -54,8 +54,6 @@ import {LoadingComponent} from "../../../shared/loading/loading.component";
   styleUrl: './manage-events.component.scss'
 })
 export class ManageEventsComponent implements OnInit{
-  loading: boolean = true;
-
   dataSource = new MatTableDataSource<any>();
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
   @ViewChild(MatSort) sort: MatSort | undefined;
@@ -90,9 +88,6 @@ export class ManageEventsComponent implements OnInit{
         this.snackBar.open(error.error, 'Close', {
           duration: 3000
         });
-      },
-      complete: () => {
-        this.loading = false;
       }
     });
   }
@@ -126,7 +121,7 @@ export class ManageEventsComponent implements OnInit{
     });
     dialogRef.afterClosed().subscribe((event: any) => {
       if(event) {
-        event.ticketTypes = JSON.stringify(event.ticketTypes);
+        event.ticketTypesList = JSON.stringify(event.ticketTypesList);
         this.manageEventsService.addEvent(event).subscribe({
           next: (event: any) => {
             this.dataSource.data = [...this.dataSource.data, event];
@@ -185,7 +180,8 @@ export class ManageEventsComponent implements OnInit{
           error: (error: any) => {
             this.snackBar.open('A aparut o eroare la stergerea evenimentului', 'Inchide', {duration: 3000});
           }
-        });      }
+        });
+      }
     });
   }
 }

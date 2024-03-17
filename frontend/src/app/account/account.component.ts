@@ -19,7 +19,6 @@ import {SidebarComponent} from "../shared/sidebar/sidebar.component";
   styleUrl: './account.component.scss'
 })
 export class AccountComponent {
-
   menuItems: any[] = [
     { label: 'Contul meu', route: 'account', icon: 'fa-solid fa-user fa-fw me-3' },
     { label: 'Comenzi', route: 'account/orders', icon: 'fa-solid fa-envelope fa-fw me-3' },

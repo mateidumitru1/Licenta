@@ -17,8 +17,7 @@
       </button>
     </span>
   </div>
-  <app-loading *ngIf="loading && shouldDisplaySpinner"></app-loading>
-  <div *ngIf="!loading">
+  <div>
     <div class="card mt-3" *ngFor="let order of orders">
       <div class="card-header">
         <h5 class="card-title">Comanda numarul {{order.orderNumber}}</h5>

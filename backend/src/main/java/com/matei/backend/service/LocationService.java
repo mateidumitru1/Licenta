@@ -5,6 +5,8 @@ import com.matei.backend.dto.request.location.LocationUpdateRequestDto;
 import com.matei.backend.dto.response.artist.ArtistWithoutEventResponseDto;
 import com.matei.backend.dto.response.event.EventWithoutLocationResponseDto;
 import com.matei.backend.dto.response.location.LocationResponseDto;
+import com.matei.backend.dto.response.location.LocationWithoutEventListResponseDto;
+import com.matei.backend.dto.response.statistics.LocationWithEventsCountResponseDto;
 import com.matei.backend.exception.AdminResourceAccessException;
 import com.matei.backend.exception.LocationAlreadyExistsException;
 import com.matei.backend.exception.LocationNotFoundException;
@@ -150,6 +152,40 @@ public class LocationService {
     }
 
     public void deleteLocation(UUID id) {
+        imageService.deleteImage(locationRepository.findById(id)
+                .orElseThrow(() -> new LocationNotFoundException("Location not found"))
+                .getImageUrl());
         locationRepository.deleteById(id);
+    }
+
+    public Long getTotalNumberOfLocations() {
+        return locationRepository.count();
+    }
+
+    public List<LocationWithEventsCountResponseDto> getLocationsWithAllEventsCount() {
+        var locations = locationRepository.findAll();
+
+        return locations.stream()
+                .map(location -> LocationWithEventsCountResponseDto.builder()
+                        .location(modelMapper.map(location, LocationWithoutEventListResponseDto.class))
+                        .eventsCount((long) location.getEventList().size())
+                        .build())
+                .sorted((location1, location2) -> Long.compare(location2.getEventsCount(), location1.getEventsCount()))
+                .toList();
+    }
+
+    public List<LocationWithEventsCountResponseDto> getLocationsWithAvailableEventsCount() {
+        var locations = locationRepository.findAll();
+
+        return locations.stream()
+                .map(location -> LocationWithEventsCountResponseDto.builder()
+                        .location(modelMapper.map(location, LocationWithoutEventListResponseDto.class))
+                        .eventsCount((long) location.getEventList().stream()
+                                .filter(event -> event.getDate().isAfter(LocalDate.now()))
+                                .toList()
+                                .size())
+                        .build())
+                .sorted((location1, location2) -> Long.compare(location2.getEventsCount(), location1.getEventsCount()))
+                .toList();
     }
 }

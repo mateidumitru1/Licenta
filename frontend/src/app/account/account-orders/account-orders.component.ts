@@ -22,7 +22,6 @@ import {MdbDropdownModule} from "mdb-angular-ui-kit/dropdown";
   styleUrl: './account-orders.component.scss'
 })
 export class AccountOrdersComponent implements OnInit{
-
   orders: any[] = [];
   filteredOrders: any[] = [];
   currentPage = 1;

@@ -11,7 +11,6 @@ import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
   styleUrl: './map.component.scss'
 })
 export class MapComponent implements OnInit{
-
   map: mapboxgl.Map | undefined;
   style = 'mapbox://styles/mapbox/streets-v11';
 

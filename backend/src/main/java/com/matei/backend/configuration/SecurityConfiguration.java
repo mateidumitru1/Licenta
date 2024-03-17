@@ -38,7 +38,7 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.GET, "api/top-events", "/api/events/**", "api/locations/**",
                                 "api/artists/**", "api/genres/**")
                         .permitAll()
-                        .requestMatchers("/api/authenticate", "/api/register", "/api/forgot-password",
+                        .requestMatchers("/api/authenticate", "/api/register", "/api/forgot-password", "/api/ping",
                                 "/api/reset-password", "api/resend-verify-account-email", "api/verify-account")
                         .permitAll()
                         .anyRequest()

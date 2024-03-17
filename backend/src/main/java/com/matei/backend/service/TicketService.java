@@ -156,4 +156,8 @@ public class TicketService {
                         .build())
                 .toList();
     }
+
+    public Long getTotalNumberOfTicketsSold() {
+        return ticketRepository.count();
+    }
 }

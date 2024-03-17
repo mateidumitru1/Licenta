@@ -81,7 +81,6 @@ public class EventService {
     }
 
     public List<EventWithoutArtistListResponseDto> getAvailableEventListByLocation(UUID locationId) {
-
        var eventList = eventRepository.findByLocationId(locationId)
                 .orElseThrow(() -> new EventNotFoundException("Event not found" )).stream()
                .filter(event -> event.getDate().isAfter(LocalDate.now()))
@@ -128,6 +127,9 @@ public class EventService {
     }
 
     public EventWithTicketTypesResponseDto updateEvent(EventUpdateRequestDto updatedEvent) throws IOException {
+        var event = eventRepository.findById(updatedEvent.getId())
+                .orElseThrow(() -> new EventNotFoundException("Event not found"));
+
         String imageUrl = updatedEvent.getImageUrl();
         if(updatedEvent.getImage() != null) {
             if(imageUrl != null) {
@@ -135,9 +137,6 @@ public class EventService {
             }
             imageUrl = imageService.saveImage("event-images", updatedEvent.getImage());
         }
-
-        var event = eventRepository.findById(updatedEvent.getId())
-                .orElseThrow(() -> new EventNotFoundException("Event not found"));
 
         event.setTitle(updatedEvent.getTitle());
         event.setDate(getDateFromString(updatedEvent.getDate()));
@@ -160,6 +159,8 @@ public class EventService {
     }
 
     public void deleteEventById(UUID id) {
+        imageService.deleteImage(eventRepository.findById(id)
+                .orElseThrow(() -> new EventNotFoundException("Event not found")).getImageUrl());
         eventRepository.deleteById(id);
     }
 
@@ -184,4 +185,31 @@ public class EventService {
         }
         return Collections.emptyList();
     }
+
+    public Long getTotalNumberOfEvents() {
+        return eventRepository.count();
+    }
+
+    public Long getTotalNumberOfAvailableEvents() {
+        return eventRepository.findAll().stream()
+                .filter(event -> event.getDate().isAfter(LocalDate.now()))
+                .count();
+    }
+
+//    public List<EventWithoutArtistListResponseDto> getTop5EventsWithMostTicketsSold() {
+//        return eventRepository.findAll().stream()
+//                .sorted(Comparator.comparing(event -> event.getTicketTypes().stream()
+//                        .mapToLong(TicketType::getNumberOfTicketsSold).sum()).reversed())
+//                .limit(5)
+//                .map(event -> EventWithoutArtistListResponseDto.builder()
+//                        .id(event.getId())
+//                        .title(event.getTitle())
+//                        .date(event.getDate())
+//                        .shortDescription(event.getShortDescription())
+//                        .description(event.getDescription())
+//                        .location(modelMapper.map(event.getLocation(), LocationWithoutEventListResponseDto.class))
+//                        .imageUrl(event.getImageUrl())
+//                        .build())
+//                .toList();
+//    }
 }

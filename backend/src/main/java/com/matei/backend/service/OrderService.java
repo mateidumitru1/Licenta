@@ -164,4 +164,8 @@ public class OrderService {
         order.getTicketList().forEach(ticket -> ticketService.adminCancelTicket(ticket.getId()));
         orderRepository.save(order);
     }
+
+    public Long getTotalNumberOfOrders() {
+        return orderRepository.count();
+    }
 }

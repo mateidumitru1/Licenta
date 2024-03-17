@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,13 +29,15 @@ public class Artist {
 
     private String imageUrl;
 
+    private LocalDateTime createdAt;
+
     @JsonIgnore
     @ManyToMany(mappedBy = "artists")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Event> eventList;
 
     @JsonIgnore
-    @ManyToMany(mappedBy = "artists")
+    @ManyToMany(mappedBy = "artists", cascade = CascadeType.ALL)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Genre> genreList;
 

@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -26,5 +27,11 @@ public class GenreService {
     public GenreWithoutArtistListResponseDto getGenreById(UUID id) {
         return modelMapper.map(genreRepository.findById(id).orElseThrow(() ->
                 new RuntimeException("Genre not found")), GenreWithoutArtistListResponseDto.class);
+    }
+
+    public List<GenreWithoutArtistListResponseDto> getAllGenres() {
+        return genreRepository.findAll().stream()
+                .map(genre -> modelMapper.map(genre, GenreWithoutArtistListResponseDto.class))
+                .toList();
     }
 }

@@ -20,8 +20,6 @@ import {LoadingComponent} from "../../../shared/loading/loading.component";
   styleUrl: './add-top-event.component.scss'
 })
 export class AddTopEventComponent implements OnInit {
-  loading: boolean = true;
-
   eventList: any[] = [];
   filteredEventList: any[] = [];
   searchText: string = '';
@@ -36,9 +34,6 @@ export class AddTopEventComponent implements OnInit {
       },
       error: (error: any) => {
         this.snackBar.open('Error fetching events', 'Close', {duration: 3000});
-      },
-      complete: () => {
-        this.loading = false;
       }
     });
     this.eventList.forEach((event: any) => {

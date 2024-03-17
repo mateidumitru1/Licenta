@@ -13,7 +13,6 @@ import {RouterOutlet} from "@angular/router";
   styleUrl: './validator-dashboard.component.scss'
 })
 export class ValidatorDashboardComponent {
-
   menuItems: any[] = [
     { label: 'Acasa', route: 'validator-dashboard', icon: 'fa-solid fa-home fa-fw me-3' },
     { label: 'Validare', route: 'validator-dashboard/scanner', icon: 'fa-solid fa-qrcode fa-fw me-3' },

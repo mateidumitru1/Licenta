@@ -28,8 +28,6 @@ import {LoadingComponent} from "../../shared/loading/loading.component";
   styleUrl: './event.component.scss'
 })
 export class EventComponent implements OnInit{
-  loading: boolean = true;
-
   event: any = {};
 
   descriptionIsVisible: boolean = false;
@@ -55,9 +53,6 @@ export class EventComponent implements OnInit{
             if(error.status === 404 && error.error === 'Event not found') {
               this.router.navigate(['/page-not-found']);
             }
-          },
-          complete: () => {
-            this.loading = false;
           }
         });
       }

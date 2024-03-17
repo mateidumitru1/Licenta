@@ -26,7 +26,7 @@ import {LoadingService} from "../shared/loading/loading.service";
 @Injectable({
   providedIn: 'root'
 })
-export class HttpInterceptor implements HttpInterceptor {
+export class MyHttpInterceptor implements HttpInterceptor {
   constructor(private loadingService: LoadingService) {}
 
   intercept(

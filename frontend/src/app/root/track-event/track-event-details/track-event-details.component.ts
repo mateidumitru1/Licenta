@@ -19,7 +19,6 @@ import {MatButton} from "@angular/material/button";
   styleUrl: './track-event-details.component.scss'
 })
 export class TrackEventDetailsComponent implements OnInit{
-
   tickets: any[] = [];
 
   event: any = {};

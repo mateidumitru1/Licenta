@@ -18,9 +18,6 @@ import {LoadingComponent} from "../../../shared/loading/loading.component";
   styleUrl: './manage-orders.component.scss'
 })
 export class ManageOrdersComponent {
-  loading: boolean = true;
-  shouldDisplaySpinner: boolean = false;
-
   orders: any[] = [];
   orderNumber: string = '';
   userId: string = '';
@@ -41,9 +38,6 @@ export class ManageOrdersComponent {
   fetchOrderByNumber() {
     if(this.orderNumber === '') return;
 
-    this.shouldDisplaySpinner = true;
-    this.loading = true;
-
     this.orders = [];
     this.manageOrdersService.fetchOrderByNumber(this.orderNumber).subscribe({
       next: (order: any) => {
@@ -51,19 +45,12 @@ export class ManageOrdersComponent {
       },
       error: (error) => {
         this.snackBar.open(error.error, 'Close', {duration: 3000});
-      },
-      complete: () => {
-        this.shouldDisplaySpinner = false;
-        this.loading = false;
       }
     });
   }
 
   fetchOrderByUserId() {
     if(this.userId === '') return;
-
-    this.shouldDisplaySpinner = true;
-    this.loading = true;
 
     this.orders = [];
     this.manageOrdersService.fetchOrdersByUserId(this.userId).subscribe({
@@ -74,10 +61,6 @@ export class ManageOrdersComponent {
       },
       error: (error) => {
         this.snackBar.open(error.error, 'Close', {duration: 3000});
-      },
-      complete: () => {
-        this.shouldDisplaySpinner = false;
-        this.loading = false;
       }
     });
   }

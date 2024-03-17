@@ -1,0 +1,23 @@
+<div class="modal-content">
+  <div class="modal-header mb-5">
+    <h5 class="modal-title" id="exampleModalLabel">Add genre</h5>
+    <button type="button" class="btn-close" aria-label="Close" (click)="onCloseClick()"></button>
+  </div>
+  <div class="modal-body mb-3">
+    <form [formGroup]="registrationForm">
+      <div class="mb-3">
+        <label for="name" class="form-label">Genre</label>
+        <select class="form-select" id="name" name="name" formControlName="name" required>
+          <option *ngFor="let genre of genreList" [ngValue]="genre">{{ genre.name }}</option>
+        </select>
+      </div>
+      <div *ngIf="registrationForm.get('name')?.errors?.['required'] && registrationForm.get('name')?.touched" class="text-danger mb-4">
+        Name is required
+      </div>
+    </form>
+    <div class="modal-footer mt-2">
+      <button type="button" class="btn btn-secondary me-1" (click)="onCloseClick()">Cancel</button>
+      <button type="button" class="btn btn-primary" (click)="onConfirmClick()">Save changes</button>
+    </div>
+  </div>
+</div>

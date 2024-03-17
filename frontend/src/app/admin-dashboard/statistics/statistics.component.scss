@@ -1,0 +1,25 @@
+.container-fluid {
+  padding-bottom: 20px;
+  padding-right: 20px;
+}
+
+.card {
+  max-width: 500px;
+  height: 150px;
+}
+
+.card-header {
+  position: relative;
+  font-size: 20px;
+}
+
+.card-text {
+  height: 200px;
+  position: relative;
+}
+
+
+.card:hover {
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
+}

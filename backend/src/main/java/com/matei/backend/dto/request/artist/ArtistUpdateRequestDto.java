@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.UUID;
 
@@ -14,7 +15,8 @@ import java.util.UUID;
 public class ArtistUpdateRequestDto {
     private UUID id;
     private String name;
+    private MultipartFile image;
     private String imageUrl;
-    private String eventIdList;
-    private String genreIdList;
+    private String eventList;
+    private String genreList;
 }

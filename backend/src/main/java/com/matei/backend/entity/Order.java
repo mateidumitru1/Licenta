@@ -30,9 +30,7 @@ public class Order {
     private Long orderNumber;
 
     private Status status;
-
     private Double price;
-
     private LocalDateTime date;
 
     @JsonIgnore

@@ -16,8 +16,6 @@ import {NgIf} from "@angular/common";
   styleUrl: './verify-account.component.scss'
 })
 export class VerifyAccountComponent implements OnInit{
-  loading: boolean = true;
-
   verified: boolean = false;
   constructor(private route: ActivatedRoute, private identityService: IdentityService, private snackBar: MatSnackBar) {}
 
@@ -29,9 +27,9 @@ export class VerifyAccountComponent implements OnInit{
       },
       error: (error) => {
         this.verified = false;
-      },
-      complete: () => {
-        this.loading = false;
+        this.snackBar.open(error.error.message, 'Close', {
+          duration: 5000
+        });
       }
     })
   }

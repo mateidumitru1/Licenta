@@ -17,8 +17,6 @@ import {NgForOf, NgIf} from "@angular/common";
   styleUrl: './artist.component.scss'
 })
 export class ArtistComponent implements OnInit{
-  loading: boolean = true;
-
   artist: any;
   constructor(private route: ActivatedRoute, private artistsService: ArtistsService) {}
 
@@ -31,9 +29,6 @@ export class ArtistComponent implements OnInit{
           },
           error: (error) => {
             console.error(error);
-          },
-          complete: () => {
-            this.loading = false;
           }
         });
       }

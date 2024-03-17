@@ -17,8 +17,6 @@ import {LoadingComponent} from "../../shared/loading/loading.component";
   styleUrl: './home.component.scss'
 })
 export class HomeComponent implements OnInit{
-  loading: boolean = true;
-
   topEvents: any[] = [];
 
   constructor(private homeService: HomeService, private router: Router) {
@@ -30,9 +28,6 @@ export class HomeComponent implements OnInit{
       },
       error: (error: any) => {
         console.error('Error fetching top events', error);
-      },
-      complete: () => {
-        this.loading = false;
       }
     });
   }
