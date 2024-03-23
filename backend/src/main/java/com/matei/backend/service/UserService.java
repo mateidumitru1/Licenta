@@ -7,10 +7,11 @@ import com.matei.backend.dto.response.user.UserResponseDto;
 import com.matei.backend.dto.response.user.UserWithOrdersResponseDto;
 import com.matei.backend.entity.User;
 import com.matei.backend.entity.enums.Role;
-import com.matei.backend.exception.AdminResourceAccessException;
-import com.matei.backend.exception.IncorrectOldPasswordException;
-import com.matei.backend.exception.PasswordNotMatchingException;
-import com.matei.backend.exception.UserNotFoundException;
+import com.matei.backend.entity.enums.StatisticsFilter;
+import com.matei.backend.exception.resourceAccess.AdminResourceAccessException;
+import com.matei.backend.exception.auth.IncorrectOldPasswordException;
+import com.matei.backend.exception.auth.PasswordNotMatchingException;
+import com.matei.backend.exception.user.UserNotFoundException;
 import com.matei.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -115,7 +116,10 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public Long getTotalNumberOfUsers() {
-        return userRepository.count();
+    public Long getTotalNumberOfUsers(StatisticsFilter filter) {
+        if (filter.equals(StatisticsFilter.ALL)) {
+            return userRepository.count();
+        }
+        return userRepository.countByCreatedAtAfter(filter.getStartDate());
     }
 }

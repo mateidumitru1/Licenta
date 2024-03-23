@@ -1,9 +1,8 @@
 package com.matei.backend.service.auth;
 
-import com.matei.backend.entity.ResetPasswordToken;
 import com.matei.backend.entity.User;
 import com.matei.backend.entity.VerifyAccountToken;
-import com.matei.backend.exception.VerifyAccountTokenNotFoundException;
+import com.matei.backend.exception.tokens.VerifyAccountTokenNotFoundException;
 import com.matei.backend.repository.VerifyAccountTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

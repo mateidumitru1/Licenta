@@ -31,7 +31,7 @@ public class Order {
 
     private Status status;
     private Double price;
-    private LocalDateTime date;
+    private LocalDateTime createdAt;
 
     @JsonIgnore
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -51,7 +51,7 @@ public class Order {
                 ", orderNumber=" + orderNumber +
                 ", status=" + status +
                 ", price=" + price +
-                ", date=" + date +
+                ", date=" + createdAt +
                 '}';
     }
 }

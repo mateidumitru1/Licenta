@@ -3,6 +3,7 @@ package com.matei.backend.service;
 import com.matei.backend.dto.response.statistics.EventWithTicketsSoldCount;
 import com.matei.backend.dto.response.statistics.LocationWithEventsCountResponseDto;
 import com.matei.backend.dto.response.statistics.StatisticsResponseDto;
+import com.matei.backend.entity.enums.StatisticsFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,44 +18,44 @@ public class StatisticsService {
     private final LocationService locationService;
     private final TicketService ticketService;
 
-    public StatisticsResponseDto getStatistics() {
+    public StatisticsResponseDto getStatistics(StatisticsFilter filter) {
         return StatisticsResponseDto.builder()
-                .totalNumberOfUsers(getTotalNumberOfUsers())
-                .totalNumberOfOrders(getTotalNumberOfOrders())
-                .totalNumberOfEvents(getTotalNumberOfEvents())
-                .totalNumberOfAvailableEvents(getTotalNumberOfAvailableEvents())
-                .totalNumberOfLocations(getTotalNumberOfLocations())
-                .totalNumberOfTicketsSold(getTotalNumberOfTicketsSold())
-                .locationsWithAllEventsCount(getLocationsWithAllEventsCount())
-                .locationsWithAvailableEventsCount(getLocationsWithAvailableEventsCount())
-                .eventsWithTicketsSoldCount(getEventsWithTicketsSoldCount())
+                .totalNumberOfUsers(getTotalNumberOfUsers(filter))
+                .totalNumberOfOrders(getTotalNumberOfOrders(filter))
+                .totalNumberOfEvents(getTotalNumberOfEvents(filter))
+                .totalNumberOfAvailableEvents(getTotalNumberOfAvailableEvents(filter))
+                .totalNumberOfLocations(getTotalNumberOfLocations(filter))
+                .totalNumberOfTicketsSold(getTotalNumberOfTicketsSold(filter))
+                .locationsWithAllEventsCount(getLocationsWithAllEventsCount(filter))
+                .locationsWithAvailableEventsCount(getLocationsWithAvailableEventsCount(filter))
+                .eventsWithTicketsSoldCount(getEventsWithTicketsSoldCount(filter))
                 .build();
     }
-    private Long getTotalNumberOfUsers() {
-        return userService.getTotalNumberOfUsers();
+    private Long getTotalNumberOfUsers(StatisticsFilter filter) {
+        return userService.getTotalNumberOfUsers(filter);
     }
-    private Long getTotalNumberOfOrders() {
-        return orderService.getTotalNumberOfOrders();
+    private Long getTotalNumberOfOrders(StatisticsFilter filter) {
+        return orderService.getTotalNumberOfOrders(filter);
     }
-    private Long getTotalNumberOfEvents() {
-        return eventService.getTotalNumberOfEvents();
+    private Long getTotalNumberOfEvents(StatisticsFilter filter) {
+        return eventService.getTotalNumberOfEvents(filter);
     }
-    private Long getTotalNumberOfAvailableEvents() {
-        return eventService.getTotalNumberOfAvailableEvents();
+    private Long getTotalNumberOfAvailableEvents(StatisticsFilter filter) {
+        return eventService.getTotalNumberOfAvailableEvents(filter);
     }
-    private Long getTotalNumberOfLocations() {
-        return locationService.getTotalNumberOfLocations();
+    private Long getTotalNumberOfLocations(StatisticsFilter filter) {
+        return locationService.getTotalNumberOfLocations(filter);
     }
-    private Long getTotalNumberOfTicketsSold() {
-        return ticketService.getTotalNumberOfTicketsSold();
+    private Long getTotalNumberOfTicketsSold(StatisticsFilter filter) {
+        return ticketService.getTotalNumberOfTicketsSold(filter);
     }
-    private List<LocationWithEventsCountResponseDto> getLocationsWithAllEventsCount() {
-        return locationService.getLocationsWithAllEventsCount();
+    private List<LocationWithEventsCountResponseDto> getLocationsWithAllEventsCount(StatisticsFilter filter) {
+        return locationService.getLocationsWithAllEventsCount(filter);
     }
-    private List<LocationWithEventsCountResponseDto> getLocationsWithAvailableEventsCount() {
-        return locationService.getLocationsWithAvailableEventsCount();
+    private List<LocationWithEventsCountResponseDto> getLocationsWithAvailableEventsCount(StatisticsFilter filter) {
+        return locationService.getLocationsWithAvailableEventsCount(filter);
     }
-    private List<EventWithTicketsSoldCount> getEventsWithTicketsSoldCount() {
-        return eventService.getEventsWithTicketsSoldCount();
+    private List<EventWithTicketsSoldCount> getEventsWithTicketsSoldCount(StatisticsFilter filter) {
+        return eventService.getEventsWithTicketsSoldCount(filter);
     }
 }

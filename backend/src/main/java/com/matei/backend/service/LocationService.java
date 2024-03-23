@@ -7,9 +7,10 @@ import com.matei.backend.dto.response.event.EventWithoutLocationResponseDto;
 import com.matei.backend.dto.response.location.LocationResponseDto;
 import com.matei.backend.dto.response.location.LocationWithoutEventListResponseDto;
 import com.matei.backend.dto.response.statistics.LocationWithEventsCountResponseDto;
-import com.matei.backend.exception.AdminResourceAccessException;
-import com.matei.backend.exception.LocationAlreadyExistsException;
-import com.matei.backend.exception.LocationNotFoundException;
+import com.matei.backend.entity.enums.StatisticsFilter;
+import com.matei.backend.exception.resourceAccess.AdminResourceAccessException;
+import com.matei.backend.exception.location.LocationAlreadyExistsException;
+import com.matei.backend.exception.location.LocationNotFoundException;
 import com.matei.backend.repository.LocationRepository;
 import com.matei.backend.entity.Location;
 import com.matei.backend.service.util.ImageService;
@@ -158,12 +159,21 @@ public class LocationService {
         locationRepository.deleteById(id);
     }
 
-    public Long getTotalNumberOfLocations() {
-        return locationRepository.count();
+    public Long getTotalNumberOfLocations(StatisticsFilter filter) {
+        if(filter == StatisticsFilter.ALL) {
+            return locationRepository.count();
+        }
+        return locationRepository.countByCreatedAtAfter(filter.getStartDate());
     }
 
-    public List<LocationWithEventsCountResponseDto> getLocationsWithAllEventsCount() {
-        var locations = locationRepository.findAll();
+    public List<LocationWithEventsCountResponseDto> getLocationsWithAllEventsCount(StatisticsFilter filter) {
+        List<Location> locations;
+        if (filter == StatisticsFilter.ALL) {
+            locations = locationRepository.findAll();
+        }
+        else {
+            locations = locationRepository.findAllWithEventsCreatedAfter(filter.getStartDate());
+        }
 
         return locations.stream()
                 .map(location -> LocationWithEventsCountResponseDto.builder()
@@ -174,8 +184,14 @@ public class LocationService {
                 .toList();
     }
 
-    public List<LocationWithEventsCountResponseDto> getLocationsWithAvailableEventsCount() {
-        var locations = locationRepository.findAll();
+    public List<LocationWithEventsCountResponseDto> getLocationsWithAvailableEventsCount(StatisticsFilter filter) {
+        List<Location> locations;
+        if (filter == StatisticsFilter.ALL) {
+            locations = locationRepository.findAll();
+        }
+        else {
+            locations = locationRepository.findAllWithEventsCreatedAfter(filter.getStartDate());
+        }
 
         return locations.stream()
                 .map(location -> LocationWithEventsCountResponseDto.builder()

@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {StatisticsService} from "./statistics.service";
 import {Chart, registerables} from "chart.js";
 import {NgForOf} from "@angular/common";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 
 Chart.register(...registerables);
 
@@ -10,15 +11,19 @@ Chart.register(...registerables);
   selector: 'app-statistics',
   standalone: true,
   imports: [
-    NgForOf
+    NgForOf,
+    ReactiveFormsModule,
+    FormsModule
   ],
   templateUrl: './statistics.component.html',
   styleUrl: './statistics.component.scss'
 })
 export class StatisticsComponent implements OnInit {
-  locationWithAllEventsChart: any = [];
-  locationWithAvailableEventsChart: any = [];
-  eventsWithTicketsSoldChart: any = [];
+  filter: string = 'all';
+
+  locationWithAllEventsChart!: Chart;
+  locationWithAvailableEventsChart!: Chart;
+  eventsWithTicketsSoldChart!: Chart;
 
   statistics: any = {};
 
@@ -36,15 +41,15 @@ export class StatisticsComponent implements OnInit {
   constructor(private statisticsService: StatisticsService) {}
 
   ngOnInit() {
-    this.statisticsService.fetchStatistics().subscribe((statistics) => {
+    this.statisticsService.fetchStatistics(this.filter).subscribe((statistics) => {
       this.statistics = statistics;
       this.locationsColors = this.statistics.locationsWithAllEventsCount.map((location: any) => {
         return { [location.location.name]: this.predefinedColors.pop() };
       });
       this.setCardStatistics();
-      this.drawLocationsChart(this.locationWithAllEventsChart, this.statistics.locationsWithAllEventsCount, 'location-with-all-events-chart');
-      this.drawLocationsChart(this.locationWithAvailableEventsChart, this.statistics.locationsWithAvailableEventsCount, 'location-with-available-events-chart');
-      this.drawEventsChart(this.eventsWithTicketsSoldChart, this.statistics.eventsWithTicketsSoldCount, 'events-with-most-tickets-sold-chart');
+      this.locationWithAllEventsChart = this.drawLocationsChart(this.statistics.locationsWithAllEventsCount, 'location-with-all-events-chart');
+      this.locationWithAvailableEventsChart = this.drawLocationsChart(this.statistics.locationsWithAvailableEventsCount, 'location-with-available-events-chart');
+      this.eventsWithTicketsSoldChart = this.drawEventsChart(this.statistics.eventsWithTicketsSoldCount, 'events-with-most-tickets-sold-chart');
     });
   }
 
@@ -77,8 +82,8 @@ export class StatisticsComponent implements OnInit {
     ]
   }
 
-  drawLocationsChart(chart: any, locations: any[], chartId: string) {
-    chart = new Chart(chartId, {
+  drawLocationsChart(locations: any[], chartId: string) {
+    return new Chart(chartId, {
       type: 'bar',
       data: {
         labels: locations.map((location: any) => location.location.name),
@@ -106,8 +111,8 @@ export class StatisticsComponent implements OnInit {
     });
   }
 
-  drawEventsChart(chart: any, events: any[], chartId: string) {
-    chart = new Chart(chartId, {
+  drawEventsChart(events: any[], chartId: string) {
+     return new Chart(chartId, {
       type: 'bar',
       data: {
         labels: events.map((event: any) => event.event.title),
@@ -130,5 +135,28 @@ export class StatisticsComponent implements OnInit {
         }
       },
     });
+  }
+
+  refreshStatistics() {
+    this.statisticsService.fetchStatistics(this.filter).subscribe((statistics) => {
+      this.statistics = statistics;
+      console.log(this.statistics);
+      this.setCardStatistics();
+      this.updateLocationsChart(this.locationWithAllEventsChart, this.statistics.locationsWithAllEventsCount);
+      this.updateLocationsChart(this.locationWithAvailableEventsChart, this.statistics.locationsWithAvailableEventsCount);
+      this.updateEventsChart(this.eventsWithTicketsSoldChart, this.statistics.eventsWithTicketsSoldCount);
+    });
+  }
+
+  updateLocationsChart(chart: any, locations: any[]) {
+    chart.data.labels = locations.map((location: any) => location.location.name);
+    chart.data.datasets[0].data = locations.map((location: any) => location.eventsCount);
+    chart.update();
+  }
+
+  updateEventsChart(chart: any, events: any[]) {
+    chart.data.labels = events.map((event: any) => event.event.title);
+    chart.data.datasets[0].data = events.map((event: any) => event.ticketsSoldCount);
+    chart.update();
   }
 }

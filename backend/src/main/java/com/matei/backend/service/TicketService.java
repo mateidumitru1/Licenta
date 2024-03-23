@@ -8,8 +8,13 @@ import com.matei.backend.dto.response.ticket.TicketResponseDto;
 import com.matei.backend.dto.response.ticketType.TicketTypeResponseDto;
 import com.matei.backend.entity.*;
 import com.matei.backend.entity.enums.Role;
+import com.matei.backend.entity.enums.StatisticsFilter;
 import com.matei.backend.entity.enums.Status;
-import com.matei.backend.exception.*;
+import com.matei.backend.exception.event.EventNotFoundException;
+import com.matei.backend.exception.event.EventPastException;
+import com.matei.backend.exception.resourceAccess.ValidatorResourceAccessException;
+import com.matei.backend.exception.ticket.TicketCreationException;
+import com.matei.backend.exception.ticket.TicketNotFoundException;
 import com.matei.backend.repository.TicketRepository;
 import com.matei.backend.service.util.EmailService;
 import com.matei.backend.service.util.QRService;
@@ -157,7 +162,10 @@ public class TicketService {
                 .toList();
     }
 
-    public Long getTotalNumberOfTicketsSold() {
-        return ticketRepository.count();
+    public Long getTotalNumberOfTicketsSold(StatisticsFilter filter) {
+        if(filter == StatisticsFilter.ALL) {
+            return ticketRepository.count();
+        }
+        return ticketRepository.countByCreatedAtAfter(filter.getStartDate());
     }
 }

@@ -20,7 +20,7 @@ public class OrderResponseDto {
     private UUID id;
     private Long orderNumber;
     private Double price;
-    private LocalDateTime date;
+    private LocalDateTime createdAt;
     private Status status;
     private List<TicketResponseDto> ticketList;
     private UserResponseDto user;

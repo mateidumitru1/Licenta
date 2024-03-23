@@ -8,11 +8,12 @@ import com.matei.backend.dto.response.ticket.TicketResponseDto;
 import com.matei.backend.dto.response.ticketType.TicketTypeResponseDto;
 import com.matei.backend.dto.response.user.UserResponseDto;
 import com.matei.backend.entity.*;
+import com.matei.backend.entity.enums.StatisticsFilter;
 import com.matei.backend.entity.enums.Status;
-import com.matei.backend.exception.EventPastException;
-import com.matei.backend.exception.OrderNotFoundException;
-import com.matei.backend.exception.ShoppingCartItemNotFoundException;
-import com.matei.backend.exception.TicketTypeQuantityException;
+import com.matei.backend.exception.event.EventPastException;
+import com.matei.backend.exception.order.OrderNotFoundException;
+import com.matei.backend.exception.shoppingCart.ShoppingCartItemNotFoundException;
+import com.matei.backend.exception.ticketType.TicketTypeQuantityException;
 import com.matei.backend.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -54,7 +55,7 @@ public class OrderService {
         var order = orderRepository.save(Order.builder()
                 .id(UUID.randomUUID())
                 .price(shoppingCart.getPrice())
-                .date(LocalDateTime.now())
+                .createdAt(LocalDateTime.now())
                 .status(Status.CONFIRMED)
                 .user(Optional.of(userService.getUserById(userId)).map(user -> User.builder()
                         .id(user.getId()).build()).orElseThrow())
@@ -88,7 +89,7 @@ public class OrderService {
                 .id(order.getId())
                 .orderNumber(order.getOrderNumber())
                 .price(order.getPrice())
-                .date(order.getDate())
+                .createdAt(order.getCreatedAt())
                 .status(order.getStatus())
                 .ticketList(order.getTicketList().stream().map(ticket -> {
                     TicketResponseDto.TicketResponseDtoBuilder ticketResponseDtoBuilder = TicketResponseDto.builder()
@@ -137,7 +138,7 @@ public class OrderService {
                 .id(order.getId())
                 .orderNumber(order.getOrderNumber())
                 .price(order.getPrice())
-                .date(order.getDate())
+                .createdAt(order.getCreatedAt())
                 .status(order.getStatus())
                 .user(UserResponseDto.builder()
                         .id(order.getUser().getId())
@@ -159,7 +160,7 @@ public class OrderService {
 
     public void adminCancelOrder(Long orderNumber) {
         var order = orderRepository.findByOrderNumber(orderNumber).orElseThrow(() -> new OrderNotFoundException("Order not found"));
-        if(order.getDate().isBefore(LocalDateTime.now())) {
+        if(order.getCreatedAt().isBefore(LocalDateTime.now())) {
             throw new EventPastException("Event has already passed");
         }
         order.setStatus(Status.CANCELED);
@@ -167,7 +168,10 @@ public class OrderService {
         orderRepository.save(order);
     }
 
-    public Long getTotalNumberOfOrders() {
-        return orderRepository.count();
+    public Long getTotalNumberOfOrders(StatisticsFilter filter) {
+        if(filter.equals(StatisticsFilter.ALL)) {
+            return orderRepository.count();
+        }
+        return orderRepository.countByCreatedAtAfter(filter.getStartDate());
     }
 }

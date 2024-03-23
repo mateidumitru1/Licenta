@@ -2,7 +2,7 @@ package com.matei.backend.service.auth;
 
 import com.matei.backend.entity.ResetPasswordToken;
 import com.matei.backend.entity.User;
-import com.matei.backend.exception.ResetPasswordTokenNotFoundException;
+import com.matei.backend.exception.tokens.ResetPasswordTokenNotFoundException;
 import com.matei.backend.repository.ResetPasswordTokenRespository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

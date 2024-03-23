@@ -14,7 +14,8 @@ import com.matei.backend.dto.response.ticketType.TicketTypeWithoutEventResponseD
 import com.matei.backend.entity.Event;
 import com.matei.backend.entity.Location;
 import com.matei.backend.entity.TicketType;
-import com.matei.backend.exception.EventNotFoundException;
+import com.matei.backend.entity.enums.StatisticsFilter;
+import com.matei.backend.exception.event.EventNotFoundException;
 import com.matei.backend.repository.EventRepository;
 import com.matei.backend.service.util.ImageService;
 import lombok.RequiredArgsConstructor;
@@ -187,18 +188,40 @@ public class EventService {
         return Collections.emptyList();
     }
 
-    public Long getTotalNumberOfEvents() {
-        return eventRepository.count();
+    public Long getTotalNumberOfEvents(StatisticsFilter filter) {
+        if(filter.equals(StatisticsFilter.ALL)) {
+            return eventRepository.count();
+        }
+        return eventRepository.countByCreatedAtAfter(filter.getStartDate());
     }
 
-    public Long getTotalNumberOfAvailableEvents() {
+    public Long getTotalNumberOfAvailableEvents(StatisticsFilter filter) {
+        if (filter.equals(StatisticsFilter.ALL)) {
+            return eventRepository.findAll().stream()
+                    .filter(event -> event.getDate().isAfter(LocalDate.now()))
+                    .count();
+        }
         return eventRepository.findAll().stream()
                 .filter(event -> event.getDate().isAfter(LocalDate.now()))
+                .filter(event -> event.getCreatedAt().isAfter(filter.getStartDate()))
                 .count();
     }
 
-    public List<EventWithTicketsSoldCount> getEventsWithTicketsSoldCount() {
+    public List<EventWithTicketsSoldCount> getEventsWithTicketsSoldCount(StatisticsFilter filter) {
+        if (filter.equals(StatisticsFilter.ALL)) {
+            return eventRepository.findAll().stream()
+                    .map(event -> EventWithTicketsSoldCount.builder()
+                            .event(modelMapper.map(event, EventWithoutArtistListResponseDto.class))
+                            .ticketsSoldCount(event.getTicketTypes().stream()
+                                    .map(ticketType -> ticketType.getTotalQuantity() - ticketType.getRemainingQuantity())
+                                    .reduce(0, Integer::sum))
+                            .build())
+                    .sorted(Comparator.comparingInt(EventWithTicketsSoldCount::getTicketsSoldCount).reversed())
+                    .limit(5)
+                    .toList();
+        }
         return eventRepository.findAll().stream()
+                .filter(event -> event.getCreatedAt().isAfter(filter.getStartDate()))
                 .map(event -> EventWithTicketsSoldCount.builder()
                         .event(modelMapper.map(event, EventWithoutArtistListResponseDto.class))
                         .ticketsSoldCount(event.getTicketTypes().stream()
@@ -206,7 +229,7 @@ public class EventService {
                                 .reduce(0, Integer::sum))
                         .build())
                 .sorted(Comparator.comparingInt(EventWithTicketsSoldCount::getTicketsSoldCount).reversed())
-                .limit(10)
+                .limit(5)
                 .toList();
     }
 }

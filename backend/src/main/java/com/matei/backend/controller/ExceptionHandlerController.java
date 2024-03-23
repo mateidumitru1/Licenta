@@ -1,11 +1,39 @@
 package com.matei.backend.controller;
 
-import com.matei.backend.exception.*;
+import com.matei.backend.exception.artist.ArtistAlreadyExistsException;
+import com.matei.backend.exception.artist.ArtistNotFoundException;
+import com.matei.backend.exception.auth.IncorrectOldPasswordException;
+import com.matei.backend.exception.auth.InvalidCredentialsException;
+import com.matei.backend.exception.auth.PasswordNotMatchingException;
+import com.matei.backend.exception.event.EventNotFoundException;
+import com.matei.backend.exception.event.EventPastException;
+import com.matei.backend.exception.genre.GenreAlreadyExistsException;
+import com.matei.backend.exception.genre.GenreNotFoundException;
+import com.matei.backend.exception.location.LocationAlreadyExistsException;
+import com.matei.backend.exception.location.LocationNotFoundException;
+import com.matei.backend.exception.order.OrderNotFoundException;
+import com.matei.backend.exception.resourceAccess.AdminResourceAccessException;
+import com.matei.backend.exception.shoppingCart.ShoppingCartItemNotFoundException;
+import com.matei.backend.exception.shoppingCart.ShoppingCartNotFoundException;
+import com.matei.backend.exception.statistics.StatisticsFilterInvalidException;
+import com.matei.backend.exception.ticket.TicketCreationException;
+import com.matei.backend.exception.ticket.TicketNotFoundException;
+import com.matei.backend.exception.ticketType.TicketTypeNotFoundException;
+import com.matei.backend.exception.ticketType.TicketTypeQuantityException;
+import com.matei.backend.exception.tokens.ResetPasswordTokenExpiredException;
+import com.matei.backend.exception.tokens.ResetPasswordTokenNotFoundException;
+import com.matei.backend.exception.tokens.VerifyAccountTokenExpiredException;
+import com.matei.backend.exception.tokens.VerifyAccountTokenNotFoundException;
+import com.matei.backend.exception.topEvent.TopEventAlreadyExistsException;
+import com.matei.backend.exception.topEvent.TopEventNotFoundException;
+import com.matei.backend.exception.user.UserAlreadyEnabledException;
+import com.matei.backend.exception.user.UserAlreadyExistsException;
+import com.matei.backend.exception.user.UserNotEnabledException;
+import com.matei.backend.exception.user.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.servlet.NoHandlerFoundException;
 
 @ControllerAdvice
 public class ExceptionHandlerController {
@@ -152,6 +180,11 @@ public class ExceptionHandlerController {
 
     @ExceptionHandler(PasswordNotMatchingException.class)
     public ResponseEntity<?> handlePasswordNotMatchingException(PasswordNotMatchingException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(StatisticsFilterInvalidException.class)
+    public ResponseEntity<?> handleStatisticsFilterNotFoundException(StatisticsFilterInvalidException exception) {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }

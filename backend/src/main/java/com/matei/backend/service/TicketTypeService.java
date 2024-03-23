@@ -6,7 +6,7 @@ import com.matei.backend.dto.response.event.EventWithoutArtistListResponseDto;
 import com.matei.backend.dto.response.ticketType.TicketTypeResponseDto;
 import com.matei.backend.entity.Event;
 import com.matei.backend.entity.TicketType;
-import com.matei.backend.exception.TicketTypeNotFoundException;
+import com.matei.backend.exception.ticketType.TicketTypeNotFoundException;
 import com.matei.backend.repository.TicketTypeRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;

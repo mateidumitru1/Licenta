@@ -9,8 +9,8 @@ import {JwtHandler} from "../../identity/jwt.handler";
 export class StatisticsService {
   constructor(private http: HttpClient, private jwtHandler: JwtHandler) {}
 
-  fetchStatistics() {
-    return this.http.get(apiURL + '/statistics', {
+  fetchStatistics(filter: string) {
+    return this.http.get(apiURL + '/statistics/' + filter, {
       headers: {
         'Authorization': 'Bearer ' + this.jwtHandler.getToken()
       }
