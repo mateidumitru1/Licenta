@@ -9,6 +9,8 @@ import com.matei.backend.exception.event.EventNotFoundException;
 import com.matei.backend.exception.event.EventPastException;
 import com.matei.backend.exception.genre.GenreAlreadyExistsException;
 import com.matei.backend.exception.genre.GenreNotFoundException;
+import com.matei.backend.exception.jwt.TokenBlacklistedException;
+import com.matei.backend.exception.jwt.TokenExpiredException;
 import com.matei.backend.exception.location.LocationAlreadyExistsException;
 import com.matei.backend.exception.location.LocationNotFoundException;
 import com.matei.backend.exception.order.OrderNotFoundException;
@@ -37,6 +39,16 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 public class ExceptionHandlerController {
+
+    @ExceptionHandler(TokenBlacklistedException.class)
+    public ResponseEntity<?> handleTokenBlacklistedException(TokenBlacklistedException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(TokenExpiredException.class)
+    public ResponseEntity<?> handleTokenExpiredException(TokenExpiredException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.UNAUTHORIZED);
+    }
 
     @ExceptionHandler(AdminResourceAccessException.class)
     public ResponseEntity<?> handleAdminResourceAccessException(AdminResourceAccessException exception) {

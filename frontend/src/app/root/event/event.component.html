@@ -11,9 +11,10 @@
     </div>
   </div>
   <div class="tickets-container">
-    <h2 class="h4 mb-4 text-gray-800">Bilete</h2>
-    <div *ngFor="let ticket of event.ticketTypes">
-      <div class="ticket-details">
+    <div *ngIf="event.ticketTypes.length > 0">
+      <h2 class="h4 mb-4 text-gray-800">Bilete</h2>
+      <div *ngFor="let ticket of event.ticketTypes">
+        <div class="ticket-details">
           <h3 class="h5 mb-4 text-gray-800">{{ ticket.name }}</h3>
           <p><strong>Pret:</strong> {{ ticket.price }} RON</p>
           <div class="ticket-number-selector-container">
@@ -25,9 +26,13 @@
               <span class="fa fa-plus"></span>
             </button>
           </div>
+        </div>
+        <p class="text-end"><strong>Cantitate ramasa: {{ ticket.remainingQuantity }}</strong></p>
       </div>
-      <p class="text-end"><strong>Cantitate ramasa: {{ ticket.remainingQuantity }}</strong></p>
+      <button class="btn btn-primary" (click)="buyTickets()">Cumpara</button>
     </div>
-    <button class="btn btn-primary" (click)="buyTickets()">Cumpara</button>
+    <div *ngIf="event.ticketTypes.length == 0">
+      <h2 class="h4 mt-3 mb-4 text-gray-800">Nu sunt bilete disponibile pentru acest eveniment</h2>
+    </div>
   </div>
 </div>

@@ -27,8 +27,12 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(generator = "uuid4")
     private UUID id;
+
+    @Column(unique = true)
     private String username;
     private String password;
+
+    @Column(unique = true)
     private String email;
     private String firstName;
     private String lastName;

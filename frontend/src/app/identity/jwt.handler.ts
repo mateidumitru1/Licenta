@@ -18,7 +18,6 @@ export class JwtHandler {
     if (token === null) {
       return false;
     }
-    // @ts-ignore
     const jwt = this.parseJwt(token);
     const now = new Date();
     const nowTime = now.getTime() / 1000;
@@ -34,15 +33,6 @@ export class JwtHandler {
     return jwt.role;
   }
 
-  getUserName(): string {
-    const token = this.getToken();
-    if (token === null) {
-      return '';
-    }
-    const jwt = this.parseJwt(token);
-    return jwt.sub;
-  }
-
   setToken(token: string, rememberMe: boolean) {
     if(rememberMe) {
       localStorage.setItem('token', token);
@@ -55,7 +45,6 @@ export class JwtHandler {
   removeToken() {
     localStorage.removeItem('token');
     sessionStorage.removeItem('token');
-    localStorage.removeItem('rememberMe');
   }
 
   getToken(): string | null {

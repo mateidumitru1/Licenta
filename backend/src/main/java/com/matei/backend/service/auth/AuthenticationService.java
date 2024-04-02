@@ -18,12 +18,14 @@ import com.matei.backend.service.util.EmailService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -53,6 +55,7 @@ public class AuthenticationService {
                 .email(request.getEmail())
                 .role(Role.USER)
                 .enabled(false)
+                .createdAt(LocalDateTime.now())
                 .build();
 
         var createdUser = userRepository.save(user);
@@ -64,11 +67,13 @@ public class AuthenticationService {
         return modelMapper.map(createdUser, RegisterResponseDto.class);
     }
 
-    public AuthenticationResponseDto authenticate(AuthenticationRequestDto loginRequest) {
+    public AuthenticationResponseDto authenticate(AuthenticationRequestDto loginRequest) throws Exception {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
         } catch (DisabledException e) {
             throw new UserNotEnabledException("User not enabled");
+        } catch (BadCredentialsException e) {
+            throw new InvalidCredentialsException("Invalid credentials");
         }
 
         var user = userRepository.findByUsername(loginRequest.getUsername()).orElseThrow(() -> new InvalidCredentialsException("Invalid credentials"));

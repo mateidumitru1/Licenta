@@ -26,7 +26,11 @@ public class Event {
     private UUID id;
     private String title;
     private LocalDate date;
+
+    @Column(length = 6200)
     private String shortDescription;
+
+    @Column(length = 9500)
     private String description;
     private String imageUrl;
     private LocalDateTime createdAt;

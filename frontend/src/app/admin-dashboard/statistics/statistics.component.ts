@@ -56,7 +56,7 @@ export class StatisticsComponent implements OnInit {
   setCardStatistics() {
     this.cardStatistics = [
       {
-        title: 'Numarul total de utilizatori',
+        title: 'Numarul total de utilizatori adaugati',
         value: this.statistics.totalNumberOfUsers
       },
       {
@@ -68,15 +68,15 @@ export class StatisticsComponent implements OnInit {
         value: this.statistics.totalNumberOfTicketsSold
       },
       {
-        title: 'Numarul total de locatii',
+        title: 'Numarul total de locatii adaugate',
         value: this.statistics.totalNumberOfLocations
       },
       {
-        title: 'Numarul total de evenimente',
+        title: 'Numarul total de evenimente adaugate',
         value: this.statistics.totalNumberOfEvents
       },
       {
-        title: 'Numarul total de evenimente disponibile',
+        title: 'Numarul total de evenimente adaugate disponibile',
         value: this.statistics.totalNumberOfAvailableEvents
       },
     ]

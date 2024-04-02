@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -73,13 +74,12 @@ public class LocationService {
         var locations = locationRepository.findAll();
 
         return locations.stream()
-                .map(this::getLocationWithAvailableEventsResponseDto)
+                .map(this::getLocationResponseDto)
                 .toList();
     }
 
-    private LocationResponseDto getLocationWithAvailableEventsResponseDto(Location location) {
+    private LocationResponseDto getLocationResponseDto(Location location) {
         var availableEvents = location.getEventList().stream()
-                .filter(event -> event.getDate().isAfter(LocalDate.now()))
                 .map(event -> {
                     var artistList = event.getArtists().stream()
                             .map(artist -> modelMapper.map(artist, ArtistWithoutEventResponseDto.class))
@@ -97,30 +97,18 @@ public class LocationService {
     }
 
     public LocationResponseDto getLocationWithAvailableEventsById(UUID id) {
-        var location = locationRepository.findById(id).orElseThrow(() -> new LocationNotFoundException("Location not found"));
+        var location = locationRepository.findLocationWithAvailableEventsById(id, LocalDate.now())
+                .orElseThrow(() -> new LocationNotFoundException("Location not found"));
 
-        return getLocationWithAvailableEventsResponseDto(location);
+        return getLocationResponseDto(location);
     }
 
     public LocationResponseDto getLocationWithUnavailableEventsById(UUID id) {
-        var location = locationRepository.findById(id).orElseThrow(() -> new LocationNotFoundException("Location not found"));
+        var location = locationRepository.findLocationWithUnavailableEventsById(id, LocalDate.now())
+                .orElseThrow(() -> new LocationNotFoundException("Location not found"));
 
-        var unavailableEvents = location.getEventList().stream()
-                .filter(event -> event.getDate().isBefore(LocalDate.now()))
-                .map(event -> {
-                    var artistList = event.getArtists().stream()
-                            .map(artist -> modelMapper.map(artist, ArtistWithoutEventResponseDto.class))
-                            .toList();
-                    var eventDto = modelMapper.map(event, EventWithoutLocationResponseDto.class);
-                    eventDto.setArtistList(artistList);
-                    return eventDto;
-                })
-                .toList();
-
-        var locationResponseDto = modelMapper.map(location, LocationResponseDto.class);
-        locationResponseDto.setEventList(unavailableEvents);
-
-        return locationResponseDto;    }
+        return getLocationResponseDto(location);
+    }
 
     public LocationResponseDto updateLocation(LocationUpdateRequestDto updatedLocation, UUID userId) throws IOException {
         if(!userService.isAdmin(userId)) {

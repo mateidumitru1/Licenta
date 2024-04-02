@@ -12,7 +12,7 @@ import {
   finalize,
   map,
   mergeMap,
-  Observable,
+  Observable, retry,
   retryWhen,
   take,
   throwError,
@@ -35,14 +35,27 @@ export class MyHttpInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<any>> {
     this.loadingService.show();
     return next.handle(request).pipe(
-      timeout(10000),
+      retryWhen(errors =>
+        errors.pipe(
+          mergeMap((error: HttpErrorResponse, index: number) => {
+            if (index < 3 && this.isConnectionError(error)) {
+              return timer(1000);
+            }
+            return throwError(error);
+          })
+        )
+      ),
       catchError((error: HttpErrorResponse) => {
-        this.loadingService.hide();
         return throwError(error);
       }),
       finalize(() => {
         this.loadingService.hide();
       })
     );
+  }
+
+  private isConnectionError(error: HttpErrorResponse): boolean {
+    // @ts-ignore
+    return error.status === '(failed)net::ERR_CONNECTION_REFUSED';
   }
 }

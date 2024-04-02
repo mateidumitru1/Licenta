@@ -18,6 +18,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,7 +33,10 @@ public class UserService {
         if (!isAdmin(currentUserId)) {
             throw new AdminResourceAccessException("You are not authorized to perform this action");
         }
-        userCreationRequestDto.setPassword(passwordEncoder.encode(userCreationRequestDto.getPassword()));
+        var userToSave = modelMapper.map(userCreationRequestDto, User.class);
+        userToSave.setPassword(passwordEncoder.encode(userCreationRequestDto.getPassword()));
+        userToSave.setEnabled(true);
+        userToSave.setCreatedAt(LocalDateTime.now());
 
         var user = userRepository.save(modelMapper.map(userCreationRequestDto, User.class));
 

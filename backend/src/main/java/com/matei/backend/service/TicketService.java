@@ -166,6 +166,7 @@ public class TicketService {
         if(filter == StatisticsFilter.ALL) {
             return ticketRepository.count();
         }
-        return ticketRepository.countByCreatedAtAfter(filter.getStartDate());
+        return ticketRepository.countByCreatedAtAfter(filter.getStartDate())
+                .orElseThrow();
     }
 }

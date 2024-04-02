@@ -1,6 +1,8 @@
 package com.matei.backend.configuration;
 
 import com.matei.backend.entity.User;
+import com.matei.backend.exception.jwt.TokenBlacklistedException;
+import com.matei.backend.exception.jwt.TokenExpiredException;
 import com.matei.backend.service.auth.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -39,8 +41,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String token = authorizationHeader.substring(7);
 
         if(jwtService.isTokenBlacklisted(token)) {
-            filterChain.doFilter(request, response);
-            return;
+            throw new TokenBlacklistedException("Token is blacklisted");
+        }
+
+        if(jwtService.isTokenExpired(token)) {
+            throw new TokenExpiredException("Token is expired");
         }
 
         String username = jwtService.extractUsername(token);

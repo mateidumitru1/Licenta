@@ -192,7 +192,8 @@ public class EventService {
         if(filter.equals(StatisticsFilter.ALL)) {
             return eventRepository.count();
         }
-        return eventRepository.countByCreatedAtAfter(filter.getStartDate());
+        return eventRepository.countByCreatedAtAfter(filter.getStartDate())
+                .orElseThrow();
     }
 
     public Long getTotalNumberOfAvailableEvents(StatisticsFilter filter) {
@@ -208,28 +209,35 @@ public class EventService {
     }
 
     public List<EventWithTicketsSoldCount> getEventsWithTicketsSoldCount(StatisticsFilter filter) {
+        List<Event> events;
         if (filter.equals(StatisticsFilter.ALL)) {
-            return eventRepository.findAll().stream()
-                    .map(event -> EventWithTicketsSoldCount.builder()
-                            .event(modelMapper.map(event, EventWithoutArtistListResponseDto.class))
-                            .ticketsSoldCount(event.getTicketTypes().stream()
-                                    .map(ticketType -> ticketType.getTotalQuantity() - ticketType.getRemainingQuantity())
-                                    .reduce(0, Integer::sum))
-                            .build())
-                    .sorted(Comparator.comparingInt(EventWithTicketsSoldCount::getTicketsSoldCount).reversed())
-                    .limit(5)
-                    .toList();
+            events = eventRepository.findAll();
+        } else {
+            events = eventRepository.findAllByCreatedAtAfter(filter.getStartDate());
         }
-        return eventRepository.findAll().stream()
-                .filter(event -> event.getCreatedAt().isAfter(filter.getStartDate()))
-                .map(event -> EventWithTicketsSoldCount.builder()
-                        .event(modelMapper.map(event, EventWithoutArtistListResponseDto.class))
-                        .ticketsSoldCount(event.getTicketTypes().stream()
-                                .map(ticketType -> ticketType.getTotalQuantity() - ticketType.getRemainingQuantity())
-                                .reduce(0, Integer::sum))
-                        .build())
+
+        return events.stream()
+                .map(event -> {
+                    EventWithoutArtistListResponseDto eventDto = modelMapper.map(event, EventWithoutArtistListResponseDto.class);
+                    int ticketsSoldCount = calculateTicketsSoldCount(event);
+                    if (ticketsSoldCount == 0)
+                        return null;
+
+                    return EventWithTicketsSoldCount.builder()
+                            .event(eventDto)
+                            .ticketsSoldCount(ticketsSoldCount)
+                            .build();
+                })
+                .filter(Objects::nonNull)
                 .sorted(Comparator.comparingInt(EventWithTicketsSoldCount::getTicketsSoldCount).reversed())
                 .limit(5)
                 .toList();
     }
+
+    private int calculateTicketsSoldCount(Event event) {
+        return event.getTicketTypes().stream()
+                .map(ticketType -> ticketType.getTotalQuantity() - ticketType.getRemainingQuantity())
+                .reduce(0, Integer::sum);
+    }
+
 }
