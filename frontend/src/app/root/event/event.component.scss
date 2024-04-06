@@ -51,22 +51,9 @@
 .tickets-container {
   margin: 0 auto;
   padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
   background-color: #f5f5f5;
   border: 1px solid #ccc;
   width: 100%;
-}
-
-.ticket-details {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 1rem;
-  padding: 1rem;
-  border-radius: 0.25rem;
 }
 
 .ticket-number {
@@ -80,7 +67,7 @@
 
 .ticket-number-button {
   width: 30px;
-  height: 30px;
+  height: 31.5px;
   padding: 0.25rem 0.5rem;
   font-size: 0.7rem;
 }

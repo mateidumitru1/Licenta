@@ -15,6 +15,10 @@ export class ManageArtistsService {
       return this.http.get(apiURL + '/artists');
     }
 
+    fetchArtistsWithoutEventGenre() {
+      return this.http.get(apiURL + '/artists/without-event-genre');
+    }
+
     addArtist(artist: any) {
       console.log(getFormData(artist));
       return this.http.post(apiURL + '/artists', getFormData(artist), {

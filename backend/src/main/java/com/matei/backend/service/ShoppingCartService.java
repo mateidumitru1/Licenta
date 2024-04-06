@@ -1,7 +1,7 @@
 package com.matei.backend.service;
 
 import com.matei.backend.dto.request.shoppingCart.ShoppingCartItemRequestDto;
-import com.matei.backend.dto.response.event.EventWithoutArtistListResponseDto;
+import com.matei.backend.dto.response.event.EventWithoutTicketArtistResponseDto;
 import com.matei.backend.dto.response.location.LocationWithoutEventListResponseDto;
 import com.matei.backend.dto.response.shoppingCart.ShoppingCartItemResponseDto;
 import com.matei.backend.dto.response.shoppingCart.ShoppingCartResponseDto;
@@ -11,6 +11,7 @@ import com.matei.backend.exception.event.EventPastException;
 import com.matei.backend.exception.ticketType.TicketTypeNotFoundException;
 import com.matei.backend.repository.ShoppingCartItemRepository;
 import com.matei.backend.repository.ShoppingCartRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class ShoppingCartService {
     private final ShoppingCartRepository shoppingCartRepository;
@@ -177,7 +179,7 @@ public class ShoppingCartService {
                                         .price(shoppingCartItem.getTicketType().getPrice())
                                         .totalQuantity(shoppingCartItem.getTicketType().getTotalQuantity())
                                         .remainingQuantity(shoppingCartItem.getTicketType().getRemainingQuantity())
-                                        .event(EventWithoutArtistListResponseDto.builder()
+                                        .event(EventWithoutTicketArtistResponseDto.builder()
                                                 .id(shoppingCartItem.getTicketType().getEvent().getId())
                                                 .title(shoppingCartItem.getTicketType().getEvent().getTitle())
                                                 .date(shoppingCartItem.getTicketType().getEvent().getDate())

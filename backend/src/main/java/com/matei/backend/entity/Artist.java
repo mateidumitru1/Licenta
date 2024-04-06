@@ -32,7 +32,7 @@ public class Artist {
     private LocalDateTime createdAt;
 
     @JsonIgnore
-    @ManyToMany(mappedBy = "artists")
+    @ManyToMany(mappedBy = "artistList")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Event> eventList;
 

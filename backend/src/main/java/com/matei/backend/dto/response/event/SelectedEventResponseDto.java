@@ -13,7 +13,7 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class EventWithoutArtistListResponseDto {
+public class SelectedEventResponseDto {
     private UUID id;
     private String title;
     private LocalDate date;
@@ -21,4 +21,5 @@ public class EventWithoutArtistListResponseDto {
     private String description;
     private LocationWithoutEventListResponseDto location;
     private String imageUrl;
+    private Boolean selected;
 }

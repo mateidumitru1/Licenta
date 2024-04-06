@@ -49,7 +49,7 @@ export class AddTicketTypeComponent {
     this.registrationForm = this.fb.group({
       name: ['', Validators.required],
       price: ['', [Validators.required, Validators.pattern('^[0-9]*$')]],
-      quantity: ['', [Validators.required, Validators.pattern('^[0-9]*$')]]
+      remainingQuantity: ['', [Validators.required, Validators.pattern('^[0-9]*$')]]
     });
   }
 

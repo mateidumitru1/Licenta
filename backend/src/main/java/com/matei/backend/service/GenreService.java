@@ -5,14 +5,17 @@ import com.matei.backend.dto.response.genre.GenreResponseDto;
 import com.matei.backend.dto.response.genre.GenreWithoutArtistListResponseDto;
 import com.matei.backend.entity.Genre;
 import com.matei.backend.repository.GenreRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class GenreService {
     private final GenreRepository genreRepository;
@@ -21,6 +24,7 @@ public class GenreService {
     public GenreResponseDto createGenre(GenreCreationRequestDto genre) {
         return modelMapper.map(genreRepository.save(Genre.builder()
                 .name(genre.getName())
+                .createdAt(LocalDateTime.now())
                 .build()), GenreResponseDto.class);
     }
 

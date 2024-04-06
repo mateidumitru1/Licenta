@@ -1,6 +1,6 @@
 package com.matei.backend.dto.response.location;
 
-import com.matei.backend.dto.response.event.EventWithoutLocationResponseDto;
+import com.matei.backend.dto.response.event.EventWithoutLocationTicketResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,5 +18,5 @@ public class LocationResponseDto {
     private String name;
     private String address;
     private String imageUrl;
-    private List<EventWithoutLocationResponseDto> eventList;
+    private List<EventWithoutLocationTicketResponseDto> eventList;
 }

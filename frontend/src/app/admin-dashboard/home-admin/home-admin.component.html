@@ -2,12 +2,12 @@
   <h1>Recommended events</h1>
   <button class="btn btn-primary" id="btnAddEvent" (click)="addTopEvent()">Add event</button>
   <div class="cards-container">
-    <div *ngFor="let topEvent of topEventList" class="card">
-      <button class="btn btn-danger btn-delete" (click)="deleteTopEvent(topEvent)"><i class="fa fa-x"></i></button>
-      <img class="card-img-top" src="{{topEvent.event.imageUrl}}" alt="Card image cap">
+    <div *ngFor="let selectedEvent of selectedEventList" class="card">
+      <button class="btn btn-danger btn-delete" (click)="deleteTopEvent(selectedEvent)"><i class="fa fa-x"></i></button>
+      <img class="card-img-top" src="{{selectedEvent.imageUrl}}" alt="">
       <div class="card-body">
-        <h5 class="card-title">{{topEvent.event.title}}</h5>
-        <p class="card-text">{{topEvent.event.location.name}} | {{topEvent.event.date}}</p>
+        <h5 class="card-title">{{selectedEvent.title}}</h5>
+        <p class="card-text">{{selectedEvent.location.name}} | {{selectedEvent.date}}</p>
       </div>
     </div>
   </div>

@@ -11,27 +11,29 @@
     </div>
   </div>
   <div class="tickets-container">
-    <div *ngIf="event.ticketTypes.length > 0">
+    <div *ngIf="event.ticketTypeList?.length > 0">
       <h2 class="h4 mb-4 text-gray-800">Bilete</h2>
-      <div *ngFor="let ticket of event.ticketTypes">
-        <div class="ticket-details">
-          <h3 class="h5 mb-4 text-gray-800">{{ ticket.name }}</h3>
-          <p><strong>Pret:</strong> {{ ticket.price }} RON</p>
-          <div class="ticket-number-selector-container">
-            <button class="btn btn-primary ticket-number-button left" (click)="decrementQuantity(ticket)">
-              <span class="fa fa-minus"></span>
-            </button>
-            <input class="ticket-number" type="number" [(ngModel)]="ticket.reservedQuantity" readonly>
-            <button class="btn btn-primary ticket-number-button right" (click)="incrementQuantity(ticket)">
-              <span class="fa fa-plus"></span>
-            </button>
+      <div *ngFor="let ticket of event.ticketTypeList">
+        <div class="ticket-details d-flex">
+          <h3 class="h5 mb-0 text-gray-800 flex-grow-1">{{ ticket.name }}</h3>
+          <div class="d-flex">
+            <p class="mb-0 me-3"><strong>Pret:</strong> {{ ticket.price }} RON</p>
+            <div class="ticket-number-selector-container">
+              <button class="btn btn-primary ticket-number-button left" (click)="decrementQuantity(ticket)">
+                <span class="fa fa-minus"></span>
+              </button>
+              <input class="ticket-number" type="number" [(ngModel)]="ticket.reservedQuantity" readonly>
+              <button class="btn btn-primary ticket-number-button right" (click)="incrementQuantity(ticket)">
+                <span class="fa fa-plus"></span>
+              </button>
+            </div>
           </div>
         </div>
-        <p class="text-end"><strong>Cantitate ramasa: {{ ticket.remainingQuantity }}</strong></p>
+        <p class="text-end mt-1"><strong>Cantitate ramasa: {{ ticket.remainingQuantity }}</strong></p>
       </div>
       <button class="btn btn-primary" (click)="buyTickets()">Cumpara</button>
     </div>
-    <div *ngIf="event.ticketTypes.length == 0">
+    <div *ngIf="event.ticketTypeList?.length == 0">
       <h2 class="h4 mt-3 mb-4 text-gray-800">Nu sunt bilete disponibile pentru acest eveniment</h2>
     </div>
   </div>

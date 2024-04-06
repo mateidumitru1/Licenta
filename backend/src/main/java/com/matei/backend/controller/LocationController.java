@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.matei.backend.dto.request.location.LocationCreationRequestDto;
 import com.matei.backend.dto.request.location.LocationUpdateRequestDto;
 import com.matei.backend.dto.response.location.LocationResponseDto;
+import com.matei.backend.dto.response.location.LocationWithoutEventListResponseDto;
 import com.matei.backend.service.auth.JwtService;
 import com.matei.backend.service.LocationService;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +31,7 @@ public class LocationController {
     }
 
     @GetMapping
-    public ResponseEntity<List<LocationResponseDto>> getAllLocations() {
+    public ResponseEntity<List<LocationWithoutEventListResponseDto>> getAllLocations() {
         return ResponseEntity.ok(locationService.getAllLocations());
     }
 

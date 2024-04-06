@@ -16,7 +16,6 @@ import java.util.UUID;
 public class ArtistWithoutEventResponseDto {
     private UUID id;
     private String name;
-    private String genre;
     private String imageUrl;
-    private List<GenreWithoutArtistListResponseDto> genres;
+    private List<GenreWithoutArtistListResponseDto> genreList;
 }

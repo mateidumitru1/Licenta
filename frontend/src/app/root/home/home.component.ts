@@ -3,6 +3,7 @@ import {HomeService} from "./home.service";
 import {Router} from "@angular/router";
 import {NgForOf, NgIf, NgOptimizedImage} from "@angular/common";
 import {LoadingComponent} from "../../shared/loading/loading.component";
+import {IdentityService} from "../../identity/identity.service";
 
 @Component({
   selector: 'app-home',
@@ -17,24 +18,40 @@ import {LoadingComponent} from "../../shared/loading/loading.component";
   styleUrl: './home.component.scss'
 })
 export class HomeComponent implements OnInit{
-  topEvents: any[] = [];
+  selectedEvents: any[] = [];
+  recommendedEvents: any[] = [];
+  locations: any[] = [];
 
-  constructor(private homeService: HomeService, private router: Router) {
-  }
+  isLoggedIn = false;
+
+  constructor(private homeService: HomeService, private identityService: IdentityService, private router: Router) {}
+
   ngOnInit(): void {
-    this.homeService.fetchTopEvents().subscribe({
+    if (this.identityService.isLoggedIn()) {
+      this.isLoggedIn = true;
+      this.homeService.fetchRecommendedEvents().subscribe({
+        next: (events: any) => {
+          this.recommendedEvents = events;
+          console.log('Recommended events', events);
+        },
+        error: (error: any) => {
+          console.error('Error fetching recommended events', error);
+        }
+      });
+    }
+    this.homeService.fetchSelectedEvents().subscribe({
       next: (events: any) => {
-        this.topEvents = events;
+        this.selectedEvents = events;
       },
       error: (error: any) => {
-        console.error('Error fetching top events', error);
+        console.error('Error fetching selected events', error);
       }
     });
   }
 
-  onEventClick(topEvent: any) {
-    this.router.navigate(['/', topEvent.event.location.name, topEvent.event.title], {
-      queryParams: {id: topEvent.event.id}
+  onEventClick(selectedEvent: any) {
+    this.router.navigate(['/', selectedEvent.location.name, selectedEvent.title], {
+      queryParams: {id: selectedEvent.id}
     });
   }
 }

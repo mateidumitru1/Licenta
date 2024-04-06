@@ -3,6 +3,8 @@ package com.matei.backend.controller;
 import com.matei.backend.dto.request.artist.ArtistCreationRequestDto;
 import com.matei.backend.dto.request.artist.ArtistUpdateRequestDto;
 import com.matei.backend.dto.response.artist.ArtistResponseDto;
+import com.matei.backend.dto.response.artist.ArtistWithoutEventGenreResponseDto;
+import com.matei.backend.dto.response.artist.ArtistWithoutEventResponseDto;
 import com.matei.backend.service.ArtistService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -29,8 +31,13 @@ public class ArtistController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ArtistResponseDto>> getAllArtists() {
+    public ResponseEntity<List<ArtistWithoutEventResponseDto>> getAllArtists() {
         return ResponseEntity.ok(artistService.getAllArtists());
+    }
+
+    @GetMapping("/without-event-genre")
+    public ResponseEntity<List<ArtistWithoutEventGenreResponseDto>> getAllArtistsWithoutEventGenre() {
+        return ResponseEntity.ok(artistService.getAllArtistsWithoutEventGenre());
     }
 
     @GetMapping("/first-letter/{firstLetter}")

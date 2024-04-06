@@ -26,6 +26,7 @@ public class Event {
     private UUID id;
     private String title;
     private LocalDate date;
+    private Boolean selected;
 
     @Column(length = 6200)
     private String shortDescription;
@@ -43,7 +44,7 @@ public class Event {
 
     @JsonIgnore
     @OneToMany(mappedBy = "event")
-    private List<TicketType> ticketTypes;
+    private List<TicketType> ticketTypeList;
 
     @ManyToMany
     @JoinTable(
@@ -52,7 +53,7 @@ public class Event {
             inverseJoinColumns = @JoinColumn(name = "artist_id")
     )
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private List<Artist> artists;
+    private List<Artist> artistList;
 
     @Override
     public String toString() {

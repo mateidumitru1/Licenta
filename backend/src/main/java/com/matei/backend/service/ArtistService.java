@@ -5,7 +5,9 @@ import com.matei.backend.dto.request.artist.ArtistCreationRequestDto;
 import com.matei.backend.dto.request.artist.ArtistUpdateRequestDto;
 import com.matei.backend.dto.request.genre.GenreRequestDto;
 import com.matei.backend.dto.response.artist.ArtistResponseDto;
-import com.matei.backend.dto.response.event.EventWithoutArtistListResponseDto;
+import com.matei.backend.dto.response.artist.ArtistWithoutEventGenreResponseDto;
+import com.matei.backend.dto.response.artist.ArtistWithoutEventResponseDto;
+import com.matei.backend.dto.response.event.EventWithoutTicketArtistResponseDto;
 import com.matei.backend.dto.response.genre.GenreWithoutArtistListResponseDto;
 import com.matei.backend.entity.Artist;
 import com.matei.backend.entity.Genre;
@@ -14,16 +16,19 @@ import com.matei.backend.exception.artist.ArtistNotFoundException;
 import com.matei.backend.repository.ArtistRepository;
 import com.matei.backend.repository.GenreRepository;
 import com.matei.backend.service.util.ImageService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class ArtistService {
     private final ArtistRepository artistRepository;
@@ -46,6 +51,7 @@ public class ArtistService {
                         .map(genre -> modelMapper.map(genre, Genre.class))
                         .toList())
                 .imageUrl(imageService.saveImage("artist-images", artistCreationRequestDto.getImage()))
+                .createdAt(LocalDateTime.now())
                 .build());
 
         genreRepository.saveAll(artist.getGenreList().stream()
@@ -68,7 +74,7 @@ public class ArtistService {
                 .toList();
 
         var eventList = artist.getEventList().stream()
-                .map(event -> modelMapper.map(event, EventWithoutArtistListResponseDto.class))
+                .map(event -> modelMapper.map(event, EventWithoutTicketArtistResponseDto.class))
                 .toList();
 
         var artistResponseDto = modelMapper.map(artist, ArtistResponseDto.class);
@@ -78,9 +84,15 @@ public class ArtistService {
         return artistResponseDto;
     }
 
-    public List<ArtistResponseDto> getAllArtists() {
+    public List<ArtistWithoutEventResponseDto> getAllArtists() {
         return artistRepository.findAll().stream()
-                .map(artist -> modelMapper.map(artist, ArtistResponseDto.class))
+                .map(artist -> modelMapper.map(artist, ArtistWithoutEventResponseDto.class))
+                .toList();
+    }
+
+    public List<ArtistWithoutEventGenreResponseDto> getAllArtistsWithoutEventGenre() {
+        return artistRepository.findAll().stream()
+                .map(artist -> modelMapper.map(artist, ArtistWithoutEventGenreResponseDto.class))
                 .toList();
     }
 
@@ -93,7 +105,7 @@ public class ArtistService {
                             .map(genre -> modelMapper.map(genre, GenreWithoutArtistListResponseDto.class))
                             .toList());
                     artistResponseDto.setEventList(artist.getEventList().stream()
-                            .map(event -> modelMapper.map(event, EventWithoutArtistListResponseDto.class))
+                            .map(event -> modelMapper.map(event, EventWithoutTicketArtistResponseDto.class))
                             .toList());
                     return artistResponseDto;
                 })
@@ -153,6 +165,10 @@ public class ArtistService {
         imageService.deleteImage(artistRepository.findById(id)
                 .orElseThrow(() -> new ArtistNotFoundException("Artist not found")).getImageUrl());
         artistRepository.deleteById(id);
+    }
+
+    public List<Artist> getArtistsByIds(List<UUID> artistIds) {
+        return artistRepository.findAllById(artistIds);
     }
 
     private List<GenreRequestDto> getGenreList(String genreList) {

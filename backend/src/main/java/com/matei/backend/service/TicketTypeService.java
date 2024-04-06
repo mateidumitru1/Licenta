@@ -2,12 +2,13 @@ package com.matei.backend.service;
 
 import com.matei.backend.dto.request.ticketType.TicketTypeCreationRequestDto;
 import com.matei.backend.dto.request.ticketType.TicketTypeUpdateRequestDto;
-import com.matei.backend.dto.response.event.EventWithoutArtistListResponseDto;
+import com.matei.backend.dto.response.event.EventWithoutTicketArtistResponseDto;
 import com.matei.backend.dto.response.ticketType.TicketTypeResponseDto;
 import com.matei.backend.entity.Event;
 import com.matei.backend.entity.TicketType;
 import com.matei.backend.exception.ticketType.TicketTypeNotFoundException;
 import com.matei.backend.repository.TicketTypeRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class TicketTypeService {
     private final TicketTypeRepository ticketTypeRepository;
@@ -26,10 +28,11 @@ public class TicketTypeService {
         return ticketTypeRepository.save(ticketType);
     }
 
-    public TicketTypeResponseDto createTicketType(TicketTypeCreationRequestDto ticketTypeCreationRequestDto, EventWithoutArtistListResponseDto eventResponseDto) {
+    public TicketTypeResponseDto createTicketType(TicketTypeCreationRequestDto ticketTypeCreationRequestDto, EventWithoutTicketArtistResponseDto eventResponseDto) {
         var ticketTypeToAdd = modelMapper.map(ticketTypeCreationRequestDto, TicketType.class);
         ticketTypeToAdd.setEvent(modelMapper.map(eventResponseDto, Event.class));
         ticketTypeToAdd.setRemainingQuantity(ticketTypeCreationRequestDto.getQuantity());
+        ticketTypeToAdd.setTotalQuantity(ticketTypeCreationRequestDto.getQuantity());
         var ticketType = ticketTypeRepository.save(ticketTypeToAdd);
 
         return modelMapper.map(ticketType, TicketTypeResponseDto.class);
@@ -41,19 +44,13 @@ public class TicketTypeService {
         return modelMapper.map(ticketType, TicketTypeResponseDto.class);
     }
 
-    public List<TicketTypeResponseDto> getAllTicketTypes() {
-        return ticketTypeRepository.findAll().stream()
-                .map(ticketType -> modelMapper.map(ticketType, TicketTypeResponseDto.class))
-                .toList();
-    }
-
     public List<TicketTypeResponseDto> getTicketTypesByEventId(UUID eventId) {
         return ticketTypeRepository.findByEventId(eventId).orElseThrow(() -> new TicketTypeNotFoundException("Ticket types not found")).stream()
                 .map(ticketType -> modelMapper.map(ticketType, TicketTypeResponseDto.class))
                 .toList();
     }
 
-    public void updateTicketTypes(List<TicketTypeUpdateRequestDto> ticketTypeUpdateRequestDtoList, EventWithoutArtistListResponseDto event) {
+    public void updateTicketTypes(List<TicketTypeUpdateRequestDto> ticketTypeUpdateRequestDtoList, EventWithoutTicketArtistResponseDto event) {
         var ticketTypes = ticketTypeRepository.findByEventId(event.getId()).orElseThrow(() -> new TicketTypeNotFoundException("Ticket types not found"));
 
         ticketTypeUpdateRequestDtoList = ticketTypeUpdateRequestDtoList.stream()
@@ -78,7 +75,10 @@ public class TicketTypeService {
 
                 ticketType.setName(ticketTypeUpdateRequestDto.getName());
                 ticketType.setPrice(ticketTypeUpdateRequestDto.getPrice());
-                ticketType.setTotalQuantity(ticketTypeUpdateRequestDto.getQuantity());
+
+                var totalQuantity = ticketType.getTotalQuantity() + ticketTypeUpdateRequestDto.getQuantity() - ticketType.getRemainingQuantity();
+                ticketType.setRemainingQuantity(ticketTypeUpdateRequestDto.getQuantity());
+                ticketType.setTotalQuantity(totalQuantity);
 
                 ticketTypeRepository.save(ticketType);
             } else {

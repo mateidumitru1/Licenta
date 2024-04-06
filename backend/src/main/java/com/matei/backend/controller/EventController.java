@@ -2,8 +2,9 @@ package com.matei.backend.controller;
 
 import com.matei.backend.dto.request.event.EventCreationRequestDto;
 import com.matei.backend.dto.request.event.EventUpdateRequestDto;
-import com.matei.backend.dto.response.event.EventWithoutArtistListResponseDto;
+import com.matei.backend.dto.response.event.EventWithoutTicketArtistResponseDto;
 import com.matei.backend.dto.response.event.EventWithTicketTypesResponseDto;
+import com.matei.backend.dto.response.event.SelectedEventResponseDto;
 import com.matei.backend.service.EventService;
 import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,7 @@ public class EventController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<EventWithTicketTypesResponseDto>> getAllEvents() {
+    public ResponseEntity<List<EventWithoutTicketArtistResponseDto>> getAllEvents() {
         return ResponseEntity.ok(eventService.getAllEvents());
     }
 
@@ -35,19 +36,13 @@ public class EventController {
         return ResponseEntity.ok(eventService.getAvailableEvents());
     }
 
-    @GetMapping("/{locationId}")
-    public ResponseEntity<?> getEventListByLocation(@PathVariable("locationId") String locationId) {
-        return ResponseEntity.ok(eventService.getEventListByLocation(UUID.fromString(locationId)));
-    }
-
-
     @GetMapping("/available/{locationId}")
-    public ResponseEntity<?> getAvailableEventListByLocation(@PathVariable("locationId") String locationId) {
+    public ResponseEntity<List<EventWithoutTicketArtistResponseDto>> getAvailableEventListByLocation(@PathVariable("locationId") String locationId) {
         return ResponseEntity.ok(eventService.getAvailableEventListByLocation(UUID.fromString(locationId)));
     }
 
     @GetMapping("/{title}")
-    public ResponseEntity<EventWithoutArtistListResponseDto> getEventByTitle(@PathVariable("title") String title) {
+    public ResponseEntity<EventWithoutTicketArtistResponseDto> getEventByTitle(@PathVariable("title") String title) {
         return ResponseEntity.ok(eventService.getEventByTitle(title));
     }
 
@@ -57,7 +52,7 @@ public class EventController {
     }
 
     @PutMapping
-    public ResponseEntity<?> updateEvent(@ModelAttribute EventUpdateRequestDto eventUpdateRequestDto) throws IOException {
+    public ResponseEntity<EventWithTicketTypesResponseDto> updateEvent(@ModelAttribute EventUpdateRequestDto eventUpdateRequestDto) throws IOException {
         return ResponseEntity.ok(eventService.updateEvent(eventUpdateRequestDto));
     }
 
@@ -65,5 +60,26 @@ public class EventController {
     public ResponseEntity<Void> deleteEvent(@PathVariable("id") String id) {
         eventService.deleteEventById(UUID.fromString(id));
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/select")
+    public ResponseEntity<List<SelectedEventResponseDto>> selectEvent(@RequestBody String eventIdList) {
+        return ResponseEntity.ok(eventService.selectEvent(eventIdList));
+    }
+
+    @DeleteMapping("/deselect/{eventId}")
+    public ResponseEntity<Void> deselectEvent(@PathVariable("eventId") String eventId) {
+        eventService.deselectEvent(UUID.fromString(eventId));
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/selected")
+    public ResponseEntity<List<SelectedEventResponseDto>> getSelectedEvents() {
+        return ResponseEntity.ok(eventService.getSelectedEvents());
+    }
+
+    @GetMapping("/all-for-selection")
+    public ResponseEntity<List<SelectedEventResponseDto>> getAllEventsForSelection() {
+        return ResponseEntity.ok(eventService.getAllEventsForSelection());
     }
 }

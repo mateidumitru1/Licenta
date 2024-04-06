@@ -9,13 +9,15 @@
   </div>
   <h1 class="text-center mb-2 mt-2">Evenimente</h1>
   <div class="cards-container">
-    <div class="card" *ngFor="let event of filteredEventList" [ngClass]="{'selected': event.selected}" (click)="onCardClick(event)">
+    <div class="card" *ngFor="let event of filteredEventList"
+         [ngClass]="{'selected': event.toBeSelected, 'disabled': event.selected}"
+         (click)="onCardClick(event)">
       <img [src]="event.imageUrl" class="card-img-top" alt="...">
       <div class="card-body">
         <h5 class="card-title">{{event.title}}</h5>
         <p class="card-text">{{event.location.name}} | {{event.date}}</p>
       </div>
-      <div *ngIf="event.selected" class="icon-container">
+      <div *ngIf="event.toBeSelected || event.selected" class="icon-container">
         <i class="fa-solid fa-check fa-lg"></i>
       </div>
     </div>

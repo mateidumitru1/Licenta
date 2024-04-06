@@ -19,4 +19,6 @@ public interface EventRepository extends JpaRepository<Event, UUID> {
 
     @Query("SELECT e FROM Event e WHERE e.createdAt > :startDate")
     List<Event> findAllByCreatedAtAfter(@Param("startDate") LocalDateTime startDate);
+
+    List<Event> findAllBySelectedTrue();
 }

@@ -1,6 +1,6 @@
 package com.matei.backend.dto.response.artist;
 
-import com.matei.backend.dto.response.event.EventWithoutArtistListResponseDto;
+import com.matei.backend.dto.response.event.EventWithoutTicketArtistResponseDto;
 import com.matei.backend.dto.response.genre.GenreWithoutArtistListResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,6 +18,6 @@ public class ArtistResponseDto {
     private UUID id;
     private String name;
     private String imageUrl;
-    private List<EventWithoutArtistListResponseDto> eventList;
+    private List<EventWithoutTicketArtistResponseDto> eventList;
     private List<GenreWithoutArtistListResponseDto> genreList;
 }

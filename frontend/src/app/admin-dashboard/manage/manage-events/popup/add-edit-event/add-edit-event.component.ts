@@ -18,6 +18,9 @@ import {
 import {MatIconButton} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
 import {AddTicketTypeComponent} from "../add-ticket-type/add-ticket-type.component";
+import {AddArtistComponent} from "../add-artist/add-artist.component";
+import {AddGenreComponent} from "../../../manage-artists/popups/add-genre/add-genre.component";
+import {ManageEventsService} from "../../manage-events.service";
 
 @Component({
   selector: 'app-add-edit-event',
@@ -45,43 +48,80 @@ import {AddTicketTypeComponent} from "../add-ticket-type/add-ticket-type.compone
   styleUrl: './add-edit-event.component.scss'
 })
 export class AddEditEventComponent implements OnInit{
-  registrationForm: FormGroup;
-  imageSrc:  string | ArrayBuffer | null = null;
+  registrationForm!: FormGroup;
+  imageSrc: string | ArrayBuffer | null = null;
   @ViewChild('fileInput', { static: false }) fileInput!: ElementRef;
   imageFile: File | null = null;
   isImageNull: boolean = false;
-
   locations: any[] = [];
-
+  event = {
+    id: '',
+    title: '',
+    date: '',
+    location: {
+      id: '',
+      name: ''
+    },
+    shortDescription: '',
+    description: '',
+    imageUrl: null,
+    ticketTypes: [],
+    artists: []
+  };
   today: any;
+  ticketsDataSource = new MatTableDataSource<any>();
+  artistsDataSource = new MatTableDataSource<any>();
 
-  dataSource = new MatTableDataSource<any>();
-
-  constructor(public dialogRef: MatDialogRef<AddEditUserComponent>, @Inject(MAT_DIALOG_DATA) public data: any,
-              private fb: FormBuilder, private manageLocationsService: ManageLocationsService,
-              private snackBar: MatSnackBar, private dialog: MatDialog) {
-    this.registrationForm = this.fb.group({
-      title: [this.data.event.title, Validators.required],
-      date: [this.data.event.date, Validators.required],
-      location: [this.data.event.location.name, Validators.required],
-      shortDescription: [this.data.event.shortDescription, Validators.required],
-      description: [this.data.event.description, Validators.required]
-    });
-  }
+  constructor(
+    public dialogRef: MatDialogRef<AddEditUserComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private fb: FormBuilder,
+    private manageLocationsService: ManageLocationsService,
+    private manageEventsService: ManageEventsService,
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog
+  ) { }
 
   ngOnInit() {
-    this.dataSource.data = this.data.event.ticketTypes;
+    this.registrationForm = this.fb.group({
+      title: ['', Validators.required],
+      date: ['', Validators.required],
+      location: ['', Validators.required],
+      shortDescription: ['', Validators.required],
+      description: ['', Validators.required]
+    });
+
     this.today = new Date().toISOString().split('T')[0];
-    this.imageSrc = this.data.event.imageUrl;
-    this.isImageNull = this.imageSrc === null;
     this.manageLocationsService.fetchLocations().subscribe({
       next: (locations: any) => {
         this.locations = locations;
       },
       error: (error: any) => {
-        this.snackBar.open('A apărut o eroare la aducerea locațiilor', 'Închide', {duration: 3000});
+        this.snackBar.open('A apărut o eroare la aducerea locațiilor', 'Închide', { duration: 3000 });
       }
     });
+
+    if (this.data.eventId !== undefined) {
+      this.manageEventsService.fetchEventById(this.data.eventId).subscribe({
+        next: (event: any) => {
+          this.event = event;
+          this.ticketsDataSource.data = this.event.ticketTypes;
+          this.artistsDataSource.data = this.event.artists;
+          this.imageSrc = this.event.imageUrl;
+          this.isImageNull = this.imageSrc === null;
+          this.registrationForm.patchValue({
+            title: this.event.title,
+            date: this.event.date,
+            location: this.event.location.name,
+            shortDescription: this.event.shortDescription,
+            description: this.event.description
+          });
+        },
+        error: (error: any) => {
+          this.snackBar.open('A apărut o eroare la aducerea evenimentului', 'Închide', { duration: 3000 });
+        }
+      });
+    }
   }
 
   onCloseClick() {
@@ -90,10 +130,25 @@ export class AddEditEventComponent implements OnInit{
 
   onConfirmClick() {
     this.registrationForm.markAllAsTouched();
+
     if (this.registrationForm.valid) {
-      let event = { ...this.registrationForm.value, id: this.data.event.id, imageUrl: this.imageSrc , ticketTypesList: this.dataSource.data};
+      let event = { ...this.registrationForm.value,
+        id: this.data.eventId,
+        imageUrl: this.imageSrc ,
+        ticketTypesList: this.ticketsDataSource.data.map((ticketType: any) => {
+          return {
+            id: ticketType.id,
+            name: ticketType.name,
+            price: ticketType.price,
+            quantity: ticketType.remainingQuantity
+          };
+        }),
+        artistIdList: this.artistsDataSource.data.map((artist: any) => artist.id)
+      };
+
       event.locationId = this.locations.find((location: any) => location.name === event.location).id;
       delete event.location;
+
       if (this.imageFile === null && this.imageSrc != '') {
         this.dialogRef.close(event);
       }
@@ -134,12 +189,26 @@ export class AddEditEventComponent implements OnInit{
     });
     dialogRef.afterClosed().subscribe((ticketType: any) => {
       if(ticketType) {
-        this.dataSource.data = [...this.dataSource.data, ticketType];
+        this.ticketsDataSource.data = [...this.ticketsDataSource.data, ticketType];
       }
     });
   }
 
   onDeleteTicketTypeClick(data: any) {
-    this.dataSource.data = this.dataSource.data.filter((value: any) => value !== data);
+    this.ticketsDataSource.data = this.ticketsDataSource.data.filter((value: any) => value !== data);
+  }
+
+  onAddArtistClick() {
+    const dialogRef = this.dialog.open(AddArtistComponent);
+
+    dialogRef.afterClosed().subscribe((result: any) => {
+      if (result) {
+        this.artistsDataSource.data = [...this.artistsDataSource.data, result];
+      }
+    });
+  }
+
+  onDeleteArtistClick(data: any) {
+    this.artistsDataSource.data = this.artistsDataSource.data.filter((value: any) => value !== data);
   }
 }

@@ -6,8 +6,12 @@ import com.matei.backend.dto.request.event.EventCreationRequestDto;
 import com.matei.backend.dto.request.event.EventUpdateRequestDto;
 import com.matei.backend.dto.request.ticketType.TicketTypeCreationRequestDto;
 import com.matei.backend.dto.request.ticketType.TicketTypeUpdateRequestDto;
-import com.matei.backend.dto.response.event.EventWithoutArtistListResponseDto;
+import com.matei.backend.dto.response.artist.ArtistWithoutEventResponseDto;
+import com.matei.backend.dto.response.event.EventWithoutLocationTicketResponseDto;
+import com.matei.backend.dto.response.event.EventWithoutTicketArtistResponseDto;
 import com.matei.backend.dto.response.event.EventWithTicketTypesResponseDto;
+import com.matei.backend.dto.response.event.SelectedEventResponseDto;
+import com.matei.backend.dto.response.genre.GenreWithoutArtistListResponseDto;
 import com.matei.backend.dto.response.location.LocationWithoutEventListResponseDto;
 import com.matei.backend.dto.response.statistics.EventWithTicketsSoldCount;
 import com.matei.backend.dto.response.ticketType.TicketTypeWithoutEventResponseDto;
@@ -18,37 +22,53 @@ import com.matei.backend.entity.enums.StatisticsFilter;
 import com.matei.backend.exception.event.EventNotFoundException;
 import com.matei.backend.repository.EventRepository;
 import com.matei.backend.service.util.ImageService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class EventService {
     private final EventRepository eventRepository;
     private final TicketTypeService ticketTypeService;
     private final LocationService locationService;
+    private final ArtistService artistService;
     private final ImageService imageService;
     private final ObjectMapper objectMapper;
     private final ModelMapper modelMapper;
 
     public EventWithTicketTypesResponseDto createEvent(EventCreationRequestDto eventCreationRequestDto) throws IOException {
         var eventToSave = modelMapper.map(eventCreationRequestDto, Event.class);
+
         eventToSave.setLocation(Optional.of(locationService.getLocationById(UUID.fromString(eventCreationRequestDto.getLocationId())))
-                .map(locationResponseDto -> modelMapper.map(locationResponseDto, Location.class)).orElseThrow());
+                .map(locationResponseDto -> modelMapper.map(locationResponseDto, Location.class))
+                .orElseThrow());
+
+        var artistIdList = getArtistIdList(eventCreationRequestDto.getArtistIdList());
+
+        eventToSave.setArtistList(artistService.getArtistsByIds(artistIdList));
+
         eventToSave.setImageUrl(imageService.saveImage("event-images", eventCreationRequestDto.getImage()));
         eventToSave.setDate(LocalDate.parse(eventCreationRequestDto.getDate().substring(0, 10)));
+        eventToSave.setCreatedAt(LocalDateTime.now());
+
         var event = eventRepository.save(eventToSave);
 
         var ticketTypes = getTicketTypeCreationRequestDtoList(eventCreationRequestDto.getTicketTypesList()).stream()
-                .map(ticketTypeCreationRequestDto -> ticketTypeService.createTicketType(ticketTypeCreationRequestDto, Optional.of(event).map(
-                        event1 -> modelMapper.map(event1, EventWithoutArtistListResponseDto.class)).orElseThrow()))
+                .map(ticketTypeCreationRequestDto ->
+                        ticketTypeService.createTicketType(ticketTypeCreationRequestDto, Optional.of(event)
+                                .map(event1 -> modelMapper.map(event1, EventWithoutTicketArtistResponseDto.class))
+                                .orElseThrow()))
                 .toList();
-        event.setTicketTypes(ticketTypes.stream().map(ticketTypeResponseDto -> modelMapper.map(ticketTypeResponseDto, TicketType.class))
+
+        event.setTicketTypeList(ticketTypes.stream().map(ticketTypeResponseDto -> modelMapper.map(ticketTypeResponseDto, TicketType.class))
                 .toList());
         return modelMapper.map(event, EventWithTicketTypesResponseDto.class);
     }
@@ -58,19 +78,28 @@ public class EventService {
                 .orElseThrow(() -> new EventNotFoundException("Event not found"));
 
         var eventResponse = modelMapper.map(event, EventWithTicketTypesResponseDto.class);
-        eventResponse.setTicketTypes(event.getTicketTypes().stream()
+        eventResponse.setTicketTypeList(event.getTicketTypeList().stream()
                 .map(ticketType -> modelMapper.map(ticketType, TicketTypeWithoutEventResponseDto.class))
+                .toList());
+        eventResponse.setArtistList(event.getArtistList().stream()
+                .map(artist -> {
+                    var artistResponse = modelMapper.map(artist, ArtistWithoutEventResponseDto.class);
+                    artistResponse.setGenreList(artist.getGenreList().stream()
+                            .map(genre -> modelMapper.map(genre, GenreWithoutArtistListResponseDto.class))
+                            .toList());
+                    return artistResponse;
+                })
                 .toList());
 
         return eventResponse;
     }
 
-    public List<EventWithoutArtistListResponseDto> getEventListByLocation(UUID locationId) {
+    public List<EventWithoutTicketArtistResponseDto> getEventListByLocation(UUID locationId) {
         var eventList = eventRepository.findByLocationId(locationId)
                 .orElseThrow(() -> new EventNotFoundException("Event not found"));
 
         return eventList.stream()
-                .map(event -> EventWithoutArtistListResponseDto.builder()
+                .map(event -> EventWithoutTicketArtistResponseDto.builder()
                         .id(event.getId())
                         .title(event.getTitle())
                         .date(event.getDate())
@@ -82,11 +111,11 @@ public class EventService {
                 .toList();
     }
 
-    public List<EventWithoutArtistListResponseDto> getAvailableEventListByLocation(UUID locationId) {
+    public List<EventWithoutTicketArtistResponseDto> getAvailableEventListByLocation(UUID locationId) {
        var eventList = eventRepository.findByLocationId(locationId)
                 .orElseThrow(() -> new EventNotFoundException("Event not found" )).stream()
                .filter(event -> event.getDate().isAfter(LocalDate.now()))
-               .map(event -> EventWithoutArtistListResponseDto.builder()
+               .map(event -> EventWithoutTicketArtistResponseDto.builder()
                        .id(event.getId())
                        .title(event.getTitle())
                        .date(event.getDate())
@@ -100,20 +129,40 @@ public class EventService {
         return eventList;
     }
 
-    public List<EventWithTicketTypesResponseDto> getAllEvents() {
+    public List<EventWithoutTicketArtistResponseDto> getAllEvents() {
         var eventList = eventRepository.findAll();
 
-        List<Event> events = eventList.stream().filter(event -> !event.getTicketTypes().isEmpty()).toList();
+        List<Event> events = eventList.stream().filter(event -> !event.getTicketTypeList().isEmpty()).toList();
 
         return events.stream()
-                .map(event -> modelMapper.map(event, EventWithTicketTypesResponseDto.class))
+                .map(event -> modelMapper.map(event, EventWithoutTicketArtistResponseDto.class))
+                .toList();
+    }
+
+    public List<EventWithoutLocationTicketResponseDto> getAllEventsWithoutLocationTicket() {
+        var eventList = eventRepository.findAll();
+
+        return eventList.stream()
+                .map(event -> {
+                    var eventDto = modelMapper.map(event, EventWithoutLocationTicketResponseDto.class);
+                    eventDto.setArtistList(event.getArtistList().stream()
+                            .map(artist -> {
+                                var artistDto = modelMapper.map(artist, ArtistWithoutEventResponseDto.class);
+                                artistDto.setGenreList(artist.getGenreList().stream()
+                                        .map(genre -> modelMapper.map(genre, GenreWithoutArtistListResponseDto.class))
+                                        .toList());
+                                return artistDto;
+                            })
+                            .toList());
+                    return eventDto;
+                })
                 .toList();
     }
 
     public List<EventWithTicketTypesResponseDto> getAvailableEvents() {
         var eventList = eventRepository.findAll();
 
-        List<Event> events = eventList.stream().filter(event -> !event.getTicketTypes().isEmpty()).toList();
+        List<Event> events = eventList.stream().filter(event -> !event.getTicketTypeList().isEmpty()).toList();
 
         return events.stream()
                 .filter(event -> event.getDate().isAfter(LocalDate.now()))
@@ -121,11 +170,11 @@ public class EventService {
                 .toList();
     }
 
-    public EventWithoutArtistListResponseDto getEventByTitle(String title) {
+    public EventWithoutTicketArtistResponseDto getEventByTitle(String title) {
         var event = eventRepository.findByTitle(title)
                 .orElseThrow(() -> new EventNotFoundException("Event not found"));
 
-        return modelMapper.map(event, EventWithoutArtistListResponseDto.class);
+        return modelMapper.map(event, EventWithoutTicketArtistResponseDto.class);
     }
 
     public EventWithTicketTypesResponseDto updateEvent(EventUpdateRequestDto updatedEvent) throws IOException {
@@ -146,15 +195,16 @@ public class EventService {
         event.setDescription(updatedEvent.getDescription());
         event.setLocation(Optional.of(locationService.getLocationById(updatedEvent.getLocationId()))
                 .map(locationResponseDto -> modelMapper.map(locationResponseDto, Location.class)).orElseThrow());
+        event.setArtistList(artistService.getArtistsByIds(getArtistIdList(updatedEvent.getArtistIdList())));
         event.setImageUrl(imageUrl);
 
         eventRepository.save(event);
 
         var ticketTypes = getTicketTypeUpdateRequestDtoList(updatedEvent.getTicketTypesList());
         ticketTypeService.updateTicketTypes(ticketTypes, Optional.of(event).map(event1 ->
-                modelMapper.map(event1, EventWithoutArtistListResponseDto.class)).orElseThrow());
+                modelMapper.map(event1, EventWithoutTicketArtistResponseDto.class)).orElseThrow());
 
-        event.setTicketTypes(ticketTypes.stream().map(ticketTypeResponseDto -> modelMapper.map(ticketTypeResponseDto, TicketType.class))
+        event.setTicketTypeList(ticketTypes.stream().map(ticketTypeResponseDto -> modelMapper.map(ticketTypeResponseDto, TicketType.class))
                 .toList());
 
     return modelMapper.map(event, EventWithTicketTypesResponseDto.class);
@@ -164,6 +214,15 @@ public class EventService {
         imageService.deleteImage(eventRepository.findById(id)
                 .orElseThrow(() -> new EventNotFoundException("Event not found")).getImageUrl());
         eventRepository.deleteById(id);
+    }
+
+    private List<UUID> getArtistIdList(String artistIds) {
+        try {
+            return List.of(Objects.requireNonNull(objectMapper.readValue(artistIds, UUID[].class)));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return Collections.emptyList();
     }
 
     private LocalDate getDateFromString(String date) {
@@ -218,7 +277,7 @@ public class EventService {
 
         return events.stream()
                 .map(event -> {
-                    EventWithoutArtistListResponseDto eventDto = modelMapper.map(event, EventWithoutArtistListResponseDto.class);
+                    EventWithoutTicketArtistResponseDto eventDto = modelMapper.map(event, EventWithoutTicketArtistResponseDto.class);
                     int ticketsSoldCount = calculateTicketsSoldCount(event);
                     if (ticketsSoldCount == 0)
                         return null;
@@ -235,9 +294,57 @@ public class EventService {
     }
 
     private int calculateTicketsSoldCount(Event event) {
-        return event.getTicketTypes().stream()
+        return event.getTicketTypeList().stream()
                 .map(ticketType -> ticketType.getTotalQuantity() - ticketType.getRemainingQuantity())
                 .reduce(0, Integer::sum);
     }
 
+    public List<SelectedEventResponseDto> selectEvent(String eventIdList) {
+        var selectedEvents = new ArrayList<SelectedEventResponseDto>();
+        var idList = getEventIdList(eventIdList);
+        idList.forEach(id -> {
+            var event = eventRepository.findById(id)
+                    .orElseThrow(() -> new EventNotFoundException("Event not found"));
+
+            event.setSelected(true);
+            eventRepository.save(event);
+
+            selectedEvents.add(modelMapper.map(event, SelectedEventResponseDto.class));
+        });
+
+        return selectedEvents;
+    }
+
+    public void deselectEvent(UUID id) {
+        var event = eventRepository.findById(id)
+                .orElseThrow(() -> new EventNotFoundException("Event not found"));
+
+        event.setSelected(false);
+        eventRepository.save(event);
+    }
+
+    public List<SelectedEventResponseDto> getSelectedEvents() {
+        var selectedEvents = eventRepository.findAllBySelectedTrue();
+
+        return selectedEvents.stream()
+                .filter(event -> event.getDate().isAfter(LocalDate.now()))
+                .map(event -> modelMapper.map(event, SelectedEventResponseDto.class))
+                .toList();
+    }
+
+    public List<SelectedEventResponseDto> getAllEventsForSelection() {
+        return eventRepository.findAll().stream()
+                .filter(event -> event.getDate().isAfter(LocalDate.now()))
+                .map(event -> modelMapper.map(event, SelectedEventResponseDto.class))
+                .toList();
+    }
+
+    private List<UUID> getEventIdList(String eventIds) {
+        try {
+            return List.of(Objects.requireNonNull(objectMapper.readValue(eventIds, UUID[].class)));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return Collections.emptyList();
+    }
 }

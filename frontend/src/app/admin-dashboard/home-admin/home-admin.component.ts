@@ -3,7 +3,7 @@ import {NgForOf, NgIf} from "@angular/common";
 import {HomeAdminService} from "./home-admin.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {MatDialog} from "@angular/material/dialog";
-import {AddTopEventComponent} from "./add-top-event/add-top-event.component";
+import {AddSelectedEventComponent} from "./add-selected-event/add-selected-event.component";
 import {LoadingComponent} from "../../shared/loading/loading.component";
 
 @Component({
@@ -18,37 +18,37 @@ import {LoadingComponent} from "../../shared/loading/loading.component";
   styleUrl: './home-admin.component.scss'
 })
 export class HomeAdminComponent implements OnInit {
-  topEventList: any = [];
+  selectedEventList: any = [];
   constructor(private homeAdminService: HomeAdminService, private snackBar: MatSnackBar, private dialog: MatDialog) { }
 
   ngOnInit() {
-    this.homeAdminService.fetchTopEvents().subscribe({
-      next: (topEventList: any) => {
-        this.topEventList = topEventList;
+    this.homeAdminService.fetchSelectedEvents().subscribe({
+      next: (selectedEventList: any) => {
+        this.selectedEventList = selectedEventList;
       },
       error: (error: any) => {
-        this.snackBar.open('Error fetching top events', 'Close', {duration: 3000});
+        this.snackBar.open('Error fetching selected events', 'Close', {duration: 3000});
       }
     });
   }
 
   addTopEvent() {
-    let dialogRef = this.dialog.open(AddTopEventComponent, {
+    let dialogRef = this.dialog.open(AddSelectedEventComponent, {
       width: '60%'
     });
     dialogRef.afterClosed().subscribe((eventList: any) => {
-      if(eventList) {
-        this.homeAdminService.addTopEventList(eventList).subscribe({
-          next: (topEventList: any) => {
-            this.topEventList.push(...topEventList);
-            this.snackBar.open('Top event added', 'Close', {duration: 3000});
+      if(eventList.length > 0) {
+        this.homeAdminService.addSelectedEventList(eventList).subscribe({
+          next: (selectedEventList: any) => {
+            this.selectedEventList.push(...selectedEventList);
+            this.snackBar.open('Selected event added', 'Close', {duration: 3000});
           },
           error: (error: any) => {
-            if(error.status === 409 && error.error === 'Top event already exists') {
+            if(error.status === 409 && error.error === 'Selected event already exists') {
               this.snackBar.open(error.error, 'Close', {duration: 3000});
             }
             else {
-              this.snackBar.open('Error adding top events', 'Close', {duration: 3000});
+              this.snackBar.open('Error adding selected events', 'Close', {duration: 3000});
             }
           }
         });
@@ -56,14 +56,14 @@ export class HomeAdminComponent implements OnInit {
     });
   }
 
-  deleteTopEvent(topEvent: any) {
-    this.homeAdminService.deleteTopEvent(topEvent.id).subscribe({
+  deleteTopEvent(selectedEvent: any) {
+    this.homeAdminService.deleteSelectedEvent(selectedEvent.id).subscribe({
       next: () => {
-        this.topEventList = this.topEventList.filter((event: any) => event.id !== topEvent.id);
-        this.snackBar.open('Top event deleted', 'Close', {duration: 3000});
+        this.selectedEventList = this.selectedEventList.filter((event: any) => event.id !== selectedEvent.id);
+        this.snackBar.open('Selected event deleted', 'Close', {duration: 3000});
       },
       error: (error: any) => {
-        this.snackBar.open('Error deleting top event', 'Close', {duration: 3000});
+        this.snackBar.open('Error deleting selected event', 'Close', {duration: 3000});
       }
     });
   }

@@ -3,7 +3,7 @@ package com.matei.backend.service;
 import com.matei.backend.dto.request.location.LocationCreationRequestDto;
 import com.matei.backend.dto.request.location.LocationUpdateRequestDto;
 import com.matei.backend.dto.response.artist.ArtistWithoutEventResponseDto;
-import com.matei.backend.dto.response.event.EventWithoutLocationResponseDto;
+import com.matei.backend.dto.response.event.EventWithoutLocationTicketResponseDto;
 import com.matei.backend.dto.response.location.LocationResponseDto;
 import com.matei.backend.dto.response.location.LocationWithoutEventListResponseDto;
 import com.matei.backend.dto.response.statistics.LocationWithEventsCountResponseDto;
@@ -15,6 +15,7 @@ import com.matei.backend.repository.LocationRepository;
 import com.matei.backend.entity.Location;
 import com.matei.backend.service.util.ImageService;
 import com.matei.backend.service.util.MapBoxService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class LocationService {
     private final LocationRepository locationRepository;
@@ -50,17 +52,18 @@ public class LocationService {
         locationToSave.setImageUrl(imageService.saveImage("location-images", locationCreationRequestDto.getImage()));
         locationToSave.setLatitude(mapBoxGeocodingResponse.getFeatures().getFirst().getCenter().get(1));
         locationToSave.setLongitude(mapBoxGeocodingResponse.getFeatures().getFirst().getCenter().get(0));
+        locationToSave.setCreatedAt(LocalDateTime.now());
 
         var location = locationRepository.save(locationToSave);
 
         return modelMapper.map(location, LocationResponseDto.class);
     }
 
-    public List<LocationResponseDto> getAllLocations() {
+    public List<LocationWithoutEventListResponseDto> getAllLocations() {
         var locations = locationRepository.findAll();
 
         return locations.stream()
-                .map(location -> modelMapper.map(location, LocationResponseDto.class))
+                .map(location -> modelMapper.map(location, LocationWithoutEventListResponseDto.class))
                 .toList();
     }
 
@@ -81,10 +84,10 @@ public class LocationService {
     private LocationResponseDto getLocationResponseDto(Location location) {
         var availableEvents = location.getEventList().stream()
                 .map(event -> {
-                    var artistList = event.getArtists().stream()
+                    var artistList = event.getArtistList().stream()
                             .map(artist -> modelMapper.map(artist, ArtistWithoutEventResponseDto.class))
                             .toList();
-                    var eventDto = modelMapper.map(event, EventWithoutLocationResponseDto.class);
+                    var eventDto = modelMapper.map(event, EventWithoutLocationTicketResponseDto.class);
                     eventDto.setArtistList(artistList);
                     return eventDto;
                 })

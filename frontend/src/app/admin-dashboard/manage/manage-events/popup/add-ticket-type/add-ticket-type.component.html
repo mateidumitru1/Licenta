@@ -22,7 +22,7 @@
       </div>
 
       <mdb-form-control class="mb-3">
-        <input #quantity mdbInput type="text" id="quantity" class="form-control" formControlName="quantity"/>
+        <input #quantity mdbInput type="text" id="quantity" class="form-control" formControlName="remainingQuantity"/>
         <label mdbLabel class="form-label" for="quantity">Quantity</label>
       </mdb-form-control>
       <div *ngIf="registrationForm.get('quantity')?.invalid && registrationForm.get('quantity')?.touched" class="text-danger mb-4">

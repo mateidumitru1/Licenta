@@ -3,6 +3,9 @@ package com.matei.backend.service;
 import com.matei.backend.dto.request.auth.ChangePasswordRequestDto;
 import com.matei.backend.dto.request.user.UserCreationRequestDto;
 import com.matei.backend.dto.request.user.UserRequestDto;
+import com.matei.backend.dto.response.order.OrderResponseDto;
+import com.matei.backend.dto.response.ticket.TicketResponseDto;
+import com.matei.backend.dto.response.ticketType.TicketTypeResponseDto;
 import com.matei.backend.dto.response.user.UserResponseDto;
 import com.matei.backend.dto.response.user.UserWithOrdersResponseDto;
 import com.matei.backend.entity.User;
@@ -13,6 +16,7 @@ import com.matei.backend.exception.auth.IncorrectOldPasswordException;
 import com.matei.backend.exception.auth.PasswordNotMatchingException;
 import com.matei.backend.exception.user.UserNotFoundException;
 import com.matei.backend.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,6 +27,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
@@ -62,7 +67,18 @@ public class UserService {
     public UserWithOrdersResponseDto getUserById(UUID id) {
         var user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User not found"));
 
-        return modelMapper.map(user, UserWithOrdersResponseDto.class);
+        var userDto = modelMapper.map(user, UserWithOrdersResponseDto.class);
+        userDto.setOrderList(user.getOrderList().stream().map(order -> {
+            var orderDto = modelMapper.map(order, OrderResponseDto.class);
+            orderDto.setTicketList(order.getTicketList().stream().map(ticket -> {
+                var ticketDto = modelMapper.map(ticket, TicketResponseDto.class);
+                ticketDto.setTicketType(modelMapper.map(ticket.getTicketType(), TicketTypeResponseDto.class));
+                return ticketDto;
+            }).toList());
+            return orderDto;
+        }).toList());
+
+        return userDto;
     }
 
     public UserResponseDto updateUser(UUID currentUserId, UserRequestDto userRequestDto) {

@@ -1,4 +1,4 @@
-package com.matei.backend.dto.request.topEvent;
+package com.matei.backend.dto.response.artist;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +11,7 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class TopEventCreationRequestDto {
-    private String customDescription;
-    private UUID eventId;
+public class ArtistWithoutEventGenreResponseDto {
+    private UUID id;
+    private String name;
 }

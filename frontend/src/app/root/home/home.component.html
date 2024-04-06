@@ -1,10 +1,24 @@
 <div class="container-fluid">
-  <h1 class="text-center">Evenimente recomandate</h1>
-  <div class="cards-container">
-    <div class="card" *ngFor="let event of topEvents" (click)="onEventClick(event)">
-      <img alt="" class="card-img-top" src="{{ event.event.imageUrl }}"/>
-      <div class="card-body">
-        <p class="card-text">{{ event.event.title }}</p>
+  <div *ngIf="isLoggedIn" class="recommended-events">
+    <h1 class="text-center">Evenimente recomandate</h1>
+    <div class="cards-container">
+      <div class="card" *ngFor="let event of recommendedEvents" (click)="onEventClick(event)">
+        <img alt="" class="card-img-top" src="{{ event.imageUrl }}"/>
+        <div class="card-body">
+          <p class="card-text">{{ event.title }}</p>
+          <p class="card-text">{{ event.broadGenre }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="selected-events">
+    <h1 class="text-center">Evenimente selectate</h1>
+    <div class="cards-container">
+      <div class="card" *ngFor="let event of selectedEvents" (click)="onEventClick(event)">
+        <img alt="" class="card-img-top" src="{{ event.imageUrl }}"/>
+        <div class="card-body">
+          <p class="card-text">{{ event.title }}</p>
+        </div>
       </div>
     </div>
   </div>

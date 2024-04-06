@@ -44,10 +44,10 @@ export class EventComponent implements OnInit{
         this.eventService.fetchEventById(this.route.snapshot.queryParams['id']).subscribe({
           next: (event: any) => {
             this.event = event;
-            this.event.ticketTypes.forEach((ticket: any) => {
+            this.event.ticketTypeList.forEach((ticket: any) => {
               ticket.reservedQuantity = 0;
             });
-            this.event.ticketTypes.sort((a: any, b: any) => b.price - a.price);
+            this.event.ticketTypeList.sort((a: any, b: any) => b.price - a.price);
           },
           error: (error: any) => {
             if(error.status === 404 && error.error === 'Event not found') {

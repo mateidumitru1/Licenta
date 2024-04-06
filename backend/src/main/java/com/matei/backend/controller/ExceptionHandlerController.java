@@ -26,8 +26,6 @@ import com.matei.backend.exception.tokens.ResetPasswordTokenExpiredException;
 import com.matei.backend.exception.tokens.ResetPasswordTokenNotFoundException;
 import com.matei.backend.exception.tokens.VerifyAccountTokenExpiredException;
 import com.matei.backend.exception.tokens.VerifyAccountTokenNotFoundException;
-import com.matei.backend.exception.topEvent.TopEventAlreadyExistsException;
-import com.matei.backend.exception.topEvent.TopEventNotFoundException;
 import com.matei.backend.exception.user.UserAlreadyEnabledException;
 import com.matei.backend.exception.user.UserAlreadyExistsException;
 import com.matei.backend.exception.user.UserNotEnabledException;
@@ -165,15 +163,6 @@ public class ExceptionHandlerController {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(TopEventAlreadyExistsException.class)
-    public ResponseEntity<?> handleTopEventAlreadyExistsException(TopEventAlreadyExistsException exception) {
-        return new ResponseEntity<>(exception.getMessage(), HttpStatus.CONFLICT);
-    }
-
-    @ExceptionHandler(TopEventNotFoundException.class)
-    public ResponseEntity<?> handleTopEventNotFoundException(TopEventNotFoundException exception) {
-        return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
-    }
 
     @ExceptionHandler(UserAlreadyExistsException.class)
     public ResponseEntity<?> handleUserAlreadyExistsException(UserAlreadyExistsException exception) {

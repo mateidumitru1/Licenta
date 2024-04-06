@@ -80,6 +80,7 @@ export class ManageEventsComponent implements OnInit{
   ngOnInit() {
     this.manageEventsService.fetchEvents().subscribe({
       next: (events: any) => {
+        console.log(events);
         this.dataSource.data = events;
         this.dataSource.sort = this.sort!;
         this.dataSource.paginator = this.paginator!;
@@ -114,7 +115,6 @@ export class ManageEventsComponent implements OnInit{
       height: '80%',
       width: '60%',
       data: {
-        event: {title: '', date: '', shortDescription: '', description: '', imageUrl: '', ticketTypes: [], location: {id: '', name: ''}},
         title: 'Adauga eveniment'
       },
       disableClose: true
@@ -140,7 +140,7 @@ export class ManageEventsComponent implements OnInit{
       height: '80%',
       width: '60%',
       data: {
-        event: this.rowData,
+        eventId: this.rowData.id,
         title: 'Modifica eveniment'
       },
       disableClose: true

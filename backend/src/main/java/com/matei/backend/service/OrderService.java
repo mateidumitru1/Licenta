@@ -1,6 +1,6 @@
 package com.matei.backend.service;
 
-import com.matei.backend.dto.response.event.EventWithoutArtistListResponseDto;
+import com.matei.backend.dto.response.event.EventWithoutTicketArtistResponseDto;
 import com.matei.backend.dto.response.location.LocationWithoutEventListResponseDto;
 import com.matei.backend.dto.response.order.OrderResponseDto;
 import com.matei.backend.dto.response.shoppingCart.ShoppingCartItemResponseDto;
@@ -15,6 +15,7 @@ import com.matei.backend.exception.order.OrderNotFoundException;
 import com.matei.backend.exception.shoppingCart.ShoppingCartItemNotFoundException;
 import com.matei.backend.exception.ticketType.TicketTypeQuantityException;
 import com.matei.backend.repository.OrderRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class OrderService {
     private final OrderRepository orderRepository;
@@ -61,7 +63,7 @@ public class OrderService {
                         .id(user.getId()).build()).orElseThrow())
                 .build());
 
-        Map<EventWithoutArtistListResponseDto, List<ShoppingCartItemResponseDto>> eventShoppingCartMap = shoppingCart.getShoppingCartItemList().stream()
+        Map<EventWithoutTicketArtistResponseDto, List<ShoppingCartItemResponseDto>> eventShoppingCartMap = shoppingCart.getShoppingCartItemList().stream()
                 .collect(Collectors.groupingBy(shoppingCartItem ->
                         shoppingCartItem.getTicketType().getEvent(), Collectors.toList()));
 
@@ -108,9 +110,9 @@ public class OrderService {
                                 .remainingQuantity(ticket.getTicketType().getRemainingQuantity())
                                 .build();
 
-                        EventWithoutArtistListResponseDto eventResponseDto = null;
+                        EventWithoutTicketArtistResponseDto eventResponseDto = null;
                         if (ticket.getTicketType().getEvent() != null) {
-                            eventResponseDto = EventWithoutArtistListResponseDto.builder()
+                            eventResponseDto = EventWithoutTicketArtistResponseDto.builder()
                                     .id(ticket.getTicketType().getEvent().getId())
                                     .title(ticket.getTicketType().getEvent().getTitle())
                                     .date(ticket.getTicketType().getEvent().getDate())

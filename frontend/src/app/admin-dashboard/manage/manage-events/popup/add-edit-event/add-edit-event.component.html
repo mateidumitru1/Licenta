@@ -24,8 +24,9 @@
       <div class="mb-3">
         <label for="location" class="form-label">Location</label>
         <select class="form-select" id="location" name="location" formControlName="location" required>
-          <option *ngFor="let location of locations"
-                  [selected]="data.event.location.id" [ngValue]="location.name">{{ location.name }}</option>
+          <option *ngFor="let location of locations" [ngValue]="location.name" [selected]="location.name === event.location.name">
+            {{ location.name }}
+          </option>
         </select>
       </div>
       <div *ngIf="registrationForm.get('location')?.errors?.['required'] && registrationForm.get('location')?.touched" class="text-danger mb-4">
@@ -61,7 +62,7 @@
 
   <div class="mt-4">
     <h6>Tickets</h6>
-    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+    <table mat-table [dataSource]="ticketsDataSource" class="mat-elevation-z8">
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef> Name </th>
         <td mat-cell *matCellDef="let data"> {{data.name}} </td>
@@ -70,9 +71,9 @@
         <th mat-header-cell *matHeaderCellDef> Price </th>
         <td mat-cell *matCellDef="let data"> {{data.price}} </td>
       </ng-container>
-      <ng-container matColumnDef="quantity">
+      <ng-container matColumnDef="remainingQuantity">
         <th mat-header-cell *matHeaderCellDef> Quantity </th>
-        <td mat-cell *matCellDef="let data"> {{data.totalQuantity}} </td>
+        <td mat-cell *matCellDef="let data"> {{data.remainingQuantity}} </td>
       </ng-container>
       <ng-container matColumnDef="action">
         <th mat-header-cell *matHeaderCellDef> Action </th>
@@ -82,11 +83,34 @@
           </button>
         </td>
       </ng-container>
-      <tr mat-header-row *matHeaderRowDef="['name', 'price', 'quantity', 'action']"></tr>
-      <tr mat-row *matRowDef="let row; columns: ['name', 'price', 'quantity', 'action'];"></tr>
+      <tr mat-header-row *matHeaderRowDef="['name', 'price', 'remainingQuantity', 'action']"></tr>
+      <tr mat-row *matRowDef="let row; columns: ['name', 'price', 'remainingQuantity', 'action'];"></tr>
     </table>
     <button class="btn btn-primary" (click)="onAddTicketTypeClick()">
       Add Ticket
+    </button>
+  </div>
+
+  <div class="mt-4">
+    <h6>Artisti</h6>
+    <table mat-table [dataSource]="artistsDataSource" class="mat-elevation-z8">
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef> Name </th>
+        <td mat-cell *matCellDef="let data"> {{data.name}} </td>
+      </ng-container>
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef> Action </th>
+        <td mat-cell *matCellDef="let data">
+          <button mat-icon-button (click)="onDeleteArtistClick(data)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="['name', 'action']"></tr>
+      <tr mat-row *matRowDef="let row; columns: ['name', 'action'];"></tr>
+    </table>
+    <button class="btn btn-primary" (click)="onAddArtistClick()">
+      Adauga Artist
     </button>
   </div>
 

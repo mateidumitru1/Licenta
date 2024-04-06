@@ -15,6 +15,14 @@ export class ManageEventsService {
     return this.http.get(apiURL + '/events/all');
   }
 
+  fetchEventForSelection() {
+    return this.http.get(apiURL + '/events/all-for-selection', {
+      headers: {
+        Authorization: 'Bearer ' + this.jwtHandler.getToken()
+      }
+    });
+  }
+
   addEvent(event: any) {
     return this.http.post(apiURL + '/events', getFormData(event), {
       headers: {
@@ -33,6 +41,17 @@ export class ManageEventsService {
 
   deleteEvent(id: string) {
     return this.http.delete(apiURL + `/events/${id}`, {
+      headers: {
+        Authorization: 'Bearer ' + this.jwtHandler.getToken()
+      }
+    });
+  }
+
+  fetchEventById(eventId: string) {
+    return this.http.get(apiURL + `/events`, {
+      params: {
+        id: eventId
+      },
       headers: {
         Authorization: 'Bearer ' + this.jwtHandler.getToken()
       }

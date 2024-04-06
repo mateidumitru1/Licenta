@@ -1,7 +1,7 @@
 package com.matei.backend.service;
 
 import com.google.zxing.WriterException;
-import com.matei.backend.dto.response.event.EventWithoutArtistListResponseDto;
+import com.matei.backend.dto.response.event.EventWithoutTicketArtistResponseDto;
 import com.matei.backend.dto.response.order.OrderResponseDto;
 import com.matei.backend.dto.response.shoppingCart.ShoppingCartItemResponseDto;
 import com.matei.backend.dto.response.ticket.TicketResponseDto;
@@ -18,6 +18,7 @@ import com.matei.backend.exception.ticket.TicketNotFoundException;
 import com.matei.backend.repository.TicketRepository;
 import com.matei.backend.service.util.EmailService;
 import com.matei.backend.service.util.QRService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class TicketService {
     private final TicketRepository ticketRepository;
@@ -37,8 +39,8 @@ public class TicketService {
     private final UserService userService;
     private final ModelMapper modelMapper;
 
-    public void createTickets(Map<EventWithoutArtistListResponseDto, List<ShoppingCartItemResponseDto>> eventShoppingCartMap, UUID userId, OrderResponseDto orderDto) {
-        Map<EventWithoutArtistListResponseDto, List<TicketResponseDto>> eventTicketMap = new HashMap<>();
+    public void createTickets(Map<EventWithoutTicketArtistResponseDto, List<ShoppingCartItemResponseDto>> eventShoppingCartMap, UUID userId, OrderResponseDto orderDto) {
+        Map<EventWithoutTicketArtistResponseDto, List<TicketResponseDto>> eventTicketMap = new HashMap<>();
 
         eventShoppingCartMap.forEach((eventResponseDto, shoppingCartItemResponseDtoList) -> {
             List<Ticket> tickets = new ArrayList<>();

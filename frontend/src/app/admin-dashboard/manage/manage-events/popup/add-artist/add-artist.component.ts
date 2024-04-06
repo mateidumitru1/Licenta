@@ -1,40 +1,39 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
-import {MdbFormsModule} from "mdb-angular-ui-kit/forms";
 import {NgForOf, NgIf} from "@angular/common";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {ManageGenresService} from "../../manage-genres.service";
+import {ManageGenresService} from "../../../manage-artists/manage-genres.service";
+import {ManageArtistsService} from "../../../manage-artists/manage-artists.service";
 
 @Component({
-  selector: 'app-add-genre',
+  selector: 'app-add-artist',
   standalone: true,
   imports: [
     FormsModule,
-    MdbFormsModule,
+    NgForOf,
     NgIf,
-    ReactiveFormsModule,
-    NgForOf
+    ReactiveFormsModule
   ],
-  templateUrl: './add-genre.component.html',
-  styleUrl: './add-genre.component.scss'
+  templateUrl: './add-artist.component.html',
+  styleUrl: './add-artist.component.scss'
 })
-export class AddGenreComponent implements OnInit {
+export class AddArtistComponent implements OnInit {
   registrationForm: FormGroup;
 
-  genreList: any = [];
+  artistList: any = [];
 
-  constructor(public dialogRef: MatDialogRef<AddGenreComponent>, @Inject(MAT_DIALOG_DATA) public data: any,
-              private fb: FormBuilder, private manageGenresService: ManageGenresService) {
+  constructor(public dialogRef: MatDialogRef<AddArtistComponent>, @Inject(MAT_DIALOG_DATA) public data: any,
+              private fb: FormBuilder, private manageArtistsService: ManageArtistsService) {
     this.registrationForm = this.fb.group({
       name: ['', Validators.required],
     });
   }
 
   ngOnInit() {
-    this.manageGenresService.fetchGenres().subscribe( {
+    this.manageArtistsService.fetchArtistsWithoutEventGenre().subscribe( {
       next: (response: any) => {
-        this.genreList = response;
-        this.genreList.sort((a: any, b: any) => a.name.localeCompare(b.name));
+        this.artistList = response;
+        this.artistList.sort((a: any, b: any) => a.name.localeCompare(b.name));
       },
       error: (error: any) => {
         console.error(error);
