@@ -8,7 +8,21 @@ import {apiURL} from "../../app.config";
 export class LocationService {
   constructor(private http: HttpClient) {}
 
-  fetchLocationWithAvailableEventsById(id: string) {
-    return this.http.get(apiURL + '/locations/' + id + '/available-events');
+  fetchInitialEventsByLocationId(id: string, page: number, size: number) {
+    return this.http.get(apiURL + '/events/location/' + id + '/initial', {
+      params: {
+        page: page.toString(),
+        size: size.toString()
+      }
+    });
+  }
+
+  fetchMoreEventsByLocationId(id: string, page: number, size: number) {
+    return this.http.get(apiURL + '/events/location/' + id, {
+      params: {
+        page: page.toString(),
+        size: size.toString()
+      }
+    });
   }
 }

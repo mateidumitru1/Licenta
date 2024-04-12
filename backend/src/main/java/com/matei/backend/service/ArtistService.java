@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.matei.backend.dto.request.artist.ArtistCreationRequestDto;
 import com.matei.backend.dto.request.artist.ArtistUpdateRequestDto;
 import com.matei.backend.dto.request.genre.GenreRequestDto;
+import com.matei.backend.dto.response.artist.ArtistPageWithCountResponseDto;
 import com.matei.backend.dto.response.artist.ArtistResponseDto;
 import com.matei.backend.dto.response.artist.ArtistWithoutEventGenreResponseDto;
 import com.matei.backend.dto.response.artist.ArtistWithoutEventResponseDto;
@@ -19,6 +20,8 @@ import com.matei.backend.service.util.ImageService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -177,5 +180,21 @@ public class ArtistService {
         } catch (IOException e) {
             throw new RuntimeException("Error parsing genre list");
         }
+    }
+
+    public ArtistPageWithCountResponseDto getAllArtistsPaginatedManage(int page, int size) {
+        Page<Artist> artistPage = artistRepository.findAllByOrderByCreatedAtDesc(PageRequest.of(page, size));
+        return ArtistPageWithCountResponseDto.builder()
+                .artistPage(artistPage.map(artist -> modelMapper.map(artist, ArtistWithoutEventResponseDto.class)))
+                .count(artistRepository.count())
+                .build();
+    }
+
+    public ArtistPageWithCountResponseDto getFilteredArtistsPaginatedManage(int page, int size, String filter, String search) {
+        Page<Artist> artistPage = artistRepository.findFilteredArtistsPaginated(filter, search, PageRequest.of(page, size));
+        return ArtistPageWithCountResponseDto.builder()
+                .artistPage(artistPage.map(artist -> modelMapper.map(artist, ArtistWithoutEventResponseDto.class)))
+                .count(artistRepository.countFilteredArtists(filter, search))
+                .build();
     }
 }

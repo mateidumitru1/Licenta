@@ -44,6 +44,7 @@ public class Event {
 
     @JsonIgnore
     @OneToMany(mappedBy = "event")
+    @OnDelete(action = OnDeleteAction.SET_NULL)
     private List<TicketType> ticketTypeList;
 
     @ManyToMany

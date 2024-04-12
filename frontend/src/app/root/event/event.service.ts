@@ -9,6 +9,6 @@ export class EventService {
   constructor(private http: HttpClient) {}
 
   fetchEventById(id: string) {
-    return this.http.get(apiURL + '/events', {params: {id: id}});
+    return this.http.get(apiURL + '/events/' + id);
   }
 }

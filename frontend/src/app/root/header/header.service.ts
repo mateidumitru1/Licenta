@@ -9,7 +9,7 @@ export class HeaderService {
   constructor(private http: HttpClient) { }
 
   fetchLocations() {
-    return this.http.get(apiURL + '/locations');
+    return this.http.get(apiURL + '/locations/all');
   }
 
   fetchLocationsWithAvailableEvents() {

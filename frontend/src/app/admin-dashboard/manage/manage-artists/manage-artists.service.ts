@@ -11,8 +11,30 @@ export class ManageArtistsService {
 
     constructor(private http: HttpClient, private jwtHandler: JwtHandler) { }
 
-    fetchArtists() {
-      return this.http.get(apiURL + '/artists');
+    fetchPaginatedArtists(page: number, size: number) {
+      return this.http.get(apiURL + '/artists', {
+        params: {
+          page: page.toString(),
+          size: size.toString()
+        },
+        headers: {
+          'Authorization': 'Bearer ' +  this.jwtHandler.getToken()
+        }
+      });
+    }
+
+    fetchPaginatedArtistsFiltered(page: number, size: number, search: string, filter: string) {
+      return this.http.get(apiURL + '/artists/filtered', {
+        params: {
+          page: page.toString(),
+          size: size.toString(),
+          search: search,
+          filter: filter
+        },
+        headers: {
+          'Authorization': 'Bearer ' +  this.jwtHandler.getToken()
+        }
+      });
     }
 
     fetchArtistsWithoutEventGenre() {

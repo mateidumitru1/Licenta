@@ -1,2 +1,5 @@
 <app-loading *ngIf="loading"></app-loading>
 <router-outlet></router-outlet>
+<button *ngIf="showScrollButton" class="btn scroll-top-button" (click)="scrollToTop()">
+  <i class="fa fa-arrow-up"></i>
+</button>

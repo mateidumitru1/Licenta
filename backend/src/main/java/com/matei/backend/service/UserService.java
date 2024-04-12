@@ -6,6 +6,7 @@ import com.matei.backend.dto.request.user.UserRequestDto;
 import com.matei.backend.dto.response.order.OrderResponseDto;
 import com.matei.backend.dto.response.ticket.TicketResponseDto;
 import com.matei.backend.dto.response.ticketType.TicketTypeResponseDto;
+import com.matei.backend.dto.response.user.UserPageWithCountResponseDto;
 import com.matei.backend.dto.response.user.UserResponseDto;
 import com.matei.backend.dto.response.user.UserWithOrdersResponseDto;
 import com.matei.backend.entity.User;
@@ -19,6 +20,9 @@ import com.matei.backend.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -46,13 +50,6 @@ public class UserService {
         var user = userRepository.save(modelMapper.map(userCreationRequestDto, User.class));
 
         return modelMapper.map(user, UserResponseDto.class);
-    }
-
-    public List<UserResponseDto> getAllUsers(UUID currentUserId) {
-        if (!isAdmin(currentUserId)) {
-            throw new AdminResourceAccessException("You are not authorized to perform this action");
-        }
-        return userRepository.findAll().stream().map(user -> modelMapper.map(user, UserResponseDto.class)).toList();
     }
 
     public UserResponseDto adminGetUserById(UUID currentUserId, UUID id) {
@@ -141,5 +138,21 @@ public class UserService {
             return userRepository.count();
         }
         return userRepository.countByCreatedAtAfter(filter.getStartDate());
+    }
+
+    public UserPageWithCountResponseDto getAllUsersPaginatedManage(int page, int size) {
+        Page<User> userPage = userRepository.findAllByOrderByCreatedAtDesc(PageRequest.of(page, size));
+        return UserPageWithCountResponseDto.builder()
+                .userPage(userPage.map(user -> modelMapper.map(user, UserResponseDto.class)))
+                .count(userRepository.count())
+                .build();
+    }
+
+    public UserPageWithCountResponseDto getAllUsersFilteredPaginatedManage(int page, int size, String filter, String search) {
+        Page<User> userPage = userRepository.findFilteredUsersPaginated(filter, search, PageRequest.of(page, size));
+        return UserPageWithCountResponseDto.builder()
+                .userPage(userPage.map(user -> modelMapper.map(user, UserResponseDto.class)))
+                .count(userRepository.countFilteredUsers(filter, search))
+                .build();
     }
 }

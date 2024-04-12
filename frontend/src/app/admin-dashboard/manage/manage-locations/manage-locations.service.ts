@@ -10,9 +10,32 @@ import {JwtHandler} from "../../../identity/jwt.handler";
 export class ManageLocationsService {
   constructor(private http: HttpClient, private jwtHandler: JwtHandler) {}
 
-  fetchLocations() {
-    return this.http.get(apiURL + '/locations');
+  fetchPaginatedLocations(page: number, size: number) {
+    return this.http.get(apiURL + '/locations', {
+      params: {
+        page: page.toString(),
+        size: size.toString()
+      },
+      headers: {
+        Authorization: 'Bearer ' + this.jwtHandler.getToken()
+      }
+    });
   }
+
+  fetchPaginatedLocationsFiltered(page: number, size: number, filter: string, search: string) {
+    return this.http.get(apiURL + '/locations/filtered', {
+      params: {
+        page: page.toString(),
+        size: size.toString(),
+        filter: filter,
+        search: search
+      },
+      headers: {
+        Authorization: 'Bearer ' + this.jwtHandler.getToken()
+      }
+    });
+  }
+
   addLocation(location: any) {
     return this.http.post(apiURL + '/locations', getFormData(location), {
       headers: {
@@ -31,6 +54,14 @@ export class ManageLocationsService {
 
   deleteLocation(id: string) {
     return this.http.delete(apiURL + `/locations/${id}`, {
+      headers: {
+        Authorization: 'Bearer ' + this.jwtHandler.getToken()
+      }
+    });
+  }
+
+  fetchAllLocations() {
+    return this.http.get(apiURL + '/locations/all', {
       headers: {
         Authorization: 'Bearer ' + this.jwtHandler.getToken()
       }

@@ -1,11 +1,12 @@
 package com.matei.backend.repository;
 
 import com.matei.backend.entity.Location;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import javax.swing.text.html.Option;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -31,4 +32,16 @@ public interface LocationRepository extends JpaRepository<Location, UUID> {
 
     @Query("SELECT l FROM Location l LEFT JOIN FETCH l.eventList e WHERE e.createdAt > :startDate")
     List<Location> findAllWithEventsCreatedAfter(@Param("startDate") LocalDateTime startDate);
+
+    Page<Location> findAllByOrderByCreatedAtDesc(Pageable pageable);
+
+    @Query("SELECT l FROM Location l WHERE " +
+            "(:filter = 'name' AND l.name LIKE %:search%) OR " +
+            "(:filter = 'address' AND l.address LIKE %:search%)")
+    Page<Location> findFilteredLocationsPaginated(String filter, String search, Pageable pageable);
+
+    @Query("SELECT COUNT(*) FROM Location l WHERE " +
+            "(:filter = 'name' AND l.name LIKE %:search%) OR " +
+            "(:filter = 'address' AND l.address LIKE %:search%)")
+    Long countFilteredLocations(String filter, String search);
 }

@@ -3,6 +3,7 @@ package com.matei.backend.controller;
 import com.matei.backend.dto.request.auth.ChangePasswordRequestDto;
 import com.matei.backend.dto.request.user.UserCreationRequestDto;
 import com.matei.backend.dto.request.user.UserRequestDto;
+import com.matei.backend.dto.response.user.UserPageWithCountResponseDto;
 import com.matei.backend.dto.response.user.UserResponseDto;
 import com.matei.backend.dto.response.user.UserWithOrdersResponseDto;
 import com.matei.backend.service.auth.JwtService;
@@ -10,7 +11,12 @@ import com.matei.backend.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+
 
 import java.util.List;
 import java.util.UUID;
@@ -22,16 +28,13 @@ public class UserController {
     private final UserService userService;
     private final JwtService jwtService;
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
     public ResponseEntity<UserResponseDto> createUser(@RequestHeader("Authorization") String jwtToken, @ModelAttribute UserCreationRequestDto userCreationRequestDto) {
         return ResponseEntity.ok(userService.createUser(jwtService.extractId(jwtToken), userCreationRequestDto));
     }
 
-    @GetMapping
-    public ResponseEntity<List<UserResponseDto>> getAllUsers(@RequestHeader("Authorization") String jwtToken) {
-        return ResponseEntity.ok(userService.getAllUsers(jwtService.extractId(jwtToken)));
-    }
-
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<UserResponseDto> getUserById(@RequestHeader("Authorization") String jwtToken, @PathVariable("id") String id) {
         return ResponseEntity.ok(userService.adminGetUserById(jwtService.extractId(jwtToken), UUID.fromString(id)));
@@ -49,6 +52,7 @@ public class UserController {
         return ResponseEntity.ok(userService.updateMe(jwtService.extractId(jwtToken), userRequestDto));
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @Transactional
     @PatchMapping
     public ResponseEntity<UserResponseDto> updateUser(@RequestHeader("Authorization") String jwtToken, @ModelAttribute UserRequestDto userRequestDto) {
@@ -61,9 +65,27 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@RequestHeader("Authorization") String jwtToken, @PathVariable("id") String id) {
         userService.deleteUser(jwtService.extractId(jwtToken), UUID.fromString(id));
         return ResponseEntity.noContent().build();
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping
+    public ResponseEntity<UserPageWithCountResponseDto> getAllUsersPaginatedManage(@RequestParam("page") int page,
+                                                                                   @RequestParam("size") int size) {
+        return ResponseEntity.ok(userService.getAllUsersPaginatedManage(page, size));
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/filtered")
+    public ResponseEntity<UserPageWithCountResponseDto> getAllUsersFilteredPaginatedManage(@RequestParam("page") int page,
+                                                                                       @RequestParam("size") int size,
+                                                                                       @RequestParam("filter") String filter,
+                                                                                       @RequestParam("search") String search) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return ResponseEntity.ok(userService.getAllUsersFilteredPaginatedManage(page, size, filter, search));
     }
 }

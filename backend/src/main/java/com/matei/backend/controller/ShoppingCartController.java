@@ -5,6 +5,7 @@ import com.matei.backend.service.auth.JwtService;
 import com.matei.backend.service.ShoppingCartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,22 +18,26 @@ public class ShoppingCartController {
     private final ShoppingCartService shoppingCartService;
     private final JwtService jwtService;
 
+    @PreAuthorize("hasAuthority('USER')")
     @PostMapping
     public ResponseEntity<?> addTicketToShoppingCart(@RequestHeader("Authorization") String jwtToken, @RequestBody List<ShoppingCartItemRequestDto> shoppingCartItemRequestDtoList) {
         return ResponseEntity.ok(shoppingCartService.addTicketToShoppingCart(shoppingCartItemRequestDtoList,  jwtService.extractId(jwtToken)));
     }
 
+    @PreAuthorize("hasAuthority('USER')")
     @PatchMapping("/{shoppingCartItemId}")
     public ResponseEntity<?> updateTicketQuantity(@RequestHeader("Authorization") String jwtToken, @PathVariable("shoppingCartItemId") String shoppingCartItemId,
                                                   @RequestParam("quantity") Integer quantity) {
         return ResponseEntity.ok(shoppingCartService.updateTicketQuantity(UUID.fromString(shoppingCartItemId), quantity, jwtService.extractId(jwtToken)));
     }
 
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping
     public ResponseEntity<?> getShoppingCart(@RequestHeader("Authorization") String jwtToken) {
         return ResponseEntity.ok(shoppingCartService.getShoppingCart(jwtService.extractId(jwtToken)));
     }
 
+    @PreAuthorize("hasAuthority('USER')")
     @PutMapping("/{ticketTypeId}")
     public ResponseEntity<?> removeTicketFromShoppingCart(@RequestHeader("Authorization") String jwtToken, @PathVariable("ticketTypeId") String ticketTypeId) {
         return ResponseEntity.ok(shoppingCartService.removeTicketFromShoppingCart(UUID.fromString(ticketTypeId), jwtService.extractId(jwtToken)));

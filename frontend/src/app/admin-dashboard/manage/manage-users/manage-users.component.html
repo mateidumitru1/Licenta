@@ -1,8 +1,8 @@
 <div class="input-group rounded pt-2">
   <input type="search" class="form-control rounded" placeholder="Cauta" aria-label="Search" aria-describedby="search-addon"
-         [(ngModel)]="searchValue" (input)="applyFilter(searchValue, selectedFilterOption)"/>
+         [(ngModel)]="searchValue"/>
   <span class="input-group-text border-0" id="search-addon">
-    <i class="fas fa-search"></i>
+    <i role="button" class="bg-primary text-white fas fa-search search-button" (click)="filterData()"></i>
     <button class="btn btn-primary ms-5 me-2" (click)="onAddClick()"> Adauga </button>
   </span>
 </div>
@@ -27,6 +27,9 @@
            [(ngModel)]="selectedFilterOption"/>
     <label class="form-check-label" for="emailRadio">Email</label>
   </div>
+  <div class="form-check-inline" *ngIf="shouldDisplayRemoveFilterButton">
+    <button class="btn" (click)="removeFilter()">Sterge filtrul</button>
+  </div>
 </div>
 <table mat-table [dataSource]="dataSource" matSort>
   <ng-container *ngFor="let column of displayedColumns" [matColumnDef]="column">
@@ -48,11 +51,14 @@
 </table>
 
 <mat-paginator
-  [length]="dataSource.data.length"
-  [pageSize]="5"
-  [pageSizeOptions]="[5, 10, 20]"
+  [length]="itemsCount"
+  [pageSize]="pageSize"
+  [pageIndex]="pageIndex"
+  [pageSizeOptions]="[5, 10, 20, 50]"
+  (page)="onPageChange($event)"
   showFirstLastButtons
   aria-label="Select page"></mat-paginator>
+
 
 <mat-menu #contextMenu="matMenu">
   <button mat-menu-item (click)="onEditClick()"> Modifica </button>

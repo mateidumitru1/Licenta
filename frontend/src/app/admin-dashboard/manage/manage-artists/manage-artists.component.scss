@@ -1,0 +1,18 @@
+th {
+  user-select: none;
+}
+
+.search-button {
+  margin-left: 5px;
+  padding: 0.5rem 1rem;
+  border-radius: 0.3rem;
+}
+
+.search-button:hover {
+  cursor: pointer;
+  box-shadow: 2px 4px 5px rgba(0, 0, 0, 0.4);
+}
+
+.input-group-text {
+  padding-left: 0;
+}

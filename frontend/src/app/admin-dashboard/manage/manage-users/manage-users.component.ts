@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, HostListener, OnInit, ViewChild} from '@angular/core';
 import {
   MatCell,
   MatCellDef,
@@ -9,7 +9,7 @@ import {
   MatTableDataSource
 } from "@angular/material/table";
 import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
-import {MatPaginator} from "@angular/material/paginator";
+import {MatPaginator, PageEvent} from "@angular/material/paginator";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {ManageUsersService} from "./manage-users.service";
 import {NgForOf, NgIf, TitleCasePipe} from "@angular/common";
@@ -23,6 +23,7 @@ import {DeleteComponent} from "../shared/delete/delete.component";
 import {MdbRadioModule} from "mdb-angular-ui-kit/radio";
 import {FormsModule} from "@angular/forms";
 import {LoadingComponent} from "../../../shared/loading/loading.component";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-manage-users',
@@ -57,10 +58,11 @@ import {LoadingComponent} from "../../../shared/loading/loading.component";
   templateUrl: './manage-users.component.html',
   styleUrl: './manage-users.component.scss'
 })
-export class ManageUsersComponent implements OnInit {
+export class ManageUsersComponent implements OnInit, AfterViewInit {
   dataSource = new MatTableDataSource<any>();
-  @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
-  @ViewChild(MatSort) sort: MatSort | undefined;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
+  itemsCount = 0;
 
   displayedColumns: string[] = ['firstName', 'lastName', 'username', 'email', 'role'];
 
@@ -68,7 +70,10 @@ export class ManageUsersComponent implements OnInit {
 
   searchValue: string = '';
   selectedFilterOption: string = 'firstName';
-  filteredData: any[] = [];
+  shouldDisplayRemoveFilterButton: boolean = false;
+
+  pageIndex = 0;
+  pageSize = 5;
 
   columnMap: {
     [key: string]: string
@@ -81,43 +86,83 @@ export class ManageUsersComponent implements OnInit {
   };
 
   constructor(private dialog: MatDialog, private snackBar: MatSnackBar,
-              private manageUsersService: ManageUsersService) {}
+              private manageUsersService: ManageUsersService,
+              private route: ActivatedRoute,
+              private router: Router) {}
 
   ngOnInit() {
-    this.manageUsersService.fetchUsers().subscribe({
-      next: (users: any) => {
-        this.dataSource.data = users;
-        this.dataSource.sort = this.sort!;
-        this.dataSource.paginator = this.paginator!;
-      },
-      error: (error: any) => {
-        this.snackBar.open('Error fetching users', 'Close', {
-          duration: 3000
+    this.route.queryParams.subscribe(params => {
+      this.pageIndex = params['page'] || 0;
+      this.pageSize = params['size'] || 5;
+      this.searchValue = params['search'] || '';
+      this.selectedFilterOption = params['filter'] || 'firstName';
+      this.shouldDisplayRemoveFilterButton = !!(params['filter'] && params['search']);
+
+      if (this.searchValue === '' && this.selectedFilterOption === 'firstName') {
+        this.manageUsersService.fetchPaginatedUsers(this.pageIndex, this.pageSize).subscribe({
+          next: (response: any) => {
+            this.dataSource.data = response.userPage.content;
+            this.itemsCount = response.count
+          },
+          error: (error: any) => {
+            this.snackBar.open('Error fetching users', 'Close', {
+              duration: 3000
+            });
+          }
+        });
+      } else {
+        this.manageUsersService.fetchPaginatedUsersFiltered(this.pageIndex, this.pageSize, this.selectedFilterOption, this.searchValue).subscribe({
+          next: (response: any) => {
+            this.dataSource.data = response.userPage.content;
+            this.itemsCount = response.count;
+          },
+          error: (error: any) => {
+            this.snackBar.open('Error fetching users', 'Close', {
+              duration: 3000
+            });
+          }
         });
       }
     });
   }
 
-  applyFilter(searchValue: string, selectedFilterOption: string) {
-    this.dataSource.filterPredicate = (data: any, filter: string) => {
-      switch (selectedFilterOption) {
-        case 'firstName':
-          return data.firstName.toLowerCase().includes(filter);
-        case 'lastName':
-          return data.lastName.toLowerCase().includes(filter);
-        case 'username':
-          return data.username.toLowerCase().includes(filter);
-        case 'email':
-          return data.email.toLowerCase().includes(filter);
-        default:
-          return data.firstName.toLowerCase().includes(filter) ||
-            data.lastName.toLowerCase().includes(filter) ||
-            data.username.toLowerCase().includes(filter) ||
-            data.email.toLowerCase().includes(filter) ||
-            data.role.toLowerCase().includes(filter);
-      }
-    };
-    this.dataSource.filter = searchValue.trim().toLowerCase();
+  ngAfterViewInit() {
+    this.paginator.length = this.itemsCount;
+    this.paginator.pageIndex = this.pageIndex;
+    this.paginator.pageSize = this.pageSize;
+    this.dataSource.sort = this.sort;
+  }
+
+  onPageChange(event: any): void {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { page: event.pageIndex, size: event.pageSize },
+      queryParamsHandling: 'merge'
+    });
+  }
+
+  filterData() {
+    if(this.searchValue === '') return;
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { search: this.searchValue, filter: this.selectedFilterOption, page: 0, size: this.pageSize },
+      queryParamsHandling: 'merge'
+    });
+  }
+
+  @HostListener('document:keydown', ['$event'])
+  handleDeleteKeyboardEvent(event: KeyboardEvent) {
+    if(event.key === 'Enter') {
+      this.filterData();
+    }
+  }
+
+  removeFilter() {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { filter: null, search: null, page: 0, size: this.pageSize },
+      queryParamsHandling: 'merge'
+    });
   }
 
   onAddClick() {

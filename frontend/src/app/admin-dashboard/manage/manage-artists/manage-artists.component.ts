@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, HostListener, OnInit, ViewChild} from '@angular/core';
 import {FormsModule} from "@angular/forms";
 import {LoadingComponent} from "../../../shared/loading/loading.component";
 import {LocationNamePipe} from "../../../util/pipes/location-name.pipe";
@@ -22,6 +22,7 @@ import {DeleteComponent} from "../shared/delete/delete.component";
 import {ManageArtistsService} from "./manage-artists.service";
 import {AddEditArtistComponent} from "./popups/add-edit-artist/add-edit-artist.component";
 import {GenreListNamesPipe} from "../../../util/pipes/genre-list-names.pipe";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-manage-artists',
@@ -54,10 +55,11 @@ import {GenreListNamesPipe} from "../../../util/pipes/genre-list-names.pipe";
   templateUrl: './manage-artists.component.html',
   styleUrl: './manage-artists.component.scss'
 })
-export class ManageArtistsComponent implements OnInit {
+export class ManageArtistsComponent implements OnInit, AfterViewInit {
   dataSource = new MatTableDataSource<any>();
-  @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
-  @ViewChild(MatSort) sort: MatSort | undefined;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
+  itemsCount = 0;
 
   displayedColumns: string[] = ['name', 'genreList'];
 
@@ -65,6 +67,10 @@ export class ManageArtistsComponent implements OnInit {
 
   searchValue: string = '';
   selectedFilterOption: string = 'name';
+  shouldDisplayRemoveFilterButton: boolean = false;
+
+  pageIndex = 0;
+  pageSize = 5;
 
   columnMap: {
     [key: string]: string
@@ -74,36 +80,84 @@ export class ManageArtistsComponent implements OnInit {
   };
 
   constructor(private dialog: MatDialog, private snackBar: MatSnackBar,
-              private manageArtistsService: ManageArtistsService) {}
+              private manageArtistsService: ManageArtistsService,
+              private route: ActivatedRoute,
+              private router: Router) {}
 
   ngOnInit() {
-    this.manageArtistsService.fetchArtists().subscribe({
-      next: (artists: any) => {
-        this.dataSource.data = artists;
-        this.dataSource.sort = this.sort!;
-        this.dataSource.paginator = this.paginator!;
-      },
-      error: (error: any) => {
-        this.snackBar.open(error.error, 'Close', {
-          duration: 3000
+    this.route.queryParams.subscribe(params => {
+      this.pageIndex = params['page'] || 0;
+      this.pageSize = params['size'] || 5;
+      this.searchValue = params['search'] || '';
+      this.selectedFilterOption = params['filter'] || 'name';
+      this.shouldDisplayRemoveFilterButton = !!(params['filter'] && params['search']);
+
+      if (this.searchValue === '' && this.selectedFilterOption === 'name') {
+        this.manageArtistsService.fetchPaginatedArtists(this.pageIndex, this.pageSize).subscribe({
+          next: (response: any) => {
+            this.dataSource.data = response.artistPage.content;
+            this.itemsCount = response.count;
+          },
+          error: (error: any) => {
+            this.snackBar.open(error.error, 'Close', {
+              duration: 3000
+            });
+          }
+        });
+      }
+      else {
+        this.manageArtistsService.fetchPaginatedArtistsFiltered(this.pageIndex, this.pageSize, this.searchValue, this.selectedFilterOption).subscribe({
+          next: (response: any) => {
+            this.dataSource.data = response.artistPage.content;
+            this.itemsCount = response.count;
+          },
+          error: (error: any) => {
+            this.snackBar.open('Error fetching artists', 'Close', {
+              duration: 3000
+            });
+          }
         });
       }
     });
   }
 
-  applyFilter(searchValue: string, selectedFilterOption: string) {
-    this.dataSource.filterPredicate = (data: any, filter: string) => {
-      switch (selectedFilterOption) {
-        case 'name':
-          return data.name.toLowerCase().includes(filter);
-        case 'genre':
-          return data.genreList.some((genre: any) => genre.name.toLowerCase().includes(filter));
-        default:
-          return data.name.toLowerCase().includes(filter) ||
-            data.address.toLowerCase().includes(filter);
-      }
-    };
-    this.dataSource.filter = searchValue.trim().toLowerCase();
+  ngAfterViewInit() {
+    this.paginator.length = this.itemsCount;
+    this.paginator.pageIndex = this.pageIndex;
+    this.paginator.pageSize = this.pageSize;
+    this.dataSource.sort = this.sort;
+  }
+
+  onPageChange(event: any): void {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { page: event.pageIndex, size: event.pageSize },
+      queryParamsHandling: 'merge'
+    });
+  }
+
+  filterData() {
+    if(this.searchValue === '') return;
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { search: this.searchValue, filter: this.selectedFilterOption, page: 0, size: this.pageSize },
+      queryParamsHandling: 'merge'
+    });
+  }
+
+  @HostListener('document:keydown', ['$event'])
+  handleDeleteKeyboardEvent(event: KeyboardEvent) {
+    if(event.key === 'Enter') {
+      this.filterData();
+    }
+  }
+
+  removeFilter() {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { filter: null, search: null, page: 0, size: this.pageSize },
+      queryParamsHandling: 'merge'
+    });
   }
 
   onAddClick() {

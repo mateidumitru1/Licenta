@@ -42,7 +42,7 @@ export class SidebarComponent implements OnInit {
   constructor(private router: Router, private route: ActivatedRoute, private identityService: IdentityService) {}
 
   ngOnInit() {
-    this.page = this.router.url.split('/').join('/');
+    this.page = this.router.url.split('/').join('/').split('?')[0];
     if (this.page.includes('manage')) {
       this.activePage = this.pageNameMap[this.page].split(' ')[1];
     }
@@ -54,7 +54,7 @@ export class SidebarComponent implements OnInit {
     ).subscribe(() => {
       const url = this.router.url;
 
-      this.page = url.split('/').join('/');
+      this.page = url.split('/').join('/').split('?')[0];
       if (this.page.includes('manage')) {
         this.activePage = this.pageNameMap[this.page].split(' ')[1];
       }
@@ -70,7 +70,12 @@ export class SidebarComponent implements OnInit {
 
   onMenuItemClick(item: any): void {
     if(item.route) {
-      this.router.navigate([item.route]);
+      if(item.route.includes('manage')) {
+        this.router.navigate([item.route], { queryParams: { page: 0, size: 5 } });
+      }
+      else {
+        this.router.navigate([item.route]);
+      }
     }
   }
 

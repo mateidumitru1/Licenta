@@ -14,6 +14,7 @@ import {LoadingComponent} from "./shared/loading/loading.component";
 export class AppComponent implements OnInit {
   title = 'Bileteria';
   loading!: boolean;
+  showScrollButton = false;
 
   constructor(private loadingService: LoadingService) {}
 
@@ -23,5 +24,14 @@ export class AppComponent implements OnInit {
         this.loading = loading;
       }, 0);
     });
+  }
+
+  @HostListener('window:scroll', ['$event'])
+  onWindowScroll(event: any): void {
+    this.showScrollButton = window.scrollY > 500;
+  }
+
+  scrollToTop(): void {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 }

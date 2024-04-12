@@ -4,6 +4,7 @@ import com.matei.backend.dto.request.location.LocationCreationRequestDto;
 import com.matei.backend.dto.request.location.LocationUpdateRequestDto;
 import com.matei.backend.dto.response.artist.ArtistWithoutEventResponseDto;
 import com.matei.backend.dto.response.event.EventWithoutLocationTicketResponseDto;
+import com.matei.backend.dto.response.location.LocationPageWithCountResponseDto;
 import com.matei.backend.dto.response.location.LocationResponseDto;
 import com.matei.backend.dto.response.location.LocationWithoutEventListResponseDto;
 import com.matei.backend.dto.response.statistics.LocationWithEventsCountResponseDto;
@@ -18,6 +19,8 @@ import com.matei.backend.service.util.MapBoxService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -194,5 +197,23 @@ public class LocationService {
                         .build())
                 .sorted((location1, location2) -> Long.compare(location2.getEventsCount(), location1.getEventsCount()))
                 .toList();
+    }
+
+    public LocationPageWithCountResponseDto getLocationsPaginatedManage(int page, int size) {
+        Page<Location> locationPage = locationRepository.findAllByOrderByCreatedAtDesc(PageRequest.of(page, size));
+
+        return LocationPageWithCountResponseDto.builder()
+                .locationPage(locationPage.map(location -> modelMapper.map(location, LocationWithoutEventListResponseDto.class)))
+                .count(locationRepository.count())
+                .build();
+
+    }
+
+    public LocationPageWithCountResponseDto getLocationsFilteredPaginatedManage(int page, int size, String filter, String search) {
+        Page<Location> locationPage = locationRepository.findFilteredLocationsPaginated(filter, search, PageRequest.of(page, size));
+        return LocationPageWithCountResponseDto.builder()
+                .locationPage(locationPage.map(location -> modelMapper.map(location, LocationWithoutEventListResponseDto.class)))
+                .count(locationRepository.countFilteredLocations(filter, search))
+                .build();
     }
 }

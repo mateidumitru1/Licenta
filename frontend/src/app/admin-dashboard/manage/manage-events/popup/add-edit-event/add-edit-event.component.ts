@@ -92,7 +92,7 @@ export class AddEditEventComponent implements OnInit{
     });
 
     this.today = new Date().toISOString().split('T')[0];
-    this.manageLocationsService.fetchLocations().subscribe({
+    this.manageLocationsService.fetchAllLocations().subscribe({
       next: (locations: any) => {
         this.locations = locations;
       },

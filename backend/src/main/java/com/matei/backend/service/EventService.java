@@ -7,10 +7,7 @@ import com.matei.backend.dto.request.event.EventUpdateRequestDto;
 import com.matei.backend.dto.request.ticketType.TicketTypeCreationRequestDto;
 import com.matei.backend.dto.request.ticketType.TicketTypeUpdateRequestDto;
 import com.matei.backend.dto.response.artist.ArtistWithoutEventResponseDto;
-import com.matei.backend.dto.response.event.EventWithoutLocationTicketResponseDto;
-import com.matei.backend.dto.response.event.EventWithoutTicketArtistResponseDto;
-import com.matei.backend.dto.response.event.EventWithTicketTypesResponseDto;
-import com.matei.backend.dto.response.event.SelectedEventResponseDto;
+import com.matei.backend.dto.response.event.*;
 import com.matei.backend.dto.response.genre.GenreWithoutArtistListResponseDto;
 import com.matei.backend.dto.response.location.LocationWithoutEventListResponseDto;
 import com.matei.backend.dto.response.statistics.EventWithTicketsSoldCount;
@@ -25,6 +22,8 @@ import com.matei.backend.service.util.ImageService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -346,5 +345,31 @@ public class EventService {
             e.printStackTrace();
         }
         return Collections.emptyList();
+    }
+
+    public Page<EventWithoutAllResponseDto> getMoreRecentEvents(UUID locationId, int page, int size) {
+        return eventRepository.findByDateAfterAndLocationIdOrderByDateAsc(LocalDate.now(), locationId, PageRequest.of(page, size))
+                .map(event -> modelMapper.map(event, EventWithoutAllResponseDto.class));
+    }
+
+    public Page<EventWithoutTicketArtistResponseDto> getInitialEvents(UUID locationId) {
+        return eventRepository.findByDateAfterAndLocationIdOrderByDateAsc(LocalDate.now(), locationId, PageRequest.of(0, 10))
+                .map(event -> modelMapper.map(event, EventWithoutTicketArtistResponseDto.class));
+    }
+
+    public EventPageWithCountResponseDto getAllEventsPaginatedManage(int page, int size) {
+        Page<Event> eventPage = eventRepository.findAllByOrderByCreatedAtDesc(PageRequest.of(page, size));
+        return EventPageWithCountResponseDto.builder()
+                .eventPage(eventPage.map(event -> modelMapper.map(event, EventWithoutTicketArtistResponseDto.class)))
+                .count(eventPage.getTotalElements())
+                .build();
+    }
+
+    public EventPageWithCountResponseDto getAllEventsFilteredPaginatedManage(int page, int size, String filter, String search) {
+        Page<Event> eventPage = eventRepository.findFilteredEventsPaginated(filter, search, PageRequest.of(page, size));
+        return EventPageWithCountResponseDto.builder()
+                .eventPage(eventPage.map(event -> modelMapper.map(event, EventWithoutTicketArtistResponseDto.class)))
+                .count(eventRepository.countFilteredEvents(filter, search))
+                .build();
     }
 }

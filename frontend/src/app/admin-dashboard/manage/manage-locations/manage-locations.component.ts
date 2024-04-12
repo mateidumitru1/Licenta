@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, HostListener, OnInit, ViewChild} from '@angular/core';
 import {MatButton} from "@angular/material/button";
 import {
   MatCell,
@@ -16,11 +16,11 @@ import {NgForOf, NgIf} from "@angular/common";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatDialog} from "@angular/material/dialog";
 import {MatSnackBar} from "@angular/material/snack-bar";
-import {ManageUsersService} from "../manage-users/manage-users.service";
 import {ManageLocationsService} from "./manage-locations.service";
 import {AddEditLocationComponent} from "./popups/add-edit-location/add-edit-location.component";
 import {DeleteComponent} from "../shared/delete/delete.component";
 import {LoadingComponent} from "../../../shared/loading/loading.component";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-manage-locations',
@@ -52,10 +52,11 @@ import {LoadingComponent} from "../../../shared/loading/loading.component";
   templateUrl: './manage-locations.component.html',
   styleUrl: './manage-locations.component.scss'
 })
-export class ManageLocationsComponent implements OnInit{
+export class ManageLocationsComponent implements OnInit, AfterViewInit {
   dataSource = new MatTableDataSource<any>();
-  @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
-  @ViewChild(MatSort) sort: MatSort | undefined;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
+  itemsCount = 0;
 
   displayedColumns: string[] = ['name', 'address'];
 
@@ -63,7 +64,10 @@ export class ManageLocationsComponent implements OnInit{
 
   searchValue: string = '';
   selectedFilterOption: string = 'name';
-  filteredData: any[] = [];
+  shouldDisplayRemoveFilterButton: boolean = false;
+
+  pageIndex = 0;
+  pageSize = 5;
 
   columnMap: {
     [key: string]: string
@@ -73,38 +77,85 @@ export class ManageLocationsComponent implements OnInit{
   };
 
   constructor(private dialog: MatDialog, private snackBar: MatSnackBar,
-              private manageLocationsService: ManageLocationsService) {}
+              private manageLocationsService: ManageLocationsService,
+              private route: ActivatedRoute,
+              private router: Router) {}
 
   ngOnInit() {
-    this.manageLocationsService.fetchLocations().subscribe({
-      next: (locations: any) => {
-        this.dataSource.data = locations;
-        this.dataSource.sort = this.sort!;
-        this.dataSource.paginator = this.paginator!;
-      },
-      error: (error: any) => {
-        this.snackBar.open('Error fetching users', 'Close', {
-          duration: 3000
+    this.route.queryParams.subscribe(params => {
+      this.pageIndex = params['page'] || 0;
+      this.pageSize = params['size'] || 5;
+      this.searchValue = params['search'] || '';
+      this.selectedFilterOption = params['filter'] || 'name';
+      this.shouldDisplayRemoveFilterButton = !!(params['filter'] && params['search']);
+
+      if(this.searchValue === '' && this.selectedFilterOption === 'name') {
+        this.manageLocationsService.fetchPaginatedLocations(this.pageIndex, this.pageSize).subscribe({
+          next: (response: any) => {
+            this.dataSource.data = response.locationPage.content;
+            this.itemsCount = response.count;
+          },
+          error: (error: any) => {
+            this.snackBar.open('Error fetching locations', 'Close', {
+              duration: 3000
+            });
+          }
+        });
+      }
+      else {
+        this.manageLocationsService.fetchPaginatedLocationsFiltered(this.pageIndex, this.pageSize, this.selectedFilterOption, this.searchValue).subscribe({
+          next: (response: any) => {
+            this.dataSource.data = response.locationPage.content;
+            this.itemsCount = response.count;
+          },
+          error: (error: any) => {
+            this.snackBar.open('Error fetching locations', 'Close', {
+              duration: 3000
+            });
+          }
         });
       }
     });
   }
 
-  applyFilter(searchValue: string, selectedFilterOption: string) {
-    this.dataSource.filterPredicate = (data: any, filter: string) => {
-      switch (selectedFilterOption) {
-        case 'name':
-          return data.name.toLowerCase().includes(filter);
-        case 'address':
-          return data.address.toLowerCase().includes(filter);
-        default:
-          return data.name.toLowerCase().includes(filter) ||
-            data.address.toLowerCase().includes(filter);
-      }
-    };
-    this.dataSource.filter = searchValue.trim().toLowerCase();
+  ngAfterViewInit() {
+    this.paginator.length = this.itemsCount;
+    this.paginator.pageIndex = this.pageIndex;
+    this.paginator.pageSize = this.pageSize;
+    this.dataSource.sort = this.sort;
   }
 
+  onPageChange(event: any): void {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { page: event.pageIndex, size: event.pageSize },
+      queryParamsHandling: 'merge'
+    });
+  }
+
+  filterData() {
+    if(this.searchValue === '') return;
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { search: this.searchValue, filter: this.selectedFilterOption, page: 0, size: this.pageSize },
+      queryParamsHandling: 'merge'
+    });
+  }
+
+  @HostListener('document:keydown', ['$event'])
+  handleDeleteKeyboardEvent(event: KeyboardEvent) {
+    if(event.key === 'Enter') {
+      this.filterData();
+    }
+  }
+
+  removeFilter() {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { filter: null, search: null, page: 0, size: this.pageSize },
+      queryParamsHandling: 'merge'
+    });
+  }
 
   onAddClick() {
     let dialogRef = this.dialog.open(AddEditLocationComponent, {
@@ -174,12 +225,12 @@ export class ManageLocationsComponent implements OnInit{
       if(result) {
         this.manageLocationsService.deleteLocation(this.rowData.id).subscribe({
           next: (response: any) => {
-            this.snackBar.open('User deleted', 'Close', {
+            this.snackBar.open('Location deleted', 'Close', {
               duration: 3000
             });
           },
           error: (error: any) => {
-            this.snackBar.open('Error deleting user', 'Close', {
+            this.snackBar.open('Error deleting location', 'Close', {
               duration: 3000
             });
           }

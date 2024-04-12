@@ -3,6 +3,7 @@ package com.matei.backend.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.matei.backend.dto.request.location.LocationCreationRequestDto;
 import com.matei.backend.dto.request.location.LocationUpdateRequestDto;
+import com.matei.backend.dto.response.location.LocationPageWithCountResponseDto;
 import com.matei.backend.dto.response.location.LocationResponseDto;
 import com.matei.backend.dto.response.location.LocationWithoutEventListResponseDto;
 import com.matei.backend.service.auth.JwtService;
@@ -25,14 +26,10 @@ public class LocationController {
     private final ObjectMapper objectMapper;
     private final JwtService jwtService;
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
     public ResponseEntity<?> createLocation(@RequestHeader("Authorization") String jwtToken, @ModelAttribute LocationCreationRequestDto locationCreationRequestDto) throws IOException {
         return ResponseEntity.ok(locationService.createLocation(locationCreationRequestDto, jwtService.extractId(jwtToken)));
-    }
-
-    @GetMapping
-    public ResponseEntity<List<LocationWithoutEventListResponseDto>> getAllLocations() {
-        return ResponseEntity.ok(locationService.getAllLocations());
     }
 
     @GetMapping("/available-events")
@@ -67,6 +64,7 @@ public class LocationController {
         }
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PatchMapping
     public ResponseEntity<LocationResponseDto> updateLocation(@RequestHeader("Authorization") String jwtToken, @ModelAttribute LocationUpdateRequestDto locationUpdateRequestDto) throws IOException {
         return ResponseEntity.ok(locationService.updateLocation(locationUpdateRequestDto, jwtService.extractId(jwtToken)));
@@ -77,5 +75,26 @@ public class LocationController {
     public ResponseEntity<Void> deleteLocationById(@PathVariable String id) {
         locationService.deleteLocation(UUID.fromString(id));
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<LocationWithoutEventListResponseDto>> getAllLocations() {
+        return ResponseEntity.ok(locationService.getAllLocations());
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping
+    public ResponseEntity<LocationPageWithCountResponseDto> getAllLocationsPaginatedManage(@RequestParam(defaultValue = "0") int page,
+                                                                                           @RequestParam(defaultValue = "10") int size) {
+        return ResponseEntity.ok(locationService.getLocationsPaginatedManage(page, size));
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/filtered")
+    public ResponseEntity<LocationPageWithCountResponseDto> getAllLocationsFilteredPaginatedManage(@RequestParam(defaultValue = "0") int page,
+                                                                                                   @RequestParam(defaultValue = "5") int size,
+                                                                                                   @RequestParam(defaultValue = "") String filter,
+                                                                                                   @RequestParam(defaultValue = "") String search) {
+        return ResponseEntity.ok(locationService.getLocationsFilteredPaginatedManage(page, size, filter, search));
     }
 }

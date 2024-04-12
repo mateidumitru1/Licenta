@@ -3,7 +3,7 @@
   <img class="img-fluid location-image d-none d-sm-block" src="{{ location.imageUrl }}" alt="">
   <div class="row">
     <div class="col-12">
-      <div role="button" *ngFor="let event of location.eventList"
+      <div role="button" *ngFor="let event of events"
            class="card event-card rounded mb-3 mt-3"
            [routerLink]="[event.title]" [queryParams]="{ id: event.id }">
         <div class="d-flex justify-content-center align-items-center">

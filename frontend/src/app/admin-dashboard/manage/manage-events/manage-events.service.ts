@@ -11,8 +11,30 @@ export class ManageEventsService {
 
   constructor(private http: HttpClient, private jwtHandler: JwtHandler) {}
 
-  fetchEvents() {
-    return this.http.get(apiURL + '/events/all');
+  fetchPaginatedEvents(page: number, size: number) {
+    return this.http.get(apiURL + '/events', {
+      params: {
+        page: page.toString(),
+        size: size.toString()
+      },
+      headers: {
+        Authorization: 'Bearer ' + this.jwtHandler.getToken()
+      }
+    });
+  }
+
+  fetchPaginatedEventsFiltered(page: number, size: number, filter: string, search: string) {
+    return this.http.get(apiURL + '/events/filtered', {
+      params: {
+        page: page.toString(),
+        size: size.toString(),
+        filter: filter,
+        search: search
+      },
+      headers: {
+        Authorization: 'Bearer ' + this.jwtHandler.getToken()
+      }
+    });
   }
 
   fetchEventForSelection() {
@@ -48,10 +70,7 @@ export class ManageEventsService {
   }
 
   fetchEventById(eventId: string) {
-    return this.http.get(apiURL + `/events`, {
-      params: {
-        id: eventId
-      },
+    return this.http.get(apiURL + `/events/` + eventId, {
       headers: {
         Authorization: 'Bearer ' + this.jwtHandler.getToken()
       }

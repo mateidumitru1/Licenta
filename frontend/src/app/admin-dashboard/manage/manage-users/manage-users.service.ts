@@ -11,8 +11,26 @@ import {JwtHandler} from "../../../identity/jwt.handler";
 export class ManageUsersService {
   constructor(private http: HttpClient, private jwtHandler: JwtHandler) {}
 
-  fetchUsers() {
+  fetchPaginatedUsers(page: number, size: number) {
     return this.http.get(apiURL + '/users', {
+      params: {
+        page: page.toString(),
+        size: size.toString()
+      },
+      headers: {
+        'Authorization': 'Bearer ' + this.jwtHandler.getToken()
+      }
+    });
+  }
+
+  fetchPaginatedUsersFiltered(page: number, size: number, filter: string, search: string) {
+    return this.http.get(apiURL + '/users/filtered', {
+      params: {
+        page: page.toString(),
+        size: size.toString(),
+        filter: filter,
+        search: search
+      },
       headers: {
         'Authorization': 'Bearer ' + this.jwtHandler.getToken()
       }

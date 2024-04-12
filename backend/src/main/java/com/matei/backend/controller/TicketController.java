@@ -4,6 +4,7 @@ import com.matei.backend.service.auth.JwtService;
 import com.matei.backend.service.TicketService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -15,6 +16,7 @@ public class TicketController {
     private final TicketService ticketService;
     private final JwtService jwtService;
 
+    @PreAuthorize("hasAuthority('TICKET_VALIDATOR')")
     @GetMapping("/validate/{ticketId}")
     public ResponseEntity<?> validateTicket(@RequestHeader("Authorization") String jwtToken, @PathVariable("ticketId") String qrId) {
         return ResponseEntity.ok(ticketService.validateTicket(jwtService.extractId(jwtToken), UUID.fromString(qrId)));
@@ -30,12 +32,14 @@ public class TicketController {
         return ResponseEntity.ok(ticketService.getTicketsForEvent(jwtService.extractId(jwtToken), UUID.fromString(eventId)));
     }
 
+    @PreAuthorize("hasAuthority('USER')")
     @PutMapping("/{ticketId}/cancel")
     public ResponseEntity<?> cancelTicket(@RequestHeader("Authorization") String jwtToken, @PathVariable("ticketId") String ticketId) {
         ticketService.cancelTicket(jwtService.extractId(jwtToken), UUID.fromString(ticketId));
         return ResponseEntity.ok().build();
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/{ticketId}/admin/cancel")
     public ResponseEntity<?> adminCancelTicket(@PathVariable("ticketId") String ticketId) {
         ticketService.adminCancelTicket(UUID.fromString(ticketId));

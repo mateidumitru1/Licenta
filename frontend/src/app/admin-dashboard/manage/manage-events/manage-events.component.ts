@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, HostListener, input, OnInit, ViewChild} from '@angular/core';
 import {FormsModule} from "@angular/forms";
 import {MatButton} from "@angular/material/button";
 import {
@@ -22,6 +22,8 @@ import {LocationNamePipe} from "../../../util/pipes/location-name.pipe";
 import {AddEditEventComponent} from "./popup/add-edit-event/add-edit-event.component";
 import {DeleteComponent} from "../shared/delete/delete.component";
 import {LoadingComponent} from "../../../shared/loading/loading.component";
+import {ActivatedRoute, Router} from "@angular/router";
+import {isValid, parse} from "date-fns";
 
 @Component({
   selector: 'app-manage-events',
@@ -53,10 +55,11 @@ import {LoadingComponent} from "../../../shared/loading/loading.component";
   templateUrl: './manage-events.component.html',
   styleUrl: './manage-events.component.scss'
 })
-export class ManageEventsComponent implements OnInit{
+export class ManageEventsComponent implements OnInit, AfterViewInit {
   dataSource = new MatTableDataSource<any>();
-  @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
-  @ViewChild(MatSort) sort: MatSort | undefined;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
+  itemsCount = 0;
 
   displayedColumns: string[] = ['title', 'date', 'location'];
 
@@ -64,7 +67,10 @@ export class ManageEventsComponent implements OnInit{
 
   searchValue: string = '';
   selectedFilterOption: string = 'title';
-  filteredData: any[] = [];
+  shouldDisplayRemoveFilterButton: boolean = false;
+
+  pageIndex = 0;
+  pageSize = 5;
 
   columnMap: {
     [key: string]: string
@@ -75,39 +81,92 @@ export class ManageEventsComponent implements OnInit{
   };
 
   constructor(private dialog: MatDialog, private snackBar: MatSnackBar,
-              private manageEventsService: ManageEventsService) {}
+              private manageEventsService: ManageEventsService,
+              private route: ActivatedRoute,
+              private router: Router) {}
 
   ngOnInit() {
-    this.manageEventsService.fetchEvents().subscribe({
-      next: (events: any) => {
-        console.log(events);
-        this.dataSource.data = events;
-        this.dataSource.sort = this.sort!;
-        this.dataSource.paginator = this.paginator!;
-      },
-      error: (error: any) => {
-        this.snackBar.open(error.error, 'Close', {
-          duration: 3000
+    this.route.queryParams.subscribe(params => {
+      this.pageIndex = params['page'] || 0;
+      this.pageSize = params['size'] || 5;
+      this.searchValue = params['search'] || '';
+      this.selectedFilterOption = params['filter'] || 'title';
+      this.shouldDisplayRemoveFilterButton = !!(params['filter'] && params['search']);
+
+      if(this.searchValue === '' && this.selectedFilterOption === 'title') {
+        this.manageEventsService.fetchPaginatedEvents(this.pageIndex, this.pageSize).subscribe({
+          next: (response: any) => {
+            this.dataSource.data = response.eventPage.content;
+            this.itemsCount = response.count;
+          },
+          error: (error: any) => {
+            this.snackBar.open(error.error, 'Close', {
+              duration: 3000
+            });
+          }
+        });
+      }
+      else {
+        this.manageEventsService.fetchPaginatedEventsFiltered(this.pageIndex, this.pageSize, this.selectedFilterOption, this.searchValue).subscribe({
+          next: (response: any) => {
+            this.dataSource.data = response.eventPage.content;
+            this.itemsCount = response.count;
+          },
+          error: (error: any) => {
+            this.snackBar.open(error.error, 'Close', {
+              duration: 3000
+            });
+          }
         });
       }
     });
   }
 
-  applyFilter(searchValue: string, selectedFilterOption: string) {
-    this.dataSource.filterPredicate = (data: any, filter: string) => {
-      switch (selectedFilterOption) {
-        case 'title':
-          return data.title.toLowerCase().includes(filter);
-        case 'date':
-          return data.date.toLowerCase().includes(filter);
-        case 'location':
-          return data.location.name.toLowerCase().includes(filter);
-        default:
-          return data.name.toLowerCase().includes(filter) ||
-            data.address.toLowerCase().includes(filter);
+  ngAfterViewInit() {
+    this.paginator.length = this.itemsCount;
+    this.paginator.pageIndex = this.pageIndex;
+    this.paginator.pageSize = this.pageSize;
+    this.dataSource.sort = this.sort;
+  }
+
+  onPageChange(event: any): void {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { page: event.pageIndex, size: event.pageSize },
+      queryParamsHandling: 'merge'
+    });
+  }
+
+  filterData() {
+    if(this.searchValue === '') return;
+    if(this.selectedFilterOption === 'date') {
+      const dateFormats = ['yyyy-MM-dd', 'dd/MM/yyyy', 'dd.MM.yyyy', 'yyyy.MM.dd', ];
+
+      for (const format of dateFormats) {
+        const parsedDate = parse(this.searchValue, format, new Date());
+
       }
-    };
-    this.dataSource.filter = searchValue.trim().toLowerCase();
+    }
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { search: this.searchValue, filter: this.selectedFilterOption, page: 0, size: this.pageSize },
+      queryParamsHandling: 'merge'
+    });
+  }
+
+  @HostListener('document:keydown', ['$event'])
+  handleDeleteKeyboardEvent(event: KeyboardEvent) {
+    if(event.key === 'Enter') {
+      this.filterData();
+    }
+  }
+
+  removeFilter() {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { filter: null, search: null, page: 0, size: this.pageSize },
+      queryParamsHandling: 'merge'
+    });
   }
 
   onAddClick() {
