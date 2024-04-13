@@ -2,7 +2,6 @@ package com.matei.backend.dto.response.event;
 
 import com.matei.backend.dto.response.artist.ArtistWithoutEventResponseDto;
 import com.matei.backend.dto.response.location.LocationWithoutEventListResponseDto;
-import com.matei.backend.dto.response.ticketType.TicketTypeWithoutEventResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,7 +15,7 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class EventWithTicketTypesResponseDto {
+public class EventWithoutTicketTypesResponseDto {
     private UUID id;
     private String title;
     private LocalDate date;
@@ -24,6 +23,5 @@ public class EventWithTicketTypesResponseDto {
     private String description;
     private LocationWithoutEventListResponseDto location;
     private String imageUrl;
-    private List<TicketTypeWithoutEventResponseDto> ticketTypeList;
     private List<ArtistWithoutEventResponseDto> artistList;
 }

@@ -1,6 +1,7 @@
 package com.matei.backend.service.util;
 
 import com.matei.backend.dto.response.event.EventWithoutTicketArtistResponseDto;
+import com.matei.backend.dto.response.event.EventWithoutTicketTypesResponseDto;
 import com.matei.backend.dto.response.ticket.TicketResponseDto;
 import com.matei.backend.entity.ResetPasswordToken;
 import com.sendgrid.Method;
@@ -61,7 +62,7 @@ public class EmailService {
         send(mail);
     }
 
-    public void sendTicketEmail(String toEmail, Map<EventWithoutTicketArtistResponseDto, List<TicketResponseDto>> eventTicketMap) {
+    public void sendTicketEmail(String toEmail, Map<EventWithoutTicketTypesResponseDto, List<TicketResponseDto>> eventTicketMap) {
         Email to = new Email(toEmail);
 
         final String sendTicketTemplateId = "d-22dfa17cd6234faeb5f3bdcb9095342d";

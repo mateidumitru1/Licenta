@@ -2,6 +2,7 @@ package com.matei.backend.service.util;
 
 import com.itextpdf.xmp.impl.Base64;
 import com.matei.backend.dto.response.event.EventWithoutTicketArtistResponseDto;
+import com.matei.backend.dto.response.event.EventWithoutTicketTypesResponseDto;
 import com.matei.backend.dto.response.ticket.TicketResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -35,7 +36,7 @@ public class PdfService {
         letterMap.put('Ț', 'T');
     }
 
-    public byte[] createPdf(EventWithoutTicketArtistResponseDto eventResponseDto, List<TicketResponseDto> ticketResponseDtoList) {
+    public byte[] createPdf(EventWithoutTicketTypesResponseDto eventResponseDto, List<TicketResponseDto> ticketResponseDtoList) {
         PDDocument document = new PDDocument();
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 

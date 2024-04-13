@@ -37,8 +37,8 @@ public class Artist {
     private List<Event> eventList;
 
     @JsonIgnore
-    @ManyToMany(mappedBy = "artists", cascade = CascadeType.ALL)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @ManyToMany(mappedBy = "artists")
+    @OnDelete(action = OnDeleteAction.SET_NULL)
     private List<Genre> genreList;
 
     @Override

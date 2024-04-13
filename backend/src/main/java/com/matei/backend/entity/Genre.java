@@ -1,5 +1,6 @@
 package com.matei.backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,13 +29,14 @@ public class Genre {
 
     private LocalDateTime createdAt;
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(
             name = "genre_artists",
             joinColumns = @JoinColumn(name = "genre_id"),
             inverseJoinColumns = @JoinColumn(name = "artist_id")
     )
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OnDelete(action = OnDeleteAction.SET_NULL)
     private List<Artist> artists;
 
     @Override

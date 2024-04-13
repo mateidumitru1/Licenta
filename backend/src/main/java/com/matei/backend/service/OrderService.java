@@ -1,11 +1,12 @@
 package com.matei.backend.service;
 
 import com.matei.backend.dto.response.event.EventWithoutTicketArtistResponseDto;
+import com.matei.backend.dto.response.event.EventWithoutTicketTypesResponseDto;
 import com.matei.backend.dto.response.location.LocationWithoutEventListResponseDto;
 import com.matei.backend.dto.response.order.OrderResponseDto;
 import com.matei.backend.dto.response.shoppingCart.ShoppingCartItemResponseDto;
 import com.matei.backend.dto.response.ticket.TicketResponseDto;
-import com.matei.backend.dto.response.ticketType.TicketTypeResponseDto;
+import com.matei.backend.dto.response.ticketType.TicketTypeEventWithoutArtistResponseDto;
 import com.matei.backend.dto.response.user.UserResponseDto;
 import com.matei.backend.entity.*;
 import com.matei.backend.entity.enums.StatisticsFilter;
@@ -36,10 +37,11 @@ public class OrderService {
     private final UserService userService;
     private final ShoppingCartService shoppingCartService;
     private final TicketService ticketService;
+    private final UserGenrePreferenceService userGenrePreferenceService;
     private final ModelMapper modelMapper;
 
     public void createOrder(UUID userId) {
-        var shoppingCart = shoppingCartService.getShoppingCart(userId);
+        var shoppingCart = shoppingCartService.getShoppingCartDto(userId);
 
         if(shoppingCart.getShoppingCartItemList().isEmpty()) {
             throw new ShoppingCartItemNotFoundException("Shopping cart is empty");
@@ -63,13 +65,14 @@ public class OrderService {
                         .id(user.getId()).build()).orElseThrow())
                 .build());
 
-        Map<EventWithoutTicketArtistResponseDto, List<ShoppingCartItemResponseDto>> eventShoppingCartMap = shoppingCart.getShoppingCartItemList().stream()
+        Map<EventWithoutTicketTypesResponseDto, List<ShoppingCartItemResponseDto>> eventShoppingCartMap = shoppingCart.getShoppingCartItemList().stream()
                 .collect(Collectors.groupingBy(shoppingCartItem ->
                         shoppingCartItem.getTicketType().getEvent(), Collectors.toList()));
 
         ticketService.createTickets(eventShoppingCartMap, userId, getCreationOrderResponseDto(order));
-
         shoppingCartService.clearShoppingCart(userId);
+
+        userGenrePreferenceService.updateUserGenrePreferences(userId, shoppingCart.getShoppingCartItemList());
     }
 
     public List<OrderResponseDto> getOrders(UUID id) {
@@ -100,9 +103,9 @@ public class OrderService {
                             .image(ticket.getImage())
                             .scanned(ticket.getScanned());
 
-                    TicketTypeResponseDto ticketTypeResponseDto = null;
+                    TicketTypeEventWithoutArtistResponseDto ticketTypeEventWithoutArtistResponseDto = null;
                     if (ticket.getTicketType() != null) {
-                        ticketTypeResponseDto = TicketTypeResponseDto.builder()
+                        ticketTypeEventWithoutArtistResponseDto = TicketTypeEventWithoutArtistResponseDto.builder()
                                 .id(ticket.getTicketType().getId())
                                 .name(ticket.getTicketType().getName())
                                 .price(ticket.getTicketType().getPrice())
@@ -119,10 +122,10 @@ public class OrderService {
                                     .location(modelMapper.map(ticket.getTicketType().getEvent().getLocation(), LocationWithoutEventListResponseDto.class))
                                     .build();
                         }
-                        ticketTypeResponseDto.setEvent(eventResponseDto);
+                        ticketTypeEventWithoutArtistResponseDto.setEvent(eventResponseDto);
                     }
 
-                    ticketResponseDtoBuilder.ticketType(ticketTypeResponseDto);
+                    ticketResponseDtoBuilder.ticketType(ticketTypeEventWithoutArtistResponseDto);
                     return ticketResponseDtoBuilder.build();
                 }).collect(Collectors.toList()))
                 .user(UserResponseDto.builder()

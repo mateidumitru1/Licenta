@@ -5,7 +5,7 @@ import com.matei.backend.dto.request.user.UserCreationRequestDto;
 import com.matei.backend.dto.request.user.UserRequestDto;
 import com.matei.backend.dto.response.order.OrderResponseDto;
 import com.matei.backend.dto.response.ticket.TicketResponseDto;
-import com.matei.backend.dto.response.ticketType.TicketTypeResponseDto;
+import com.matei.backend.dto.response.ticketType.TicketTypeEventWithoutArtistResponseDto;
 import com.matei.backend.dto.response.user.UserPageWithCountResponseDto;
 import com.matei.backend.dto.response.user.UserResponseDto;
 import com.matei.backend.dto.response.user.UserWithOrdersResponseDto;
@@ -22,12 +22,10 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -69,7 +67,7 @@ public class UserService {
             var orderDto = modelMapper.map(order, OrderResponseDto.class);
             orderDto.setTicketList(order.getTicketList().stream().map(ticket -> {
                 var ticketDto = modelMapper.map(ticket, TicketResponseDto.class);
-                ticketDto.setTicketType(modelMapper.map(ticket.getTicketType(), TicketTypeResponseDto.class));
+                ticketDto.setTicketType(modelMapper.map(ticket.getTicketType(), TicketTypeEventWithoutArtistResponseDto.class));
                 return ticketDto;
             }).toList());
             return orderDto;

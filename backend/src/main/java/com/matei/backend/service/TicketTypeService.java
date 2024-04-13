@@ -3,7 +3,7 @@ package com.matei.backend.service;
 import com.matei.backend.dto.request.ticketType.TicketTypeCreationRequestDto;
 import com.matei.backend.dto.request.ticketType.TicketTypeUpdateRequestDto;
 import com.matei.backend.dto.response.event.EventWithoutTicketArtistResponseDto;
-import com.matei.backend.dto.response.ticketType.TicketTypeResponseDto;
+import com.matei.backend.dto.response.ticketType.TicketTypeEventWithoutArtistResponseDto;
 import com.matei.backend.entity.Event;
 import com.matei.backend.entity.TicketType;
 import com.matei.backend.exception.ticketType.TicketTypeNotFoundException;
@@ -28,25 +28,25 @@ public class TicketTypeService {
         return ticketTypeRepository.save(ticketType);
     }
 
-    public TicketTypeResponseDto createTicketType(TicketTypeCreationRequestDto ticketTypeCreationRequestDto, EventWithoutTicketArtistResponseDto eventResponseDto) {
+    public TicketTypeEventWithoutArtistResponseDto createTicketType(TicketTypeCreationRequestDto ticketTypeCreationRequestDto, EventWithoutTicketArtistResponseDto eventResponseDto) {
         var ticketTypeToAdd = modelMapper.map(ticketTypeCreationRequestDto, TicketType.class);
         ticketTypeToAdd.setEvent(modelMapper.map(eventResponseDto, Event.class));
         ticketTypeToAdd.setRemainingQuantity(ticketTypeCreationRequestDto.getQuantity());
         ticketTypeToAdd.setTotalQuantity(ticketTypeCreationRequestDto.getQuantity());
         var ticketType = ticketTypeRepository.save(ticketTypeToAdd);
 
-        return modelMapper.map(ticketType, TicketTypeResponseDto.class);
+        return modelMapper.map(ticketType, TicketTypeEventWithoutArtistResponseDto.class);
     }
 
-    public TicketTypeResponseDto getTicketTypeById(UUID id) {
+    public TicketTypeEventWithoutArtistResponseDto getTicketTypeById(UUID id) {
         var ticketType = ticketTypeRepository.findById(id).orElseThrow(() -> new TicketTypeNotFoundException("Ticket type not found"));
 
-        return modelMapper.map(ticketType, TicketTypeResponseDto.class);
+        return modelMapper.map(ticketType, TicketTypeEventWithoutArtistResponseDto.class);
     }
 
-    public List<TicketTypeResponseDto> getTicketTypesByEventId(UUID eventId) {
+    public List<TicketTypeEventWithoutArtistResponseDto> getTicketTypesByEventId(UUID eventId) {
         return ticketTypeRepository.findByEventId(eventId).orElseThrow(() -> new TicketTypeNotFoundException("Ticket types not found")).stream()
-                .map(ticketType -> modelMapper.map(ticketType, TicketTypeResponseDto.class))
+                .map(ticketType -> modelMapper.map(ticketType, TicketTypeEventWithoutArtistResponseDto.class))
                 .toList();
     }
 

@@ -1,11 +1,19 @@
 package com.matei.backend.service;
 
 import com.matei.backend.dto.request.shoppingCart.ShoppingCartItemRequestDto;
+import com.matei.backend.dto.response.artist.ArtistWithoutEventResponseDto;
+import com.matei.backend.dto.response.event.EventWithoutLocationTicketResponseDto;
 import com.matei.backend.dto.response.event.EventWithoutTicketArtistResponseDto;
+import com.matei.backend.dto.response.event.EventWithoutTicketTypesResponseDto;
+import com.matei.backend.dto.response.genre.GenreResponseDto;
+import com.matei.backend.dto.response.genre.GenreWithoutArtistListResponseDto;
 import com.matei.backend.dto.response.location.LocationWithoutEventListResponseDto;
+import com.matei.backend.dto.response.shoppingCart.ShoppingCartItemEventWithoutArtistResponseDto;
+import com.matei.backend.dto.response.shoppingCart.ShoppingCartEventWithoutArtistResponseDto;
 import com.matei.backend.dto.response.shoppingCart.ShoppingCartItemResponseDto;
 import com.matei.backend.dto.response.shoppingCart.ShoppingCartResponseDto;
-import com.matei.backend.dto.response.ticketType.TicketTypeResponseDto;
+import com.matei.backend.dto.response.ticketType.TicketTypeEventResponseDto;
+import com.matei.backend.dto.response.ticketType.TicketTypeEventWithoutArtistResponseDto;
 import com.matei.backend.entity.*;
 import com.matei.backend.exception.event.EventPastException;
 import com.matei.backend.exception.ticketType.TicketTypeNotFoundException;
@@ -41,7 +49,7 @@ public class ShoppingCartService {
                 .build());
     }
 
-    public ShoppingCartResponseDto addTicketToShoppingCart(List<ShoppingCartItemRequestDto> shoppingCartItemRequestDtoList, UUID userId) {
+    public ShoppingCartEventWithoutArtistResponseDto addTicketToShoppingCart(List<ShoppingCartItemRequestDto> shoppingCartItemRequestDtoList, UUID userId) {
         shoppingCartItemRequestDtoList.stream().filter(shoppingCartItemRequestDto -> {
             var ticketType = Optional.of(ticketTypeService.getTicketTypeById(shoppingCartItemRequestDto.getTicketTypeId()))
                     .orElseThrow(() -> new TicketTypeNotFoundException("Ticket type not found"));
@@ -98,10 +106,16 @@ public class ShoppingCartService {
 
         var updatedShoppingCart = shoppingCartRepository.save(shoppingCart);
 
-        return getShoppingCartResponseDto(updatedShoppingCart);
+        return getShoppingCartEventWithoutArtistResponseDto(updatedShoppingCart);
     }
 
-    public ShoppingCartResponseDto getShoppingCart(UUID userId) {
+    public ShoppingCartEventWithoutArtistResponseDto getShoppingCartEventWithoutArtistDto(UUID userId) {
+        var shoppingCart = findShoppingCartOrElseEmpty(userId);
+
+        return getShoppingCartEventWithoutArtistResponseDto(shoppingCart);
+    }
+
+    public ShoppingCartResponseDto getShoppingCartDto(UUID userId) {
         var shoppingCart = findShoppingCartOrElseEmpty(userId);
 
         return getShoppingCartResponseDto(shoppingCart);
@@ -114,7 +128,7 @@ public class ShoppingCartService {
         });
     }
 
-    public ShoppingCartResponseDto removeTicketFromShoppingCart(UUID ticketTypeId, UUID userId) {
+    public ShoppingCartEventWithoutArtistResponseDto removeTicketFromShoppingCart(UUID ticketTypeId, UUID userId) {
         var shoppingCart = findShoppingCartOrElseEmpty(userId);
 
         var ticketType = ticketTypeService.getTicketTypeById(ticketTypeId);
@@ -134,10 +148,10 @@ public class ShoppingCartService {
 
         shoppingCartRepository.save(shoppingCart);
 
-        return getShoppingCartResponseDto(shoppingCart);
+        return getShoppingCartEventWithoutArtistResponseDto(shoppingCart);
     }
 
-    public ShoppingCartResponseDto updateTicketQuantity(UUID shoppingCartItemId, Integer quantity, UUID userId) {
+    public ShoppingCartEventWithoutArtistResponseDto updateTicketQuantity(UUID shoppingCartItemId, Integer quantity, UUID userId) {
         var shoppingCart = findShoppingCartOrElseEmpty(userId);
 
         var shoppingCartItem = shoppingCart.getShoppingCartItemList().stream()
@@ -152,7 +166,7 @@ public class ShoppingCartService {
         shoppingCartItemRepository.save(shoppingCartItem);
         shoppingCartRepository.save(shoppingCart);
 
-        return getShoppingCartResponseDto(shoppingCart);
+        return getShoppingCartEventWithoutArtistResponseDto(shoppingCart);
     }
 
     public void clearShoppingCart(UUID userId) {
@@ -166,14 +180,14 @@ public class ShoppingCartService {
         shoppingCartRepository.save(shoppingCart);
     }
 
-    public ShoppingCartResponseDto getShoppingCartResponseDto(ShoppingCart shoppingCart) {
-        return ShoppingCartResponseDto.builder()
+    public ShoppingCartEventWithoutArtistResponseDto getShoppingCartEventWithoutArtistResponseDto(ShoppingCart shoppingCart) {
+        return ShoppingCartEventWithoutArtistResponseDto.builder()
                 .id(shoppingCart.getId())
                 .price(shoppingCart.getPrice())
                 .shoppingCartItemList(shoppingCart.getShoppingCartItemList().stream()
-                        .map(shoppingCartItem -> ShoppingCartItemResponseDto.builder()
+                        .map(shoppingCartItem -> ShoppingCartItemEventWithoutArtistResponseDto.builder()
                                 .id(shoppingCartItem.getId())
-                                .ticketType(TicketTypeResponseDto.builder()
+                                .ticketType(TicketTypeEventWithoutArtistResponseDto.builder()
                                         .id(shoppingCartItem.getTicketType().getId())
                                         .name(shoppingCartItem.getTicketType().getName())
                                         .price(shoppingCartItem.getTicketType().getPrice())
@@ -187,6 +201,48 @@ public class ShoppingCartService {
                                                 .description(shoppingCartItem.getTicketType().getEvent().getDescription())
                                                 .location(modelMapper.map(shoppingCartItem.getTicketType().getEvent().getLocation(),
                                                         LocationWithoutEventListResponseDto.class))
+                                                .imageUrl(shoppingCartItem.getTicketType().getEvent().getImageUrl())
+                                                .build())
+                                        .build())
+                                .quantity(shoppingCartItem.getQuantity())
+                                .build())
+                        .toList())
+                .build();
+    }
+
+    private ShoppingCartResponseDto getShoppingCartResponseDto(ShoppingCart shoppingCart) {
+        return ShoppingCartResponseDto.builder()
+                .id(shoppingCart.getId())
+                .price(shoppingCart.getPrice())
+                .shoppingCartItemList(shoppingCart.getShoppingCartItemList().stream()
+                        .map(shoppingCartItem -> ShoppingCartItemResponseDto.builder()
+                                .id(shoppingCartItem.getId())
+                                .ticketType(TicketTypeEventResponseDto.builder()
+                                        .id(shoppingCartItem.getTicketType().getId())
+                                        .name(shoppingCartItem.getTicketType().getName())
+                                        .price(shoppingCartItem.getTicketType().getPrice())
+                                        .totalQuantity(shoppingCartItem.getTicketType().getTotalQuantity())
+                                        .remainingQuantity(shoppingCartItem.getTicketType().getRemainingQuantity())
+                                        .event(EventWithoutTicketTypesResponseDto.builder()
+                                                .id(shoppingCartItem.getTicketType().getEvent().getId())
+                                                .title(shoppingCartItem.getTicketType().getEvent().getTitle())
+                                                .date(shoppingCartItem.getTicketType().getEvent().getDate())
+                                                .shortDescription(shoppingCartItem.getTicketType().getEvent().getShortDescription())
+                                                .description(shoppingCartItem.getTicketType().getEvent().getDescription())
+                                                .location(modelMapper.map(shoppingCartItem.getTicketType().getEvent().getLocation(),
+                                                        LocationWithoutEventListResponseDto.class))
+                                                .artistList(shoppingCartItem.getTicketType().getEvent().getArtistList().stream()
+                                                        .map(artist -> ArtistWithoutEventResponseDto.builder()
+                                                                .id(artist.getId())
+                                                                .name(artist.getName())
+                                                                .genreList(artist.getGenreList().stream()
+                                                                        .map(genre -> GenreWithoutArtistListResponseDto.builder()
+                                                                                .id(genre.getId())
+                                                                                .name(genre.getName())
+                                                                                .build()).toList())
+                                                                .imageUrl(artist.getImageUrl())
+                                                                .build())
+                                                        .toList())
                                                 .imageUrl(shoppingCartItem.getTicketType().getEvent().getImageUrl())
                                                 .build())
                                         .build())

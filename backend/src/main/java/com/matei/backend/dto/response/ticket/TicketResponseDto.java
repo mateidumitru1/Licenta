@@ -1,7 +1,6 @@
 package com.matei.backend.dto.response.ticket;
 
-import com.matei.backend.dto.response.ticketType.TicketTypeResponseDto;
-import com.matei.backend.dto.response.ticketType.TicketTypeWithoutEventResponseDto;
+import com.matei.backend.dto.response.ticketType.TicketTypeEventWithoutArtistResponseDto;
 import com.matei.backend.entity.enums.Status;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,7 +16,7 @@ import java.util.UUID;
 @Builder
 public class TicketResponseDto {
     private UUID id;
-    private TicketTypeResponseDto ticketType;
+    private TicketTypeEventWithoutArtistResponseDto ticketType;
     private Status status;
     private String image;
     private Boolean scanned;

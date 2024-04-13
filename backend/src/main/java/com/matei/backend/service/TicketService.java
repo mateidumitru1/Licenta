@@ -1,11 +1,14 @@
 package com.matei.backend.service;
 
 import com.google.zxing.WriterException;
+import com.matei.backend.dto.response.event.EventWithoutLocationTicketResponseDto;
 import com.matei.backend.dto.response.event.EventWithoutTicketArtistResponseDto;
+import com.matei.backend.dto.response.event.EventWithoutTicketTypesResponseDto;
 import com.matei.backend.dto.response.order.OrderResponseDto;
+import com.matei.backend.dto.response.shoppingCart.ShoppingCartItemEventWithoutArtistResponseDto;
 import com.matei.backend.dto.response.shoppingCart.ShoppingCartItemResponseDto;
 import com.matei.backend.dto.response.ticket.TicketResponseDto;
-import com.matei.backend.dto.response.ticketType.TicketTypeResponseDto;
+import com.matei.backend.dto.response.ticketType.TicketTypeEventWithoutArtistResponseDto;
 import com.matei.backend.entity.*;
 import com.matei.backend.entity.enums.Role;
 import com.matei.backend.entity.enums.StatisticsFilter;
@@ -39,15 +42,15 @@ public class TicketService {
     private final UserService userService;
     private final ModelMapper modelMapper;
 
-    public void createTickets(Map<EventWithoutTicketArtistResponseDto, List<ShoppingCartItemResponseDto>> eventShoppingCartMap, UUID userId, OrderResponseDto orderDto) {
-        Map<EventWithoutTicketArtistResponseDto, List<TicketResponseDto>> eventTicketMap = new HashMap<>();
+    public void createTickets(Map<EventWithoutTicketTypesResponseDto, List<ShoppingCartItemResponseDto>> eventShoppingCartMap, UUID userId, OrderResponseDto orderDto) {
+        Map<EventWithoutTicketTypesResponseDto, List<TicketResponseDto>> eventTicketMap = new HashMap<>();
 
         eventShoppingCartMap.forEach((eventResponseDto, shoppingCartItemResponseDtoList) -> {
             List<Ticket> tickets = new ArrayList<>();
-            shoppingCartItemResponseDtoList.forEach(shoppingCartItemResponseDto -> {
-                while(shoppingCartItemResponseDto.getQuantity() > 0) {
+            shoppingCartItemResponseDtoList.forEach(shoppingCartItemEventWithoutArtistResponseDto -> {
+                while(shoppingCartItemEventWithoutArtistResponseDto.getQuantity() > 0) {
                     try {
-                        var ticketType = modelMapper.map(ticketTypeService.getTicketTypeById(shoppingCartItemResponseDto.getTicketType().getId()), TicketType.class);
+                        var ticketType = modelMapper.map(ticketTypeService.getTicketTypeById(shoppingCartItemEventWithoutArtistResponseDto.getTicketType().getId()), TicketType.class);
                         ticketType.setRemainingQuantity(ticketType.getRemainingQuantity() - 1);
                         ticketType = ticketTypeService.save(ticketType);
                         UUID id = UUID.randomUUID();
@@ -64,7 +67,7 @@ public class TicketService {
                     } catch (WriterException | IOException e) {
                         throw new TicketCreationException("QR Creation Exception: " + e.getMessage());
                     }
-                    shoppingCartItemResponseDto.setQuantity(shoppingCartItemResponseDto.getQuantity() - 1);
+                    shoppingCartItemEventWithoutArtistResponseDto.setQuantity(shoppingCartItemEventWithoutArtistResponseDto.getQuantity() - 1);
                 }
             });
             eventTicketMap.put(eventResponseDto, tickets.stream().map(ticket -> modelMapper.map(ticket, TicketResponseDto.class)).toList());
@@ -141,7 +144,7 @@ public class TicketService {
                         .id(ticket.getId())
                         .status(ticket.getStatus())
                         .ticketType(Optional.of(ticket.getTicketType())
-                                .map(ticketType -> modelMapper.map(ticketType, TicketTypeResponseDto.class)).orElseThrow())
+                                .map(ticketType -> modelMapper.map(ticketType, TicketTypeEventWithoutArtistResponseDto.class)).orElseThrow())
                         .image(ticket.getImage())
                         .scanned(ticket.getScanned())
                         .scannedAt(ticket.getScannedAt())
@@ -156,7 +159,7 @@ public class TicketService {
                         .id(ticket.getId())
                         .status(ticket.getStatus())
                         .ticketType(Optional.of(ticket.getTicketType())
-                                .map(ticketType -> modelMapper.map(ticketType, TicketTypeResponseDto.class)).orElseThrow())
+                                .map(ticketType -> modelMapper.map(ticketType, TicketTypeEventWithoutArtistResponseDto.class)).orElseThrow())
                         .image(ticket.getImage())
                         .scanned(ticket.getScanned())
                         .scannedAt(ticket.getScannedAt())

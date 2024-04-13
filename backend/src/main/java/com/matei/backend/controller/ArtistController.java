@@ -56,12 +56,14 @@ public class ArtistController {
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping
     public ResponseEntity<ArtistPageWithCountResponseDto> getAllArtistsPaginatedManage(@RequestParam(defaultValue = "0") int page,
                                                                                        @RequestParam(defaultValue = "10") int size) {
         return ResponseEntity.ok(artistService.getAllArtistsPaginatedManage(page, size));
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/filtered")
     public ResponseEntity<ArtistPageWithCountResponseDto> getArtistsFilteredPaginatedManage(@RequestParam(defaultValue = "0") int page,
                                                                                              @RequestParam(defaultValue = "10") int size,

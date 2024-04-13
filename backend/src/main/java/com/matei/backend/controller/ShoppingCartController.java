@@ -34,7 +34,7 @@ public class ShoppingCartController {
     @PreAuthorize("hasAuthority('USER')")
     @GetMapping
     public ResponseEntity<?> getShoppingCart(@RequestHeader("Authorization") String jwtToken) {
-        return ResponseEntity.ok(shoppingCartService.getShoppingCart(jwtService.extractId(jwtToken)));
+        return ResponseEntity.ok(shoppingCartService.getShoppingCartEventWithoutArtistDto(jwtService.extractId(jwtToken)));
     }
 
     @PreAuthorize("hasAuthority('USER')")

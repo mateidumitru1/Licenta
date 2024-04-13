@@ -1,6 +1,6 @@
 package com.matei.backend.dto.response.shoppingCart;
 
-import com.matei.backend.dto.response.ticketType.TicketTypeEventResponseDto;
+import com.matei.backend.dto.response.ticketType.TicketTypeEventWithoutArtistResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,8 +12,8 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ShoppingCartItemResponseDto {
+public class ShoppingCartItemEventWithoutArtistResponseDto {
     private UUID id;
-    private TicketTypeEventResponseDto ticketType;
+    private TicketTypeEventWithoutArtistResponseDto ticketType;
     private Integer quantity;
 }

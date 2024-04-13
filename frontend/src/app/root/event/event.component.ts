@@ -77,7 +77,7 @@ export class EventComponent implements OnInit{
 
   buyTickets() {
     let selectedTicketTypes: any[] = [];
-    this.event.ticketTypes.forEach((ticket: any) => {
+    this.event.ticketTypeList.forEach((ticket: any) => {
       if(ticket.reservedQuantity > 0) {
         selectedTicketTypes.push({
           ticketTypeId: ticket.id,

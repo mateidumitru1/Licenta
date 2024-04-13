@@ -4,7 +4,6 @@ import com.matei.backend.dto.request.event.EventCreationRequestDto;
 import com.matei.backend.dto.request.event.EventUpdateRequestDto;
 import com.matei.backend.dto.response.event.*;
 import com.matei.backend.service.EventService;
-import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +22,7 @@ public class EventController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
-    public ResponseEntity<EventWithTicketTypesResponseDto> createEvent(@ModelAttribute EventCreationRequestDto eventCreationRequestDto) throws IOException {
+    public ResponseEntity<EventResponseDto> createEvent(@ModelAttribute EventCreationRequestDto eventCreationRequestDto) throws IOException {
         return ResponseEntity.ok(eventService.createEvent(eventCreationRequestDto));
     }
 
@@ -35,7 +34,7 @@ public class EventController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/all/available")
-    public ResponseEntity<List<EventWithTicketTypesResponseDto>> getAvailableEvents() {
+    public ResponseEntity<List<EventResponseDto>> getAvailableEvents() {
         return ResponseEntity.ok(eventService.getAvailableEvents());
     }
 
@@ -46,13 +45,13 @@ public class EventController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EventWithTicketTypesResponseDto> getEventById(@PathVariable("id") String id){
+    public ResponseEntity<EventResponseDto> getEventById(@PathVariable("id") String id){
         return ResponseEntity.ok(eventService.getEventById(UUID.fromString(id)));
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping
-    public ResponseEntity<EventWithTicketTypesResponseDto> updateEvent(@ModelAttribute EventUpdateRequestDto eventUpdateRequestDto) throws IOException {
+    public ResponseEntity<EventResponseDto> updateEvent(@ModelAttribute EventUpdateRequestDto eventUpdateRequestDto) throws IOException {
         return ResponseEntity.ok(eventService.updateEvent(eventUpdateRequestDto));
     }
 
