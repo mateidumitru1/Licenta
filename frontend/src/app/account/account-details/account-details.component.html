@@ -1,22 +1,36 @@
 <div class="container-fluid">
-  <h1>Informatii personale</h1>
-  <div class="card">
-    <div class="card-body">
-      <h5 class="card-title">Nume: {{ user.firstName }} {{ user.lastName }}</h5>
-      <h6 class="card-subtitle mb-2 text-muted">Email: {{ user.email }}</h6>
+  <div class="personal-info-genres">
+    <div class="personal-info">
+      <h1 class="text-center">Informatii personale</h1>
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Nume: {{ user.firstName }} {{ user.lastName }}</h5>
+          <h6 class="card-subtitle mb-2 text-muted">Email: {{ user.email }}</h6>
+        </div>
+        <div class="card-footer">
+          <button class="btn btn-primary me-2" (click)="onEditClick()">Modifica datele</button>
+          <button class="btn btn-primary" (click)="onChangePasswordClick()">Schimba parola</button>
+        </div>
+      </div>
     </div>
-    <div class="card-footer">
-      <button class="btn btn-primary me-2" (click)="onEditClick()">Modifica datele</button>
-      <button class="btn btn-primary" (click)="onChangePasswordClick()">Schimba parola</button>
+    <div class="genre-preferences d-flex justify-content-center align-items-center flex-column flex-grow-1">
+      <h1 class="text-center">Preferinte genuri</h1>
+      <div class="chart-container">
+        <canvas id="genrePieChart"></canvas>
+      </div>
     </div>
   </div>
-  <h1>Comenzile recente</h1>
-  <div class="card" *ngFor="let order of orderList">
-    <div class="card-body">
-      <h5 class="card-title mb-3">Comanda #{{ order.orderNumber }}</h5>
-      <h6 class="card-subtitle mb-2 text-muted">Data: {{ order.date | date }}</h6>
-      <p class="card-text">Status: {{ order.status }}</p>
-      <p class="card-text">Total: {{ order.price }} RON</p>
+  <div class="recent-orders">
+    <h1>Comenzile recente</h1>
+    <div class="card" *ngFor="let order of orderList">
+      <div class="card-body">
+        <h5 role="tab" class="card-title mb-3" >
+          <a [routerLink]="['orders', order.orderNumber]">Comanda #{{ order.orderNumber }}</a>
+        </h5>
+        <h6 class="card-subtitle mb-2 text-muted">Data: {{ order.date | date }}</h6>
+        <p class="card-text">Status: {{ order.status }}</p>
+        <p class="card-text">Total: {{ order.price }} RON</p>
+      </div>
     </div>
   </div>
 </div>

@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {AccountOrdersService} from "../account-orders.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {DatePipe, NgClass, NgForOf, NgIf} from "@angular/common";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, RouterLink} from "@angular/router";
 
 @Component({
   selector: 'app-account-order-details',
@@ -11,7 +11,8 @@ import {ActivatedRoute} from "@angular/router";
     DatePipe,
     NgForOf,
     NgIf,
-    NgClass
+    NgClass,
+    RouterLink
   ],
   templateUrl: './account-order-details.component.html',
   styleUrl: './account-order-details.component.scss'

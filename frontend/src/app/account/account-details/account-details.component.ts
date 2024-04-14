@@ -1,25 +1,27 @@
-import {Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {AccountDetailsService} from "./account-details.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
-import {Router} from "@angular/router";
+import {Router, RouterLink} from "@angular/router";
 import {DatePipe, NgForOf} from "@angular/common";
 import {MatDialog} from "@angular/material/dialog";
 import {EditAccountDetailsComponent} from "./edit-account-details/edit-account-details.component";
 import {
   ChangePasswordAccountDetailsComponent
 } from "./change-password-account-details/change-password-account-details.component";
+import {Chart, ChartConfiguration} from "chart.js";
 
 @Component({
   selector: 'app-account-details',
   standalone: true,
   imports: [
     NgForOf,
-    DatePipe
+    DatePipe,
+    RouterLink
   ],
   templateUrl: './account-details.component.html',
   styleUrl: './account-details.component.scss'
 })
-export class AccountDetailsComponent implements OnInit{
+export class AccountDetailsComponent implements OnInit, AfterViewInit {
   user: any = {};
   orderList: any = [];
 
@@ -30,6 +32,7 @@ export class AccountDetailsComponent implements OnInit{
       next: (user: any) => {
         this.user = user;
         this.orderList = user.orderList.sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 4);
+        this.createPieChart();
       },
       error: (error: any) => {
         this.snackBar.open(error.error, 'Close', {
@@ -37,6 +40,48 @@ export class AccountDetailsComponent implements OnInit{
         });
       }
     });
+  }
+
+  ngAfterViewInit() {
+  }
+
+  createPieChart() {
+    const genreData = {
+      labels: this.user.genrePreferences.map((genre: any) => genre.broadGenre),
+      datasets: [{
+        data: this.user.genrePreferences.map((genre: any) => genre.percentage.toFixed(2)),
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.6)',
+          'rgba(54, 162, 235, 0.6)',
+          'rgba(255, 206, 86, 0.6)',
+          'rgba(75, 192, 192, 0.6)'
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)'
+        ],
+        borderWidth: 1
+      }]
+    };
+
+    const config: ChartConfiguration<'pie', number[], string> = {
+      type: 'pie',
+      data: genreData,
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'right',
+          },
+        },
+      },
+    };
+
+    const ctx = document.getElementById('genrePieChart') as HTMLCanvasElement;
+    const myPieChart = new Chart(ctx, config);
   }
 
   onEditClick() {

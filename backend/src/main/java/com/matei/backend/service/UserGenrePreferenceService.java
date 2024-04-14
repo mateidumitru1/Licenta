@@ -1,10 +1,12 @@
 package com.matei.backend.service;
 
+import com.matei.backend.dto.response.event.EventWithoutTicketTypesResponseDto;
 import com.matei.backend.dto.response.preference.UserGenrePreferenceResponseDto;
-import com.matei.backend.dto.response.shoppingCart.ShoppingCartItemResponseDto;
 import com.matei.backend.entity.User;
 import com.matei.backend.entity.UserGenrePreference;
 import com.matei.backend.repository.UserGenrePreferenceRepository;
+import com.matei.backend.service.util.BroadGenreMapperService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -13,48 +15,12 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class UserGenrePreferenceService {
     private final UserGenrePreferenceRepository userGenrePreferenceRepository;
     private final UserService userService;
     private final ModelMapper modelMapper;
-
-    private final Map<String, String> genreMapping = new HashMap<>() {{
-        put("rock", "rock");
-        put("jazz", "jazz & blues");
-        put("blues", "jazz & blues");
-        put("soul", "jazz & blues");
-        put("r&b", "jazz & blues");
-        put("pop", "pop & dance");
-        put("dance", "pop & dance");
-        put("electronic", "pop & dance");
-        put("classical", "classical");
-        put("opera", "classical");
-        put("hip hop", "hip hop & rap");
-        put("rap", "hip hop & rap");
-        put("funk", "funk");
-        put("alternative", "alternative");
-        put("alt", "alternative");
-        put("punk", "punk");
-        put("metal", "metal");
-        put("death", "metal");
-        put("indie", "indie");
-        put("country", "country");
-        put("reggae", "reggae");
-        put("manele", "manele");
-        put("stand up", "comedy");
-        put("comedy", "comedy");
-        put("theatre", "theatre");
-        put("musical", "theatre");
-        put("festival", "festival");
-        put("carnival", "festival");
-        put("exhibition", "exhibition");
-        put("museum", "exhibition");
-        put("conference", "conference");
-        put("seminar", "conference");
-        put("sport", "sport");
-        put("fitness", "sport");
-    }};
 
     public List<UserGenrePreferenceResponseDto> getUserGenrePreferences(UUID userId) {
         return userGenrePreferenceRepository
@@ -65,20 +31,20 @@ public class UserGenrePreferenceService {
                 .toList();
     }
 
-    public void updateUserGenrePreferences(UUID userId, List<ShoppingCartItemResponseDto> shoppingCartItemList) {
-        Map<String, Long> genreCountMap = calculateGenreCountMap(shoppingCartItemList);
-        Map<String, Double> genrePercentageMap = calculateGenrePercentages(genreCountMap);
-
+    public void updateUserGenrePreferences(UUID userId, Set<EventWithoutTicketTypesResponseDto> eventSet) {
         User user = Optional.of(userService.getUserById(userId))
                 .map(u -> modelMapper.map(u, User.class))
                 .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Map<String, Long> genreCountMap = calculateGenreCountMap(eventSet);
+        Map<String, Double> genrePercentageMap = calculateGenrePercentages(genreCountMap);
 
         List<UserGenrePreference> existingGenrePreferences = userGenrePreferenceRepository.findByUser(user)
                 .orElse(new ArrayList<>());
 
         updateExistingGenrePreferences(existingGenrePreferences, genreCountMap);
 
-        List<UserGenrePreference> newGenrePreferences = createNewGenrePreferences(genrePercentageMap, genreCountMap, existingGenrePreferences);
+        List<UserGenrePreference> newGenrePreferences = createNewGenrePreferences(genrePercentageMap, genreCountMap, existingGenrePreferences, user);
 
         existingGenrePreferences.addAll(newGenrePreferences);
 
@@ -89,12 +55,13 @@ public class UserGenrePreferenceService {
 
     private List<UserGenrePreference> createNewGenrePreferences(Map<String, Double> genrePercentageMap,
                                                                 Map<String, Long> genreCountMap,
-                                                                List<UserGenrePreference> existingGenrePreferences) {
+                                                                List<UserGenrePreference> existingGenrePreferences,
+                                                                User user) {
         return genrePercentageMap.entrySet().stream()
                 .filter(entry -> existingGenrePreferences.stream()
                         .noneMatch(pref -> pref.getBroadGenre().equals(entry.getKey())))
                 .map(entry -> UserGenrePreference.builder()
-                        .user(existingGenrePreferences.get(0).getUser())
+                        .user(user)
                         .broadGenre(entry.getKey())
                         .percentage(entry.getValue())
                         .count(genreCountMap.get(entry.getKey()))
@@ -136,49 +103,13 @@ public class UserGenrePreferenceService {
         return genrePercentageMap;
     }
 
-    private String mapToBroadGenre(String specificGenre) {
-        String lowercaseGenre = specificGenre.toLowerCase();
-        for (Map.Entry<String, String> entry : genreMapping.entrySet()) {
-            if (lowercaseGenre.contains(entry.getKey())) {
-                return entry.getValue();
-            }
-        }
-        return "other";
-    }
-
-    private Map<String, Long> calculateGenreCountMap(List<ShoppingCartItemResponseDto> shoppingCartItemList) {
+    private Map<String, Long> calculateGenreCountMap(Set<EventWithoutTicketTypesResponseDto> eventSet) {
         Map<String, Long> genreCountMap = new HashMap<>();
 
-        shoppingCartItemList.forEach(shoppingCartItem -> {
-            if (shoppingCartItem.getTicketType().getEvent().getArtistList().isEmpty()) {
-                if (isStandUpEvent(shoppingCartItem)) {
-                    genreCountMap.put("stand up", genreCountMap.getOrDefault("stand up", 0L) + 1);
-                } else {
-                    genreCountMap.put("other", genreCountMap.getOrDefault("other", 0L) + 1);
-                }
-            }
-            else {
-                shoppingCartItem.getTicketType().getEvent().getArtistList().forEach(artist -> {
-                    if (!artist.getGenreList().isEmpty()) {
-                        artist.getGenreList().forEach(genreDto -> {
-                            String specificGenre = genreDto.getName().toLowerCase();
-                            String broadGenre = mapToBroadGenre(specificGenre);
-                            genreCountMap.put(broadGenre, genreCountMap.getOrDefault(broadGenre, 0L) + 1);
-                        });
-                    } else if (isStandUpEvent(shoppingCartItem)) {
-                        genreCountMap.put("stand up", genreCountMap.getOrDefault("stand up", 0L) + 1);
-                    } else {
-                        genreCountMap.put("other", genreCountMap.getOrDefault("other", 0L) + 1);
-                    }
-                });
-            }
+        eventSet.forEach(event -> {
+            genreCountMap.put(event.getBroadGenre(), genreCountMap.getOrDefault(event.getBroadGenre(), 0L) + 1);
         });
 
         return genreCountMap;
-    }
-
-    private boolean isStandUpEvent(ShoppingCartItemResponseDto shoppingCartItem) {
-        String locationName = shoppingCartItem.getTicketType().getEvent().getLocation().getName();
-        return "The Fool".equals(locationName) || "Club 99".equals(locationName);
     }
 }

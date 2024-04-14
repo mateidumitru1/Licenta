@@ -21,4 +21,5 @@ public class EventWithoutTicketArtistResponseDto {
     private String description;
     private LocationWithoutEventListResponseDto location;
     private String imageUrl;
+    private String broadGenre;
 }

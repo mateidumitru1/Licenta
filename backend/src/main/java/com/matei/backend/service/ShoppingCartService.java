@@ -244,6 +244,7 @@ public class ShoppingCartService {
                                                                 .build())
                                                         .toList())
                                                 .imageUrl(shoppingCartItem.getTicketType().getEvent().getImageUrl())
+                                                .broadGenre(shoppingCartItem.getTicketType().getEvent().getBroadGenre())
                                                 .build())
                                         .build())
                                 .quantity(shoppingCartItem.getQuantity())

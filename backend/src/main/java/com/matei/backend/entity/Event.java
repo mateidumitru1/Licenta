@@ -12,6 +12,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Data
@@ -56,6 +57,8 @@ public class Event {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Artist> artistList;
 
+    private String broadGenre;
+
     @Override
     public String toString() {
         return "Event{" +
@@ -66,5 +69,22 @@ public class Event {
                 ", description='" + description + '\'' +
                 ", imageUrl='" + imageUrl + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        Event event = (Event) obj;
+        return id.equals(event.id) && title.equals(event.title);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title);
     }
 }

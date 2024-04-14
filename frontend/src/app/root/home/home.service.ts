@@ -9,15 +9,17 @@ import {JwtHandler} from "../../identity/jwt.handler";
 export class HomeService {
   constructor(private http: HttpClient, private jwtHandler: JwtHandler) { }
 
-  fetchSelectedEvents() {
-    return this.http.get(apiURL + '/events/selected');
-  }
-
-  fetchRecommendedEvents() {
-    return this.http.get(apiURL + '/recommendations', {
-      headers: {
-        'Authorization': 'Bearer ' + this.jwtHandler.getToken()
-      }
-    });
+  fetchHomeEvents() {
+    const token = this.jwtHandler.getToken();
+    if (!token) {
+      return this.http.get(apiURL + '/events/home');
+    }
+    else {
+      return this.http.get(apiURL + '/events/home', {
+        headers: {
+          'Authorization': 'Bearer ' + this.jwtHandler.getToken()
+        }
+      });
+    }
   }
 }

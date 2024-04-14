@@ -10,14 +10,18 @@ import com.matei.backend.dto.response.artist.ArtistWithoutEventResponseDto;
 import com.matei.backend.dto.response.event.*;
 import com.matei.backend.dto.response.genre.GenreWithoutArtistListResponseDto;
 import com.matei.backend.dto.response.location.LocationWithoutEventListResponseDto;
+import com.matei.backend.dto.response.preference.UserGenrePreferenceResponseDto;
 import com.matei.backend.dto.response.statistics.EventWithTicketsSoldCount;
 import com.matei.backend.dto.response.ticketType.TicketTypeWithoutEventResponseDto;
+import com.matei.backend.entity.Artist;
 import com.matei.backend.entity.Event;
 import com.matei.backend.entity.Location;
 import com.matei.backend.entity.TicketType;
 import com.matei.backend.entity.enums.StatisticsFilter;
 import com.matei.backend.exception.event.EventNotFoundException;
 import com.matei.backend.repository.EventRepository;
+import com.matei.backend.service.auth.JwtService;
+import com.matei.backend.service.util.BroadGenreMapperService;
 import com.matei.backend.service.util.ImageService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -33,7 +37,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -43,9 +46,12 @@ public class EventService {
     private final TicketTypeService ticketTypeService;
     private final LocationService locationService;
     private final ArtistService artistService;
+    private final BroadGenreMapperService broadGenreMapperService;
+    private final UserGenrePreferenceService userGenrePreferenceService;
     private final ImageService imageService;
     private final ObjectMapper objectMapper;
     private final ModelMapper modelMapper;
+    private final JwtService jwtService;
 
     public EventResponseDto createEvent(EventCreationRequestDto eventCreationRequestDto) throws IOException {
         var eventToSave = modelMapper.map(eventCreationRequestDto, Event.class);
@@ -56,13 +62,16 @@ public class EventService {
 
         var artistIdList = getArtistIdList(eventCreationRequestDto.getArtistIdList());
 
-        eventToSave.setArtistList(artistService.getArtistsByIds(artistIdList));
+        eventToSave.setArtistList(artistService.getArtistsByIdList(artistIdList));
 
         eventToSave.setImageUrl(imageService.saveImage("event-images", eventCreationRequestDto.getImage()));
         eventToSave.setDate(LocalDate.parse(eventCreationRequestDto.getDate().substring(0, 10)));
         eventToSave.setCreatedAt(LocalDateTime.now());
+        var eventGenreMapping = broadGenreMapperService.map(artistIdList, eventToSave);
+        eventToSave.setBroadGenre(eventGenreMapping);
 
         var event = eventRepository.save(eventToSave);
+
 
         var ticketTypes = getTicketTypeCreationRequestDtoList(eventCreationRequestDto.getTicketTypesList()).stream()
                 .map(ticketTypeCreationRequestDto ->
@@ -95,6 +104,18 @@ public class EventService {
                 .toList());
 
         return eventResponse;
+    }
+
+    public List<EventResponseDto> createMappingsForExistingEvents() {
+        List<Event> events = eventRepository.findAll();
+        events.forEach(event -> {
+            var eventGenreMapping = broadGenreMapperService.map(event.getArtistList().stream()
+                    .map(Artist::getId)
+                    .toList(), event);
+            event.setBroadGenre(eventGenreMapping);
+            eventRepository.save(event);
+        });
+        return events.stream().map(event -> modelMapper.map(event, EventResponseDto.class)).toList();
     }
 
     public List<EventWithoutTicketArtistResponseDto> getEventListByLocation(UUID locationId) {
@@ -198,7 +219,7 @@ public class EventService {
         event.setDescription(updatedEvent.getDescription());
         event.setLocation(Optional.of(locationService.getLocationById(updatedEvent.getLocationId()))
                 .map(locationResponseDto -> modelMapper.map(locationResponseDto, Location.class)).orElseThrow());
-        event.setArtistList(artistService.getArtistsByIds(getArtistIdList(updatedEvent.getArtistIdList())));
+        event.setArtistList(artistService.getArtistsByIdList(getArtistIdList(updatedEvent.getArtistIdList())));
         event.setImageUrl(imageUrl);
 
         eventRepository.save(event);
@@ -377,37 +398,42 @@ public class EventService {
                 .build();
     }
 
-    @PersistenceContext
-    private EntityManager entityManager;
-
-    public List<RecommendedEventResponseDto> getAllEventsToRecommend(List<String> broadGenreList) {
-        String jpql = "SELECT DISTINCT e FROM Event e " +
-                "JOIN e.artistList a " +
-                "JOIN a.genreList g " +
-                "WHERE (1 = 0 ";
-
-        Map<String, Object> params = new HashMap<>();
-        int index = 0;
-
-        for (String genre : broadGenreList) {
-            jpql += " OR g.name LIKE :genre" + index;
-            params.put("genre" + index, "%" + genre + "%");
-            index++;
+    public List<RecommendedEventResponseDto> getRecommendedEvents(String currentUserId) {
+        if (currentUserId == null || currentUserId.isEmpty()) {
+            return Collections.emptyList();
         }
+        List<UserGenrePreferenceResponseDto> userGenrePreferences = userGenrePreferenceService.getUserGenrePreferences(UUID.fromString(currentUserId));
 
-        jpql += ") AND e.date >= :now";
-        params.put("now", LocalDate.now());
-
-        TypedQuery<Event> query = entityManager.createQuery(jpql, Event.class);
-
-        for (Map.Entry<String, Object> entry : params.entrySet()) {
-            query.setParameter(entry.getKey(), entry.getValue());
-        }
-
-        List<Event> events = query.getResultList();
-
-        return events.stream()
+        Set<RecommendedEventResponseDto> recommendedEvents = new HashSet<>();
+        var availableEvents = eventRepository.findAllByBroadGenreInAndDateAfter(userGenrePreferences.stream()
+                        .map(UserGenrePreferenceResponseDto::getBroadGenre)
+                        .toList(), LocalDate.now()).orElseThrow().stream()
                 .map(event -> modelMapper.map(event, RecommendedEventResponseDto.class))
                 .toList();
+
+        userGenrePreferences.forEach(userGenrePreference -> {
+            int numberOfEventsToRecommend = (int) Math.round(userGenrePreference.getPercentage() / 100 * 10);
+
+            List<RecommendedEventResponseDto> recommendedEventsToReturn = new ArrayList<>(availableEvents.stream()
+                    .filter(event -> event.getBroadGenre().equals(userGenrePreference.getBroadGenre()))
+                    .toList());
+
+            Collections.shuffle(recommendedEventsToReturn);
+
+            recommendedEvents.addAll(recommendedEventsToReturn.stream()
+                    .limit(numberOfEventsToRecommend)
+                    .toList());
+        });
+
+        return recommendedEvents.stream()
+                .sorted(Comparator.comparing(RecommendedEventResponseDto::getDate))
+                .toList();
+    }
+
+    public HomeEventsResponseDto getHomeEvents(String currentUserId) {
+        return HomeEventsResponseDto.builder()
+                .selectedEvents(getSelectedEvents())
+                .recommendedEvents(getRecommendedEvents(currentUserId))
+                .build();
     }
 }

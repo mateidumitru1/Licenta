@@ -5,25 +5,36 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0ff3fa00-627c-435d-82b1-4a1abb5b20ca" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/dto/response/event/EventWithBroadGenreResponseDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/dto/response/preference/UserGenrePreferenceResponseDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/dto/response/event/HomeEventsResponseDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/util/BroadGenreMapperService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/controller/GenreController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/controller/GenreController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/dto/request/genre/GenreRequestDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/dto/request/genre/GenreRequestDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/entity/Artist.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/entity/Artist.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/entity/Genre.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/entity/Genre.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/controller/EventController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/controller/EventController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/controller/RecommendationController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/dto/response/event/EventResponseDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/dto/response/event/EventResponseDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/dto/response/event/EventWithoutTicketArtistResponseDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/dto/response/event/EventWithoutTicketArtistResponseDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/dto/response/event/EventWithoutTicketTypesResponseDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/dto/response/event/EventWithoutTicketTypesResponseDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/dto/response/user/UserWithOrdersResponseDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/dto/response/user/UserWithOrdersResponseDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/entity/Event.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/entity/Event.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/repository/EventRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/repository/EventRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/repository/GenreRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/repository/GenreRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/ArtistService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/ArtistService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/EventService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/EventService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/RecommendationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/RecommendationService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/OrderService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/OrderService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/RecommendationService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/ShoppingCartService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/ShoppingCartService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/UserGenrePreferenceService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/UserGenrePreferenceService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/admin-dashboard/manage/manage-artists/manage-artists.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/admin-dashboard/manage/manage-artists/manage-artists.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/admin-dashboard/manage/manage-artists/manage-genres.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/admin-dashboard/manage/manage-artists/manage-genres.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/matei/backend/service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/account/account-details/account-details.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/account/account-details/account-details.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/account/account-details/account-details.component.scss" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/account/account-details/account-details.component.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/account/account-details/account-details.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/account/account-details/account-details.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/account/account-details/account-details.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/account/account-details/account-details.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/account/account-orders/account-order-details/account-order-details.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/account/account-orders/account-order-details/account-order-details.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/account/account-orders/account-order-details/account-order-details.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/account/account-orders/account-order-details/account-order-details.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/app/admin-dashboard/manage/manage-events/popup/add-artist/add-artist.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/admin-dashboard/manage/manage-events/popup/add-artist/add-artist.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/admin-dashboard/manage/manage-events/popup/add-edit-event/add-edit-event.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/admin-dashboard/manage/manage-events/popup/add-edit-event/add-edit-event.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/admin-dashboard/manage/manage-events/popup/add-edit-event/add-edit-event.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/admin-dashboard/manage/manage-events/popup/add-edit-event/add-edit-event.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/util/my-http-interceptor.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/util/my-http-interceptor.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/root/home/home.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/root/home/home.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/root/home/home.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/root/home/home.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/root/home/home.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/root/home/home.service.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -276,6 +287,7 @@
       <workItem from="1712914832543" duration="21916000" />
       <workItem from="1712992733856" duration="1302000" />
       <workItem from="1713073843222" duration="5286000" />
+      <workItem from="1713085426713" duration="10983000" />
     </task>
     <servers />
   </component>

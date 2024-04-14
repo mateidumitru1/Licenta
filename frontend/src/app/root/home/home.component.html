@@ -1,5 +1,5 @@
 <div class="container-fluid">
-  <div *ngIf="isLoggedIn" class="recommended-events">
+  <div *ngIf="isLoggedIn()" class="recommended-events">
     <h1 class="text-center">Evenimente recomandate</h1>
     <div class="cards-container">
       <div class="card" *ngFor="let event of recommendedEvents" (click)="onEventClick(event)">

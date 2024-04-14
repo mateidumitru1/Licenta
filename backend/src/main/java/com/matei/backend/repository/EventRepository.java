@@ -41,10 +41,5 @@ public interface EventRepository extends JpaRepository<Event, UUID> {
             "(:filter = 'location' AND e.location.name LIKE %:search%)")
     Long countFilteredEvents(String filter, String search);
 
-    @Query("SELECT DISTINCT e FROM Event e " +
-            "JOIN e.artistList a " +
-            "JOIN a.genreList g " +
-            "WHERE g.name LIKE :broadGenrePattern " +
-            "AND e.date >= :now")
-    Optional<List<Event>> findAllEventToRecommend(String broadGenrePattern, LocalDate now);
+    Optional<List<Event>> findAllByBroadGenreInAndDateAfter(List<String> broadGenreList, LocalDate now);
 }

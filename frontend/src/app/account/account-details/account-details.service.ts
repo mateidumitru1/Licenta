@@ -37,4 +37,12 @@ export class AccountDetailsService {
       }
     });
   }
+
+  fetchGenrePreferences() {
+    return this.http.get(apiURL + '/users/me/genre-preferences', {
+      headers: {
+        'Authorization': 'Bearer ' + this.jwtHandler.getToken()
+      }
+    });
+  }
 }

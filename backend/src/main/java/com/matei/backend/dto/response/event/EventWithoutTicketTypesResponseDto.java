@@ -24,4 +24,5 @@ public class EventWithoutTicketTypesResponseDto {
     private LocationWithoutEventListResponseDto location;
     private String imageUrl;
     private List<ArtistWithoutEventResponseDto> artistList;
+    private String broadGenre;
 }

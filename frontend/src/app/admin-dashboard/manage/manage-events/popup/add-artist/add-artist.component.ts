@@ -33,7 +33,6 @@ export class AddArtistComponent implements OnInit {
     this.manageArtistsService.fetchArtistsWithoutEventGenre().subscribe( {
       next: (response: any) => {
         this.artistList = response;
-        console.log(this.artistList);
         this.artistList.sort((a: any, b: any) => a.name.localeCompare(b.name));
       },
       error: (error: any) => {

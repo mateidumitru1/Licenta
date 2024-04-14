@@ -4,6 +4,7 @@ import com.matei.backend.dto.request.auth.ChangePasswordRequestDto;
 import com.matei.backend.dto.request.user.UserCreationRequestDto;
 import com.matei.backend.dto.request.user.UserRequestDto;
 import com.matei.backend.dto.response.order.OrderResponseDto;
+import com.matei.backend.dto.response.preference.UserGenrePreferenceResponseDto;
 import com.matei.backend.dto.response.ticket.TicketResponseDto;
 import com.matei.backend.dto.response.ticketType.TicketTypeEventWithoutArtistResponseDto;
 import com.matei.backend.dto.response.user.UserPageWithCountResponseDto;
@@ -26,6 +27,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -63,6 +65,9 @@ public class UserService {
         var user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User not found"));
 
         var userDto = modelMapper.map(user, UserWithOrdersResponseDto.class);
+        userDto.setGenrePreferences(user.getUserGenrePreferenceList().stream().map(genrePreference ->
+            modelMapper.map(genrePreference, UserGenrePreferenceResponseDto.class)).toList());
+
         userDto.setOrderList(user.getOrderList().stream().map(order -> {
             var orderDto = modelMapper.map(order, OrderResponseDto.class);
             orderDto.setTicketList(order.getTicketList().stream().map(ticket -> {

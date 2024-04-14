@@ -14,6 +14,7 @@ import com.matei.backend.entity.Artist;
 import com.matei.backend.entity.Genre;
 import com.matei.backend.exception.artist.ArtistAlreadyExistsException;
 import com.matei.backend.exception.artist.ArtistNotFoundException;
+import com.matei.backend.exception.genre.GenreNotFoundException;
 import com.matei.backend.repository.ArtistRepository;
 import com.matei.backend.repository.GenreRepository;
 import com.matei.backend.service.util.ImageService;
@@ -123,30 +124,44 @@ public class ArtistService {
             imageUrl = imageService.saveImage("artist-images", artistUpdateRequestDto.getImage());
         }
 
-        var updatedGenres = getGenreList(artistUpdateRequestDto.getGenreList()).stream().toList();
-
-        List<Genre> existingGenres = genreRepository.findAllByNameIn(updatedGenres.stream()
-                .map(GenreRequestDto::getName)
-                .toList());
+        var updatedGenres = getGenreList(artistUpdateRequestDto.getGenreList());
 
         artist.setName(artistUpdateRequestDto.getName());
         artist.setImageUrl(imageUrl);
+        List<Genre> updatedGenreList = updatedGenres.stream()
+                .map(genreRequestDto -> modelMapper.map(genreRequestDto, Genre.class))
+                .toList();
+        List<Genre> existingGenres = new ArrayList<>(updatedGenreList);
+
         artist.setGenreList(existingGenres);
 
         var updatedArtist = artistRepository.save(artist);
 
-        genreRepository.saveAll(existingGenres.stream()
-                .peek(genre -> {
-                    if (genre.getArtists() == null) {
-                        genre.setArtists(new ArrayList<>(List.of(updatedArtist)));
-                    }
-                    else if (genre.getArtists().stream().noneMatch(artist1 -> artist1.getId().equals(updatedArtist.getId()))) {
-                        genre.getArtists().add(updatedArtist);
-                    }
-                })
-                .toList());
+        updateGenreAssociations(existingGenres, updatedArtist);
 
-        return modelMapper.map(artist, ArtistResponseDto.class);
+        return modelMapper.map(updatedArtist, ArtistResponseDto.class);
+    }
+
+    private void updateGenreAssociations(List<Genre> updatedGenres, Artist updatedArtist) {
+        List<Genre> currentGenres = genreRepository.findAllByArtistId(updatedArtist.getId());
+
+        List<Genre> genresRemove = currentGenres.stream()
+                .filter(genre -> !updatedGenres.contains(genre))
+                .toList();
+
+        List<Genre> genresToAdd = updatedGenres.stream()
+                .filter(genre -> !currentGenres.contains(genre))
+                .toList();
+
+        genresRemove.forEach(genre -> {
+            genre.getArtists().remove(updatedArtist);
+            genreRepository.save(genre);
+        });
+
+        genresToAdd.forEach(genre -> {
+            genre.getArtists().add(updatedArtist);
+            genreRepository.save(genre);
+        });
     }
 
     public void deleteArtistById(UUID id) {
@@ -155,7 +170,7 @@ public class ArtistService {
         artistRepository.deleteById(id);
     }
 
-    public List<Artist> getArtistsByIds(List<UUID> artistIds) {
+    public List<Artist> getArtistsByIdList(List<UUID> artistIds) {
         return artistRepository.findAllById(artistIds);
     }
 

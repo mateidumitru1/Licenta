@@ -24,6 +24,7 @@ public class EventResponseDto {
     private String description;
     private LocationWithoutEventListResponseDto location;
     private String imageUrl;
+    private String broadGenre;
     private List<TicketTypeWithoutEventResponseDto> ticketTypeList;
     private List<ArtistWithoutEventResponseDto> artistList;
 }

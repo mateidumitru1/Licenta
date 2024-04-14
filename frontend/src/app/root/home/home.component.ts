@@ -8,12 +8,12 @@ import {IdentityService} from "../../identity/identity.service";
 @Component({
   selector: 'app-home',
   standalone: true,
-    imports: [
-        NgForOf,
-        NgOptimizedImage,
-        LoadingComponent,
-        NgIf
-    ],
+  imports: [
+    NgForOf,
+    NgOptimizedImage,
+    LoadingComponent,
+    NgIf
+  ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
@@ -22,29 +22,16 @@ export class HomeComponent implements OnInit{
   recommendedEvents: any[] = [];
   locations: any[] = [];
 
-  isLoggedIn = false;
-
   constructor(private homeService: HomeService, private identityService: IdentityService, private router: Router) {}
 
   ngOnInit(): void {
-    if (this.identityService.isLoggedIn()) {
-      this.isLoggedIn = true;
-      this.homeService.fetchRecommendedEvents().subscribe({
-        next: (events: any) => {
-          this.recommendedEvents = events;
-          console.log('Recommended events', events);
-        },
-        error: (error: any) => {
-          console.error('Error fetching recommended events', error);
-        }
-      });
-    }
-    this.homeService.fetchSelectedEvents().subscribe({
-      next: (events: any) => {
-        this.selectedEvents = events;
+    this.homeService.fetchHomeEvents().subscribe({
+      next: (homeEvents: any) => {
+        this.recommendedEvents = homeEvents.recommendedEvents;
+        this.selectedEvents = homeEvents.selectedEvents;
       },
       error: (error: any) => {
-        console.error('Error fetching selected events', error);
+        console.error('Error fetching recommended events', error);
       }
     });
   }
@@ -53,5 +40,9 @@ export class HomeComponent implements OnInit{
     this.router.navigate(['/', selectedEvent.location.name, selectedEvent.title], {
       queryParams: {id: selectedEvent.id}
     });
+  }
+
+  isLoggedIn() {
+    return this.identityService.isLoggedIn();
   }
 }

@@ -1,6 +1,7 @@
 package com.matei.backend.dto.response.user;
 
 import com.matei.backend.dto.response.order.OrderResponseDto;
+import com.matei.backend.dto.response.preference.UserGenrePreferenceResponseDto;
 import com.matei.backend.entity.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,4 +23,5 @@ public class UserWithOrdersResponseDto {
     private String lastName;
     private Role role;
     private List<OrderResponseDto> orderList;
+    private List<UserGenrePreferenceResponseDto> genrePreferences;
 }

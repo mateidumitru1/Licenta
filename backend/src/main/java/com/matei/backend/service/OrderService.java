@@ -72,7 +72,8 @@ public class OrderService {
         ticketService.createTickets(eventShoppingCartMap, userId, getCreationOrderResponseDto(order));
         shoppingCartService.clearShoppingCart(userId);
 
-        userGenrePreferenceService.updateUserGenrePreferences(userId, shoppingCart.getShoppingCartItemList());
+        userGenrePreferenceService.updateUserGenrePreferences(userId, shoppingCart.getShoppingCartItemList().stream()
+                .map(shoppingCartItemResponseDto -> shoppingCartItemResponseDto.getTicketType().getEvent()).collect(Collectors.toSet()));
     }
 
     public List<OrderResponseDto> getOrders(UUID id) {

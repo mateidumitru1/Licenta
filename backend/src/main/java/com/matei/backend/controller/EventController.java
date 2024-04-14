@@ -3,11 +3,15 @@ package com.matei.backend.controller;
 import com.matei.backend.dto.request.event.EventCreationRequestDto;
 import com.matei.backend.dto.request.event.EventUpdateRequestDto;
 import com.matei.backend.dto.response.event.*;
+import com.matei.backend.entity.User;
 import com.matei.backend.service.EventService;
+import com.matei.backend.service.auth.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -19,6 +23,7 @@ import java.util.UUID;
 @RequestMapping("/api/events")
 public class EventController {
     private final EventService eventService;
+    private final JwtService jwtService;
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
@@ -113,5 +118,23 @@ public class EventController {
                                                                                              @RequestParam(defaultValue = "") String filter,
                                                                                              @RequestParam(defaultValue = "") String search) {
         return ResponseEntity.ok(eventService.getAllEventsFilteredPaginatedManage(page, size, filter, search));
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/mappings")
+    public ResponseEntity<List<EventResponseDto>> getEventGenreMappings() {
+        return ResponseEntity.ok(eventService.createMappingsForExistingEvents());
+    }
+
+    @GetMapping("/home")
+    public ResponseEntity<HomeEventsResponseDto> getHomeEvents(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication.getPrincipal().equals("anonymousUser")) {
+            return ResponseEntity.ok(eventService.getHomeEvents(""));
+        }
+        else {
+            User user = (User) authentication.getPrincipal();
+            return ResponseEntity.ok(eventService.getHomeEvents(user.getId().toString()));
+        }
     }
 }
