@@ -1,5 +1,6 @@
 package com.matei.backend.service;
 
+import com.matei.backend.dto.response.preference.UserGenrePreferenceResponseDto;
 import com.matei.backend.dto.response.shoppingCart.ShoppingCartItemResponseDto;
 import com.matei.backend.entity.User;
 import com.matei.backend.entity.UserGenrePreference;
@@ -32,6 +33,9 @@ public class UserGenrePreferenceService {
         put("hip hop", "hip hop & rap");
         put("rap", "hip hop & rap");
         put("funk", "funk");
+        put("alternative", "alternative");
+        put("alt", "alternative");
+        put("punk", "punk");
         put("metal", "metal");
         put("death", "metal");
         put("indie", "indie");
@@ -50,50 +54,75 @@ public class UserGenrePreferenceService {
         put("seminar", "conference");
         put("sport", "sport");
         put("fitness", "sport");
-        put("other", "");
     }};
+
+    public List<UserGenrePreferenceResponseDto> getUserGenrePreferences(UUID userId) {
+        return userGenrePreferenceRepository
+                .findByUser(Optional.of(userService.getUserById(userId))
+                        .map(u -> modelMapper.map(u, User.class)).orElseThrow(() -> new RuntimeException("User not found")))
+                .orElseThrow(() -> new RuntimeException("User genre preferences not found")).stream()
+                .map(userGenrePreference -> modelMapper.map(userGenrePreference, UserGenrePreferenceResponseDto.class))
+                .toList();
+    }
 
     public void updateUserGenrePreferences(UUID userId, List<ShoppingCartItemResponseDto> shoppingCartItemList) {
         Map<String, Long> genreCountMap = calculateGenreCountMap(shoppingCartItemList);
         Map<String, Double> genrePercentageMap = calculateGenrePercentages(genreCountMap);
 
-        User user = Optional.of(userService.getUserById(userId)).map(u -> modelMapper.map(u, User.class)).orElseThrow();
+        User user = Optional.of(userService.getUserById(userId))
+                .map(u -> modelMapper.map(u, User.class))
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
-        List<UserGenrePreference> existingGenrePreferences = userGenrePreferenceRepository.findByUser(user).orElse(new ArrayList<>());
+        List<UserGenrePreference> existingGenrePreferences = userGenrePreferenceRepository.findByUser(user)
+                .orElse(new ArrayList<>());
 
-        existingGenrePreferences.forEach(existingPreference -> {
-            String broadGenre = existingPreference.getBroadGenre();
-            Long newCount = genreCountMap.getOrDefault(broadGenre, 0L);
-            existingPreference.setCount(existingPreference.getCount() + newCount);
-        });
+        updateExistingGenrePreferences(existingGenrePreferences, genreCountMap);
 
-        List<UserGenrePreference> newGenrePreferences = genrePercentageMap.entrySet().stream()
-                .filter(entry -> existingGenrePreferences.stream().noneMatch(pref -> pref.getBroadGenre().equals(entry.getKey())))
+        List<UserGenrePreference> newGenrePreferences = createNewGenrePreferences(genrePercentageMap, genreCountMap, existingGenrePreferences);
+
+        existingGenrePreferences.addAll(newGenrePreferences);
+
+        updateMergedGenrePreferences(existingGenrePreferences);
+
+        userGenrePreferenceRepository.saveAll(existingGenrePreferences);
+    }
+
+    private List<UserGenrePreference> createNewGenrePreferences(Map<String, Double> genrePercentageMap,
+                                                                Map<String, Long> genreCountMap,
+                                                                List<UserGenrePreference> existingGenrePreferences) {
+        return genrePercentageMap.entrySet().stream()
+                .filter(entry -> existingGenrePreferences.stream()
+                        .noneMatch(pref -> pref.getBroadGenre().equals(entry.getKey())))
                 .map(entry -> UserGenrePreference.builder()
-                        .user(user)
+                        .user(existingGenrePreferences.get(0).getUser())
                         .broadGenre(entry.getKey())
                         .percentage(entry.getValue())
                         .count(genreCountMap.get(entry.getKey()))
                         .build())
                 .toList();
+    }
 
-        existingGenrePreferences.addAll(newGenrePreferences);
+    private void updateExistingGenrePreferences(List<UserGenrePreference> existingGenrePreferences, Map<String, Long> genreCountMap) {
+        existingGenrePreferences.forEach(existingPreference -> {
+            String broadGenre = existingPreference.getBroadGenre();
+            Long newCount = genreCountMap.getOrDefault(broadGenre, 0L);
+            existingPreference.setCount(existingPreference.getCount() + newCount);
+        });
+    }
 
+    private void updateMergedGenrePreferences(List<UserGenrePreference> existingGenrePreferences) {
         Map<String, Long> mergedGenreCountMap = existingGenrePreferences.stream()
-                .collect(Collectors.groupingBy(UserGenrePreference::getBroadGenre, Collectors.summingLong(UserGenrePreference::getCount)));
+                .collect(Collectors.groupingBy(UserGenrePreference::getBroadGenre,
+                        Collectors.summingLong(UserGenrePreference::getCount)));
 
         Map<String, Double> mergedGenrePercentageMap = calculateGenrePercentages(mergedGenreCountMap);
 
         existingGenrePreferences.forEach(existingPreference -> {
             String broadGenre = existingPreference.getBroadGenre();
-            Long mergedCount = mergedGenreCountMap.get(broadGenre);
             Double newPercentage = mergedGenrePercentageMap.get(broadGenre);
             existingPreference.setPercentage(newPercentage);
         });
-
-        userGenrePreferenceRepository.saveAll(existingGenrePreferences);
     }
-
 
     private Map<String, Double> calculateGenrePercentages(Map<String, Long> genreCountMap) {
         Map<String, Double> genrePercentageMap = new HashMap<>();

@@ -42,7 +42,6 @@ export class ManageArtistsService {
     }
 
     addArtist(artist: any) {
-      console.log(getFormData(artist));
       return this.http.post(apiURL + '/artists', getFormData(artist), {
         headers: {
           'Authorization': 'Bearer ' +  this.jwtHandler.getToken()

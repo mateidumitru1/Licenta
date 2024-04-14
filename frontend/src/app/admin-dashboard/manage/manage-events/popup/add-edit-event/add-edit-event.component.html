@@ -24,7 +24,7 @@
       <div class="mb-3">
         <label for="location" class="form-label">Location</label>
         <select class="form-select" id="location" name="location" formControlName="location" required>
-          <option *ngFor="let location of locations" [ngValue]="location.name" [selected]="location.name === event.location.name">
+          <option *ngFor="let location of locations" [ngValue]="location.name" [selected]="location.name === event?.location.name">
             {{ location.name }}
           </option>
         </select>

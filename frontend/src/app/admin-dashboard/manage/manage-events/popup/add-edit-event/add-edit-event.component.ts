@@ -19,7 +19,6 @@ import {MatIconButton} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
 import {AddTicketTypeComponent} from "../add-ticket-type/add-ticket-type.component";
 import {AddArtistComponent} from "../add-artist/add-artist.component";
-import {AddGenreComponent} from "../../../manage-artists/popups/add-genre/add-genre.component";
 import {ManageEventsService} from "../../manage-events.service";
 
 @Component({
@@ -54,20 +53,7 @@ export class AddEditEventComponent implements OnInit{
   imageFile: File | null = null;
   isImageNull: boolean = false;
   locations: any[] = [];
-  event = {
-    id: '',
-    title: '',
-    date: '',
-    location: {
-      id: '',
-      name: ''
-    },
-    shortDescription: '',
-    description: '',
-    imageUrl: null,
-    ticketTypes: [],
-    artists: []
-  };
+  event: any;
   today: any;
   ticketsDataSource = new MatTableDataSource<any>();
   artistsDataSource = new MatTableDataSource<any>();
@@ -105,8 +91,8 @@ export class AddEditEventComponent implements OnInit{
       this.manageEventsService.fetchEventById(this.data.eventId).subscribe({
         next: (event: any) => {
           this.event = event;
-          this.ticketsDataSource.data = this.event.ticketTypes;
-          this.artistsDataSource.data = this.event.artists;
+          this.ticketsDataSource.data = this.event.ticketTypeList;
+          this.artistsDataSource.data = this.event.artistList;
           this.imageSrc = this.event.imageUrl;
           this.isImageNull = this.imageSrc === null;
           this.registrationForm.patchValue({

@@ -38,7 +38,7 @@ public class Artist {
 
     @JsonIgnore
     @ManyToMany(mappedBy = "artists")
-    @OnDelete(action = OnDeleteAction.SET_NULL)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Genre> genreList;
 
     @Override

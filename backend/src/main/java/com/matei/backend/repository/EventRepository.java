@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -39,4 +40,11 @@ public interface EventRepository extends JpaRepository<Event, UUID> {
             "(:filter = 'date' AND e.date = CAST(:search as localdate)) OR " +
             "(:filter = 'location' AND e.location.name LIKE %:search%)")
     Long countFilteredEvents(String filter, String search);
+
+    @Query("SELECT DISTINCT e FROM Event e " +
+            "JOIN e.artistList a " +
+            "JOIN a.genreList g " +
+            "WHERE g.name LIKE :broadGenrePattern " +
+            "AND e.date >= :now")
+    Optional<List<Event>> findAllEventToRecommend(String broadGenrePattern, LocalDate now);
 }

@@ -20,7 +20,6 @@ import {
   timer
 } from "rxjs";
 import {Injectable} from "@angular/core";
-import {MatSnackBar} from "@angular/material/snack-bar";
 import {LoadingService} from "../shared/loading/loading.service";
 
 @Injectable({
@@ -39,7 +38,7 @@ export class MyHttpInterceptor implements HttpInterceptor {
         errors.pipe(
           mergeMap((error: HttpErrorResponse, index: number) => {
             if (index < 3 && this.isConnectionError(error)) {
-              return timer(1000);
+              return timer(10000);
             }
             return throwError(error);
           })

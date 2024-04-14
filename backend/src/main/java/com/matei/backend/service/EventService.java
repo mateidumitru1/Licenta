@@ -19,6 +19,9 @@ import com.matei.backend.entity.enums.StatisticsFilter;
 import com.matei.backend.exception.event.EventNotFoundException;
 import com.matei.backend.repository.EventRepository;
 import com.matei.backend.service.util.ImageService;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -30,6 +33,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -371,5 +375,39 @@ public class EventService {
                 .eventPage(eventPage.map(event -> modelMapper.map(event, EventWithoutTicketArtistResponseDto.class)))
                 .count(eventRepository.countFilteredEvents(filter, search))
                 .build();
+    }
+
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    public List<RecommendedEventResponseDto> getAllEventsToRecommend(List<String> broadGenreList) {
+        String jpql = "SELECT DISTINCT e FROM Event e " +
+                "JOIN e.artistList a " +
+                "JOIN a.genreList g " +
+                "WHERE (1 = 0 ";
+
+        Map<String, Object> params = new HashMap<>();
+        int index = 0;
+
+        for (String genre : broadGenreList) {
+            jpql += " OR g.name LIKE :genre" + index;
+            params.put("genre" + index, "%" + genre + "%");
+            index++;
+        }
+
+        jpql += ") AND e.date >= :now";
+        params.put("now", LocalDate.now());
+
+        TypedQuery<Event> query = entityManager.createQuery(jpql, Event.class);
+
+        for (Map.Entry<String, Object> entry : params.entrySet()) {
+            query.setParameter(entry.getKey(), entry.getValue());
+        }
+
+        List<Event> events = query.getResultList();
+
+        return events.stream()
+                .map(event -> modelMapper.map(event, RecommendedEventResponseDto.class))
+                .toList();
     }
 }

@@ -26,9 +26,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @Transactional
@@ -36,7 +34,6 @@ import java.util.UUID;
 public class ArtistService {
     private final ArtistRepository artistRepository;
     private final GenreRepository genreRepository;
-    private final GenreService genreService;
     private final ImageService imageService;
     private final ModelMapper modelMapper;
     private final ObjectMapper objectMapper;
@@ -46,21 +43,26 @@ public class ArtistService {
         artistRepository.findByName(artistCreationRequestDto.getName()).ifPresent(artist -> {
                     throw new ArtistAlreadyExistsException("Artist with name " + artistCreationRequestDto.getName() + " already exists");});
 
-        var genreList = getGenreList(artistCreationRequestDto.getGenreList());
+        var genreList = getGenreList(artistCreationRequestDto.getGenreList()).stream().toList();
+
+        var existingGenres = genreRepository.findAllByNameIn(genreList.stream()
+                .map(GenreRequestDto::getName)
+                .toList());
 
         var artist = artistRepository.save(Artist.builder()
                 .name(artistCreationRequestDto.getName())
-                .genreList(genreList.stream()
+                .genreList(existingGenres.stream()
                         .map(genre -> modelMapper.map(genre, Genre.class))
                         .toList())
                 .imageUrl(imageService.saveImage("artist-images", artistCreationRequestDto.getImage()))
                 .createdAt(LocalDateTime.now())
                 .build());
 
-        genreRepository.saveAll(artist.getGenreList().stream()
+        genreRepository.saveAll(existingGenres.stream()
                 .peek(genre -> {
-                    if(genre.getArtists() == null) genre.setArtists(new ArrayList<>(List.of(artist)));
-                    else {
+                    if (genre.getArtists() == null) {
+                        genre.setArtists(new ArrayList<>(List.of(artist)));
+                    } else {
                         genre.getArtists().add(artist);
                     }
                 })
@@ -87,12 +89,6 @@ public class ArtistService {
         return artistResponseDto;
     }
 
-    public List<ArtistWithoutEventResponseDto> getAllArtists() {
-        return artistRepository.findAll().stream()
-                .map(artist -> modelMapper.map(artist, ArtistWithoutEventResponseDto.class))
-                .toList();
-    }
-
     public List<ArtistWithoutEventGenreResponseDto> getAllArtistsWithoutEventGenre() {
         return artistRepository.findAll().stream()
                 .map(artist -> modelMapper.map(artist, ArtistWithoutEventGenreResponseDto.class))
@@ -115,51 +111,40 @@ public class ArtistService {
                 .toList();
     }
 
-    public ArtistResponseDto updateArtist(ArtistUpdateRequestDto updatedArtist) throws IOException {
-        var artist = artistRepository.findById(updatedArtist.getId())
+    public ArtistResponseDto updateArtist(ArtistUpdateRequestDto artistUpdateRequestDto) throws IOException {
+        var artist = artistRepository.findById(artistUpdateRequestDto.getId())
                 .orElseThrow(() -> new ArtistNotFoundException("Artist not found"));
 
-        String imageUrl = updatedArtist.getImageUrl();
-        if (updatedArtist.getImage() != null) {
+        String imageUrl = artistUpdateRequestDto.getImageUrl();
+        if (artistUpdateRequestDto.getImage() != null) {
             if (imageUrl != null) {
                 imageService.deleteImage(imageUrl);
             }
-            imageUrl = imageService.saveImage("artist-images", updatedArtist.getImage());
+            imageUrl = imageService.saveImage("artist-images", artistUpdateRequestDto.getImage());
         }
 
-        List<Genre> updatedGenres = getGenreList(updatedArtist.getGenreList()).stream()
-                .map(genreRequestDto -> modelMapper.map(genreRequestDto, Genre.class))
-                .toList();
+        var updatedGenres = getGenreList(artistUpdateRequestDto.getGenreList()).stream().toList();
 
-        artist.setName(updatedArtist.getName());
+        List<Genre> existingGenres = genreRepository.findAllByNameIn(updatedGenres.stream()
+                .map(GenreRequestDto::getName)
+                .toList());
+
+        artist.setName(artistUpdateRequestDto.getName());
         artist.setImageUrl(imageUrl);
+        artist.setGenreList(existingGenres);
 
-        final Artist finalArtist = artist;
-        List<Genre> genresToRemove = artist.getGenreList().stream()
-                .filter(existingGenre -> !updatedGenres.contains(existingGenre))
-                .peek(existingGenre -> {
-                    existingGenre.getArtists().remove(finalArtist);
-                    if (existingGenre.getArtists().isEmpty()) {
-                        genreRepository.delete(existingGenre);
+        var updatedArtist = artistRepository.save(artist);
+
+        genreRepository.saveAll(existingGenres.stream()
+                .peek(genre -> {
+                    if (genre.getArtists() == null) {
+                        genre.setArtists(new ArrayList<>(List.of(updatedArtist)));
+                    }
+                    else if (genre.getArtists().stream().noneMatch(artist1 -> artist1.getId().equals(updatedArtist.getId()))) {
+                        genre.getArtists().add(updatedArtist);
                     }
                 })
-                .toList();
-        artist.getGenreList().removeAll(genresToRemove);
-
-        updatedGenres.stream()
-                .filter(newGenre -> !finalArtist.getGenreList().contains(newGenre))
-                .forEach(newGenre -> {
-                    List<Artist> artists = newGenre.getArtists();
-                    if (artists == null) {
-                        artists = new ArrayList<>();
-                    }
-                    artists.add(finalArtist);
-                    newGenre.setArtists(artists);
-                    finalArtist.getGenreList().add(newGenre);
-                });
-
-        artist = artistRepository.save(artist);
-        genreRepository.saveAll(updatedGenres);
+                .toList());
 
         return modelMapper.map(artist, ArtistResponseDto.class);
     }
@@ -174,9 +159,10 @@ public class ArtistService {
         return artistRepository.findAllById(artistIds);
     }
 
-    private List<GenreRequestDto> getGenreList(String genreList) {
+    private Set<GenreRequestDto> getGenreList(String genreList) {
         try {
-            return List.of(objectMapper.readValue(genreList, GenreRequestDto[].class));
+            GenreRequestDto[] genreArray = objectMapper.readValue(genreList, GenreRequestDto[].class);
+            return new HashSet<>(Arrays.asList(genreArray));
         } catch (IOException e) {
             throw new RuntimeException("Error parsing genre list");
         }
