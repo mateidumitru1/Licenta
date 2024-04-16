@@ -4,13 +4,25 @@ import {apiURL} from "../../app.config";
 import {IdentityService} from "../../identity/identity.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {JwtHandler} from "../../identity/jwt.handler";
+import {BehaviorSubject} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ShoppingCartService{
+  private shoppingCartLengthSubject = new BehaviorSubject<number>(0);
+  shoppingCartLength$ = this.shoppingCartLengthSubject.asObservable();
+
   constructor(private http: HttpClient, private identityService: IdentityService,
               private snackBar: MatSnackBar, private jwtHandler: JwtHandler) {}
+
+  setShoppingCartLength(length: number) {
+    this.shoppingCartLengthSubject.next(length);
+  }
+
+  getShoppingCartLength() {
+    return this.shoppingCartLengthSubject.getValue();
+  }
 
   fetchShoppingCart() {
     return this.http.get(apiURL + '/shopping-cart', {

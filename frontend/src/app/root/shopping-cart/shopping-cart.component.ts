@@ -61,9 +61,10 @@ export class ShoppingCartComponent implements OnInit{
     this.shoppingCartService.removeTicketFromShoppingCart(shoppingCartItem.ticketType)?.subscribe({
       next: (shoppingCart) => {
         this.shoppingCart = shoppingCart;
+        this.shoppingCartService.setShoppingCartLength(this.shoppingCart.shoppingCartItemList.length);
         this.snackBar.open('Ticket removed from shopping cart!', 'Dismiss', {duration: 3000});
       },
-      error: error => {
+      error: (error) => {
         this.snackBar.open('Error while removing ticket from shopping cart', 'Dismiss', {duration: 3000});
       }
     });
@@ -72,6 +73,7 @@ export class ShoppingCartComponent implements OnInit{
   onBuyClick() {
     this.shoppingCartService.buyTickets()?.subscribe({
       next: () => {
+        this.shoppingCartService.setShoppingCartLength(0);
         this.snackBar.open('Tickets reserved!', 'Dismiss', {duration: 3000});
       },
       error: error => {

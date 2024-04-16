@@ -10,6 +10,7 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {LoadingComponent} from "../../shared/loading/loading.component";
 import {FormsModule} from "@angular/forms";
 import {DropdownService} from "./dropdown.service";
+import {ShoppingCartService} from "../shopping-cart/shopping-cart.service";
 
 @Component({
   selector: 'app-header',
@@ -37,6 +38,8 @@ export class HeaderComponent implements OnInit {
   searchEvents: any[] = [];
   searchArtists: any[] = [];
 
+  shoppingCartLength!: number;
+
   @ViewChild('searchInput') searchInput!: ElementRef;
   @ViewChild('searchDropdown') searchDropdown!: ElementRef;
 
@@ -44,6 +47,7 @@ export class HeaderComponent implements OnInit {
     private router: Router,
     private headerService: HeaderService,
     private identityService: IdentityService,
+    private shoppingCartService: ShoppingCartService,
     private jwtHandler: JwtHandler,
     private snackBar: MatSnackBar,
     private dropdownService: DropdownService
@@ -62,7 +66,9 @@ export class HeaderComponent implements OnInit {
     });
     this.dropdownService.showDropdown$.subscribe((showDropdown) => {
       this.showDropdown = showDropdown;
-      console.log('showDropdown', showDropdown);
+    });
+    this.shoppingCartService.shoppingCartLength$.subscribe((shoppingCartLength) => {
+      this.shoppingCartLength = shoppingCartLength;
     });
     this.headerService.fetchLocations().subscribe({
       next: (locations: any) => {

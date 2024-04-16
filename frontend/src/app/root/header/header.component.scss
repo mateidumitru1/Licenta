@@ -3,6 +3,10 @@
   gap: 1rem;
 }
 
+.margin-top {
+  margin-top: 4.5px;
+}
+
 .card {
   padding: 1rem;
   flex: 1 0 calc(19% - 1rem);
@@ -16,18 +20,6 @@
 
 a {
   color: black;
-}
-
-.shopping-cart-button {
-  border: none;
-  background: none;
-}
-
-.shopping-cart-button:hover {
-  cursor: pointer;
-  background: #ccc;
-  box-shadow: 0 0 10px #ccc;
-  border-radius: 25px;
 }
 
 .next-button {
@@ -78,13 +70,10 @@ a {
     top: 100px;
   }
   input {
-    width: 90%;
     margin-bottom: 10px;
   }
-  #search-addon {
-    position: absolute;
-    right: 5px;
-    top: 60px;
+  .right-buttons {
+    justify-content: right;
   }
 }
 
@@ -96,10 +85,4 @@ a {
   .next-button {
     width: 100%;
   }
-  #search-addon {
-    position: absolute;
-
-    right: 0;
-  }
 }
-

@@ -1,10 +1,10 @@
 <header>
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
+    <div class="container-fluid fs-5">
       <div class="d-flex ">
         <a class="navbar-brand" routerLink="/">Bileteria</a>
         <a
-          class="mt-2"
+          class="margin-top"
           type="button"
           (click)="externalContent.toggle()"
           aria-controls="navbarToggleExternalContent"
@@ -13,7 +13,7 @@
         >
           Locatii
         </a>
-        <a class="ms-3 mt-2" routerLink="/artists/A">Artisti</a>
+        <a class="margin-top ms-3" routerLink="/artists/A">Artisti</a>
       </div>
       <button
         class="navbar-toggler"
@@ -29,22 +29,27 @@
            mdbCollapse
            #noListNav="mdbCollapse">
 
-        <input
-          #searchInput
-          type="search"
-          class="form-control rounded form-control-lg ms-3"
-          placeholder="Cauta"
-          aria-label="Search"
-          [(ngModel)]="searchText"
-        />
-        <span role="button" class="input-group-text border-0 me-4" id="search-addon" (click)="search()">
-            <i class="fas fa-search"></i>
+        <div class="input-group">
+          <input
+            #searchInput
+            type="search"
+            class="form-control rounded form-control-lg ms-3"
+            placeholder="Cauta"
+            aria-label="Search"
+            [(ngModel)]="searchText"
+          />
+          <span role="button" class="btn btn-light input-group-text border-0 ms-1 me-4" id="search-addon" (click)="search()">
+            <i class="fas fa-search fs-6"></i>
           </span>
-        <div class="d-flex">
-          <button class="me-5 shopping-cart-button" (click)="onShoppingCartClick()">
-            <i class="fas fa-shopping-cart"></i>
-          </button>
-          <div mdbDropdown class="nav-item dropdown">
+        </div>
+        <div class="right-buttons d-flex">
+          <div role="button" class="btn btn-light me-4" (click)="onShoppingCartClick()">
+            <div class="d-flex justify-content-center align-items-center fs-5">
+              <i id="shopping-cart-icon" class="fas fa-shopping-cart me-1"></i>
+              <span id="badge" class="badge text-primary" *ngIf="getIdentityService().isLoggedIn() && shoppingCartLength > 0" >{{ shoppingCartLength }}</span>
+            </div>
+          </div>
+          <div mdbDropdown class="nav-item dropdown d-flex justify-content-center align-items-center me-2">
             <a
               class="nav-link dropdown-toggle"
               id="navbarDropdownMenuLink"
