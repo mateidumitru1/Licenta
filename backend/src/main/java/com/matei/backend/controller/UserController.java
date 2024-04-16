@@ -1,5 +1,6 @@
 package com.matei.backend.controller;
 
+import com.google.api.Page;
 import com.matei.backend.dto.request.auth.ChangePasswordRequestDto;
 import com.matei.backend.dto.request.user.UserCreationRequestDto;
 import com.matei.backend.dto.request.user.UserRequestDto;
@@ -17,7 +18,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -29,8 +29,10 @@ public class UserController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
-    public ResponseEntity<UserResponseDto> createUser(@RequestHeader("Authorization") String jwtToken, @ModelAttribute UserCreationRequestDto userCreationRequestDto) {
-        return ResponseEntity.ok(userService.createUser(jwtService.extractId(jwtToken), userCreationRequestDto));
+    public ResponseEntity<UserPageWithCountResponseDto> createUser(@ModelAttribute UserCreationRequestDto userCreationRequestDto,
+                                                                   @RequestParam("page") int page,
+                                                                   @RequestParam("size") int size) {
+        return ResponseEntity.ok(userService.createUser(userCreationRequestDto, page, size));
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -66,9 +68,10 @@ public class UserController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@RequestHeader("Authorization") String jwtToken, @PathVariable("id") String id) {
-        userService.deleteUser(jwtService.extractId(jwtToken), UUID.fromString(id));
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<UserPageWithCountResponseDto> deleteUser(@PathVariable("id") String id,
+                                                                   @RequestParam("page") int page,
+                                                                   @RequestParam("size") int size) {
+        return ResponseEntity.ok(userService.deleteUser(UUID.fromString(id), page, size));
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")

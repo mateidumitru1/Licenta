@@ -7,6 +7,7 @@ import com.matei.backend.dto.response.artist.ArtistResponseDto;
 import com.matei.backend.dto.response.artist.ArtistWithoutEventGenreResponseDto;
 import com.matei.backend.dto.response.artist.ArtistWithoutEventResponseDto;
 import com.matei.backend.service.ArtistService;
+import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,8 +25,10 @@ public class ArtistController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
-    public ResponseEntity<ArtistResponseDto> createArtist(@ModelAttribute ArtistCreationRequestDto artistCreationRequestDto) throws IOException {
-        return ResponseEntity.ok(artistService.createArtist(artistCreationRequestDto));
+    public ResponseEntity<ArtistPageWithCountResponseDto> createArtist(@ModelAttribute ArtistCreationRequestDto artistCreationRequestDto,
+                                                                       @PathParam("page") int page,
+                                                                       @PathParam("size") int size) throws IOException {
+        return ResponseEntity.ok(artistService.createArtist(artistCreationRequestDto, page, size));
     }
 
     @GetMapping("/{id}")
@@ -51,9 +54,10 @@ public class ArtistController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteArtistById(@PathVariable String id) {
-        artistService.deleteArtistById(UUID.fromString(id));
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<ArtistPageWithCountResponseDto> deleteArtistById(@PathVariable String id,
+                                                 @PathParam("page") int page,
+                                                 @PathParam("size") int size) {
+        return ResponseEntity.ok(artistService.deleteArtistById(UUID.fromString(id), page, size));
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")

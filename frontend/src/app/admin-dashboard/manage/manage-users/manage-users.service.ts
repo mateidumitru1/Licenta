@@ -37,8 +37,12 @@ export class ManageUsersService {
     });
   }
 
-  addUser(user: any) {
+  addUser(user: any, page: number, size: number) {
     return this.http.post(apiURL + '/users', getFormData(user), {
+      params: {
+        page: page.toString(),
+        size: size.toString()
+      },
       headers: {
         Authorization: 'Bearer ' + this.jwtHandler.getToken()
       }
@@ -53,8 +57,12 @@ export class ManageUsersService {
       });
   }
 
-  deleteUser(id: string): Observable<any> {
+  deleteUser(id: string, page: number, size: number): Observable<any> {
     return this.http.delete(apiURL + `/users/${id}`, {
+        params: {
+          page: page.toString(),
+          size: size.toString()
+        },
         headers: {
           Authorization: 'Bearer ' + this.jwtHandler.getToken()
         }

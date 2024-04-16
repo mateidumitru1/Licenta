@@ -17,8 +17,6 @@ public class SelectedEventResponseDto {
     private UUID id;
     private String title;
     private LocalDate date;
-    private String shortDescription;
-    private String description;
     private LocationWithoutEventListResponseDto location;
     private String imageUrl;
     private Boolean selected;

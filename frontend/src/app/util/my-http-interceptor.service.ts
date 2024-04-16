@@ -12,8 +12,8 @@ import {
   finalize,
   map,
   mergeMap,
-  Observable, retry,
-  retryWhen,
+  Observable, of, retry,
+  retryWhen, switchMap,
   take,
   throwError,
   timeout,
@@ -33,12 +33,19 @@ export class MyHttpInterceptor implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
     this.loadingService.show();
+
     return next.handle(request).pipe(
+      switchMap((event: HttpEvent<any>) => {
+        if (event instanceof HttpResponse) {
+          return of(event).pipe(delay(1000));
+        }
+        return of(event);
+      }),
       retryWhen(errors =>
         errors.pipe(
           mergeMap((error: HttpErrorResponse, index: number) => {
             if (index < 3 && this.isConnectionError(error)) {
-              return timer(10000);
+              return timer(1000);
             }
             return throwError(error);
           })
@@ -55,6 +62,6 @@ export class MyHttpInterceptor implements HttpInterceptor {
 
   private isConnectionError(error: HttpErrorResponse): boolean {
     // @ts-ignore
-    return error.status === '(failed)net::ERR_CONNECTION_REFUSED';
+    return error.status === '(failed)net::ERR_CONNECTION_REFUSED' || error.status === 0;
   }
 }

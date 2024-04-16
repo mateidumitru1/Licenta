@@ -93,29 +93,37 @@ export class ManageArtistsComponent implements OnInit, AfterViewInit {
       this.shouldDisplayRemoveFilterButton = !!(params['filter'] && params['search']);
 
       if (this.searchValue === '' && this.selectedFilterOption === 'name') {
-        this.manageArtistsService.fetchPaginatedArtists(this.pageIndex, this.pageSize).subscribe({
-          next: (response: any) => {
-            this.dataSource.data = response.artistPage.content;
-            this.itemsCount = response.count;
-          },
-          error: (error: any) => {
-            this.snackBar.open(error.error, 'Close', {
-              duration: 3000
-            });
-          }
-        });
+        this.fetchArtists();
       }
       else {
-        this.manageArtistsService.fetchPaginatedArtistsFiltered(this.pageIndex, this.pageSize, this.searchValue, this.selectedFilterOption).subscribe({
-          next: (response: any) => {
-            this.dataSource.data = response.artistPage.content;
-            this.itemsCount = response.count;
-          },
-          error: (error: any) => {
-            this.snackBar.open('Error fetching artists', 'Close', {
-              duration: 3000
-            });
-          }
+        this.fetchFilteredArtists();
+      }
+    });
+  }
+
+  fetchArtists() {
+    this.manageArtistsService.fetchPaginatedArtists(this.pageIndex, this.pageSize).subscribe({
+      next: (response: any) => {
+        this.dataSource.data = response.artistPage.content;
+        this.itemsCount = response.count;
+      },
+      error: (error: any) => {
+        this.snackBar.open(error.error, 'Close', {
+          duration: 3000
+        });
+      }
+    });
+  }
+
+  fetchFilteredArtists() {
+    this.manageArtistsService.fetchPaginatedArtistsFiltered(this.pageIndex, this.pageSize, this.searchValue, this.selectedFilterOption).subscribe({
+      next: (response: any) => {
+        this.dataSource.data = response.artistPage.content;
+        this.itemsCount = response.count;
+      },
+      error: (error: any) => {
+        this.snackBar.open('Error fetching artists', 'Close', {
+          duration: 3000
         });
       }
     });
@@ -172,9 +180,10 @@ export class ManageArtistsComponent implements OnInit, AfterViewInit {
     dialogRef.afterClosed().subscribe((artist: any) => {
       if(artist) {
         artist.genreList = JSON.stringify(artist.genreList);
-        this.manageArtistsService.addArtist(artist).subscribe({
-          next: (artist: any) => {
-            this.dataSource.data = [...this.dataSource.data, artist];
+        this.manageArtistsService.addArtist(artist, this.pageIndex, this.pageSize).subscribe({
+          next: (response: any) => {
+            this.dataSource.data = response.artistPage.content;
+            this.itemsCount = response.count
             this.snackBar.open('Artist adaugat cu succes', 'Inchide', {duration: 3000});
           },
           error: (error: any) => {
@@ -220,9 +229,19 @@ export class ManageArtistsComponent implements OnInit, AfterViewInit {
     });
     dialogRef.afterClosed().subscribe((result: any) => {
       if(result) {
-        this.manageArtistsService.deleteArtist(this.rowData.id).subscribe({
-          next: () => {
-            this.dataSource.data = this.dataSource.data.filter((a: any) => a.id !== this.rowData.id);
+        this.manageArtistsService.deleteArtist(this.rowData.id, this.pageIndex, this.pageSize).subscribe({
+          next: (response: any) => {
+            if(response.artistPage.content.length === 0) {
+              this.router.navigate([], {
+                relativeTo: this.route,
+                queryParams: { page: this.pageIndex - 1, size: this.pageSize },
+                queryParamsHandling: 'merge'
+              });
+            }
+            else {
+              this.dataSource.data = response.artistPage.content;
+              this.itemsCount = response.count
+            }
             this.snackBar.open('Artist sters cu succes', 'Inchide', {duration: 3000});
           },
           error: (error: any) => {

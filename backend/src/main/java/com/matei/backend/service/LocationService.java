@@ -9,7 +9,6 @@ import com.matei.backend.dto.response.location.LocationResponseDto;
 import com.matei.backend.dto.response.location.LocationWithoutEventListResponseDto;
 import com.matei.backend.dto.response.statistics.LocationWithEventsCountResponseDto;
 import com.matei.backend.entity.enums.StatisticsFilter;
-import com.matei.backend.exception.resourceAccess.AdminResourceAccessException;
 import com.matei.backend.exception.location.LocationAlreadyExistsException;
 import com.matei.backend.exception.location.LocationNotFoundException;
 import com.matei.backend.repository.LocationRepository;
@@ -40,11 +39,7 @@ public class LocationService {
     private final MapBoxService mapBoxService;
     private final UserService userService;
 
-    public LocationResponseDto createLocation(LocationCreationRequestDto locationCreationRequestDto, UUID userId) throws IOException {
-        if(!userService.isAdmin(userId)) {
-            throw new AdminResourceAccessException("You are not authorized to perform this action");
-        }
-
+    public LocationPageWithCountResponseDto createLocation(LocationCreationRequestDto locationCreationRequestDto, int page, int size) throws IOException {
         if(locationRepository.findByName(locationCreationRequestDto.getName()).isPresent()) {
             throw new LocationAlreadyExistsException("Location already exists");
         }
@@ -59,7 +54,7 @@ public class LocationService {
 
         var location = locationRepository.save(locationToSave);
 
-        return modelMapper.map(location, LocationResponseDto.class);
+        return getLocationsPaginatedManage(page, size);
     }
 
     public List<LocationWithoutEventListResponseDto> getAllLocations() {
@@ -76,50 +71,7 @@ public class LocationService {
         return modelMapper.map(location, LocationResponseDto.class);
     }
 
-    public List<LocationResponseDto> getAllLocationsWithAvailableEvents() {
-        var locations = locationRepository.findAll();
-
-        return locations.stream()
-                .map(this::getLocationResponseDto)
-                .toList();
-    }
-
-    private LocationResponseDto getLocationResponseDto(Location location) {
-        var availableEvents = location.getEventList().stream()
-                .map(event -> {
-                    var artistList = event.getArtistList().stream()
-                            .map(artist -> modelMapper.map(artist, ArtistWithoutEventResponseDto.class))
-                            .toList();
-                    var eventDto = modelMapper.map(event, EventWithoutLocationTicketResponseDto.class);
-                    eventDto.setArtistList(artistList);
-                    return eventDto;
-                })
-                .toList();
-
-        var locationResponseDto = modelMapper.map(location, LocationResponseDto.class);
-        locationResponseDto.setEventList(availableEvents);
-
-        return locationResponseDto;
-    }
-
-    public LocationResponseDto getLocationWithAvailableEventsById(UUID id) {
-        var location = locationRepository.findLocationWithAvailableEventsById(id, LocalDate.now())
-                .orElseThrow(() -> new LocationNotFoundException("Location not found"));
-
-        return getLocationResponseDto(location);
-    }
-
-    public LocationResponseDto getLocationWithUnavailableEventsById(UUID id) {
-        var location = locationRepository.findLocationWithUnavailableEventsById(id, LocalDate.now())
-                .orElseThrow(() -> new LocationNotFoundException("Location not found"));
-
-        return getLocationResponseDto(location);
-    }
-
-    public LocationResponseDto updateLocation(LocationUpdateRequestDto updatedLocation, UUID userId) throws IOException {
-        if(!userService.isAdmin(userId)) {
-            throw new AdminResourceAccessException("You are not authorized to perform this action");
-        }
+    public LocationResponseDto updateLocation(LocationUpdateRequestDto updatedLocation) throws IOException {
         String imageUrl = updatedLocation.getImageUrl();
         if(updatedLocation.getImage() != null) {
             if(imageUrl != null) {
@@ -146,11 +98,12 @@ public class LocationService {
         return modelMapper.map(location, LocationResponseDto.class);
     }
 
-    public void deleteLocation(UUID id) {
+    public LocationPageWithCountResponseDto deleteLocationById(UUID id, int page, int size) {
         imageService.deleteImage(locationRepository.findById(id)
                 .orElseThrow(() -> new LocationNotFoundException("Location not found"))
                 .getImageUrl());
         locationRepository.deleteById(id);
+        return getLocationsPaginatedManage(page, size);
     }
 
     public Long getTotalNumberOfLocations(StatisticsFilter filter) {
@@ -215,5 +168,31 @@ public class LocationService {
                 .locationPage(locationPage.map(location -> modelMapper.map(location, LocationWithoutEventListResponseDto.class)))
                 .count(locationRepository.countFilteredLocations(filter, search))
                 .build();
+    }
+
+    public List<LocationResponseDto> getAllLocationsWithAvailableEvents() {
+        return locationRepository.findLocationsByEventListDateAfter(LocalDate.now()).orElseThrow(() -> new LocationNotFoundException("Location not found"))
+                .stream()
+                .map(location -> {
+                    var locationDto = modelMapper.map(location, LocationResponseDto.class);
+                    locationDto.setEventList(location.getEventList().stream()
+                            .filter(event -> event.getDate().isAfter(LocalDate.now()))
+                            .map(event -> {
+                                var eventDto = modelMapper.map(event, EventWithoutLocationTicketResponseDto.class);
+                                eventDto.setArtistList(event.getArtistList().stream()
+                                        .map(artist -> modelMapper.map(artist, ArtistWithoutEventResponseDto.class))
+                                        .toList());
+                                return eventDto;
+                            })
+                            .toList());
+                    return locationDto;
+                })
+                .toList();
+    }
+
+    public List<LocationWithoutEventListResponseDto> searchLocations(String query) {
+        return locationRepository.findByNameContainingIgnoreCase(query, PageRequest.of(0, 3)).stream()
+                .map(location -> modelMapper.map(location, LocationWithoutEventListResponseDto.class))
+                .toList();
     }
 }

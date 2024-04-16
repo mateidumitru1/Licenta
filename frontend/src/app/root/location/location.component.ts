@@ -53,13 +53,13 @@ export class LocationComponent implements OnInit{
         return;
       }
 
-      this.locationService.fetchInitialEventsByLocationId(locationId, this.page, this.size).subscribe({
-        next: (events: any) => {
-          if (events.length < this.size) {
+      this.locationService.fetchLocationWithInitialEventsByLocationId(locationId, this.page, this.size).subscribe({
+        next: (location: any) => {
+          if (location.eventPage.content.length < this.size) {
             this.reachedEnd = true;
           }
-          this.location = events.content[0].location;
-          this.events = events.content;
+          this.location = location;
+          this.events = location.eventPage.content;
           this.page++;
         },
         error: (error: any) => {

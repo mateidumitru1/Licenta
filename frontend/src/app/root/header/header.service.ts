@@ -12,7 +12,7 @@ export class HeaderService {
     return this.http.get(apiURL + '/locations/all');
   }
 
-  fetchLocationsWithAvailableEvents() {
-    return this.http.get(apiURL + '/locations/available-events');
+  search(searchText: string) {
+    return this.http.get(apiURL + '/search?query=' + searchText);
   }
 }

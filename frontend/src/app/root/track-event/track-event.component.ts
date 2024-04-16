@@ -21,11 +21,7 @@ export class TrackEventComponent implements OnInit{
   lat: number = 0;
   lng: number = 0;
 
-  tickets: any[] = [];
-
-  upcomingTickets: any[] = [];
-
-  upcomingEvents: any[] = [];
+  events: any[] = [];
 
   constructor(private trackEventService: TrackEventService, private snackBar: MatSnackBar, private router: Router) {}
 
@@ -35,21 +31,11 @@ export class TrackEventComponent implements OnInit{
   }
 
   fetchTickets() {
-    this.trackEventService.fetchTickets().subscribe({
-      next: (tickets: any) => {
-        this.tickets = tickets;
-        const upcomingEventsMap: { [eventId: string]: boolean } = {}; // Define upcoming events map
-        this.upcomingTickets = tickets.filter((ticket: any) => {
-          const event = ticket.ticketType.event;
-          if (event !== null && !upcomingEventsMap[event.id]) {
-            upcomingEventsMap[event.id] = true;
-            this.upcomingEvents.push(event);
-            const parts = event.date.split('-');
-            const date = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
-            return date > new Date();
-          }
-          return false;
-        });
+    this.trackEventService.fetchBookedEvents().subscribe({
+      next: (events: any) => {
+        this.events = events;
+        console.log(events);
+        this.initMap();
       },
       error: (error: any) => {
         this.snackBar.open(error.error, 'Close', {duration: 3000});
@@ -81,8 +67,8 @@ export class TrackEventComponent implements OnInit{
         showUserHeading: true
       }));
 
-      this.upcomingEvents.forEach((event) => {
-        this.addMarker([event.location.longitude, event.location.latitude], event);
+      this.events.forEach((event) => {
+        this.addMarker(event);
       });
 
     }, (error) => {
@@ -91,8 +77,10 @@ export class TrackEventComponent implements OnInit{
     });
   }
 
-  addMarker(coordinates: [number, number], event: any) {
+  addMarker(event: any) {
     if (this.map instanceof mapboxgl.Map) {
+      const coordinates: [number, number] = [event.location.longitude, event.location.latitude];
+      console.log(event);
       const marker = new mapboxgl.Marker()
         .setLngLat(coordinates)
         .setPopup(

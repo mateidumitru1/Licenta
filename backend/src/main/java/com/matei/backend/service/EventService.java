@@ -9,6 +9,7 @@ import com.matei.backend.dto.request.ticketType.TicketTypeUpdateRequestDto;
 import com.matei.backend.dto.response.artist.ArtistWithoutEventResponseDto;
 import com.matei.backend.dto.response.event.*;
 import com.matei.backend.dto.response.genre.GenreWithoutArtistListResponseDto;
+import com.matei.backend.dto.response.location.LocationWithEventPageResponseDto;
 import com.matei.backend.dto.response.location.LocationWithoutEventListResponseDto;
 import com.matei.backend.dto.response.preference.UserGenrePreferenceResponseDto;
 import com.matei.backend.dto.response.statistics.EventWithTicketsSoldCount;
@@ -20,12 +21,10 @@ import com.matei.backend.entity.TicketType;
 import com.matei.backend.entity.enums.StatisticsFilter;
 import com.matei.backend.exception.event.EventNotFoundException;
 import com.matei.backend.repository.EventRepository;
+import com.matei.backend.repository.LocationRepository;
 import com.matei.backend.service.auth.JwtService;
 import com.matei.backend.service.util.BroadGenreMapperService;
 import com.matei.backend.service.util.ImageService;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -52,8 +51,10 @@ public class EventService {
     private final ObjectMapper objectMapper;
     private final ModelMapper modelMapper;
     private final JwtService jwtService;
+    private final UserService userService;
+    private final LocationRepository locationRepository;
 
-    public EventResponseDto createEvent(EventCreationRequestDto eventCreationRequestDto) throws IOException {
+    public EventPageWithCountResponseDto createEvent(EventCreationRequestDto eventCreationRequestDto, int page, int size) throws IOException {
         var eventToSave = modelMapper.map(eventCreationRequestDto, Event.class);
 
         eventToSave.setLocation(Optional.of(locationService.getLocationById(UUID.fromString(eventCreationRequestDto.getLocationId())))
@@ -72,7 +73,6 @@ public class EventService {
 
         var event = eventRepository.save(eventToSave);
 
-
         var ticketTypes = getTicketTypeCreationRequestDtoList(eventCreationRequestDto.getTicketTypesList()).stream()
                 .map(ticketTypeCreationRequestDto ->
                         ticketTypeService.createTicketType(ticketTypeCreationRequestDto, Optional.of(event)
@@ -82,7 +82,8 @@ public class EventService {
 
         event.setTicketTypeList(ticketTypes.stream().map(ticketTypeResponseDto -> modelMapper.map(ticketTypeResponseDto, TicketType.class))
                 .toList());
-        return modelMapper.map(event, EventResponseDto.class);
+
+        return getAllEventsPaginatedManage(page, size);
     }
 
     public EventResponseDto getEventById(UUID id) {
@@ -163,44 +164,6 @@ public class EventService {
                 .toList();
     }
 
-    public List<EventWithoutLocationTicketResponseDto> getAllEventsWithoutLocationTicket() {
-        var eventList = eventRepository.findAll();
-
-        return eventList.stream()
-                .map(event -> {
-                    var eventDto = modelMapper.map(event, EventWithoutLocationTicketResponseDto.class);
-                    eventDto.setArtistList(event.getArtistList().stream()
-                            .map(artist -> {
-                                var artistDto = modelMapper.map(artist, ArtistWithoutEventResponseDto.class);
-                                artistDto.setGenreList(artist.getGenreList().stream()
-                                        .map(genre -> modelMapper.map(genre, GenreWithoutArtistListResponseDto.class))
-                                        .toList());
-                                return artistDto;
-                            })
-                            .toList());
-                    return eventDto;
-                })
-                .toList();
-    }
-
-    public List<EventResponseDto> getAvailableEvents() {
-        var eventList = eventRepository.findAll();
-
-        List<Event> events = eventList.stream().filter(event -> !event.getTicketTypeList().isEmpty()).toList();
-
-        return events.stream()
-                .filter(event -> event.getDate().isAfter(LocalDate.now()))
-                .map(event -> modelMapper.map(event, EventResponseDto.class))
-                .toList();
-    }
-
-    public EventWithoutTicketArtistResponseDto getEventByTitle(String title) {
-        var event = eventRepository.findByTitle(title)
-                .orElseThrow(() -> new EventNotFoundException("Event not found"));
-
-        return modelMapper.map(event, EventWithoutTicketArtistResponseDto.class);
-    }
-
     public EventResponseDto updateEvent(EventUpdateRequestDto updatedEvent) throws IOException {
         var event = eventRepository.findById(updatedEvent.getId())
                 .orElseThrow(() -> new EventNotFoundException("Event not found"));
@@ -234,10 +197,11 @@ public class EventService {
     return modelMapper.map(event, EventResponseDto.class);
     }
 
-    public void deleteEventById(UUID id) {
+    public EventPageWithCountResponseDto deleteEventById(UUID id, int page, int size) {
         imageService.deleteImage(eventRepository.findById(id)
                 .orElseThrow(() -> new EventNotFoundException("Event not found")).getImageUrl());
         eventRepository.deleteById(id);
+        return getAllEventsPaginatedManage(page, size);
     }
 
     private List<UUID> getArtistIdList(String artistIds) {
@@ -296,7 +260,8 @@ public class EventService {
         if (filter.equals(StatisticsFilter.ALL)) {
             events = eventRepository.findAll();
         } else {
-            events = eventRepository.findAllByCreatedAtAfter(filter.getStartDate());
+            events = eventRepository.findAllByCreatedAtAfter(filter.getStartDate())
+                    .orElseThrow(() -> new EventNotFoundException("Event not found"));
         }
 
         return events.stream()
@@ -348,7 +313,8 @@ public class EventService {
     }
 
     public List<SelectedEventResponseDto> getSelectedEvents() {
-        var selectedEvents = eventRepository.findAllBySelectedTrue();
+        var selectedEvents = eventRepository.findAllBySelectedTrueAndDateAfter(LocalDate.now())
+                .orElseThrow(() -> new EventNotFoundException("Event not found"));
 
         return selectedEvents.stream()
                 .filter(event -> event.getDate().isAfter(LocalDate.now()))
@@ -357,8 +323,8 @@ public class EventService {
     }
 
     public List<SelectedEventResponseDto> getAllEventsForSelection() {
-        return eventRepository.findAll().stream()
-                .filter(event -> event.getDate().isAfter(LocalDate.now()))
+        return eventRepository.findAllByDateAfter(LocalDate.now())
+                .orElseThrow(() -> new EventNotFoundException("Event not found")).stream()
                 .map(event -> modelMapper.map(event, SelectedEventResponseDto.class))
                 .toList();
     }
@@ -372,14 +338,18 @@ public class EventService {
         return Collections.emptyList();
     }
 
-    public Page<EventWithoutAllResponseDto> getMoreRecentEvents(UUID locationId, int page, int size) {
+    public Page<EventWithoutAllResponseDto> getLocationWithMoreEvents(UUID locationId, int page, int size) {
         return eventRepository.findByDateAfterAndLocationIdOrderByDateAsc(LocalDate.now(), locationId, PageRequest.of(page, size))
                 .map(event -> modelMapper.map(event, EventWithoutAllResponseDto.class));
     }
 
-    public Page<EventWithoutTicketArtistResponseDto> getInitialEvents(UUID locationId) {
-        return eventRepository.findByDateAfterAndLocationIdOrderByDateAsc(LocalDate.now(), locationId, PageRequest.of(0, 10))
+    public LocationWithEventPageResponseDto getLocationWithInitialEvents(UUID locationId) {
+        var eventPage = eventRepository.findByDateAfterAndLocationIdOrderByDateAsc(LocalDate.now(), locationId, PageRequest.of(0, 10))
                 .map(event -> modelMapper.map(event, EventWithoutTicketArtistResponseDto.class));
+        var location = locationRepository.findById(locationId).map(l -> modelMapper.map(l, LocationWithEventPageResponseDto.class))
+                .orElseThrow(() -> new EventNotFoundException("Location not found"));
+        location.setEventPage(eventPage);
+        return location;
     }
 
     public EventPageWithCountResponseDto getAllEventsPaginatedManage(int page, int size) {
@@ -435,5 +405,24 @@ public class EventService {
                 .selectedEvents(getSelectedEvents())
                 .recommendedEvents(getRecommendedEvents(currentUserId))
                 .build();
+    }
+
+    public List<EventWithoutTicketArtistResponseDto> getEventsForUser(UUID id) {
+        var user = userService.getUserById(id);
+
+        return user.getOrderList().stream()
+                .map(order -> order.getTicketList().stream()
+                        .map(ticket -> ticket.getTicketType().getEvent())
+                        .toList())
+                .flatMap(Collection::stream)
+                .filter(event -> event.getDate().isAfter(LocalDate.now()))
+                .map(event -> modelMapper.map(event, EventWithoutTicketArtistResponseDto.class))
+                .toList();
+    }
+
+    public List<EventWithoutTicketArtistResponseDto> searchEvents(String query) {
+        return eventRepository.findByTitleContainingIgnoreCase(query, PageRequest.of(0, 3)).stream()
+                .map(event -> modelMapper.map(event, EventWithoutTicketArtistResponseDto.class))
+                .toList();
     }
 }

@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, HostListener, input, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, HostListener, OnInit, ViewChild} from '@angular/core';
 import {FormsModule} from "@angular/forms";
 import {MatButton} from "@angular/material/button";
 import {
@@ -16,14 +16,13 @@ import {MatSort, MatSortHeader} from "@angular/material/sort";
 import {NgForOf, NgIf} from "@angular/common";
 import {MatDialog} from "@angular/material/dialog";
 import {MatSnackBar} from "@angular/material/snack-bar";
-import {ManageLocationsService} from "../manage-locations/manage-locations.service";
 import {ManageEventsService} from "./manage-events.service";
 import {LocationNamePipe} from "../../../util/pipes/location-name.pipe";
 import {AddEditEventComponent} from "./popup/add-edit-event/add-edit-event.component";
 import {DeleteComponent} from "../shared/delete/delete.component";
 import {LoadingComponent} from "../../../shared/loading/loading.component";
 import {ActivatedRoute, Router} from "@angular/router";
-import {isValid, parse} from "date-fns";
+import {parse} from "date-fns";
 
 @Component({
   selector: 'app-manage-events',
@@ -94,29 +93,37 @@ export class ManageEventsComponent implements OnInit, AfterViewInit {
       this.shouldDisplayRemoveFilterButton = !!(params['filter'] && params['search']);
 
       if(this.searchValue === '' && this.selectedFilterOption === 'title') {
-        this.manageEventsService.fetchPaginatedEvents(this.pageIndex, this.pageSize).subscribe({
-          next: (response: any) => {
-            this.dataSource.data = response.eventPage.content;
-            this.itemsCount = response.count;
-          },
-          error: (error: any) => {
-            this.snackBar.open(error.error, 'Close', {
-              duration: 3000
-            });
-          }
-        });
+        this.fetchEvents();
       }
       else {
-        this.manageEventsService.fetchPaginatedEventsFiltered(this.pageIndex, this.pageSize, this.selectedFilterOption, this.searchValue).subscribe({
-          next: (response: any) => {
-            this.dataSource.data = response.eventPage.content;
-            this.itemsCount = response.count;
-          },
-          error: (error: any) => {
-            this.snackBar.open(error.error, 'Close', {
-              duration: 3000
-            });
-          }
+        this.fetchFilteredEvents();
+      }
+    });
+  }
+
+  fetchEvents() {
+    this.manageEventsService.fetchPaginatedEvents(this.pageIndex, this.pageSize).subscribe({
+      next: (response: any) => {
+        this.dataSource.data = response.eventPage.content;
+        this.itemsCount = response.count;
+      },
+      error: (error: any) => {
+        this.snackBar.open(error.error, 'Close', {
+          duration: 3000
+        });
+      }
+    });
+  }
+
+  fetchFilteredEvents() {
+    this.manageEventsService.fetchPaginatedEventsFiltered(this.pageIndex, this.pageSize, this.selectedFilterOption, this.searchValue).subscribe({
+      next: (response: any) => {
+        this.dataSource.data = response.eventPage.content;
+        this.itemsCount = response.count;
+      },
+      error: (error: any) => {
+        this.snackBar.open(error.error, 'Close', {
+          duration: 3000
         });
       }
     });
@@ -181,9 +188,10 @@ export class ManageEventsComponent implements OnInit, AfterViewInit {
     dialogRef.afterClosed().subscribe((event: any) => {
       if(event) {
         event.ticketTypesList = JSON.stringify(event.ticketTypesList);
-        this.manageEventsService.addEvent(event).subscribe({
-          next: (event: any) => {
-            this.dataSource.data = [...this.dataSource.data, event];
+        this.manageEventsService.addEvent(event, this.pageIndex, this.pageSize).subscribe({
+          next: (response: any) => {
+            this.dataSource.data = response.eventPage.content;
+            this.itemsCount = response.count;
             this.snackBar.open('Eveniment adaugat cu succes', 'Inchide', {duration: 3000});
           },
           error: (error: any) => {
@@ -231,9 +239,19 @@ export class ManageEventsComponent implements OnInit, AfterViewInit {
     });
     dialogRef.afterClosed().subscribe((result: any) => {
       if(result) {
-        this.manageEventsService.deleteEvent(this.rowData.id).subscribe({
-          next: () => {
-            this.dataSource.data = this.dataSource.data.filter((e: any) => e.id !== this.rowData.id);
+        this.manageEventsService.deleteEvent(this.rowData.id, this.pageIndex, this.pageSize).subscribe({
+          next: (response: any) => {
+            if(response.eventPage.content.length === 0) {
+              this.router.navigate([], {
+                relativeTo: this.route,
+                queryParams: { page: this.pageIndex - 1, size: this.pageSize },
+                queryParamsHandling: 'merge'
+              });
+            }
+            else {
+              this.dataSource.data = response.eventPage.content;
+              this.itemsCount = response.count;
+            }
             this.snackBar.open('Eveniment sters cu succes', 'Inchide', {duration: 3000});
           },
           error: (error: any) => {

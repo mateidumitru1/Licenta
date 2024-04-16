@@ -19,14 +19,10 @@ public interface EventRepository extends JpaRepository<Event, UUID> {
     Optional<List<Event>> findByLocationId(UUID locationId);
     Optional<Event> findByTitle(String title);
     Optional<Long> countByCreatedAtAfter(LocalDateTime createdAt);
-
-    @Query("SELECT e FROM Event e WHERE e.createdAt > :startDate")
-    List<Event> findAllByCreatedAtAfter(@Param("startDate") LocalDateTime startDate);
-
-    List<Event> findAllBySelectedTrue();
-
+    Optional<List<Event>> findAllByDateAfter(LocalDate currentDate);
+    Optional<List<Event>> findAllByCreatedAtAfter(@Param("startDate") LocalDateTime startDate);
+    Optional<List<Event>> findAllBySelectedTrueAndDateAfter(LocalDate currentDate);
     Page<Event> findByDateAfterAndLocationIdOrderByDateAsc(LocalDate currentDate, UUID locationId, Pageable pageable);
-
     Page<Event> findAllByOrderByCreatedAtDesc(Pageable pageable);
 
     @Query("SELECT e FROM Event e WHERE " +
@@ -42,4 +38,6 @@ public interface EventRepository extends JpaRepository<Event, UUID> {
     Long countFilteredEvents(String filter, String search);
 
     Optional<List<Event>> findAllByBroadGenreInAndDateAfter(List<String> broadGenreList, LocalDate now);
+
+    List<Event> findByTitleContainingIgnoreCase(String query, Pageable pageable);
 }

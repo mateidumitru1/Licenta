@@ -36,8 +36,12 @@ export class ManageLocationsService {
     });
   }
 
-  addLocation(location: any) {
+  addLocation(location: any, page: number, size: number) {
     return this.http.post(apiURL + '/locations', getFormData(location), {
+      params: {
+        page: page.toString(),
+        size: size.toString()
+      },
       headers: {
         Authorization: 'Bearer ' + this.jwtHandler.getToken()
       }
@@ -52,8 +56,12 @@ export class ManageLocationsService {
     });
   }
 
-  deleteLocation(id: string) {
+  deleteLocation(id: string, page: number, size: number) {
     return this.http.delete(apiURL + `/locations/${id}`, {
+      params: {
+        page: page.toString(),
+        size: size.toString()
+      },
       headers: {
         Authorization: 'Bearer ' + this.jwtHandler.getToken()
       }

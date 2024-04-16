@@ -19,16 +19,8 @@ public interface LocationRepository extends JpaRepository<Location, UUID> {
 
     Long countByCreatedAtAfter(LocalDateTime startDate);
 
-    @Query("SELECT DISTINCT l FROM Location l LEFT JOIN l.eventList e " +
-            "ON e.date >= :today OR e.date IS NULL " +
-            "WHERE l.id = :id")
-    Optional<Location> findLocationWithAvailableEventsById(@Param("id") UUID id, @Param("today") LocalDate today);
-
-    @Query("SELECT DISTINCT l FROM Location l LEFT JOIN l.eventList e " +
-            "ON e.date < :today " +
-            "WHERE l.id = :id")
-    Optional<Location> findLocationWithUnavailableEventsById(@Param("id") UUID id, @Param("today") LocalDate today);
-
+    @Query("SELECT l FROM Location l LEFT JOIN FETCH l.eventList e WHERE e.date >= :date OR e.date is NULL")
+    Optional<List<Location>> findLocationsByEventListDateAfter(LocalDate date);
 
     @Query("SELECT l FROM Location l LEFT JOIN FETCH l.eventList e WHERE e.createdAt > :startDate")
     List<Location> findAllWithEventsCreatedAfter(@Param("startDate") LocalDateTime startDate);
@@ -44,4 +36,6 @@ public interface LocationRepository extends JpaRepository<Location, UUID> {
             "(:filter = 'name' AND l.name LIKE %:search%) OR " +
             "(:filter = 'address' AND l.address LIKE %:search%)")
     Long countFilteredLocations(String filter, String search);
+
+    List<Location> findByNameContainingIgnoreCase(String query, Pageable pageable);
 }

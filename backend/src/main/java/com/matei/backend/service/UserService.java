@@ -38,10 +38,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
 
-    public UserResponseDto createUser(UUID currentUserId, UserCreationRequestDto userCreationRequestDto) {
-        if (!isAdmin(currentUserId)) {
-            throw new AdminResourceAccessException("You are not authorized to perform this action");
-        }
+    public UserPageWithCountResponseDto createUser(UserCreationRequestDto userCreationRequestDto, int page, int size) {
         var userToSave = modelMapper.map(userCreationRequestDto, User.class);
         userToSave.setPassword(passwordEncoder.encode(userCreationRequestDto.getPassword()));
         userToSave.setEnabled(true);
@@ -49,7 +46,7 @@ public class UserService {
 
         var user = userRepository.save(modelMapper.map(userCreationRequestDto, User.class));
 
-        return modelMapper.map(user, UserResponseDto.class);
+        return getAllUsersPaginatedManage(page, size);
     }
 
     public UserResponseDto adminGetUserById(UUID currentUserId, UUID id) {
@@ -96,11 +93,9 @@ public class UserService {
         return modelMapper.map(userRepository.findById(userRequestDto.getId()).orElseThrow(() -> new UserNotFoundException("User not found")), UserResponseDto.class);
     }
 
-    public void deleteUser(UUID currentUserId, UUID id) {
-        if (!isAdmin(currentUserId)) {
-            throw new AdminResourceAccessException("You are not authorized to perform this action");
-        }
+    public UserPageWithCountResponseDto deleteUser(UUID id, int page, int size) {
         userRepository.deleteById(id);
+        return getAllUsersPaginatedManage(page, size);
     }
 
     public boolean isAdmin(UUID userId) {

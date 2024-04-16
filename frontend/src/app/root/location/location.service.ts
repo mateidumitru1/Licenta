@@ -8,7 +8,7 @@ import {apiURL} from "../../app.config";
 export class LocationService {
   constructor(private http: HttpClient) {}
 
-  fetchInitialEventsByLocationId(id: string, page: number, size: number) {
+  fetchLocationWithInitialEventsByLocationId(id: string, page: number, size: number) {
     return this.http.get(apiURL + '/events/location/' + id + '/initial', {
       params: {
         page: page.toString(),

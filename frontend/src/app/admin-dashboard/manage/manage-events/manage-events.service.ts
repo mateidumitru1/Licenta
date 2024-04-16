@@ -45,8 +45,12 @@ export class ManageEventsService {
     });
   }
 
-  addEvent(event: any) {
+  addEvent(event: any, page: number, size: number) {
     return this.http.post(apiURL + '/events', getFormData(event), {
+      params: {
+        page: page.toString(),
+        size: size.toString()
+      },
       headers: {
         Authorization: 'Bearer ' + this.jwtHandler.getToken()
       }
@@ -61,8 +65,12 @@ export class ManageEventsService {
     });
   }
 
-  deleteEvent(id: string) {
+  deleteEvent(id: string, page: number, size: number) {
     return this.http.delete(apiURL + `/events/${id}`, {
+      params: {
+        page: page.toString(),
+        size: size.toString()
+      },
       headers: {
         Authorization: 'Bearer ' + this.jwtHandler.getToken()
       }

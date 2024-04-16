@@ -37,7 +37,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 public class ExceptionHandlerController {
-
     @ExceptionHandler(TokenBlacklistedException.class)
     public ResponseEntity<?> handleTokenBlacklistedException(TokenBlacklistedException exception) {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.UNAUTHORIZED);

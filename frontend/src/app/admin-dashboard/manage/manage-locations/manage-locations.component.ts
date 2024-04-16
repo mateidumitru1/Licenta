@@ -90,29 +90,37 @@ export class ManageLocationsComponent implements OnInit, AfterViewInit {
       this.shouldDisplayRemoveFilterButton = !!(params['filter'] && params['search']);
 
       if(this.searchValue === '' && this.selectedFilterOption === 'name') {
-        this.manageLocationsService.fetchPaginatedLocations(this.pageIndex, this.pageSize).subscribe({
-          next: (response: any) => {
-            this.dataSource.data = response.locationPage.content;
-            this.itemsCount = response.count;
-          },
-          error: (error: any) => {
-            this.snackBar.open('Error fetching locations', 'Close', {
-              duration: 3000
-            });
-          }
-        });
+        this.fetchLocations();
       }
       else {
-        this.manageLocationsService.fetchPaginatedLocationsFiltered(this.pageIndex, this.pageSize, this.selectedFilterOption, this.searchValue).subscribe({
-          next: (response: any) => {
-            this.dataSource.data = response.locationPage.content;
-            this.itemsCount = response.count;
-          },
-          error: (error: any) => {
-            this.snackBar.open('Error fetching locations', 'Close', {
-              duration: 3000
-            });
-          }
+        this.fetchFilteredLocations();
+      }
+    });
+  }
+
+  fetchLocations() {
+    this.manageLocationsService.fetchPaginatedLocations(this.pageIndex, this.pageSize).subscribe({
+      next: (response: any) => {
+        this.dataSource.data = response.locationPage.content;
+        this.itemsCount = response.count;
+      },
+      error: (error: any) => {
+        this.snackBar.open('Error fetching locations', 'Close', {
+          duration: 3000
+        });
+      }
+    });
+  }
+
+  fetchFilteredLocations() {
+    this.manageLocationsService.fetchPaginatedLocationsFiltered(this.pageIndex, this.pageSize, this.selectedFilterOption, this.searchValue).subscribe({
+      next: (response: any) => {
+        this.dataSource.data = response.locationPage.content;
+        this.itemsCount = response.count;
+      },
+      error: (error: any) => {
+        this.snackBar.open('Error fetching locations', 'Close', {
+          duration: 3000
         });
       }
     });
@@ -167,10 +175,10 @@ export class ManageLocationsComponent implements OnInit, AfterViewInit {
     });
     dialogRef.afterClosed().subscribe((location: any) => {
       if(location) {
-        this.manageLocationsService.addLocation(location).subscribe({
+        this.manageLocationsService.addLocation(location, this.pageIndex, this.pageSize).subscribe({
           next: (response: any) => {
-            this.dataSource.data.push(response);
-            this.dataSource.data = this.dataSource.data;
+            this.dataSource.data = response.locationPage.content;
+            this.itemsCount = response.count
             this.snackBar.open('Location added successfully', 'Close', {
               duration: 3000
             });
@@ -223,8 +231,19 @@ export class ManageLocationsComponent implements OnInit, AfterViewInit {
     });
     dialogRef.afterClosed().subscribe((result: any) => {
       if(result) {
-        this.manageLocationsService.deleteLocation(this.rowData.id).subscribe({
+        this.manageLocationsService.deleteLocation(this.rowData.id, this.pageIndex, this.pageSize).subscribe({
           next: (response: any) => {
+            if(response.locationPage.content.length === 0) {
+              this.router.navigate([], {
+                relativeTo: this.route,
+                queryParams: { page: this.pageIndex - 1, size: this.pageSize },
+                queryParamsHandling: 'merge'
+              });
+            }
+            else {
+              this.dataSource.data = response.locationPage.content;
+              this.itemsCount = response.count
+            }
             this.snackBar.open('Location deleted', 'Close', {
               duration: 3000
             });
@@ -235,7 +254,6 @@ export class ManageLocationsComponent implements OnInit, AfterViewInit {
             });
           }
         });
-        this.dataSource.data = this.dataSource.data.filter((data: any) => data.id !== this.rowData.id);
       }
     });
   }

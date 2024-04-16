@@ -10,8 +10,8 @@ export class TrackEventService {
   constructor(private http: HttpClient, private jwtHandler: JwtHandler) {
   }
 
-  fetchTickets() {
-    return this.http.get(apiURL + '/tickets', {
+  fetchBookedEvents() {
+    return this.http.get(apiURL + '/events/me', {
       headers: {
         'Authorization': 'Bearer ' + this.jwtHandler.getToken()
       }

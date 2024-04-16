@@ -41,8 +41,12 @@ export class ManageArtistsService {
       return this.http.get(apiURL + '/artists/without-event-genre');
     }
 
-    addArtist(artist: any) {
+    addArtist(artist: any, page: number, size: number) {
       return this.http.post(apiURL + '/artists', getFormData(artist), {
+        params: {
+          page: page.toString(),
+          size: size.toString()
+        },
         headers: {
           'Authorization': 'Bearer ' +  this.jwtHandler.getToken()
         }
@@ -57,8 +61,12 @@ export class ManageArtistsService {
       });
     }
 
-    deleteArtist(id: number) {
+    deleteArtist(id: string, page: number, size: number) {
       return this.http.delete(apiURL + '/artists/' + id, {
+        params: {
+          page: page.toString(),
+          size: size.toString()
+        },
         headers: {
           'Authorization': 'Bearer ' +  this.jwtHandler.getToken()
         }

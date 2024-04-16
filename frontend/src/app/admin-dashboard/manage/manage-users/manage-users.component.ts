@@ -99,28 +99,36 @@ export class ManageUsersComponent implements OnInit, AfterViewInit {
       this.shouldDisplayRemoveFilterButton = !!(params['filter'] && params['search']);
 
       if (this.searchValue === '' && this.selectedFilterOption === 'firstName') {
-        this.manageUsersService.fetchPaginatedUsers(this.pageIndex, this.pageSize).subscribe({
-          next: (response: any) => {
-            this.dataSource.data = response.userPage.content;
-            this.itemsCount = response.count
-          },
-          error: (error: any) => {
-            this.snackBar.open('Error fetching users', 'Close', {
-              duration: 3000
-            });
-          }
-        });
+        this.fetchUsers();
       } else {
-        this.manageUsersService.fetchPaginatedUsersFiltered(this.pageIndex, this.pageSize, this.selectedFilterOption, this.searchValue).subscribe({
-          next: (response: any) => {
-            this.dataSource.data = response.userPage.content;
-            this.itemsCount = response.count;
-          },
-          error: (error: any) => {
-            this.snackBar.open('Error fetching users', 'Close', {
-              duration: 3000
-            });
-          }
+        this.fetchFilteredUsers();
+      }
+    });
+  }
+
+  fetchUsers() {
+    this.manageUsersService.fetchPaginatedUsers(this.pageIndex, this.pageSize).subscribe({
+      next: (response: any) => {
+        this.dataSource.data = response.userPage.content;
+        this.itemsCount = response.count
+      },
+      error: (error: any) => {
+        this.snackBar.open('Error fetching users', 'Close', {
+          duration: 3000
+        });
+      }
+    });
+  }
+
+  fetchFilteredUsers() {
+    this.manageUsersService.fetchPaginatedUsersFiltered(this.pageIndex, this.pageSize, this.selectedFilterOption, this.searchValue).subscribe({
+      next: (response: any) => {
+        this.dataSource.data = response.userPage.content;
+        this.itemsCount = response.count;
+      },
+      error: (error: any) => {
+        this.snackBar.open('Error fetching users', 'Close', {
+          duration: 3000
         });
       }
     });
@@ -175,11 +183,14 @@ export class ManageUsersComponent implements OnInit, AfterViewInit {
     });
     dialogRef.afterClosed().subscribe((user: any) => {
       if(user) {
-        this.manageUsersService.addUser(user).subscribe({
+        this.manageUsersService.addUser(user, this.pageIndex, this.pageSize).subscribe({
           next: (response: any) => {
+            this.dataSource.data = response.userPage.content;
+            this.itemsCount = response.count
             this.snackBar.open('User added', 'Close', {
               duration: 3000
             });
+
           },
           error: (error: any) => {
             this.snackBar.open('Error adding user', 'Close', {
@@ -187,7 +198,6 @@ export class ManageUsersComponent implements OnInit, AfterViewInit {
             });
           }
         });
-        this.dataSource.data = [...this.dataSource.data, user];
       }
     });
   }
@@ -231,8 +241,19 @@ export class ManageUsersComponent implements OnInit, AfterViewInit {
     });
     dialogRef.afterClosed().subscribe((result: any) => {
       if(result) {
-        this.manageUsersService.deleteUser(this.rowData.id).subscribe({
+        this.manageUsersService.deleteUser(this.rowData.id, this.pageIndex, this.pageSize).subscribe({
           next: (response: any) => {
+            if(response.userPage.content.length === 0) {
+              this.router.navigate([], {
+                relativeTo: this.route,
+                queryParams: { page: this.pageIndex - 1, size: this.pageSize },
+                queryParamsHandling: 'merge'
+              });
+            }
+            else {
+              this.dataSource.data = response.userPage.content;
+              this.itemsCount = response.count
+            }
             this.snackBar.open('User deleted', 'Close', {
               duration: 3000
             });
@@ -243,7 +264,6 @@ export class ManageUsersComponent implements OnInit, AfterViewInit {
             });
           }
         });
-        this.dataSource.data = this.dataSource.data.filter((data: any) => data.id !== this.rowData.id);
       }
     });
   }

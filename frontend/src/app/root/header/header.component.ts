@@ -3,12 +3,13 @@ import {MdbDropdownModule} from "mdb-angular-ui-kit/dropdown";
 import {NgForOf, NgIf} from "@angular/common";
 import {MdbCollapseModule} from "mdb-angular-ui-kit/collapse";
 import {HeaderService} from "./header.service";
-import {Router, RouterLink} from "@angular/router";
+import {NavigationEnd, Router, RouterLink} from "@angular/router";
 import {IdentityService} from "../../identity/identity.service";
 import {JwtHandler} from "../../identity/jwt.handler";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {LoadingComponent} from "../../shared/loading/loading.component";
 import {FormsModule} from "@angular/forms";
+import {DropdownService} from "./dropdown.service";
 
 @Component({
   selector: 'app-header',
@@ -30,7 +31,6 @@ export class HeaderComponent implements OnInit {
   locationsToDisplay: any[] = [];
   startIndex: number = 0;
 
-  locationsWithAvailableEvents: any[] = [];
   showDropdown: boolean = false;
   searchText: string = '';
   searchLocations: any[] = [];
@@ -45,23 +45,29 @@ export class HeaderComponent implements OnInit {
     private headerService: HeaderService,
     private identityService: IdentityService,
     private jwtHandler: JwtHandler,
-    private snackBar: MatSnackBar
-  ) {
-  }
+    private snackBar: MatSnackBar,
+    private dropdownService: DropdownService
+  ) {}
 
   ngOnInit(): void {
+    this.dropdownService.setShowDropdown(false);
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.searchText = '';
+        this.searchLocations = [];
+        this.searchEvents = [];
+        this.searchArtists = [];
+        this.dropdownService.setShowDropdown(false);
+      }
+    });
+    this.dropdownService.showDropdown$.subscribe((showDropdown) => {
+      this.showDropdown = showDropdown;
+      console.log('showDropdown', showDropdown);
+    });
     this.headerService.fetchLocations().subscribe({
       next: (locations: any) => {
         this.locations = locations;
-        this.locationsToDisplay = this.locations.slice(this.startIndex, this.startIndex + 5);
-      },
-      error: (error: any) => {
-        console.error('Error fetching locations', error);
-      }
-    });
-    this.headerService.fetchLocationsWithAvailableEvents().subscribe({
-      next: (locations: any) => {
-        this.locationsWithAvailableEvents = locations;
+        this.locationsToDisplay = this.locations.slice(0, 5);
       },
       error: (error: any) => {
         console.error('Error fetching locations with available events', error);
@@ -99,59 +105,6 @@ export class HeaderComponent implements OnInit {
     }
   }
 
-  onSearchTextChange($event: any) {
-    if (this.searchText.length > 2) {
-      this.filterLocations();
-      this.filterEvents();
-      this.filterArtists();
-      this.showDropdown = true;
-    } else {
-      this.searchLocations = [];
-      this.searchEvents = [];
-      this.searchArtists = [];
-    }
-  }
-
-  filterLocations() {
-    const filteredLocations = this.locationsWithAvailableEvents.filter((location: any) => {
-      return location.name.toLowerCase().includes(this.searchText.toLowerCase());
-    });
-    if (filteredLocations.length > 0) {
-      this.searchLocations = filteredLocations.slice(0, 5);
-    }
-  }
-  filterEvents() {
-    const filteredEvents: any[] = [];
-    this.locationsWithAvailableEvents.forEach((location: any) => {
-      location.eventList.filter((event: any) => {
-        if (event.title.toLowerCase().includes(this.searchText.toLowerCase())) {
-          event['locationName'] = location.name;
-          filteredEvents.push(event);
-        }
-      });
-    });
-    if (filteredEvents.length > 0) {
-      this.searchEvents = filteredEvents.slice(0, 5);
-    }
-  }
-
-  filterArtists() {
-    const filteredArtists: any[] = [];
-    this.locationsWithAvailableEvents.forEach((location: any) => {
-      location.eventList.forEach((event: any) => {
-        event.artistList.filter((artist: any) => {
-          if (artist.name.toLowerCase().includes(this.searchText.toLowerCase())) {
-            if(filteredArtists.find((a: any) => a.id === artist.id) === undefined)
-              filteredArtists.push(artist);
-          }
-        });
-      });
-    });
-    if (filteredArtists.length > 0) {
-      this.searchArtists = filteredArtists.slice(0, 5);
-    }
-  }
-
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent) {
     if (
@@ -162,11 +115,38 @@ export class HeaderComponent implements OnInit {
       this.searchInput.nativeElement &&
       !this.searchInput.nativeElement.contains(event.target)
     ) {
-      this.showDropdown = false;
+      this.dropdownService.setShowDropdown(false);
+    }
+    else if (this.searchLocations.length !== 0 || this.searchEvents.length !== 0 || this.searchArtists.length !== 0) {
+      this.dropdownService.setShowDropdown(true);
     }
   }
-  @HostListener('keydown', ['$event'])
-  onKeydown(event: KeyboardEvent) {
-    this.showDropdown = event.key === 'Enter' && this.searchInput.nativeElement === document.activeElement;
+
+  @HostListener('document:keydown', ['$event'])
+  onDocumentKeydown(event: KeyboardEvent) {
+    if (event.key === 'Enter' && this.searchInput.nativeElement.contains(document.activeElement)) {
+      this.search();
+    }
+  }
+
+  search() {
+    if(this.searchText === '') {
+      return;
+    }
+    this.headerService.search(this.searchText).subscribe({
+      next: (response: any) => {
+        this.searchLocations = response.locationList;
+        this.searchEvents = response.eventList;
+        this.searchArtists = response.artistList;
+        this.dropdownService.setShowDropdown(true);
+      },
+      error: (error: any) => {
+        console.error('Error searching', error);
+      }
+    });
+  }
+
+  getDropdownService() {
+    return this.dropdownService;
   }
 }

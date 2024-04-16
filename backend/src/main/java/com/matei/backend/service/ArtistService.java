@@ -40,7 +40,7 @@ public class ArtistService {
     private final ObjectMapper objectMapper;
 
 
-    public ArtistResponseDto createArtist(ArtistCreationRequestDto artistCreationRequestDto) throws IOException {
+    public ArtistPageWithCountResponseDto createArtist(ArtistCreationRequestDto artistCreationRequestDto, int page, int size) throws IOException {
         artistRepository.findByName(artistCreationRequestDto.getName()).ifPresent(artist -> {
                     throw new ArtistAlreadyExistsException("Artist with name " + artistCreationRequestDto.getName() + " already exists");});
 
@@ -69,7 +69,7 @@ public class ArtistService {
                 })
                 .toList());
 
-        return modelMapper.map(artist, ArtistResponseDto.class);
+        return getAllArtistsPaginatedManage(page, size);
     }
 
     public ArtistResponseDto getArtistById(UUID id) {
@@ -164,10 +164,11 @@ public class ArtistService {
         });
     }
 
-    public void deleteArtistById(UUID id) {
+    public ArtistPageWithCountResponseDto deleteArtistById(UUID id, int page, int size) {
         imageService.deleteImage(artistRepository.findById(id)
                 .orElseThrow(() -> new ArtistNotFoundException("Artist not found")).getImageUrl());
         artistRepository.deleteById(id);
+        return getAllArtistsPaginatedManage(page, size);
     }
 
     public List<Artist> getArtistsByIdList(List<UUID> artistIds) {
@@ -197,5 +198,11 @@ public class ArtistService {
                 .artistPage(artistPage.map(artist -> modelMapper.map(artist, ArtistWithoutEventResponseDto.class)))
                 .count(artistRepository.countFilteredArtists(filter, search))
                 .build();
+    }
+
+    public List<ArtistWithoutEventGenreResponseDto> searchArtists(String query) {
+        return artistRepository.findByNameContainingIgnoreCase(query, PageRequest.of(0, 3)).stream()
+                .map(artist -> modelMapper.map(artist, ArtistWithoutEventGenreResponseDto.class))
+                .toList();
     }
 }

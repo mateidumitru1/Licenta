@@ -3,9 +3,11 @@ package com.matei.backend.controller;
 import com.matei.backend.dto.request.event.EventCreationRequestDto;
 import com.matei.backend.dto.request.event.EventUpdateRequestDto;
 import com.matei.backend.dto.response.event.*;
+import com.matei.backend.dto.response.location.LocationWithEventPageResponseDto;
 import com.matei.backend.entity.User;
 import com.matei.backend.service.EventService;
 import com.matei.backend.service.auth.JwtService;
+import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -23,24 +25,19 @@ import java.util.UUID;
 @RequestMapping("/api/events")
 public class EventController {
     private final EventService eventService;
-    private final JwtService jwtService;
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
-    public ResponseEntity<EventResponseDto> createEvent(@ModelAttribute EventCreationRequestDto eventCreationRequestDto) throws IOException {
-        return ResponseEntity.ok(eventService.createEvent(eventCreationRequestDto));
+    public ResponseEntity<EventPageWithCountResponseDto> createEvent(@ModelAttribute EventCreationRequestDto eventCreationRequestDto,
+                                                                     @PathParam("page") int page,
+                                                                     @PathParam("size") int size) throws IOException {
+        return ResponseEntity.ok(eventService.createEvent(eventCreationRequestDto, page, size));
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/all")
     public ResponseEntity<List<EventWithoutTicketArtistResponseDto>> getAllEvents() {
         return ResponseEntity.ok(eventService.getAllEvents());
-    }
-
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("/all/available")
-    public ResponseEntity<List<EventResponseDto>> getAvailableEvents() {
-        return ResponseEntity.ok(eventService.getAvailableEvents());
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -62,9 +59,10 @@ public class EventController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteEvent(@PathVariable("id") String id) {
-        eventService.deleteEventById(UUID.fromString(id));
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<EventPageWithCountResponseDto> deleteEventById(@PathVariable("id") String id,
+                                                @RequestParam("page") int page,
+                                                @RequestParam("size") int size) {
+        return ResponseEntity.ok(eventService.deleteEventById(UUID.fromString(id), page, size));
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -93,15 +91,15 @@ public class EventController {
     }
 
     @GetMapping("/location/{locationId}/initial")
-    public ResponseEntity<Page<EventWithoutTicketArtistResponseDto>> getInitialEvents(@PathVariable String locationId) {
-        return ResponseEntity.ok(eventService.getInitialEvents(UUID.fromString(locationId)));
+    public ResponseEntity<LocationWithEventPageResponseDto> getLocationWithInitialEvents(@PathVariable String locationId) {
+        return ResponseEntity.ok(eventService.getLocationWithInitialEvents(UUID.fromString(locationId)));
     }
 
     @GetMapping("/location/{locationId}")
-    public ResponseEntity<Page<EventWithoutAllResponseDto>> getMoreRecentEvents(@PathVariable String locationId,
+    public ResponseEntity<Page<EventWithoutAllResponseDto>> getLocationWithMoreEvents(@PathVariable String locationId,
                                                                                 @RequestParam(defaultValue = "1") int page,
                                                                                 @RequestParam(defaultValue = "10") int size) {
-        return ResponseEntity.ok(eventService.getMoreRecentEvents(UUID.fromString(locationId), page, size));
+        return ResponseEntity.ok(eventService.getLocationWithMoreEvents(UUID.fromString(locationId), page, size));
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -136,5 +134,13 @@ public class EventController {
             User user = (User) authentication.getPrincipal();
             return ResponseEntity.ok(eventService.getHomeEvents(user.getId().toString()));
         }
+    }
+
+    @PreAuthorize("hasAuthority('USER')")
+    @GetMapping("/me")
+    public ResponseEntity<List<EventWithoutTicketArtistResponseDto>> getEventsForUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        return ResponseEntity.ok(eventService.getEventsForUser(user.getId()));
     }
 }
