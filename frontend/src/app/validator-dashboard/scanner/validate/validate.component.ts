@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {
   AddEditUserComponent
@@ -7,6 +7,7 @@ import {ValidateService} from "./validate.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {LoadingComponent} from "../../../shared/loading/loading.component";
 import {DatePipe, NgIf} from "@angular/common";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-validate',
@@ -19,22 +20,23 @@ import {DatePipe, NgIf} from "@angular/common";
   templateUrl: './validate.component.html',
   styleUrl: './validate.component.scss'
 })
-export class ValidateComponent implements OnInit{
+export class ValidateComponent implements OnInit, OnDestroy {
+  private ticketSubscription: Subscription | undefined;
+
   ticket: any = {};
 
   constructor(private validateService: ValidateService, public dialogRef: MatDialogRef<ValidateComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any, private snackBar: MatSnackBar) {}
 
-  ngOnInit() {
-    this.validateService.validateTicket(this.data).subscribe({
-      next: (ticket: any) => {
-        this.ticket = ticket;
-        console.log(ticket);
-      },
-      error: (error: any) => {
-        this.snackBar.open(error.error, 'Close', {duration: 3000});
-      }
+  async ngOnInit() {
+    await this.validateService.validateTicket(this.data);
+    this.ticketSubscription = this.validateService.getTicket().subscribe(ticket => {
+      this.ticket = ticket;
     });
+  }
+
+  ngOnDestroy() {
+    this.ticketSubscription?.unsubscribe();
   }
 
   onCloseClick() {

@@ -1,19 +1,39 @@
 import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {apiURL} from "../../../app.config";
-import {JwtHandler} from "../../../identity/jwt.handler";
+import {BehaviorSubject, lastValueFrom} from "rxjs";
+import {IdentityService} from "../../../identity/identity.service";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ManageGenresService {
-  constructor(private http: HttpClient, private jwtHandler: JwtHandler) {}
+  private genreListSubject = new BehaviorSubject<any>({});
 
-  fetchGenres() {
-    return this.http.get(apiURL + '/genres', {
-      headers: {
-        'Authorization': 'Bearer ' + this.jwtHandler.getToken()
-      }
-    });
+  constructor(private http: HttpClient, private identityService: IdentityService, private snackBar: MatSnackBar) {}
+
+  setGenreList(genreList: any) {
+    this.genreListSubject.next(genreList);
+  }
+
+  getGenreList() {
+    return this.genreListSubject.asObservable();
+  }
+
+  async fetchGenres() {
+    try {
+      const genres = await lastValueFrom(this.http.get(apiURL + '/genres', {
+        headers: {
+          'Authorization': 'Bearer ' + this.identityService.getToken()
+        }
+      }));
+      this.setGenreList(genres);
+    }
+    catch (error) {
+      this.snackBar.open('Failed to fetch genres', 'Dismiss', {
+        duration: 3000
+      });
+    }
   }
 }

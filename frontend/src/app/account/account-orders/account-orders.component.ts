@@ -1,10 +1,11 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {AccountOrdersService} from "./account-orders.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {CurrencyPipe, DatePipe, NgForOf, NgIf} from "@angular/common";
 import {RouterLink} from "@angular/router";
 import {MdbCollapseModule} from "mdb-angular-ui-kit/collapse";
 import {MdbDropdownModule} from "mdb-angular-ui-kit/dropdown";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-account-orders',
@@ -21,7 +22,9 @@ import {MdbDropdownModule} from "mdb-angular-ui-kit/dropdown";
   templateUrl: './account-orders.component.html',
   styleUrl: './account-orders.component.scss'
 })
-export class AccountOrdersComponent implements OnInit{
+export class AccountOrdersComponent implements OnInit, OnDestroy {
+  private orderListSubscription: Subscription | undefined;
+
   orders: any[] = [];
   filteredOrders: any[] = [];
   currentPage = 1;
@@ -31,7 +34,6 @@ export class AccountOrdersComponent implements OnInit{
 
   constructor(private accountOrderService: AccountOrdersService, private snackBar: MatSnackBar) {}
 
-  // Define options for the filter dropdown
   filterOptions: any[] = [
     { value: 'last3Months', label: 'Ultimele 3 luni' },
     { value: 'last6Months', label: 'Ultimele 6 luni' },
@@ -39,21 +41,15 @@ export class AccountOrdersComponent implements OnInit{
     { value: 'all', label: 'Toate' }
   ];
 
-  ngOnInit() {
-    this.accountOrderService.fetchOrders().subscribe({
-      next: (orders: any) => {
-        this.orders = orders;
-        this.filteredOrders = this.orders;
-        this.orders.sort((a, b) => {
-          return new Date(b.date).getTime() - new Date(a.date).getTime();
-        });
-      },
-      error: (error: any) => {
-        this.snackBar.open(error.error.message, 'Close', {
-          duration: 3000
-        });
-      }
+  async ngOnInit() {
+    await this.accountOrderService.fetchOrders();
+    this.orderListSubscription = this.orderListSubscription = this.accountOrderService.getOrderList().subscribe(orders => {
+      this.orders = orders;
     });
+  }
+
+  ngOnDestroy() {
+    this.orderListSubscription?.unsubscribe();
   }
 
   get totalPages(): number {
@@ -94,38 +90,6 @@ export class AccountOrdersComponent implements OnInit{
 
   onFilterChange(): void {
     this.currentPage = 1;
-    this.filterOrders();
-  }
-
-  filterOrders(): void {
-    const currentDate = new Date();
-    switch (this.selectedFilter) {
-      case 'last3Months':
-        this.filteredOrders = this.orders.filter(order => {
-          const orderDate = new Date(order.date);
-          const threeMonthsAgo = new Date(currentDate.getFullYear(), currentDate.getMonth() - 3, currentDate.getDate());
-          return orderDate >= threeMonthsAgo;
-        });
-        break;
-      case 'last6Months':
-        this.filteredOrders = this.orders.filter(order => {
-          const orderDate = new Date(order.date);
-          const sixMonthsAgo = new Date(currentDate.getFullYear(), currentDate.getMonth() - 6, currentDate.getDate());
-          return orderDate >= sixMonthsAgo;
-        });
-        break;
-      case 'lastYear':
-        this.filteredOrders = this.orders.filter(order => {
-          const orderDate = new Date(order.date);
-          const oneYearAgo = new Date(currentDate.getFullYear() - 1, currentDate.getMonth(), currentDate.getDate());
-          return orderDate >= oneYearAgo;
-        });
-        break;
-      default:
-        // For 'all', show all orders
-        this.filteredOrders = [...this.orders];
-        break;
-    }
   }
 
   getSelectedFilterLabel(): string {

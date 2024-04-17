@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, HostListener, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, HostListener, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatButton} from "@angular/material/button";
 import {
   MatCell,
@@ -21,6 +21,7 @@ import {AddEditLocationComponent} from "./popups/add-edit-location/add-edit-loca
 import {DeleteComponent} from "../shared/delete/delete.component";
 import {LoadingComponent} from "../../../shared/loading/loading.component";
 import {ActivatedRoute, Router} from "@angular/router";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-manage-locations',
@@ -52,7 +53,9 @@ import {ActivatedRoute, Router} from "@angular/router";
   templateUrl: './manage-locations.component.html',
   styleUrl: './manage-locations.component.scss'
 })
-export class ManageLocationsComponent implements OnInit, AfterViewInit {
+export class ManageLocationsComponent implements OnInit, AfterViewInit, OnDestroy {
+  private locationListSubscription: Subscription | undefined;
+
   dataSource = new MatTableDataSource<any>();
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -82,7 +85,7 @@ export class ManageLocationsComponent implements OnInit, AfterViewInit {
               private router: Router) {}
 
   ngOnInit() {
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe(async (params) => {
       this.pageIndex = params['page'] || 0;
       this.pageSize = params['size'] || 5;
       this.searchValue = params['search'] || '';
@@ -90,40 +93,31 @@ export class ManageLocationsComponent implements OnInit, AfterViewInit {
       this.shouldDisplayRemoveFilterButton = !!(params['filter'] && params['search']);
 
       if(this.searchValue === '' && this.selectedFilterOption === 'name') {
-        this.fetchLocations();
+        await this.fetchLocations();
       }
       else {
-        this.fetchFilteredLocations();
+        await this.fetchFilteredLocations();
       }
+      this.locationListSubscription = this.manageLocationsService.getLocationsListSubject().subscribe((data: any) => {
+        if(data) {
+          this.dataSource.data = data.locationPage.content;
+          this.itemsCount = data.count;
+        }
+      });
     });
   }
 
-  fetchLocations() {
-    this.manageLocationsService.fetchPaginatedLocations(this.pageIndex, this.pageSize).subscribe({
-      next: (response: any) => {
-        this.dataSource.data = response.locationPage.content;
-        this.itemsCount = response.count;
-      },
-      error: (error: any) => {
-        this.snackBar.open('Error fetching locations', 'Close', {
-          duration: 3000
-        });
-      }
-    });
+  async fetchLocations() {
+    await this.manageLocationsService.fetchPaginatedLocations(this.pageIndex, this.pageSize);
+
   }
 
-  fetchFilteredLocations() {
-    this.manageLocationsService.fetchPaginatedLocationsFiltered(this.pageIndex, this.pageSize, this.selectedFilterOption, this.searchValue).subscribe({
-      next: (response: any) => {
-        this.dataSource.data = response.locationPage.content;
-        this.itemsCount = response.count;
-      },
-      error: (error: any) => {
-        this.snackBar.open('Error fetching locations', 'Close', {
-          duration: 3000
-        });
-      }
-    });
+  async fetchFilteredLocations() {
+    await this.manageLocationsService.fetchPaginatedLocationsFiltered(this.pageIndex, this.pageSize, this.selectedFilterOption, this.searchValue);
+  }
+
+  ngOnDestroy() {
+    this.locationListSubscription?.unsubscribe();
   }
 
   ngAfterViewInit() {
@@ -173,22 +167,9 @@ export class ManageLocationsComponent implements OnInit, AfterViewInit {
         title: 'Adauga locatie'
       }
     });
-    dialogRef.afterClosed().subscribe((location: any) => {
+    dialogRef.afterClosed().subscribe(async (location: any) => {
       if(location) {
-        this.manageLocationsService.addLocation(location, this.pageIndex, this.pageSize).subscribe({
-          next: (response: any) => {
-            this.dataSource.data = response.locationPage.content;
-            this.itemsCount = response.count
-            this.snackBar.open('Location added successfully', 'Close', {
-              duration: 3000
-            });
-          },
-          error: (error: any) => {
-            this.snackBar.open('Error adding location', 'Close', {
-              duration: 3000
-            });
-          }
-        });
+        await this.manageLocationsService.addLocation(location, this.pageIndex, this.pageSize);
       }
     });
   }
@@ -201,26 +182,9 @@ export class ManageLocationsComponent implements OnInit, AfterViewInit {
         title: 'Modifica locatia'
       }
     });
-    dialogRef.afterClosed().subscribe((location: any) => {
+    dialogRef.afterClosed().subscribe(async (location: any) => {
       if (location) {
-        this.manageLocationsService.editLocation(location).subscribe({
-          next: (response: any) => {
-            this.dataSource.data = this.dataSource.data.map((data: any) => {
-              if (data.id === location.id) {
-                return location;
-              }
-              return data;
-            });
-            this.snackBar.open('Location edited successfully', 'Close', {
-              duration: 3000
-            });
-          },
-          error: (error: any) => {
-            this.snackBar.open('Error editing location', 'Close', {
-              duration: 3000
-            });
-          }
-        });
+        await this.manageLocationsService.editLocation(location);
       }
     });
   }
@@ -229,31 +193,12 @@ export class ManageLocationsComponent implements OnInit, AfterViewInit {
     let dialogRef = this.dialog.open(DeleteComponent, {
       width: '30%'
     });
-    dialogRef.afterClosed().subscribe((result: any) => {
+    dialogRef.afterClosed().subscribe(async (result: any) => {
       if(result) {
-        this.manageLocationsService.deleteLocation(this.rowData.id, this.pageIndex, this.pageSize).subscribe({
-          next: (response: any) => {
-            if(response.locationPage.content.length === 0) {
-              this.router.navigate([], {
-                relativeTo: this.route,
-                queryParams: { page: this.pageIndex - 1, size: this.pageSize },
-                queryParamsHandling: 'merge'
-              });
-            }
-            else {
-              this.dataSource.data = response.locationPage.content;
-              this.itemsCount = response.count
-            }
-            this.snackBar.open('Location deleted', 'Close', {
-              duration: 3000
-            });
-          },
-          error: (error: any) => {
-            this.snackBar.open('Error deleting location', 'Close', {
-              duration: 3000
-            });
-          }
-        });
+        await this.manageLocationsService.deleteLocation(this.rowData.id, this.pageIndex, this.pageSize);
+        if (this.dataSource.data.length === 0 && this.pageIndex > 0) {
+          this.paginator.previousPage();
+        }
       }
     });
   }

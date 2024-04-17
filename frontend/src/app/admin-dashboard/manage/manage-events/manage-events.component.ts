@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, HostListener, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, HostListener, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormsModule} from "@angular/forms";
 import {MatButton} from "@angular/material/button";
 import {
@@ -23,6 +23,7 @@ import {DeleteComponent} from "../shared/delete/delete.component";
 import {LoadingComponent} from "../../../shared/loading/loading.component";
 import {ActivatedRoute, Router} from "@angular/router";
 import {parse} from "date-fns";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-manage-events',
@@ -54,7 +55,9 @@ import {parse} from "date-fns";
   templateUrl: './manage-events.component.html',
   styleUrl: './manage-events.component.scss'
 })
-export class ManageEventsComponent implements OnInit, AfterViewInit {
+export class ManageEventsComponent implements OnInit, AfterViewInit, OnDestroy {
+  private eventListSubscription: Subscription | undefined;
+
   dataSource = new MatTableDataSource<any>();
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -79,13 +82,13 @@ export class ManageEventsComponent implements OnInit, AfterViewInit {
     location: 'Locatie'
   };
 
-  constructor(private dialog: MatDialog, private snackBar: MatSnackBar,
+  constructor(private dialog: MatDialog,
               private manageEventsService: ManageEventsService,
               private route: ActivatedRoute,
               private router: Router) {}
 
   ngOnInit() {
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe(async (params) => {
       this.pageIndex = params['page'] || 0;
       this.pageSize = params['size'] || 5;
       this.searchValue = params['search'] || '';
@@ -93,40 +96,28 @@ export class ManageEventsComponent implements OnInit, AfterViewInit {
       this.shouldDisplayRemoveFilterButton = !!(params['filter'] && params['search']);
 
       if(this.searchValue === '' && this.selectedFilterOption === 'title') {
-        this.fetchEvents();
+        await this.fetchEvents();
       }
       else {
-        this.fetchFilteredEvents();
+        await this.fetchFilteredEvents();
       }
+      this.eventListSubscription = this.manageEventsService.getEventsListSubject().subscribe((response: any) => {
+        this.dataSource.data = response.eventPage.content;
+        this.itemsCount = response.count;
+      });
     });
   }
 
-  fetchEvents() {
-    this.manageEventsService.fetchPaginatedEvents(this.pageIndex, this.pageSize).subscribe({
-      next: (response: any) => {
-        this.dataSource.data = response.eventPage.content;
-        this.itemsCount = response.count;
-      },
-      error: (error: any) => {
-        this.snackBar.open(error.error, 'Close', {
-          duration: 3000
-        });
-      }
-    });
+  async fetchEvents() {
+    await this.manageEventsService.fetchPaginatedEvents(this.pageIndex, this.pageSize);
   }
 
-  fetchFilteredEvents() {
-    this.manageEventsService.fetchPaginatedEventsFiltered(this.pageIndex, this.pageSize, this.selectedFilterOption, this.searchValue).subscribe({
-      next: (response: any) => {
-        this.dataSource.data = response.eventPage.content;
-        this.itemsCount = response.count;
-      },
-      error: (error: any) => {
-        this.snackBar.open(error.error, 'Close', {
-          duration: 3000
-        });
-      }
-    });
+  async fetchFilteredEvents() {
+    await this.manageEventsService.fetchPaginatedEventsFiltered(this.pageIndex, this.pageSize, this.selectedFilterOption, this.searchValue);
+  }
+
+  ngOnDestroy() {
+    this.eventListSubscription?.unsubscribe();
   }
 
   ngAfterViewInit() {
@@ -185,19 +176,10 @@ export class ManageEventsComponent implements OnInit, AfterViewInit {
       },
       disableClose: true
     });
-    dialogRef.afterClosed().subscribe((event: any) => {
+    dialogRef.afterClosed().subscribe(async (event: any) => {
       if(event) {
         event.ticketTypesList = JSON.stringify(event.ticketTypesList);
-        this.manageEventsService.addEvent(event, this.pageIndex, this.pageSize).subscribe({
-          next: (response: any) => {
-            this.dataSource.data = response.eventPage.content;
-            this.itemsCount = response.count;
-            this.snackBar.open('Eveniment adaugat cu succes', 'Inchide', {duration: 3000});
-          },
-          error: (error: any) => {
-            this.snackBar.open('A aparut o eroare la adaugarea evenimentului', 'Inchide', {duration: 3000});
-          }
-        });
+        await this.manageEventsService.addEvent(event, this.pageIndex, this.pageSize);
       }
     });
   }
@@ -212,22 +194,9 @@ export class ManageEventsComponent implements OnInit, AfterViewInit {
       },
       disableClose: true
     });
-    dialogRef.afterClosed().subscribe((event: any) => {
+    dialogRef.afterClosed().subscribe(async (event: any) => {
       if(event) {
-        this.manageEventsService.updateEvent(event).subscribe({
-          next: (event: any) => {
-            this.dataSource.data = this.dataSource.data.map((e: any) => {
-              if(e.id === event.id) {
-                return event;
-              }
-              return e;
-            });
-            this.snackBar.open('Eveniment modificat cu succes', 'Inchide', {duration: 3000});
-          },
-          error: (error: any) => {
-            this.snackBar.open('A aparut o eroare la modificarea evenimentului', 'Inchide', {duration: 3000});
-          }
-        });
+        await this.manageEventsService.updateEvent(event);
       }
     });
 
@@ -237,27 +206,12 @@ export class ManageEventsComponent implements OnInit, AfterViewInit {
     let dialogRef = this.dialog.open(DeleteComponent, {
       width: '30%'
     });
-    dialogRef.afterClosed().subscribe((result: any) => {
+    dialogRef.afterClosed().subscribe(async (result: any) => {
       if(result) {
-        this.manageEventsService.deleteEvent(this.rowData.id, this.pageIndex, this.pageSize).subscribe({
-          next: (response: any) => {
-            if(response.eventPage.content.length === 0) {
-              this.router.navigate([], {
-                relativeTo: this.route,
-                queryParams: { page: this.pageIndex - 1, size: this.pageSize },
-                queryParamsHandling: 'merge'
-              });
-            }
-            else {
-              this.dataSource.data = response.eventPage.content;
-              this.itemsCount = response.count;
-            }
-            this.snackBar.open('Eveniment sters cu succes', 'Inchide', {duration: 3000});
-          },
-          error: (error: any) => {
-            this.snackBar.open('A aparut o eroare la stergerea evenimentului', 'Inchide', {duration: 3000});
-          }
-        });
+        await this.manageEventsService.deleteEvent(this.rowData.id, this.pageIndex, this.pageSize);
+        if (this.dataSource.data.length === 0 && this.pageIndex > 0) {
+          this.paginator.previousPage();
+        }
       }
     });
   }

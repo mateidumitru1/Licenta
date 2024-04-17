@@ -1,8 +1,9 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {AccountOrdersService} from "../account-orders.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {DatePipe, NgClass, NgForOf, NgIf} from "@angular/common";
 import {ActivatedRoute, RouterLink} from "@angular/router";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-account-order-details',
@@ -17,65 +18,30 @@ import {ActivatedRoute, RouterLink} from "@angular/router";
   templateUrl: './account-order-details.component.html',
   styleUrl: './account-order-details.component.scss'
 })
-export class AccountOrderDetailsComponent implements OnInit{
+export class AccountOrderDetailsComponent implements OnInit, OnDestroy {
+  private orderSubscription: Subscription | undefined;
 
   order: any = {};
 
   constructor(private accountOrderService: AccountOrdersService, private snackBar: MatSnackBar, private route: ActivatedRoute) {}
 
-  ngOnInit() {
+  async ngOnInit() {
     const orderNumber = Number(this.route.snapshot.url[this.route.snapshot.url.length - 1].path);
-    this.accountOrderService.fetchOrderByOrderNumber(orderNumber).subscribe({
-      next: (order: any) => {
-        this.order = order;
-        console.log(order)
-        this.order.ticketList.forEach((ticket: any) => {
-          if(ticket.ticketType.event === null) {
-            ticket.ticketType.event = {
-              title: 'Evenimentul a fost sters',
-              date: '',
-              location: {name: ''}
-            }
-          }
-        });
-      },
-      error: (error: any) => {
-        this.snackBar.open(error.error, 'Close', {
-          duration: 3000
-        });
-      }
+    await this.accountOrderService.fetchOrderByOrderNumber(orderNumber);
+    this.orderSubscription = this.accountOrderService.getOrder().subscribe(order => {
+      this.order = order;
     });
   }
 
-  cancelTicket(ticket: any) {
-    this.accountOrderService.cancelTicket(ticket).subscribe({
-      next: () => {
-        ticket.status = 'CANCELED'
-        this.snackBar.open('Biletul a fost anulat cu succes!', 'Close', {
-          duration: 3000
-        });
-      },
-      error: (error: any) => {
-        this.snackBar.open(error.error, 'Close', {
-          duration: 3000
-        });
-      }
-    });
+  ngOnDestroy() {
+    this.orderSubscription?.unsubscribe();
   }
 
-  cancelOrder() {
-    this.accountOrderService.cancelOrder(this.order).subscribe({
-      next: () => {
-        this.order.status = 'CANCELED'
-        this.snackBar.open('Comanda a fost anulata cu succes', 'Close', {
-          duration: 3000
-        });
-      },
-      error: (error: any) => {
-        this.snackBar.open(error.error, 'Close', {
-          duration: 3000
-        });
-      }
-    });
+  async cancelTicket(ticket: any) {
+    await this.accountOrderService.cancelTicket(ticket);
+  }
+
+  async cancelOrder() {
+    await this.accountOrderService.cancelOrder(this.order);
   }
 }

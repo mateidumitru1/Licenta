@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, HostListener, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, HostListener, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormsModule} from "@angular/forms";
 import {LoadingComponent} from "../../../shared/loading/loading.component";
 import {LocationNamePipe} from "../../../util/pipes/location-name.pipe";
@@ -23,6 +23,7 @@ import {ManageArtistsService} from "./manage-artists.service";
 import {AddEditArtistComponent} from "./popups/add-edit-artist/add-edit-artist.component";
 import {GenreListNamesPipe} from "../../../util/pipes/genre-list-names.pipe";
 import {ActivatedRoute, Router} from "@angular/router";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-manage-artists',
@@ -55,7 +56,9 @@ import {ActivatedRoute, Router} from "@angular/router";
   templateUrl: './manage-artists.component.html',
   styleUrl: './manage-artists.component.scss'
 })
-export class ManageArtistsComponent implements OnInit, AfterViewInit {
+export class ManageArtistsComponent implements OnInit, AfterViewInit, OnDestroy {
+  private artistSubscription: Subscription | undefined;
+
   dataSource = new MatTableDataSource<any>();
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -79,13 +82,13 @@ export class ManageArtistsComponent implements OnInit, AfterViewInit {
     genreList: 'Gen',
   };
 
-  constructor(private dialog: MatDialog, private snackBar: MatSnackBar,
+  constructor(private dialog: MatDialog,
               private manageArtistsService: ManageArtistsService,
               private route: ActivatedRoute,
               private router: Router) {}
 
   ngOnInit() {
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe(async (params) => {
       this.pageIndex = params['page'] || 0;
       this.pageSize = params['size'] || 5;
       this.searchValue = params['search'] || '';
@@ -93,40 +96,30 @@ export class ManageArtistsComponent implements OnInit, AfterViewInit {
       this.shouldDisplayRemoveFilterButton = !!(params['filter'] && params['search']);
 
       if (this.searchValue === '' && this.selectedFilterOption === 'name') {
-        this.fetchArtists();
+        await this.fetchArtists();
       }
       else {
-        this.fetchFilteredArtists();
+        await this.fetchFilteredArtists();
       }
+      this.artistSubscription = this.manageArtistsService.getArtistListSubject().subscribe({
+        next: (response: any) => {
+          this.dataSource.data = response.artistPage.content;
+          this.itemsCount = response.count;
+        }
+      });
     });
   }
 
-  fetchArtists() {
-    this.manageArtistsService.fetchPaginatedArtists(this.pageIndex, this.pageSize).subscribe({
-      next: (response: any) => {
-        this.dataSource.data = response.artistPage.content;
-        this.itemsCount = response.count;
-      },
-      error: (error: any) => {
-        this.snackBar.open(error.error, 'Close', {
-          duration: 3000
-        });
-      }
-    });
+  async fetchArtists() {
+    await this.manageArtistsService.fetchPaginatedArtists(this.pageIndex, this.pageSize);
   }
 
-  fetchFilteredArtists() {
-    this.manageArtistsService.fetchPaginatedArtistsFiltered(this.pageIndex, this.pageSize, this.searchValue, this.selectedFilterOption).subscribe({
-      next: (response: any) => {
-        this.dataSource.data = response.artistPage.content;
-        this.itemsCount = response.count;
-      },
-      error: (error: any) => {
-        this.snackBar.open('Error fetching artists', 'Close', {
-          duration: 3000
-        });
-      }
-    });
+  async fetchFilteredArtists() {
+    await this.manageArtistsService.fetchPaginatedArtistsFiltered(this.pageIndex, this.pageSize, this.searchValue, this.selectedFilterOption);
+  }
+
+  ngOnDestroy() {
+    this.artistSubscription?.unsubscribe();
   }
 
   ngAfterViewInit() {
@@ -177,19 +170,10 @@ export class ManageArtistsComponent implements OnInit, AfterViewInit {
       },
       disableClose: true
     });
-    dialogRef.afterClosed().subscribe((artist: any) => {
+    dialogRef.afterClosed().subscribe(async (artist: any) => {
       if(artist) {
         artist.genreList = JSON.stringify(artist.genreList);
-        this.manageArtistsService.addArtist(artist, this.pageIndex, this.pageSize).subscribe({
-          next: (response: any) => {
-            this.dataSource.data = response.artistPage.content;
-            this.itemsCount = response.count
-            this.snackBar.open('Artist adaugat cu succes', 'Inchide', {duration: 3000});
-          },
-          error: (error: any) => {
-            this.snackBar.open('A aparut o eroare la adaugarea artistului', 'Inchide', {duration: 3000});
-          }
-        });
+        await this.manageArtistsService.addArtist(artist, this.pageIndex, this.pageSize);
       }
     });
   }
@@ -203,22 +187,9 @@ export class ManageArtistsComponent implements OnInit, AfterViewInit {
       },
       disableClose: true
     });
-    dialogRef.afterClosed().subscribe((artist: any) => {
+    dialogRef.afterClosed().subscribe(async (artist: any) => {
       if(artist) {
-        this.manageArtistsService.updateArtist(artist).subscribe({
-          next: (artist: any) => {
-            this.dataSource.data = this.dataSource.data.map((a: any) => {
-              if(a.id === artist.id) {
-                return artist;
-              }
-              return a;
-            });
-            this.snackBar.open('Artist modificat cu succes', 'Inchide', {duration: 3000});
-          },
-          error: (error: any) => {
-            this.snackBar.open('A aparut o eroare la modificarea artistului', 'Inchide', {duration: 3000});
-          }
-        });
+        await this.manageArtistsService.updateArtist(artist);
       }
     });
   }
@@ -227,27 +198,12 @@ export class ManageArtistsComponent implements OnInit, AfterViewInit {
     let dialogRef = this.dialog.open(DeleteComponent, {
       width: '30%'
     });
-    dialogRef.afterClosed().subscribe((result: any) => {
+    dialogRef.afterClosed().subscribe(async (result: any) => {
       if(result) {
-        this.manageArtistsService.deleteArtist(this.rowData.id, this.pageIndex, this.pageSize).subscribe({
-          next: (response: any) => {
-            if(response.artistPage.content.length === 0) {
-              this.router.navigate([], {
-                relativeTo: this.route,
-                queryParams: { page: this.pageIndex - 1, size: this.pageSize },
-                queryParamsHandling: 'merge'
-              });
-            }
-            else {
-              this.dataSource.data = response.artistPage.content;
-              this.itemsCount = response.count
-            }
-            this.snackBar.open('Artist sters cu succes', 'Inchide', {duration: 3000});
-          },
-          error: (error: any) => {
-            this.snackBar.open('A aparut o eroare la stergerea artistului', 'Inchide', {duration: 3000});
-          }
-        });
+        await this.manageArtistsService.deleteArtist(this.rowData.id, this.pageIndex, this.pageSize);
+        if (this.dataSource.data.length === 0 && this.pageIndex > 0) {
+          this.paginator.previousPage();
+        }
       }
     });
   }

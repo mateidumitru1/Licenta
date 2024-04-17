@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormsModule} from "@angular/forms";
 import {MatDialogRef} from "@angular/material/dialog";
 import {MatSnackBar} from "@angular/material/snack-bar";
-import {ManageEventsService} from "../../manage/manage-events/manage-events.service";
 import {NgClass, NgForOf, NgIf} from "@angular/common";
 import {LoadingComponent} from "../../../shared/loading/loading.component";
+import {HomeAdminService} from "../home-admin.service";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-add-top-event',
@@ -19,23 +20,25 @@ import {LoadingComponent} from "../../../shared/loading/loading.component";
   templateUrl: './add-selected-event.component.html',
   styleUrl: './add-selected-event.component.scss'
 })
-export class AddSelectedEventComponent implements OnInit {
+export class AddSelectedEventComponent implements OnInit, OnDestroy {
+  private eventListSubscription: Subscription | undefined;
+
   eventList: any[] = [];
   filteredEventList: any[] = [];
   searchText: string = '';
 
-  constructor(private manageEventsService: ManageEventsService, private snackBar: MatSnackBar, private dialogRef: MatDialogRef<AddSelectedEventComponent>) {}
+  constructor(private homeAdminService: HomeAdminService, private snackBar: MatSnackBar, private dialogRef: MatDialogRef<AddSelectedEventComponent>) {}
 
-  ngOnInit() {
-    this.manageEventsService.fetchEventForSelection().subscribe({
-      next: (eventList: any) => {
-        this.eventList = eventList.map((event: any) => ({...event, toBeSelected: false}));
-        this.filteredEventList = [...this.eventList];
-      },
-      error: (error: any) => {
-        this.snackBar.open('Error fetching events', 'Close', { duration: 3000 });
-      }
+  async ngOnInit() {
+    await this.homeAdminService.fetchEventListForSelection();
+    this.eventListSubscription = this.homeAdminService.getEventListForSelection().subscribe((eventList: any) => {
+      this.eventList = eventList;
+      this.filteredEventList = eventList;
     });
+  }
+
+  ngOnDestroy() {
+    this.eventListSubscription?.unsubscribe();
   }
 
   searchEvent() {

@@ -1,8 +1,9 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {NgForOf, NgIf} from "@angular/common";
 import {ShoppingCartService} from "./shopping-cart.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-shopping-cart',
@@ -16,20 +17,22 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
   templateUrl: './shopping-cart.component.html',
   styleUrl: './shopping-cart.component.scss'
 })
-export class ShoppingCartComponent implements OnInit{
+export class ShoppingCartComponent implements OnInit, OnDestroy  {
+  private shoppingCartSubscription: Subscription | undefined;
+
   shoppingCart: any = {};
 
   constructor(private shoppingCartService: ShoppingCartService, private snackBar: MatSnackBar) {}
 
-  ngOnInit() {
-    this.shoppingCartService.fetchShoppingCart().subscribe({
-      next: (shoppingCart) => {
-        this.shoppingCart = shoppingCart;
-      },
-      error: (error) => {
-        this.snackBar.open('Error while fetching shopping cart', 'Dismiss', {duration: 3000});
-      }
+  async ngOnInit() {
+    await this.shoppingCartService.fetchShoppingCart();
+    this.shoppingCartSubscription = this.shoppingCartService.getShoppingCart().subscribe((shoppingCart) => {
+      this.shoppingCart = shoppingCart;
     });
+  }
+
+  ngOnDestroy() {
+    this.shoppingCartSubscription?.unsubscribe();
   }
 
   generateQuantityList(currentQuantity: number): number[] {
@@ -43,43 +46,17 @@ export class ShoppingCartComponent implements OnInit{
   }
 
 
-  onQuantityChange(event: any, shoppingCartItem: any) {
+  async onQuantityChange(event: any, shoppingCartItem: any) {
     shoppingCartItem.quantity = event.target.value;
-    this.shoppingCartService.updateQuantity(shoppingCartItem)?.subscribe({
-      next: (shoppingCart) => {
-        this.shoppingCart = shoppingCart;
-        this.snackBar.open('Quantity updated!', 'Dismiss', {duration: 3000});
-      },
-      error: error => {
-        this.snackBar.open('Error while updating quantity', 'Dismiss', {duration: 3000});
-      }
-    });
+    await this.shoppingCartService.updateQuantity(shoppingCartItem);
   }
 
 
-  removeFromCart(shoppingCartItem: any) {
-    this.shoppingCartService.removeTicketFromShoppingCart(shoppingCartItem.ticketType)?.subscribe({
-      next: (shoppingCart) => {
-        this.shoppingCart = shoppingCart;
-        this.shoppingCartService.setShoppingCartLength(this.shoppingCart.shoppingCartItemList.length);
-        this.snackBar.open('Ticket removed from shopping cart!', 'Dismiss', {duration: 3000});
-      },
-      error: (error) => {
-        this.snackBar.open('Error while removing ticket from shopping cart', 'Dismiss', {duration: 3000});
-      }
-    });
+  async removeFromCart(shoppingCartItem: any) {
+    await this.shoppingCartService.removeTicketFromShoppingCart(shoppingCartItem.ticketType);
   }
 
-  onBuyClick() {
-    this.shoppingCartService.buyTickets()?.subscribe({
-      next: () => {
-        this.shoppingCartService.setShoppingCartLength(0);
-        this.snackBar.open('Tickets reserved!', 'Dismiss', {duration: 3000});
-      },
-      error: error => {
-        this.snackBar.open('Error while reserving tickets', 'Dismiss', {duration: 3000});
-      }
-    });
-    this.shoppingCart.shoppingCartItemList = [];
+  async onBuyClick() {
+    await this.shoppingCartService.buyTickets();
   }
 }

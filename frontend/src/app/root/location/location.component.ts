@@ -1,9 +1,10 @@
-import {Component, HostListener, OnInit} from '@angular/core';
+import {Component, HostListener, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, NavigationStart, Router, RouterLink} from "@angular/router";
 import {LocationService} from "./location.service";
 import {NgForOf, NgIf} from "@angular/common";
 import {LoadingComponent} from "../../shared/loading/loading.component";
 import {LoadingService} from "../../shared/loading/loading.service";
+import {debounceTime, Subscription} from "rxjs";
 
 @Component({
   selector: 'app-location',
@@ -17,7 +18,11 @@ import {LoadingService} from "../../shared/loading/loading.service";
   templateUrl: './location.component.html',
   styleUrl: './location.component.scss'
 })
-export class LocationComponent implements OnInit{
+export class LocationComponent implements OnInit, OnDestroy {
+  private locationSubscription: Subscription | undefined;
+  private loadingSubscription: Subscription | undefined;
+  private moreEventsSubscription: Subscription | undefined;
+
   location: any = {};
   events: any = [];
   page = 0;
@@ -33,7 +38,7 @@ export class LocationComponent implements OnInit{
   ) {}
 
   ngOnInit(): void {
-    this.loadingService.loading$.subscribe(loading => {
+    this.loadingSubscription = this.loadingService.loading$.subscribe(loading => {
       setTimeout(() => {
         this.loading = loading;
       }, 0);
@@ -46,57 +51,56 @@ export class LocationComponent implements OnInit{
       }
     });
 
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe(async (params) => {
       const locationId = params['id'];
       if (!locationId) {
-        this.router.navigate(['/page-not-found']);
+        await this.router.navigate(['/page-not-found']);
         return;
       }
 
-      this.locationService.fetchLocationWithInitialEventsByLocationId(locationId, this.page, this.size).subscribe({
-        next: (location: any) => {
-          if (location.eventPage.content.length < this.size) {
-            this.reachedEnd = true;
-          }
-          this.location = location;
-          this.events = location.eventPage.content;
-          this.page++;
-        },
-        error: (error: any) => {
-          this.router.navigate(['/page-not-found']);
+      await this.locationService.fetchLocationWithInitialEventsByLocationId(locationId, this.page, this.size);
+      this.locationSubscription = this.locationService.getLocation().subscribe((location: any) => {
+        this.location = location;
+        this.events = location.eventPage?.content;
+        this.page++;
+        if (this.events?.length < this.size) {
+          this.reachedEnd = true;
         }
       });
     });
   }
 
+  ngOnDestroy() {
+    this.loadingSubscription?.unsubscribe();
+    this.locationSubscription?.unsubscribe();
+    this.moreEventsSubscription?.unsubscribe();
+  }
+
   @HostListener('window:scroll', ['$event'])
-  onWindowScroll(event: any): void {
+  async onWindowScroll() {
     const bottomOffset = 20;
     const windowHeight = window.innerHeight;
     const scrollHeight = document.documentElement.scrollHeight;
     const scrollTop = window.scrollY;
 
     if (!this.reachedEnd && !this.loading && scrollTop + windowHeight >= scrollHeight - bottomOffset) {
-      this.loadMoreEvents();
+      await this.loadMoreEvents();
     }
   }
 
-  loadMoreEvents(): void {
-    this.locationService.fetchMoreEventsByLocationId(this.location.id, this.page, this.size).subscribe({
-      next: (events: any) => {
-        if (events.content.length < 10) {
+  async loadMoreEvents() {
+    await this.locationService.fetchMoreEventsByLocationId(this.location.id, this.page, this.size);
+
+    this.moreEventsSubscription = this.locationService.getMoreEvents().pipe(
+      debounceTime(10)
+    ).subscribe((events: any) => {
+      if (events.content) {
+        if (events.content?.length < this.size) {
           this.reachedEnd = true;
         }
         this.events = [...this.events, ...events.content];
         this.page++;
-      },
-      error: (error: any) => {
-        console.error('Error loading more events:', error);
       }
     });
-  }
-
-  scrollToTop(): void {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 }

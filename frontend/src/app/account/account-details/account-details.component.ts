@@ -1,7 +1,7 @@
-import {AfterViewInit, Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {AccountDetailsService} from "./account-details.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
-import {Router, RouterLink} from "@angular/router";
+import {RouterLink} from "@angular/router";
 import {DatePipe, NgForOf} from "@angular/common";
 import {MatDialog} from "@angular/material/dialog";
 import {EditAccountDetailsComponent} from "./edit-account-details/edit-account-details.component";
@@ -9,6 +9,7 @@ import {
   ChangePasswordAccountDetailsComponent
 } from "./change-password-account-details/change-password-account-details.component";
 import {Chart, ChartConfiguration} from "chart.js";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-account-details',
@@ -21,28 +22,49 @@ import {Chart, ChartConfiguration} from "chart.js";
   templateUrl: './account-details.component.html',
   styleUrl: './account-details.component.scss'
 })
-export class AccountDetailsComponent implements OnInit, AfterViewInit {
+export class AccountDetailsComponent implements OnInit, OnDestroy {
+  private userSubscription: Subscription | undefined;
+
   user: any = {};
   orderList: any = [];
 
-  constructor(private accountDetailsService: AccountDetailsService, private snackBar: MatSnackBar, private router: Router,
-              private dialog: MatDialog) { }
-  ngOnInit() {
-    this.accountDetailsService.fetchUser().subscribe({
-      next: (user: any) => {
-        this.user = user;
-        this.orderList = user.orderList.sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 4);
-        this.createPieChart();
-      },
-      error: (error: any) => {
-        this.snackBar.open(error.error, 'Close', {
-          duration: 3000
-        });
+  constructor(private accountDetailsService: AccountDetailsService, private snackBar: MatSnackBar,
+              private dialog: MatDialog) {}
+
+  async ngOnInit() {
+    await this.accountDetailsService.fetchUser();
+    this.userSubscription = this.accountDetailsService.getUser().subscribe((user: any) => {
+      this.user = user;
+      this.orderList = this.user.orderList.sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).slice(0, 5);
+      this.createPieChart();
+    });
+  }
+
+  ngOnDestroy() {
+    this.userSubscription?.unsubscribe();
+  }
+
+  onEditClick() {
+    let dialogRef = this.dialog.open(EditAccountDetailsComponent, {
+      width: '60%',
+      data: this.user
+    });
+    dialogRef.afterClosed().subscribe(async (result: any) => {
+      if (result) {
+        await this.accountDetailsService.editUser(result);
       }
     });
   }
 
-  ngAfterViewInit() {
+  onChangePasswordClick() {
+    let dialogRef = this.dialog.open(ChangePasswordAccountDetailsComponent, {
+      width: '60%',
+    });
+    dialogRef.afterClosed().subscribe(async (result: any) => {
+      if (result) {
+        await this.accountDetailsService.changePassword(result);
+      }
+    });
   }
 
   createPieChart() {
@@ -54,13 +76,45 @@ export class AccountDetailsComponent implements OnInit, AfterViewInit {
           'rgba(255, 99, 132, 0.6)',
           'rgba(54, 162, 235, 0.6)',
           'rgba(255, 206, 86, 0.6)',
-          'rgba(75, 192, 192, 0.6)'
+          'rgba(75, 192, 192, 0.6)',
+          'rgba(153, 102, 255, 0.6)',
+          'rgba(255, 159, 64, 0.6)',
+          'rgba(201, 203, 207, 0.6)',
+          'rgba(34, 43, 243, 0.6)',
+          'rgba(120, 221, 45, 0.6)',
+          'rgba(255, 140, 0, 0.6)',
+          'rgba(0, 128, 128, 0.6)',
+          'rgba(128, 0, 128, 0.6)',
+          'rgba(255, 215, 0, 0.6)',
+          'rgba(255, 192, 203, 0.6)',
+          'rgba(0, 0, 255, 0.6)',
+          'rgba(128, 128, 0, 0.6)',
+          'rgba(0, 128, 0, 0.6)',
+          'rgba(255, 0, 0, 0.6)',
+          'rgba(0, 255, 0, 0.6)',
+          'rgba(0, 0, 128, 0.6)'
         ],
         borderColor: [
           'rgba(255, 99, 132, 1)',
           'rgba(54, 162, 235, 1)',
           'rgba(255, 206, 86, 1)',
-          'rgba(75, 192, 192, 1)'
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)',
+          'rgba(201, 203, 207, 1)',
+          'rgba(34, 43, 243, 1)',
+          'rgba(120, 221, 45, 1)',
+          'rgba(255, 140, 0, 1)',
+          'rgba(0, 128, 128, 1)',
+          'rgba(128, 0, 128, 1)',
+          'rgba(255, 215, 0, 1)',
+          'rgba(255, 192, 203, 1)',
+          'rgba(0, 0, 255, 1)',
+          'rgba(128, 128, 0, 1)',
+          'rgba(0, 128, 0, 1)',
+          'rgba(255, 0, 0, 1)',
+          'rgba(0, 255, 0, 1)',
+          'rgba(0, 0, 128, 1)'
         ],
         borderWidth: 1
       }]
@@ -82,47 +136,5 @@ export class AccountDetailsComponent implements OnInit, AfterViewInit {
 
     const ctx = document.getElementById('genrePieChart') as HTMLCanvasElement;
     const myPieChart = new Chart(ctx, config);
-  }
-
-  onEditClick() {
-    let dialogRef = this.dialog.open(EditAccountDetailsComponent, {
-      width: '60%',
-      data: this.user
-    });
-    dialogRef.afterClosed().subscribe((result: any) => {
-      if (result) {
-        this.accountDetailsService.editUser(result).subscribe({
-          next: (user: any) => {
-            this.user = user;
-            this.snackBar.open('Informatiile contului au fost modificate', 'Close', {
-              duration: 3000
-            });
-          },
-          error: (error: any) => {
-            this.snackBar.open(error.error, 'Close', {duration: 3000});
-          }
-        });
-      }
-    });
-  }
-
-  onChangePasswordClick() {
-    let dialogRef = this.dialog.open(ChangePasswordAccountDetailsComponent, {
-      width: '60%',
-    });
-    dialogRef.afterClosed().subscribe((result: any) => {
-      if (result) {
-        this.accountDetailsService.changePassword(result).subscribe({
-          next: () => {
-            this.snackBar.open('Parola a fost schimbata', 'Close', {
-              duration: 3000
-            });
-          },
-          error: (error: any) => {
-            this.snackBar.open(error.error, 'Close', {duration: 3000});
-          }
-        });
-      }
-    });
   }
 }

@@ -22,7 +22,6 @@ export class MapComponent implements OnInit{
   ngOnInit() {
     mapboxgl.accessToken = mapBoxToken;
     this.destination = this.data.destination;
-
     this.map = new mapboxgl.Map({
       container: 'map',
       style: this.style,

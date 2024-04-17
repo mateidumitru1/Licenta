@@ -6,6 +6,7 @@ import com.matei.backend.dto.response.event.*;
 import com.matei.backend.dto.response.location.LocationWithEventPageResponseDto;
 import com.matei.backend.entity.User;
 import com.matei.backend.service.EventService;
+import com.matei.backend.service.auth.AuthenticationService;
 import com.matei.backend.service.auth.JwtService;
 import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @RequestMapping("/api/events")
 public class EventController {
+    private final AuthenticationService authenticationService;
     private final EventService eventService;
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -126,14 +128,10 @@ public class EventController {
 
     @GetMapping("/home")
     public ResponseEntity<HomeEventsResponseDto> getHomeEvents(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication.getPrincipal().equals("anonymousUser")) {
-            return ResponseEntity.ok(eventService.getHomeEvents(""));
+        if (authenticationService.isAuthenticated()) {
+            return ResponseEntity.ok(eventService.getHomeEvents(authenticationService.getUserId().toString()));
         }
-        else {
-            User user = (User) authentication.getPrincipal();
-            return ResponseEntity.ok(eventService.getHomeEvents(user.getId().toString()));
-        }
+        return ResponseEntity.ok(eventService.getHomeEvents(""));
     }
 
     @PreAuthorize("hasAuthority('USER')")

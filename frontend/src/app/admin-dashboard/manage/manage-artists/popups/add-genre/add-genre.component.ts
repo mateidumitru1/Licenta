@@ -1,9 +1,10 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MdbFormsModule} from "mdb-angular-ui-kit/forms";
 import {NgForOf, NgIf} from "@angular/common";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {ManageGenresService} from "../../manage-genres.service";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-add-genre',
@@ -18,7 +19,9 @@ import {ManageGenresService} from "../../manage-genres.service";
   templateUrl: './add-genre.component.html',
   styleUrl: './add-genre.component.scss'
 })
-export class AddGenreComponent implements OnInit {
+export class AddGenreComponent implements OnInit, OnDestroy {
+  private genreListSubscription: Subscription | undefined;
+
   registrationForm: FormGroup;
 
   genreList: any = [];
@@ -30,16 +33,15 @@ export class AddGenreComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
-    this.manageGenresService.fetchGenres().subscribe( {
-      next: (response: any) => {
-        this.genreList = response;
-        this.genreList.sort((a: any, b: any) => a.name.localeCompare(b.name));
-      },
-      error: (error: any) => {
-        console.error(error);
-      }
+  async ngOnInit() {
+    await this.manageGenresService.fetchGenres();
+    this.genreListSubscription = this.manageGenresService.getGenreList().subscribe((genreList: any) => {
+      this.genreList = genreList;
     });
+  }
+
+  ngOnDestroy() {
+    this.genreListSubscription?.unsubscribe();
   }
 
   onCloseClick() {

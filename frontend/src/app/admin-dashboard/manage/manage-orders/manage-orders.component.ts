@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormsModule} from "@angular/forms";
 import {NgForOf, NgIf} from "@angular/common";
 import {ManageOrderService} from "./manage-order.service";
@@ -17,14 +17,24 @@ import {LoadingComponent} from "../../../shared/loading/loading.component";
   templateUrl: './manage-orders.component.html',
   styleUrl: './manage-orders.component.scss'
 })
-export class ManageOrdersComponent {
-  orders: any[] = [];
+export class ManageOrdersComponent implements OnInit, OnDestroy {
+  orders: any;
   orderNumber: string = '';
   userId: string = '';
 
-  constructor(private manageOrdersService: ManageOrderService, private snackBar: MatSnackBar) {}
+  constructor(private manageOrdersService: ManageOrderService) {}
+
+  ngOnInit() {
+    this.orders = [];
+  }
+
+  ngOnDestroy() {
+  }
 
   handleNullEvent(order: any) {
+    if(order.ticketList == undefined) {
+      return;
+    }
     order.ticketList.forEach((ticket: any) => {
       if(ticket.ticketType.event == null) {
         ticket.ticketType.event = {
@@ -35,60 +45,28 @@ export class ManageOrdersComponent {
     return order;
   }
 
-  fetchOrderByNumber() {
+  async fetchOrderByNumber() {
     if(this.orderNumber === '') return;
-
     this.orders = [];
-    this.manageOrdersService.fetchOrderByNumber(this.orderNumber).subscribe({
-      next: (order: any) => {
-        this.orders.push(this.handleNullEvent(order));
-      },
-      error: (error) => {
-        this.snackBar.open(error.error, 'Close', {duration: 3000});
-      }
-    });
+    this.orders.push(this.handleNullEvent(await this.manageOrdersService.fetchOrderByNumber(this.orderNumber)));
   }
 
-  fetchOrderByUserId() {
+  async fetchOrderByUserId() {
     if(this.userId === '') return;
 
     this.orders = [];
-    this.manageOrdersService.fetchOrdersByUserId(this.userId).subscribe({
-      next: (orders: any) => {
-        this.orders = orders.map((order: any) => this.handleNullEvent(order));
-        this.orders = orders;
-        this.snackBar.open('Orders fetched successfully', 'Close', {duration: 3000});
-      },
-      error: (error) => {
-        this.snackBar.open(error.error, 'Close', {duration: 3000});
-      }
-    });
+    const response: any = await this.manageOrdersService.fetchOrdersByUserId(this.userId);
+
+    if (response) {
+      this.orders = response.map((order: any) => this.handleNullEvent(order));
+    }
   }
 
-  cancelTicket(ticket: any) {
-    this.manageOrdersService.cancelTicket(ticket).subscribe({
-      next: () => {
-        ticket.status = 'CANCELED';
-        this.snackBar.open('Ticket canceled successfully', 'Close', {duration: 3000});
-      },
-      error: (error) => {
-        this.snackBar.open(error.error, 'Close', {duration: 3000});
-      }
-    });
+  async cancelOrder(order: any) {
+    order = await this.manageOrdersService.cancelOrder(order);
   }
 
-  cancelOrder(order: any) {
-    this.manageOrdersService.cancelOrder(order).subscribe({
-      next: () => {
-        order.status = 'CANCELED';
-        order.ticketList.forEach((ticket: any) => {
-          ticket.status = 'CANCELED';
-        });
-        this.snackBar.open('Order canceled successfully', 'Close', {duration: 3000});
-      },
-      error: (error) => {
-        this.snackBar.open(error.error, 'Close', {duration: 3000});
-      }
-    });
+  async cancelTicket(ticket: any) {
+    ticket = await this.manageOrdersService.cancelTicket(ticket);
   }
 }

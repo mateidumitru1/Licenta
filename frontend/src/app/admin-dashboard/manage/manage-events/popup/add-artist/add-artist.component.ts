@@ -29,16 +29,8 @@ export class AddArtistComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
-    this.manageArtistsService.fetchArtistsWithoutEventGenre().subscribe( {
-      next: (response: any) => {
-        this.artistList = response;
-        this.artistList.sort((a: any, b: any) => a.name.localeCompare(b.name));
-      },
-      error: (error: any) => {
-        console.error(error);
-      }
-    });
+  async ngOnInit() {
+    await this.manageArtistsService.fetchArtistsWithoutEventGenre();
   }
 
   onCloseClick() {

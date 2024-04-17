@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, HostListener, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, HostListener, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {
   MatCell,
   MatCellDef,
@@ -24,6 +24,7 @@ import {MdbRadioModule} from "mdb-angular-ui-kit/radio";
 import {FormsModule} from "@angular/forms";
 import {LoadingComponent} from "../../../shared/loading/loading.component";
 import {ActivatedRoute, Router} from "@angular/router";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-manage-users',
@@ -58,7 +59,9 @@ import {ActivatedRoute, Router} from "@angular/router";
   templateUrl: './manage-users.component.html',
   styleUrl: './manage-users.component.scss'
 })
-export class ManageUsersComponent implements OnInit, AfterViewInit {
+export class ManageUsersComponent implements OnInit, AfterViewInit, OnDestroy {
+  private userListSubscription: Subscription | undefined;
+
   dataSource = new MatTableDataSource<any>();
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -91,7 +94,7 @@ export class ManageUsersComponent implements OnInit, AfterViewInit {
               private router: Router) {}
 
   ngOnInit() {
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe(async (params) => {
       this.pageIndex = params['page'] || 0;
       this.pageSize = params['size'] || 5;
       this.searchValue = params['search'] || '';
@@ -99,39 +102,29 @@ export class ManageUsersComponent implements OnInit, AfterViewInit {
       this.shouldDisplayRemoveFilterButton = !!(params['filter'] && params['search']);
 
       if (this.searchValue === '' && this.selectedFilterOption === 'firstName') {
-        this.fetchUsers();
+        await this.fetchUsers();
       } else {
-        this.fetchFilteredUsers();
+        await this.fetchFilteredUsers();
       }
+      this.userListSubscription = this.manageUsersService.getUsersListSubject().subscribe({
+        next: (users: any) => {
+          this.dataSource.data = users.userPage.content;
+          this.itemsCount = users.count;
+        }
+      });
     });
   }
 
-  fetchUsers() {
-    this.manageUsersService.fetchPaginatedUsers(this.pageIndex, this.pageSize).subscribe({
-      next: (response: any) => {
-        this.dataSource.data = response.userPage.content;
-        this.itemsCount = response.count
-      },
-      error: (error: any) => {
-        this.snackBar.open('Error fetching users', 'Close', {
-          duration: 3000
-        });
-      }
-    });
+  async fetchUsers() {
+    await this.manageUsersService.fetchPaginatedUsers(this.pageIndex, this.pageSize);
   }
 
-  fetchFilteredUsers() {
-    this.manageUsersService.fetchPaginatedUsersFiltered(this.pageIndex, this.pageSize, this.selectedFilterOption, this.searchValue).subscribe({
-      next: (response: any) => {
-        this.dataSource.data = response.userPage.content;
-        this.itemsCount = response.count;
-      },
-      error: (error: any) => {
-        this.snackBar.open('Error fetching users', 'Close', {
-          duration: 3000
-        });
-      }
-    });
+  async fetchFilteredUsers() {
+    await this.manageUsersService.fetchPaginatedUsersFiltered(this.pageIndex, this.pageSize, this.selectedFilterOption, this.searchValue);
+  }
+
+  ngOnDestroy() {
+    this.userListSubscription?.unsubscribe();
   }
 
   ngAfterViewInit() {
@@ -181,23 +174,9 @@ export class ManageUsersComponent implements OnInit, AfterViewInit {
         title: 'Adauga user'
       }
     });
-    dialogRef.afterClosed().subscribe((user: any) => {
+    dialogRef.afterClosed().subscribe(async (user: any) => {
       if(user) {
-        this.manageUsersService.addUser(user, this.pageIndex, this.pageSize).subscribe({
-          next: (response: any) => {
-            this.dataSource.data = response.userPage.content;
-            this.itemsCount = response.count
-            this.snackBar.open('User added', 'Close', {
-              duration: 3000
-            });
-
-          },
-          error: (error: any) => {
-            this.snackBar.open('Error adding user', 'Close', {
-              duration: 3000
-            });
-          }
-        });
+        await this.manageUsersService.addUser(user, this.pageIndex, this.pageSize);
       }
     });
   }
@@ -211,26 +190,9 @@ export class ManageUsersComponent implements OnInit, AfterViewInit {
         title: 'Modifica user'
       }
     });
-    dialogRef.afterClosed().subscribe((user: any) => {
+    dialogRef.afterClosed().subscribe(async (user: any) => {
       if(user) {
-        this.manageUsersService.updateUser(user).subscribe({
-          next: (response: any) => {
-            this.dataSource.data = this.dataSource.data.map((data: any) => {
-              if(data.id === user.id) {
-                return user;
-              }
-              return data;
-            });
-            this.snackBar.open('User updated', 'Close', {
-              duration: 3000
-            });
-          },
-          error: (error: any) => {
-            this.snackBar.open('Error updating user', 'Close', {
-              duration: 3000
-            });
-          }
-        });
+        await this.manageUsersService.updateUser(user);
       }
     });
   }
@@ -239,31 +201,12 @@ export class ManageUsersComponent implements OnInit, AfterViewInit {
     let dialogRef = this.dialog.open(DeleteComponent, {
       width: '30%'
     });
-    dialogRef.afterClosed().subscribe((result: any) => {
+    dialogRef.afterClosed().subscribe(async (result: any) => {
       if(result) {
-        this.manageUsersService.deleteUser(this.rowData.id, this.pageIndex, this.pageSize).subscribe({
-          next: (response: any) => {
-            if(response.userPage.content.length === 0) {
-              this.router.navigate([], {
-                relativeTo: this.route,
-                queryParams: { page: this.pageIndex - 1, size: this.pageSize },
-                queryParamsHandling: 'merge'
-              });
-            }
-            else {
-              this.dataSource.data = response.userPage.content;
-              this.itemsCount = response.count
-            }
-            this.snackBar.open('User deleted', 'Close', {
-              duration: 3000
-            });
-          },
-          error: (error: any) => {
-            this.snackBar.open('Error deleting user', 'Close', {
-              duration: 3000
-            });
-          }
-        });
+        await this.manageUsersService.deleteUser(this.rowData.id, this.pageIndex, this.pageSize);
+        if (this.dataSource.data.length === 0 && this.pageIndex > 0) {
+          this.pageIndex = this.pageIndex - 1;
+        }
       }
     });
   }

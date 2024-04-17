@@ -1,8 +1,19 @@
 <div class="container-fluid">
+  <mdb-carousel *ngIf="locations.length" [animation]="'slide'" [controls]="true" [interval]="5000" [indicators]="true">
+    <mdb-carousel-item *ngFor="let location of locations">
+      <img class="d-block w-100" src="{{ location.imageUrl }}" alt="First slide">
+      <div role="button" class="carousel-caption d-none d-md-block" [routerLink]="[location.name]" [queryParams]="{id: location.id}">
+        <h5>{{ location.name }}</h5>
+        <p>{{ location.address }}</p>
+      </div>
+    </mdb-carousel-item>
+  </mdb-carousel>
   <div *ngIf="isLoggedIn()" class="recommended-events">
     <h1 class="text-center">Evenimente recomandate</h1>
     <div class="cards-container">
-      <div class="card" *ngFor="let event of recommendedEvents" (click)="onEventClick(event)">
+      <div class="card" *ngFor="let event of recommendedEvents"
+           [routerLink]="['/', event.location.name, event.title]"
+           [queryParams]="{id: event.id}">
         <img alt="" class="card-img-top" src="{{ event.imageUrl }}"/>
         <div class="card-body">
           <p class="card-text">{{ event.title }}</p>
@@ -11,14 +22,15 @@
       </div>
     </div>
   </div>
-  <div class="selected-events">
-    <h1 class="text-center">Evenimente selectate</h1>
-    <div class="cards-container">
-      <div class="card" *ngFor="let event of selectedEvents" (click)="onEventClick(event)">
-        <img alt="" class="card-img-top" src="{{ event.imageUrl }}"/>
-        <div class="card-body">
-          <p class="card-text">{{ event.title }}</p>
-        </div>
+  <h1 class="text-center">Evenimente selectate</h1>
+  <div class="cards-container">
+    <div class="card" *ngFor="let event of selectedEvents"
+         [routerLink]="['/', event.location.name, event.title]"
+         [queryParams]="{id: event.id}">
+      <img alt="" class="card-img-top" src="{{ event.imageUrl }}"/>
+      <div class="card-body">
+        <p class="card-text">{{ event.title }}</p>
+        <p class="card-text">{{ event.broadGenre }}</p>
       </div>
     </div>
   </div>

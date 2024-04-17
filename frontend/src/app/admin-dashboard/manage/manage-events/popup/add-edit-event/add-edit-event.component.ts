@@ -52,7 +52,7 @@ export class AddEditEventComponent implements OnInit{
   @ViewChild('fileInput', { static: false }) fileInput!: ElementRef;
   imageFile: File | null = null;
   isImageNull: boolean = false;
-  locations: any[] = [];
+  locations: any;
   event: any;
   today: any;
   ticketsDataSource = new MatTableDataSource<any>();
@@ -68,7 +68,7 @@ export class AddEditEventComponent implements OnInit{
     private dialog: MatDialog
   ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.registrationForm = this.fb.group({
       title: ['', Validators.required],
       date: ['', Validators.required],
@@ -78,34 +78,20 @@ export class AddEditEventComponent implements OnInit{
     });
 
     this.today = new Date().toISOString().split('T')[0];
-    this.manageLocationsService.fetchAllLocations().subscribe({
-      next: (locations: any) => {
-        this.locations = locations;
-      },
-      error: (error: any) => {
-        this.snackBar.open('A apărut o eroare la aducerea locațiilor', 'Închide', { duration: 3000 });
-      }
-    });
+    this.locations = await this.manageLocationsService.fetchAllLocations();
 
     if (this.data.eventId !== undefined) {
-      this.manageEventsService.fetchEventById(this.data.eventId).subscribe({
-        next: (event: any) => {
-          this.event = event;
-          this.ticketsDataSource.data = this.event.ticketTypeList;
-          this.artistsDataSource.data = this.event.artistList;
-          this.imageSrc = this.event.imageUrl;
-          this.isImageNull = this.imageSrc === null;
-          this.registrationForm.patchValue({
-            title: this.event.title,
-            date: this.event.date,
-            location: this.event.location.name,
-            shortDescription: this.event.shortDescription,
-            description: this.event.description
-          });
-        },
-        error: (error: any) => {
-          this.snackBar.open('A apărut o eroare la aducerea evenimentului', 'Închide', { duration: 3000 });
-        }
+      this.event = await this.manageEventsService.fetchEventById(this.data.eventId);
+      this.ticketsDataSource.data = this.event.ticketTypeList;
+      this.artistsDataSource.data = this.event.artistList;
+      this.imageSrc = this.event.imageUrl;
+      this.isImageNull = this.imageSrc === null;
+      this.registrationForm.patchValue({
+        title: this.event.title,
+        date: this.event.date,
+        location: this.event.location.name,
+        shortDescription: this.event.shortDescription,
+        description: this.event.description
       });
     }
   }

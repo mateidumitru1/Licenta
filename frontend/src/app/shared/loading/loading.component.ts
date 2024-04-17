@@ -10,6 +10,4 @@ import {NgIf} from "@angular/common";
   templateUrl: './loading.component.html',
   styleUrl: './loading.component.scss'
 })
-export class LoadingComponent {
-
-}
+export class LoadingComponent {}

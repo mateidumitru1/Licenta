@@ -27,7 +27,7 @@
         <h5 role="tab" class="card-title mb-3" >
           <a [routerLink]="['orders', order.orderNumber]">Comanda #{{ order.orderNumber }}</a>
         </h5>
-        <h6 class="card-subtitle mb-2 text-muted">Data: {{ order.date | date }}</h6>
+        <h6 class="card-subtitle mb-2 text-muted">Data: {{ order.createdAt | date }}</h6>
         <p class="card-text">Status: {{ order.status }}</p>
         <p class="card-text">Total: {{ order.price }} RON</p>
       </div>

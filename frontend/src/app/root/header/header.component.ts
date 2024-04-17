@@ -1,16 +1,16 @@
-import {Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MdbDropdownModule} from "mdb-angular-ui-kit/dropdown";
 import {NgForOf, NgIf} from "@angular/common";
 import {MdbCollapseModule} from "mdb-angular-ui-kit/collapse";
 import {HeaderService} from "./header.service";
 import {NavigationEnd, Router, RouterLink} from "@angular/router";
 import {IdentityService} from "../../identity/identity.service";
-import {JwtHandler} from "../../identity/jwt.handler";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {LoadingComponent} from "../../shared/loading/loading.component";
 import {FormsModule} from "@angular/forms";
 import {DropdownService} from "./dropdown.service";
 import {ShoppingCartService} from "../shopping-cart/shopping-cart.service";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-header',
@@ -27,7 +27,12 @@ import {ShoppingCartService} from "../shopping-cart/shopping-cart.service";
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy {
+  private shoppingCartSubscription: Subscription | undefined;
+  private locationsSubscription: Subscription | undefined;
+  private dropDownSubscription: Subscription | undefined;
+  private searchResultSubscription: Subscription | undefined;
+
   locations: any[] = [];
   locationsToDisplay: any[] = [];
   startIndex: number = 0;
@@ -38,7 +43,7 @@ export class HeaderComponent implements OnInit {
   searchEvents: any[] = [];
   searchArtists: any[] = [];
 
-  shoppingCartLength!: number;
+  shoppingCartSize!: number;
 
   @ViewChild('searchInput') searchInput!: ElementRef;
   @ViewChild('searchDropdown') searchDropdown!: ElementRef;
@@ -48,12 +53,11 @@ export class HeaderComponent implements OnInit {
     private headerService: HeaderService,
     private identityService: IdentityService,
     private shoppingCartService: ShoppingCartService,
-    private jwtHandler: JwtHandler,
     private snackBar: MatSnackBar,
     private dropdownService: DropdownService
   ) {}
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.dropdownService.setShowDropdown(false);
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
@@ -64,21 +68,29 @@ export class HeaderComponent implements OnInit {
         this.dropdownService.setShowDropdown(false);
       }
     });
-    this.dropdownService.showDropdown$.subscribe((showDropdown) => {
+    this.dropDownSubscription = this.dropdownService.showDropdown$.subscribe((showDropdown) => {
       this.showDropdown = showDropdown;
     });
-    this.shoppingCartService.shoppingCartLength$.subscribe((shoppingCartLength) => {
-      this.shoppingCartLength = shoppingCartLength;
-    });
-    this.headerService.fetchLocations().subscribe({
+
+    await this.headerService.fetchHeaderData();
+    this.headerService.getLocations().subscribe({
       next: (locations: any) => {
         this.locations = locations;
-        this.locationsToDisplay = this.locations.slice(0, 5);
-      },
-      error: (error: any) => {
-        console.error('Error fetching locations with available events', error);
+        this.locationsToDisplay = locations.slice(0, 5);
       }
     });
+    this.shoppingCartSubscription = this.headerService.getShoppingCartSize().subscribe({
+      next: (shoppingCartSize: number) => {
+        this.shoppingCartSize = shoppingCartSize;
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    this.shoppingCartSubscription?.unsubscribe();
+    this.locationsSubscription?.unsubscribe();
+    this.dropDownSubscription?.unsubscribe();
+    this.searchResultSubscription?.unsubscribe();
   }
 
   scrollToNext() {
@@ -93,16 +105,8 @@ export class HeaderComponent implements OnInit {
     }
   }
 
-  logout() {
-    this.identityService.logout();
-  }
-
-  getIdentityService() {
-    return this.identityService;
-  }
-
   onShoppingCartClick() {
-    if (this.jwtHandler.isLoggedIn()) {
+    if (this.identityService.isLoggedIn()) {
       this.router.navigate(['/shopping-cart']);
     } else {
       this.snackBar.open('You need to be logged in to access the shopping cart!', 'Close', {
@@ -112,18 +116,18 @@ export class HeaderComponent implements OnInit {
   }
 
   @HostListener('document:click', ['$event'])
-  onDocumentClick(event: MouseEvent) {
-    if (
-      this.searchDropdown &&
+  onDocumentClick(event: MouseEvent): void {
+    const isSearchDropdownClicked = this.searchDropdown &&
       this.searchDropdown.nativeElement &&
-      !this.searchDropdown.nativeElement.contains(event.target) &&
-      this.searchInput &&
+      this.searchDropdown.nativeElement.contains(event.target);
+
+    const isSearchInputClicked = this.searchInput &&
       this.searchInput.nativeElement &&
-      !this.searchInput.nativeElement.contains(event.target)
-    ) {
+      this.searchInput.nativeElement.contains(event.target);
+
+    if (!isSearchDropdownClicked && !isSearchInputClicked) {
       this.dropdownService.setShowDropdown(false);
-    }
-    else if (this.searchLocations.length !== 0 || this.searchEvents.length !== 0 || this.searchArtists.length !== 0) {
+    } else if (isSearchInputClicked && (this.searchLocations.length > 0 || this.searchEvents.length > 0 || this.searchArtists.length > 0)) {
       this.dropdownService.setShowDropdown(true);
     }
   }
@@ -135,24 +139,27 @@ export class HeaderComponent implements OnInit {
     }
   }
 
-  search() {
+  async search() {
     if(this.searchText === '') {
       return;
     }
-    this.headerService.search(this.searchText).subscribe({
-      next: (response: any) => {
-        this.searchLocations = response.locationList;
-        this.searchEvents = response.eventList;
-        this.searchArtists = response.artistList;
-        this.dropdownService.setShowDropdown(true);
-      },
-      error: (error: any) => {
-        console.error('Error searching', error);
+    await this.headerService.search(this.searchText)
+    this.searchResultSubscription = this.headerService.getSearchResults().subscribe({
+      next: (searchResults: any) => {
+        console.log(searchResults);
+        this.searchLocations = searchResults.locationList;
+        this.searchEvents = searchResults.eventList;
+        this.searchArtists = searchResults.artistList;
       }
     });
+    this.dropdownService.setShowDropdown(true);
   }
 
-  getDropdownService() {
-    return this.dropdownService;
+  logout() {
+    this.identityService.logout();
+  }
+
+  getIdentityService() {
+    return this.identityService;
   }
 }

@@ -1,9 +1,12 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {HomeService} from "./home.service";
-import {Router} from "@angular/router";
+import {Router, RouterLink} from "@angular/router";
 import {NgForOf, NgIf, NgOptimizedImage} from "@angular/common";
 import {LoadingComponent} from "../../shared/loading/loading.component";
 import {IdentityService} from "../../identity/identity.service";
+import {MdbCarouselModule} from "mdb-angular-ui-kit/carousel";
+import {HeaderService} from "../header/header.service";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-home',
@@ -12,34 +15,39 @@ import {IdentityService} from "../../identity/identity.service";
     NgForOf,
     NgOptimizedImage,
     LoadingComponent,
-    NgIf
+    NgIf,
+    MdbCarouselModule,
+    RouterLink
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
-export class HomeComponent implements OnInit{
+export class HomeComponent implements OnInit, OnDestroy {
+  private homeEventsSubscription: Subscription | undefined;
+  private locationSubscription: Subscription | undefined;
+
   selectedEvents: any[] = [];
   recommendedEvents: any[] = [];
   locations: any[] = [];
 
-  constructor(private homeService: HomeService, private identityService: IdentityService, private router: Router) {}
+  constructor(private homeService: HomeService,
+              private identityService: IdentityService,
+              private headerService: HeaderService) {}
 
-  ngOnInit(): void {
-    this.homeService.fetchHomeEvents().subscribe({
-      next: (homeEvents: any) => {
-        this.recommendedEvents = homeEvents.recommendedEvents;
-        this.selectedEvents = homeEvents.selectedEvents;
-      },
-      error: (error: any) => {
-        console.error('Error fetching recommended events', error);
-      }
+  async ngOnInit() {
+    await this.homeService.fetchHomeEvents();
+    this.homeEventsSubscription = this.homeService.getHomeEvents().subscribe((homeEvents: any) => {
+      this.selectedEvents = homeEvents.selectedEvents;
+      this.recommendedEvents = homeEvents.recommendedEvents;
+    });
+    this.locationSubscription = this.headerService.getLocations().subscribe((locations: any) => {
+      this.locations = locations;
     });
   }
 
-  onEventClick(selectedEvent: any) {
-    this.router.navigate(['/', selectedEvent.location.name, selectedEvent.title], {
-      queryParams: {id: selectedEvent.id}
-    });
+  ngOnDestroy() {
+    this.homeEventsSubscription?.unsubscribe();
+    this.locationSubscription?.unsubscribe();
   }
 
   isLoggedIn() {

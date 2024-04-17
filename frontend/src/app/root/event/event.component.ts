@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {EventService} from "./event.service";
 import {CurrencyPipe, NgForOf, NgIf} from "@angular/common";
@@ -9,6 +9,7 @@ import {MatButton} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
 import {TicketService} from "./ticket.service";
 import {LoadingComponent} from "../../shared/loading/loading.component";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-event',
@@ -27,36 +28,39 @@ import {LoadingComponent} from "../../shared/loading/loading.component";
   templateUrl: './event.component.html',
   styleUrl: './event.component.scss'
 })
-export class EventComponent implements OnInit{
+export class EventComponent implements OnInit, OnDestroy {
+  private eventSubscription: Subscription | undefined;
   event: any = {};
 
   descriptionIsVisible: boolean = false;
 
-  constructor(private route: ActivatedRoute, private router: Router, private eventService: EventService,
+  constructor(private route: ActivatedRoute, private router: Router,
+              private eventService: EventService,
               private ticketService: TicketService) {}
 
   ngOnInit() {
-    if(!this.route.snapshot.queryParams['id']) {
-      this.router.navigate(['/page-not-found']);
-    }
-    this.route.queryParams.subscribe( {
-      next: (params: any) => {
-        this.eventService.fetchEventById(this.route.snapshot.queryParams['id']).subscribe({
-          next: (event: any) => {
-            this.event = event;
+    this.route.queryParams.subscribe( async (params) => {
+      if (!params['id']) {
+        await this.router.navigate(['/page-not-found']);
+      }
+
+      await this.eventService.fetchEventById(params['id']);
+
+      this.eventSubscription = this.eventService.getEvent().subscribe({
+        next: (event: any) => {
+          this.event = event;
+          if(this.event.ticketTypeList) {
             this.event.ticketTypeList.forEach((ticket: any) => {
               ticket.reservedQuantity = 0;
             });
-            this.event.ticketTypeList.sort((a: any, b: any) => b.price - a.price);
-          },
-          error: (error: any) => {
-            if(error.status === 404 && error.error === 'Event not found') {
-              this.router.navigate(['/page-not-found']);
-            }
           }
-        });
-      }
+        }
+      });
     });
+  }
+
+  ngOnDestroy() {
+    this.eventSubscription?.unsubscribe();
   }
 
   toggleDescription() {

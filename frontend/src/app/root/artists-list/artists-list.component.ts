@@ -1,7 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {NgForOf} from "@angular/common";
 import {ActivatedRoute, RouterLink, RouterLinkActive} from "@angular/router";
 import {ArtistsService} from "./artists.service";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-artists-list',
@@ -14,7 +15,8 @@ import {ArtistsService} from "./artists.service";
   templateUrl: './artists-list.component.html',
   styleUrl: './artists-list.component.scss'
 })
-export class ArtistsListComponent implements OnInit{
+export class ArtistsListComponent implements OnInit, OnDestroy {
+  private artistSubscription: Subscription | undefined;
   letters: any[] = [];
   artists: any[] = [];
 
@@ -24,10 +26,15 @@ export class ArtistsListComponent implements OnInit{
     for(let i = 65; i <= 90; i++) {
       this.letters.push(String.fromCharCode(i));
     }
-    this.route.params.subscribe(params => {
-      this.artistsService.getArtists(params['letter']).subscribe((artists: any) => {
-        this.artists = artists;
+    this.route.params.subscribe(async (params) => {
+      await this.artistsService.fetchArtists(params['letter']);
+      this.artistSubscription = this.artistsService.getArtistList().subscribe((data: any) => {
+        this.artists = data;
       });
     });
+  }
+
+  ngOnDestroy() {
+    this.artistSubscription?.unsubscribe();
   }
 }

@@ -36,6 +36,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 @Transactional
@@ -401,10 +402,20 @@ public class EventService {
     }
 
     public HomeEventsResponseDto getHomeEvents(String currentUserId) {
-        return HomeEventsResponseDto.builder()
-                .selectedEvents(getSelectedEvents())
-                .recommendedEvents(getRecommendedEvents(currentUserId))
-                .build();
+        CompletableFuture<List<SelectedEventResponseDto>> selectedEventsFuture = CompletableFuture.supplyAsync(() -> getSelectedEvents());
+        CompletableFuture<List<RecommendedEventResponseDto>> recommendedEventsFuture = CompletableFuture.supplyAsync(() -> getRecommendedEvents(currentUserId));
+
+        return CompletableFuture.allOf(selectedEventsFuture, recommendedEventsFuture)
+                .thenApply(ignoredVoid -> {
+                    List<SelectedEventResponseDto> selectedEvents = selectedEventsFuture.join();
+                    List<RecommendedEventResponseDto> recommendedEvents = recommendedEventsFuture.join();
+
+                    return HomeEventsResponseDto.builder()
+                            .selectedEvents(selectedEvents)
+                            .recommendedEvents(recommendedEvents)
+                            .build();
+                })
+                .join();
     }
 
     public List<EventWithoutTicketArtistResponseDto> getEventsForUser(UUID id) {

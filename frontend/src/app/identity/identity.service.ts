@@ -56,12 +56,25 @@ export class IdentityService {
   }
 
   register(firstName: string, lastName: string, username: string, password: string, email: string) {
-    return this.http.post(apiURL + '/register', {
+    this.http.post(apiURL + '/register', {
       firstName: firstName,
       lastName: lastName,
       username: username,
       password: password,
       email: email
+    }).subscribe({
+      next: () => {
+        this.snackBar.open('Registration successful!', 'Close', {
+          duration: 3000
+        });
+        return true;
+      },
+      error: (error: any) => {
+        this.snackBar.open(error.error, 'Close', {
+          duration: 3000
+        });
+        return false;
+      }
     });
   }
   forgotPassword(email: string) {
@@ -120,5 +133,9 @@ export class IdentityService {
 
   getUsername() {
     return this.jwtHandler.getUsername();
+  }
+
+  getToken() {
+    return this.jwtHandler.getToken();
   }
 }

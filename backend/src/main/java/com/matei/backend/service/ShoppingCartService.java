@@ -252,4 +252,8 @@ public class ShoppingCartService {
                         .toList())
                 .build();
     }
+
+    public Integer getShoppingCartSize(UUID uuid) {
+        return shoppingCartRepository.findShoppingCartSize(uuid).orElse(0);
+    }
 }

@@ -1,25 +1,49 @@
 import {HttpClient} from "@angular/common/http";
 import {apiURL} from "../../app.config";
-import {Injectable} from "@angular/core";
+import {Injectable, OnDestroy} from "@angular/core";
 import {JwtHandler} from "../../identity/jwt.handler";
+import {BehaviorSubject, lastValueFrom, Subscription} from "rxjs";
+import {IdentityService} from "../../identity/identity.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class HomeService {
-  constructor(private http: HttpClient, private jwtHandler: JwtHandler) { }
+  private homeEventsSubject = new BehaviorSubject<any>({recommendedEvents: [], selectedEvents: []});
 
-  fetchHomeEvents() {
-    const token = this.jwtHandler.getToken();
+  constructor(private http: HttpClient, private identityService: IdentityService) { }
+
+  setHomeEvents(homeEvents: any) {
+    this.homeEventsSubject.next(homeEvents);
+  }
+
+  getHomeEvents() {
+    return this.homeEventsSubject.asObservable();
+  }
+
+  async fetchHomeEvents() {
+    const token = this.identityService.getToken();
     if (!token) {
-      return this.http.get(apiURL + '/events/home');
+      try {
+        const homeEvents = await lastValueFrom(this.http.get(apiURL + '/events/home'));
+        this.setHomeEvents(homeEvents);
+      }
+      catch (error) {
+        console.error('Error fetching recommended events', error);
+      }
     }
     else {
-      return this.http.get(apiURL + '/events/home', {
-        headers: {
-          'Authorization': 'Bearer ' + this.jwtHandler.getToken()
-        }
-      });
+      try {
+        const homeEvents = await lastValueFrom(this.http.get(apiURL + '/events/home', {
+          headers: {
+            'Authorization': 'Bearer ' + this.identityService.getToken()
+          }
+        }));
+        this.setHomeEvents(homeEvents);
+      }
+      catch (error) {
+        console.error('Error fetching recommended events', error);
+      }
     }
   }
 }

@@ -20,26 +20,18 @@ import {MatButton} from "@angular/material/button";
 })
 export class TrackEventDetailsComponent implements OnInit{
   tickets: any[] = [];
-
   event: any = {};
-
-  destination: [number, number] = [0, 0];
 
   constructor(private route: ActivatedRoute, private trackEventService: TrackEventService,
               private snackBar: MatSnackBar, private mapDialog: MatDialog) {}
 
-  ngOnInit() {
-
-    this.trackEventService.fetchTicketsByEventId(this.route.snapshot.queryParams['id']).subscribe((tickets: any) => {
-      this.tickets = tickets;
-      this.tickets.forEach((ticket: any) => {
-        ticket.shouldDisplayQR = false;
-      });
-      this.event = tickets[0].ticketType.event;
-      this.destination = [this.event.location.longitude, this.event.location.latitude];
-
-    }, (error) => {
-      this.snackBar.open('Error fetching tickets', 'Close', {duration: 3000});
+  async ngOnInit() {
+    await this.trackEventService.fetchTicketsByEventId(this.route.snapshot.queryParams['id']);
+    this.trackEventService.getTickets().subscribe({
+      next: (tickets: any) => {
+        this.tickets = tickets;
+        this.event = tickets[0].ticketType.event;
+      }
     });
   }
 
@@ -48,16 +40,15 @@ export class TrackEventDetailsComponent implements OnInit{
   }
 
   showMap() {
+    const destination = [this.event.location.longitude, this.event.location.latitude];
     const dialogRef = this.mapDialog.open(MapComponent, {
       width: '80%',
       height: '80%',
       data: {
-        destination: this.destination
+        destination: destination
       }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-    });
+    dialogRef.afterClosed();
   }
 }

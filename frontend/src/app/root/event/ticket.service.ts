@@ -5,14 +5,17 @@ import {HttpClient} from "@angular/common/http";
 import {apiURL} from "../../app.config";
 import {JwtHandler} from "../../identity/jwt.handler";
 import {ShoppingCartService} from "../shopping-cart/shopping-cart.service";
+import {HeaderService} from "../header/header.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class TicketService {
-  constructor(private http: HttpClient, private identityService: IdentityService,
-              private snackBar: MatSnackBar, private jwtHandler: JwtHandler,
-              private shoppingCartService: ShoppingCartService) {}
+  constructor(private http: HttpClient,
+              private identityService: IdentityService,
+              private snackBar: MatSnackBar,
+              private shoppingCartService: ShoppingCartService,
+              private headerService: HeaderService) {}
 
   buyTickets(selectedTicketTypes: any[]) {
     if (!this.identityService.isLoggedIn()) {
@@ -28,11 +31,12 @@ export class TicketService {
       selectedTicketTypes,
       {
         headers: {
-          'Authorization': 'Bearer ' + this.jwtHandler.getToken()
+          'Authorization': 'Bearer ' + this.identityService.getToken()
         }
       }).subscribe({
-      next: (response: any) => {
-        this.shoppingCartService.setShoppingCartLength(this.shoppingCartService.getShoppingCartLength() + selectedTicketTypes.length);
+      next: (shoppingCart: any) => {
+        this.shoppingCartService.setShoppingCart(shoppingCart);
+        this.headerService.setShoppingCartSize(shoppingCart.shoppingCartItemList?.length);
         this.snackBar.open('Tickets added to shopping cart!', 'Dismiss', {duration: 3000});
       }, error: (error: any) => {
       this.snackBar.open(error.error, 'Dismiss', {duration: 3000});

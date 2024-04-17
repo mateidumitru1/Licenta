@@ -1,6 +1,8 @@
 package com.matei.backend.controller;
 
 import com.matei.backend.dto.request.shoppingCart.ShoppingCartItemRequestDto;
+import com.matei.backend.dto.response.shoppingCart.ShoppingCartEventWithoutArtistResponseDto;
+import com.matei.backend.dto.response.shoppingCart.ShoppingCartResponseDto;
 import com.matei.backend.service.auth.JwtService;
 import com.matei.backend.service.ShoppingCartService;
 import lombok.RequiredArgsConstructor;
@@ -20,21 +22,27 @@ public class ShoppingCartController {
 
     @PreAuthorize("hasAuthority('USER')")
     @PostMapping
-    public ResponseEntity<?> addTicketToShoppingCart(@RequestHeader("Authorization") String jwtToken, @RequestBody List<ShoppingCartItemRequestDto> shoppingCartItemRequestDtoList) {
+    public ResponseEntity<ShoppingCartEventWithoutArtistResponseDto> addTicketToShoppingCart(@RequestHeader("Authorization") String jwtToken, @RequestBody List<ShoppingCartItemRequestDto> shoppingCartItemRequestDtoList) {
         return ResponseEntity.ok(shoppingCartService.addTicketToShoppingCart(shoppingCartItemRequestDtoList,  jwtService.extractId(jwtToken)));
     }
 
     @PreAuthorize("hasAuthority('USER')")
     @PatchMapping("/{shoppingCartItemId}")
-    public ResponseEntity<?> updateTicketQuantity(@RequestHeader("Authorization") String jwtToken, @PathVariable("shoppingCartItemId") String shoppingCartItemId,
+    public ResponseEntity<ShoppingCartEventWithoutArtistResponseDto> updateTicketQuantity(@RequestHeader("Authorization") String jwtToken, @PathVariable("shoppingCartItemId") String shoppingCartItemId,
                                                   @RequestParam("quantity") Integer quantity) {
         return ResponseEntity.ok(shoppingCartService.updateTicketQuantity(UUID.fromString(shoppingCartItemId), quantity, jwtService.extractId(jwtToken)));
     }
 
     @PreAuthorize("hasAuthority('USER')")
     @GetMapping
-    public ResponseEntity<?> getShoppingCart(@RequestHeader("Authorization") String jwtToken) {
+    public ResponseEntity<ShoppingCartEventWithoutArtistResponseDto> getShoppingCart(@RequestHeader("Authorization") String jwtToken) {
         return ResponseEntity.ok(shoppingCartService.getShoppingCartEventWithoutArtistDto(jwtService.extractId(jwtToken)));
+    }
+
+    @PreAuthorize("hasAuthority('USER')")
+    @GetMapping("/size")
+    public ResponseEntity<Integer> getShoppingCartSize(@RequestHeader("Authorization") String jwtToken) {
+        return ResponseEntity.ok(shoppingCartService.getShoppingCartSize(jwtService.extractId(jwtToken)));
     }
 
     @PreAuthorize("hasAuthority('USER')")

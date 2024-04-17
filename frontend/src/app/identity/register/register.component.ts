@@ -51,15 +51,7 @@ export class RegisterComponent {
       const password = this.registrationForm.get('password')?.value;
       const confirmPassword = this.registrationForm.get('confirmPassword')?.value;
 
-      this.identityService.register(firstName, lastName, username, password, email).subscribe({
-        next: (response: any) => {
-          this.snackBar.open('A fost trimis un email pentru verificarea contului!', 'Close', {duration: 3000});
-          this.router.navigate(['/login']);
-        },
-        error: (error) => {
-          this.snackBar.open(error.error, 'Close', {duration: 3000});
-        }
-      })
+      this.identityService.register(firstName, lastName, username, password, email);
     }
   }
 }

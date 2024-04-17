@@ -28,7 +28,7 @@ export class AppComponent implements OnInit {
 
   @HostListener('window:scroll', ['$event'])
   onWindowScroll(event: any): void {
-    this.showScrollButton = window.scrollY > 500;
+    this.showScrollButton = window.scrollY > 600;
   }
 
   scrollToTop(): void {

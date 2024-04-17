@@ -23,22 +23,18 @@ export class TrackEventComponent implements OnInit{
 
   events: any[] = [];
 
-  constructor(private trackEventService: TrackEventService, private snackBar: MatSnackBar, private router: Router) {}
+  constructor(private trackEventService: TrackEventService, private router: Router) {}
 
-  ngOnInit() {
-    this.fetchTickets();
+  async ngOnInit() {
+    await this.fetchBookedEvents();
     this.initMap();
   }
 
-  fetchTickets() {
-    this.trackEventService.fetchBookedEvents().subscribe({
+  async fetchBookedEvents() {
+    await this.trackEventService.fetchBookedEvents();
+    this.trackEventService.getBookedEvents().subscribe({
       next: (events: any) => {
         this.events = events;
-        console.log(events);
-        this.initMap();
-      },
-      error: (error: any) => {
-        this.snackBar.open(error.error, 'Close', {duration: 3000});
       }
     });
   }
@@ -66,21 +62,18 @@ export class TrackEventComponent implements OnInit{
         trackUserLocation: true,
         showUserHeading: true
       }));
-
       this.events.forEach((event) => {
         this.addMarker(event);
       });
 
     }, (error) => {
       console.error(error);
-      this.snackBar.open('', 'Close', {duration: 3000,});
     });
   }
 
   addMarker(event: any) {
     if (this.map instanceof mapboxgl.Map) {
       const coordinates: [number, number] = [event.location.longitude, event.location.latitude];
-      console.log(event);
       const marker = new mapboxgl.Marker()
         .setLngLat(coordinates)
         .setPopup(
