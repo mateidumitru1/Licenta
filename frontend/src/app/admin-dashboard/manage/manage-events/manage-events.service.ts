@@ -129,5 +129,13 @@ export class ManageEventsService {
       }
     }));
   }
+
+  async fetchAllBroadGenres() {
+    return await lastValueFrom(this.http.get(apiURL + '/broad-genres', {
+      headers: {
+        Authorization: 'Bearer ' + this.identityService.getToken()
+      }
+    }));
+  }
 }
 

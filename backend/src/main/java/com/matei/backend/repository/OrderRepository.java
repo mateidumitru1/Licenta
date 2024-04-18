@@ -2,6 +2,7 @@ package com.matei.backend.repository;
 
 import com.matei.backend.entity.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -13,5 +14,15 @@ public interface OrderRepository extends JpaRepository<Order, UUID> {
 
     Optional<Order> findByOrderNumber(Long number);
 
-    Long countByCreatedAtAfter(LocalDateTime startDate);
+    @Query("SELECT COUNT(o) FROM Order o WHERE o.createdAt > :startDate AND o.status = 0")
+    Long countByCreatedAtAfterAndStatusConfirmed(LocalDateTime startDate);
+
+    @Query("SELECT COUNT(o) FROM Order o WHERE o.status = 0")
+    Long countByStatusConfirmed();
+
+    @Query("SELECT SUM(o.price) FROM Order o WHERE o.status = 0")
+    Double sumPriceByStatusConfirmed();
+
+    @Query("SELECT SUM(o.price) FROM Order o WHERE o.createdAt > :startDate AND o.status = 0")
+    Double sumPriceByCreatedAtAfterAndStatusConfirmed(LocalDateTime startDate);
 }

@@ -1,11 +1,10 @@
 package com.matei.backend.service;
 
-import com.matei.backend.dto.response.event.EventWithoutTicketTypesResponseDto;
+import com.matei.backend.dto.response.event.EventWithoutTicketArtistResponseDto;
 import com.matei.backend.dto.response.preference.UserGenrePreferenceResponseDto;
 import com.matei.backend.entity.User;
 import com.matei.backend.entity.UserGenrePreference;
 import com.matei.backend.repository.UserGenrePreferenceRepository;
-import com.matei.backend.service.util.BroadGenreMapperService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -31,7 +30,7 @@ public class UserGenrePreferenceService {
                 .toList();
     }
 
-    public void updateUserGenrePreferences(UUID userId, Set<EventWithoutTicketTypesResponseDto> eventSet) {
+    public void updateUserGenrePreferences(UUID userId, Set<EventWithoutTicketArtistResponseDto> eventSet) {
         User user = Optional.of(userService.getUserById(userId))
                 .map(u -> modelMapper.map(u, User.class))
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -103,11 +102,11 @@ public class UserGenrePreferenceService {
         return genrePercentageMap;
     }
 
-    private Map<String, Long> calculateGenreCountMap(Set<EventWithoutTicketTypesResponseDto> eventSet) {
+    private Map<String, Long> calculateGenreCountMap(Set<EventWithoutTicketArtistResponseDto> eventSet) {
         Map<String, Long> genreCountMap = new HashMap<>();
 
         eventSet.forEach(event -> {
-            genreCountMap.put(event.getBroadGenre(), genreCountMap.getOrDefault(event.getBroadGenre(), 0L) + 1);
+            genreCountMap.put(event.getBroadGenre().getName(), genreCountMap.getOrDefault(event.getBroadGenre().getName(), 0L) + 1);
         });
 
         return genreCountMap;

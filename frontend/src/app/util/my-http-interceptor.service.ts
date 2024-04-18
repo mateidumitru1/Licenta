@@ -37,7 +37,7 @@ export class MyHttpInterceptor implements HttpInterceptor {
     return next.handle(request).pipe(
       switchMap((event: HttpEvent<any>) => {
         if (event instanceof HttpResponse) {
-          return of(event).pipe(delay(1000));
+          return of(event).pipe(delay(100));
         }
         return of(event);
       }),

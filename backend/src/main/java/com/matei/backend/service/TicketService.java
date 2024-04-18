@@ -1,12 +1,9 @@
 package com.matei.backend.service;
 
 import com.google.zxing.WriterException;
-import com.matei.backend.dto.response.event.EventWithoutLocationTicketResponseDto;
 import com.matei.backend.dto.response.event.EventWithoutTicketArtistResponseDto;
-import com.matei.backend.dto.response.event.EventWithoutTicketTypesResponseDto;
 import com.matei.backend.dto.response.order.OrderResponseDto;
 import com.matei.backend.dto.response.shoppingCart.ShoppingCartItemEventWithoutArtistResponseDto;
-import com.matei.backend.dto.response.shoppingCart.ShoppingCartItemResponseDto;
 import com.matei.backend.dto.response.ticket.TicketResponseDto;
 import com.matei.backend.dto.response.ticketType.TicketTypeEventWithoutArtistResponseDto;
 import com.matei.backend.entity.*;
@@ -42,8 +39,8 @@ public class TicketService {
     private final UserService userService;
     private final ModelMapper modelMapper;
 
-    public void createTickets(Map<EventWithoutTicketTypesResponseDto, List<ShoppingCartItemResponseDto>> eventShoppingCartMap, UUID userId, OrderResponseDto orderDto) {
-        Map<EventWithoutTicketTypesResponseDto, List<TicketResponseDto>> eventTicketMap = new HashMap<>();
+    public void createTickets(Map<EventWithoutTicketArtistResponseDto, List<ShoppingCartItemEventWithoutArtistResponseDto>> eventShoppingCartMap, UUID userId, OrderResponseDto orderDto) {
+        Map<EventWithoutTicketArtistResponseDto, List<TicketResponseDto>> eventTicketMap = new HashMap<>();
 
         eventShoppingCartMap.forEach((eventResponseDto, shoppingCartItemResponseDtoList) -> {
             List<Ticket> tickets = new ArrayList<>();
@@ -167,11 +164,10 @@ public class TicketService {
                 .toList();
     }
 
-    public Long getTotalNumberOfTicketsSold(StatisticsFilter filter) {
+    public Long getTotalNumberOfConfirmedTicketsSold(StatisticsFilter filter) {
         if(filter == StatisticsFilter.ALL) {
-            return ticketRepository.count();
+            return ticketRepository.countByStatusConfirmed();
         }
-        return ticketRepository.countByCreatedAtAfter(filter.getStartDate())
-                .orElseThrow();
+        return ticketRepository.countByCreatedAtAfterAndStatusConfirmed(filter.getStartDate());
     }
 }

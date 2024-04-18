@@ -13,11 +13,12 @@ import java.util.List;
 @NoArgsConstructor
 public class StatisticsResponseDto {
     private Long totalNumberOfUsers;
-    private Long totalNumberOfOrders;
+    private Long totalNumberOfConfirmedOrders;
+    private Long totalNumberOfConfirmedTicketsSold;
+    private Double totalRevenue;
     private Long totalNumberOfEvents;
     private Long totalNumberOfAvailableEvents;
     private Long totalNumberOfLocations;
-    private Long totalNumberOfTicketsSold;
     private List<LocationWithEventsCountResponseDto> locationsWithAllEventsCount;
     private List<LocationWithEventsCountResponseDto> locationsWithAvailableEventsCount;
     private List<EventWithTicketsSoldCount> eventsWithTicketsSoldCount;

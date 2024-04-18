@@ -62,7 +62,7 @@ public class EmailService {
         send(mail);
     }
 
-    public void sendTicketEmail(String toEmail, Map<EventWithoutTicketTypesResponseDto, List<TicketResponseDto>> eventTicketMap) {
+    public void sendTicketEmail(String toEmail, Map<EventWithoutTicketArtistResponseDto, List<TicketResponseDto>> eventTicketMap) {
         Email to = new Email(toEmail);
 
         final String sendTicketTemplateId = "d-22dfa17cd6234faeb5f3bdcb9095342d";

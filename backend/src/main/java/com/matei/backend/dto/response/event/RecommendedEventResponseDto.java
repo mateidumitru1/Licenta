@@ -1,5 +1,6 @@
 package com.matei.backend.dto.response.event;
 
+import com.matei.backend.dto.response.broadGenre.BroadGenreResponseDto;
 import com.matei.backend.dto.response.location.LocationWithoutEventListResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,7 +21,7 @@ public class RecommendedEventResponseDto {
     private LocalDate date;
     private LocationWithoutEventListResponseDto location;
     private String imageUrl;
-    private String broadGenre;
+    private BroadGenreResponseDto broadGenre;
 
     @Override
     public String toString() {

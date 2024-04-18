@@ -63,7 +63,7 @@ export class ManageEventsComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(MatSort) sort!: MatSort;
   itemsCount = 0;
 
-  displayedColumns: string[] = ['title', 'date', 'location'];
+  displayedColumns: string[] = ['title', 'date', 'location', 'broadGenre'];
 
   rowData: any;
 
@@ -79,7 +79,8 @@ export class ManageEventsComponent implements OnInit, AfterViewInit, OnDestroy {
   } = {
     title: 'Titlu',
     date: 'Data',
-    location: 'Locatie'
+    location: 'Locatie',
+    broadGenre: 'Gen'
   };
 
   constructor(private dialog: MatDialog,
@@ -210,7 +211,20 @@ export class ManageEventsComponent implements OnInit, AfterViewInit, OnDestroy {
       if(result) {
         await this.manageEventsService.deleteEvent(this.rowData.id, this.pageIndex, this.pageSize);
         if (this.dataSource.data.length === 0 && this.pageIndex > 0) {
-          this.paginator.previousPage();
+          if (this.searchValue === '' && this.selectedFilterOption === 'title') {
+            await this.router.navigate([], {
+              relativeTo: this.route,
+              queryParams: {page: this.pageIndex - 1, size: this.pageSize, search: null, filter: null},
+              queryParamsHandling: 'merge'
+            });
+          }
+          else {
+            await this.router.navigate([], {
+              relativeTo: this.route,
+              queryParams: {page: this.pageIndex - 1, size: this.pageSize, search: this.searchValue, filter: this.selectedFilterOption},
+              queryParamsHandling: 'merge'
+            });
+          }
         }
       }
     });

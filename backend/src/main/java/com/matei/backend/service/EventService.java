@@ -14,16 +14,14 @@ import com.matei.backend.dto.response.location.LocationWithoutEventListResponseD
 import com.matei.backend.dto.response.preference.UserGenrePreferenceResponseDto;
 import com.matei.backend.dto.response.statistics.EventWithTicketsSoldCount;
 import com.matei.backend.dto.response.ticketType.TicketTypeWithoutEventResponseDto;
-import com.matei.backend.entity.Artist;
 import com.matei.backend.entity.Event;
 import com.matei.backend.entity.Location;
 import com.matei.backend.entity.TicketType;
 import com.matei.backend.entity.enums.StatisticsFilter;
 import com.matei.backend.exception.event.EventNotFoundException;
+import com.matei.backend.repository.BroadGenreRepository;
 import com.matei.backend.repository.EventRepository;
 import com.matei.backend.repository.LocationRepository;
-import com.matei.backend.service.auth.JwtService;
-import com.matei.backend.service.util.BroadGenreMapperService;
 import com.matei.backend.service.util.ImageService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -43,15 +41,14 @@ import java.util.concurrent.CompletableFuture;
 @RequiredArgsConstructor
 public class EventService {
     private final EventRepository eventRepository;
+    private final BroadGenreRepository broadGenreRepository;
     private final TicketTypeService ticketTypeService;
     private final LocationService locationService;
     private final ArtistService artistService;
-    private final BroadGenreMapperService broadGenreMapperService;
     private final UserGenrePreferenceService userGenrePreferenceService;
     private final ImageService imageService;
     private final ObjectMapper objectMapper;
     private final ModelMapper modelMapper;
-    private final JwtService jwtService;
     private final UserService userService;
     private final LocationRepository locationRepository;
 
@@ -69,8 +66,8 @@ public class EventService {
         eventToSave.setImageUrl(imageService.saveImage("event-images", eventCreationRequestDto.getImage()));
         eventToSave.setDate(LocalDate.parse(eventCreationRequestDto.getDate().substring(0, 10)));
         eventToSave.setCreatedAt(LocalDateTime.now());
-        var eventGenreMapping = broadGenreMapperService.map(artistIdList, eventToSave);
-        eventToSave.setBroadGenre(eventGenreMapping);
+        eventToSave.setBroadGenre(broadGenreRepository.findById(UUID.fromString(eventCreationRequestDto.getBroadGenreId()))
+                .orElseThrow());
 
         var event = eventRepository.save(eventToSave);
 
@@ -106,35 +103,6 @@ public class EventService {
                 .toList());
 
         return eventResponse;
-    }
-
-    public List<EventResponseDto> createMappingsForExistingEvents() {
-        List<Event> events = eventRepository.findAll();
-        events.forEach(event -> {
-            var eventGenreMapping = broadGenreMapperService.map(event.getArtistList().stream()
-                    .map(Artist::getId)
-                    .toList(), event);
-            event.setBroadGenre(eventGenreMapping);
-            eventRepository.save(event);
-        });
-        return events.stream().map(event -> modelMapper.map(event, EventResponseDto.class)).toList();
-    }
-
-    public List<EventWithoutTicketArtistResponseDto> getEventListByLocation(UUID locationId) {
-        var eventList = eventRepository.findByLocationId(locationId)
-                .orElseThrow(() -> new EventNotFoundException("Event not found"));
-
-        return eventList.stream()
-                .map(event -> EventWithoutTicketArtistResponseDto.builder()
-                        .id(event.getId())
-                        .title(event.getTitle())
-                        .date(event.getDate())
-                        .shortDescription(event.getShortDescription())
-                        .description(event.getDescription())
-                        .location(modelMapper.map(event.getLocation(), LocationWithoutEventListResponseDto.class))
-                        .imageUrl(event.getImageUrl())
-                        .build())
-                .toList();
     }
 
     public List<EventWithoutTicketArtistResponseDto> getAvailableEventListByLocation(UUID locationId) {
@@ -185,6 +153,8 @@ public class EventService {
                 .map(locationResponseDto -> modelMapper.map(locationResponseDto, Location.class)).orElseThrow());
         event.setArtistList(artistService.getArtistsByIdList(getArtistIdList(updatedEvent.getArtistIdList())));
         event.setImageUrl(imageUrl);
+        event.setBroadGenre(broadGenreRepository.findById(UUID.fromString(updatedEvent.getBroadGenreId()))
+                .orElseThrow());
 
         eventRepository.save(event);
 
@@ -386,7 +356,7 @@ public class EventService {
             int numberOfEventsToRecommend = (int) Math.round(userGenrePreference.getPercentage() / 100 * 10);
 
             List<RecommendedEventResponseDto> recommendedEventsToReturn = new ArrayList<>(availableEvents.stream()
-                    .filter(event -> event.getBroadGenre().equals(userGenrePreference.getBroadGenre()))
+                    .filter(event -> event.getBroadGenre().getName().equals(userGenrePreference.getBroadGenre()))
                     .toList());
 
             Collections.shuffle(recommendedEventsToReturn);

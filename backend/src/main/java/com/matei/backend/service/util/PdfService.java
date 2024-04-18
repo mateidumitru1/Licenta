@@ -36,7 +36,7 @@ public class PdfService {
         letterMap.put('Ț', 'T');
     }
 
-    public byte[] createPdf(EventWithoutTicketTypesResponseDto eventResponseDto, List<TicketResponseDto> ticketResponseDtoList) {
+    public byte[] createPdf(EventWithoutTicketArtistResponseDto eventResponseDto, List<TicketResponseDto> ticketResponseDtoList) {
         PDDocument document = new PDDocument();
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 

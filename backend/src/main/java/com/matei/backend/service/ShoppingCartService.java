@@ -115,10 +115,10 @@ public class ShoppingCartService {
         return getShoppingCartEventWithoutArtistResponseDto(shoppingCart);
     }
 
-    public ShoppingCartResponseDto getShoppingCartDto(UUID userId) {
+    public ShoppingCartEventWithoutArtistResponseDto getShoppingCartDto(UUID userId) {
         var shoppingCart = findShoppingCartOrElseEmpty(userId);
 
-        return getShoppingCartResponseDto(shoppingCart);
+        return getShoppingCartEventWithoutArtistResponseDto(shoppingCart);
     }
 
     private ShoppingCart findShoppingCartOrElseEmpty(UUID userId) {
@@ -185,70 +185,7 @@ public class ShoppingCartService {
                 .id(shoppingCart.getId())
                 .price(shoppingCart.getPrice())
                 .shoppingCartItemList(shoppingCart.getShoppingCartItemList().stream()
-                        .map(shoppingCartItem -> ShoppingCartItemEventWithoutArtistResponseDto.builder()
-                                .id(shoppingCartItem.getId())
-                                .ticketType(TicketTypeEventWithoutArtistResponseDto.builder()
-                                        .id(shoppingCartItem.getTicketType().getId())
-                                        .name(shoppingCartItem.getTicketType().getName())
-                                        .price(shoppingCartItem.getTicketType().getPrice())
-                                        .totalQuantity(shoppingCartItem.getTicketType().getTotalQuantity())
-                                        .remainingQuantity(shoppingCartItem.getTicketType().getRemainingQuantity())
-                                        .event(EventWithoutTicketArtistResponseDto.builder()
-                                                .id(shoppingCartItem.getTicketType().getEvent().getId())
-                                                .title(shoppingCartItem.getTicketType().getEvent().getTitle())
-                                                .date(shoppingCartItem.getTicketType().getEvent().getDate())
-                                                .shortDescription(shoppingCartItem.getTicketType().getEvent().getShortDescription())
-                                                .description(shoppingCartItem.getTicketType().getEvent().getDescription())
-                                                .location(modelMapper.map(shoppingCartItem.getTicketType().getEvent().getLocation(),
-                                                        LocationWithoutEventListResponseDto.class))
-                                                .imageUrl(shoppingCartItem.getTicketType().getEvent().getImageUrl())
-                                                .build())
-                                        .build())
-                                .quantity(shoppingCartItem.getQuantity())
-                                .build())
-                        .toList())
-                .build();
-    }
-
-    private ShoppingCartResponseDto getShoppingCartResponseDto(ShoppingCart shoppingCart) {
-        return ShoppingCartResponseDto.builder()
-                .id(shoppingCart.getId())
-                .price(shoppingCart.getPrice())
-                .shoppingCartItemList(shoppingCart.getShoppingCartItemList().stream()
-                        .map(shoppingCartItem -> ShoppingCartItemResponseDto.builder()
-                                .id(shoppingCartItem.getId())
-                                .ticketType(TicketTypeEventResponseDto.builder()
-                                        .id(shoppingCartItem.getTicketType().getId())
-                                        .name(shoppingCartItem.getTicketType().getName())
-                                        .price(shoppingCartItem.getTicketType().getPrice())
-                                        .totalQuantity(shoppingCartItem.getTicketType().getTotalQuantity())
-                                        .remainingQuantity(shoppingCartItem.getTicketType().getRemainingQuantity())
-                                        .event(EventWithoutTicketTypesResponseDto.builder()
-                                                .id(shoppingCartItem.getTicketType().getEvent().getId())
-                                                .title(shoppingCartItem.getTicketType().getEvent().getTitle())
-                                                .date(shoppingCartItem.getTicketType().getEvent().getDate())
-                                                .shortDescription(shoppingCartItem.getTicketType().getEvent().getShortDescription())
-                                                .description(shoppingCartItem.getTicketType().getEvent().getDescription())
-                                                .location(modelMapper.map(shoppingCartItem.getTicketType().getEvent().getLocation(),
-                                                        LocationWithoutEventListResponseDto.class))
-                                                .artistList(shoppingCartItem.getTicketType().getEvent().getArtistList().stream()
-                                                        .map(artist -> ArtistWithoutEventResponseDto.builder()
-                                                                .id(artist.getId())
-                                                                .name(artist.getName())
-                                                                .genreList(artist.getGenreList().stream()
-                                                                        .map(genre -> GenreWithoutArtistListResponseDto.builder()
-                                                                                .id(genre.getId())
-                                                                                .name(genre.getName())
-                                                                                .build()).toList())
-                                                                .imageUrl(artist.getImageUrl())
-                                                                .build())
-                                                        .toList())
-                                                .imageUrl(shoppingCartItem.getTicketType().getEvent().getImageUrl())
-                                                .broadGenre(shoppingCartItem.getTicketType().getEvent().getBroadGenre())
-                                                .build())
-                                        .build())
-                                .quantity(shoppingCartItem.getQuantity())
-                                .build())
+                        .map(shoppingCartItem -> modelMapper.map(shoppingCartItem, ShoppingCartItemEventWithoutArtistResponseDto.class))
                         .toList())
                 .build();
     }

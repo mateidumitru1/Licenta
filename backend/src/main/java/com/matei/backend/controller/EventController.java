@@ -7,7 +7,6 @@ import com.matei.backend.dto.response.location.LocationWithEventPageResponseDto;
 import com.matei.backend.entity.User;
 import com.matei.backend.service.EventService;
 import com.matei.backend.service.auth.AuthenticationService;
-import com.matei.backend.service.auth.JwtService;
 import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -118,12 +117,6 @@ public class EventController {
                                                                                              @RequestParam(defaultValue = "") String filter,
                                                                                              @RequestParam(defaultValue = "") String search) {
         return ResponseEntity.ok(eventService.getAllEventsFilteredPaginatedManage(page, size, filter, search));
-    }
-
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("/mappings")
-    public ResponseEntity<List<EventResponseDto>> getEventGenreMappings() {
-        return ResponseEntity.ok(eventService.createMappingsForExistingEvents());
     }
 
     @GetMapping("/home")

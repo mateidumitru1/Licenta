@@ -23,4 +23,5 @@ public class EventUpdateRequestDto {
     private UUID locationId;
     private String artistIdList;
     private String ticketTypesList;
+    private String broadGenreId;
 }

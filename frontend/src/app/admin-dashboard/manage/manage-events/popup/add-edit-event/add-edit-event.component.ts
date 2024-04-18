@@ -53,6 +53,7 @@ export class AddEditEventComponent implements OnInit{
   imageFile: File | null = null;
   isImageNull: boolean = false;
   locations: any;
+  broadGenres: any;
   event: any;
   today: any;
   ticketsDataSource = new MatTableDataSource<any>();
@@ -64,7 +65,6 @@ export class AddEditEventComponent implements OnInit{
     private fb: FormBuilder,
     private manageLocationsService: ManageLocationsService,
     private manageEventsService: ManageEventsService,
-    private snackBar: MatSnackBar,
     private dialog: MatDialog
   ) { }
 
@@ -73,12 +73,14 @@ export class AddEditEventComponent implements OnInit{
       title: ['', Validators.required],
       date: ['', Validators.required],
       location: ['', Validators.required],
+      broadGenre: ['', Validators.required],
       shortDescription: ['', Validators.required],
       description: ['', Validators.required]
     });
 
     this.today = new Date().toISOString().split('T')[0];
     this.locations = await this.manageLocationsService.fetchAllLocations();
+    this.broadGenres = await this.manageEventsService.fetchAllBroadGenres();
 
     if (this.data.eventId !== undefined) {
       this.event = await this.manageEventsService.fetchEventById(this.data.eventId);
@@ -90,6 +92,7 @@ export class AddEditEventComponent implements OnInit{
         title: this.event.title,
         date: this.event.date,
         location: this.event.location.name,
+        broadGenre: this.event.broadGenre,
         shortDescription: this.event.shortDescription,
         description: this.event.description
       });
@@ -119,7 +122,7 @@ export class AddEditEventComponent implements OnInit{
       };
 
       event.locationId = this.locations.find((location: any) => location.name === event.location).id;
-      delete event.location;
+      event.broadGenreId = this.broadGenres.find((genre: any) => genre.name === event.broadGenre).id;
 
       if (this.imageFile === null && this.imageSrc != '') {
         this.dialogRef.close(event);

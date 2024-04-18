@@ -1,10 +1,9 @@
 package com.matei.backend.service;
 
 import com.matei.backend.dto.response.event.EventWithoutTicketArtistResponseDto;
-import com.matei.backend.dto.response.event.EventWithoutTicketTypesResponseDto;
 import com.matei.backend.dto.response.location.LocationWithoutEventListResponseDto;
 import com.matei.backend.dto.response.order.OrderResponseDto;
-import com.matei.backend.dto.response.shoppingCart.ShoppingCartItemResponseDto;
+import com.matei.backend.dto.response.shoppingCart.ShoppingCartItemEventWithoutArtistResponseDto;
 import com.matei.backend.dto.response.ticket.TicketResponseDto;
 import com.matei.backend.dto.response.ticketType.TicketTypeEventWithoutArtistResponseDto;
 import com.matei.backend.dto.response.user.UserResponseDto;
@@ -65,7 +64,7 @@ public class OrderService {
                         .id(user.getId()).build()).orElseThrow())
                 .build());
 
-        Map<EventWithoutTicketTypesResponseDto, List<ShoppingCartItemResponseDto>> eventShoppingCartMap = shoppingCart.getShoppingCartItemList().stream()
+        Map<EventWithoutTicketArtistResponseDto, List<ShoppingCartItemEventWithoutArtistResponseDto>> eventShoppingCartMap = shoppingCart.getShoppingCartItemList().stream()
                 .collect(Collectors.groupingBy(shoppingCartItem ->
                         shoppingCartItem.getTicketType().getEvent(), Collectors.toList()));
 
@@ -174,10 +173,17 @@ public class OrderService {
         orderRepository.save(order);
     }
 
-    public Long getTotalNumberOfOrders(StatisticsFilter filter) {
+    public Long getTotalNumberOfConfirmedOrders(StatisticsFilter filter) {
         if(filter.equals(StatisticsFilter.ALL)) {
-            return orderRepository.count();
+            return orderRepository.countByStatusConfirmed();
         }
-        return orderRepository.countByCreatedAtAfter(filter.getStartDate());
+        return orderRepository.countByCreatedAtAfterAndStatusConfirmed(filter.getStartDate());
+    }
+
+    public Double getTotalRevenue(StatisticsFilter filter) {
+        if(filter.equals(StatisticsFilter.ALL)) {
+            return orderRepository.sumPriceByStatusConfirmed();
+        }
+        return orderRepository.sumPriceByCreatedAtAfterAndStatusConfirmed(filter.getStartDate());
     }
 }

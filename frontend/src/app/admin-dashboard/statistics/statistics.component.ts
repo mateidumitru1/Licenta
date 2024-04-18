@@ -60,12 +60,16 @@ export class StatisticsComponent implements OnInit {
         value: this.statistics.totalNumberOfUsers
       },
       {
-        title: 'Numarul total de comenzi efectuate',
-        value: this.statistics.totalNumberOfOrders
+        title: 'Numarul total de comenzi confirmate efectuate',
+        value: this.statistics.totalNumberOfConfirmedOrders
       },
       {
         title: 'Numarul total de bilete vandute',
-        value: this.statistics.totalNumberOfTicketsSold
+        value: this.statistics.totalNumberOfConfirmedTicketsSold
+      },
+      {
+        title: 'Incasari',
+        value: this.statistics.totalRevenue + ' RON'
       },
       {
         title: 'Numarul total de locatii adaugate',

@@ -19,4 +19,5 @@ public class EventCreationRequestDto {
     private String locationId;
     private String artistIdList;
     private String ticketTypesList;
+    private String broadGenreId;
 }

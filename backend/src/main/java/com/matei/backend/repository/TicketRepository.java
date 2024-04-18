@@ -14,9 +14,11 @@ import java.util.UUID;
 
 public interface TicketRepository extends JpaRepository<Ticket, UUID> {
     Optional<List<Ticket>> findAllByOrderUserId(UUID userId);
-
     Optional<List<Ticket>> findAllByOrderUserIdAndTicketTypeEventId(UUID orderUserId, UUID ticketTypeEventId);
 
-    @Query("SELECT COUNT(t) FROM Ticket t WHERE t.order.createdAt > :startDate")
-    Optional<Long> countByCreatedAtAfter(@Param("startDate") LocalDateTime startDate);
+    @Query("SELECT COUNT(t) FROM Ticket t WHERE t.status = 0")
+    Long countByStatusConfirmed();
+
+    @Query("SELECT COUNT(t) FROM Ticket t WHERE t.order.createdAt > :startDate AND t.status = 0")
+    Long countByCreatedAtAfterAndStatusConfirmed(@Param("startDate") LocalDateTime startDate);
 }

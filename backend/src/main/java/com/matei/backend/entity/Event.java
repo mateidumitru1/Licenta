@@ -48,6 +48,7 @@ public class Event {
     @OnDelete(action = OnDeleteAction.SET_NULL)
     private List<TicketType> ticketTypeList;
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(
             name = "event_artists",
@@ -57,7 +58,11 @@ public class Event {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Artist> artistList;
 
-    private String broadGenre;
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "broad_genre_id", referencedColumnName = "id")
+    @OnDelete(action = OnDeleteAction.SET_NULL)
+    private BroadGenre broadGenre;
 
     @Override
     public String toString() {

@@ -5,6 +5,7 @@ import com.matei.backend.exception.artist.ArtistNotFoundException;
 import com.matei.backend.exception.auth.IncorrectOldPasswordException;
 import com.matei.backend.exception.auth.InvalidCredentialsException;
 import com.matei.backend.exception.auth.PasswordNotMatchingException;
+import com.matei.backend.exception.broadGenre.BroadGenreNotFoundException;
 import com.matei.backend.exception.event.EventNotFoundException;
 import com.matei.backend.exception.event.EventPastException;
 import com.matei.backend.exception.genre.GenreAlreadyExistsException;
@@ -186,5 +187,10 @@ public class ExceptionHandlerController {
     @ExceptionHandler(StatisticsFilterInvalidException.class)
     public ResponseEntity<?> handleStatisticsFilterNotFoundException(StatisticsFilterInvalidException exception) {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(BroadGenreNotFoundException.class)
+    public ResponseEntity<?> handleBroadGenreNotFoundException(BroadGenreNotFoundException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
     }
 }

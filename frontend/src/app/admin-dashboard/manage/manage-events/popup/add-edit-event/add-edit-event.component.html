@@ -33,6 +33,18 @@
         Location is required
       </div>
 
+      <div class="mb-4">
+        <label for="broadGenre" class="form-label">Genre</label>
+        <select class="form-select" id="broadGenre" name="broadGenre" formControlName="broadGenre" required>
+          <option *ngFor="let broadGenre of broadGenres" [ngValue]="broadGenre.name" [selected]="broadGenre.name === event?.broadGenre.name">
+            {{ broadGenre.name }}
+          </option>
+        </select>
+      </div>
+      <div *ngIf="registrationForm.get('broadGenre')?.errors?.['required'] && registrationForm.get('broadGenre')?.touched" class="text-danger mb-4">
+        Genre is required
+      </div>
+
       <mdb-form-control class="mb-3">
         <textarea #shortDescription mdbInput type="text" id="shortDescription" class="form-control" formControlName="shortDescription"></textarea>
         <label mdbLabel class="form-label" for="shortDescription">Short description</label>
@@ -52,7 +64,7 @@
   </div>
   <input #fileInput  type="file" id="image" class="form-control"
          accept=".jpg, .jpeg, .png, .bmp" (change)="onFileSelected($event)"/>
-  <div class="mt-2 ms-1" *ngIf="imageSrc !== ''">
+  <div class="mt-2 ms-1" *ngIf="imageSrc !== null">
     <img [src]="imageSrc" alt="image" class="img-fluid" style="max-height: 200px; max-width: 200px;"/>
     <button class="btn btn-tertiary ms-2" (click)="removeImage()"><i class="fa-solid fa-x"></i></button>
   </div>

@@ -64,7 +64,7 @@ export class ShoppingCartService {
       return;
     }
     try {
-      const shoppingCart = await lastValueFrom(this.http.delete(apiURL + '/shopping-cart/' + ticketType.id, {
+      const shoppingCart = await lastValueFrom(this.http.put(apiURL + '/shopping-cart/' + ticketType.id, null,{
         headers: {
           'Authorization': 'Bearer ' + this.identityService.getToken()
         }

@@ -205,7 +205,20 @@ export class ManageUsersComponent implements OnInit, AfterViewInit, OnDestroy {
       if(result) {
         await this.manageUsersService.deleteUser(this.rowData.id, this.pageIndex, this.pageSize);
         if (this.dataSource.data.length === 0 && this.pageIndex > 0) {
-          this.pageIndex = this.pageIndex - 1;
+          if (this.searchValue === '' && this.selectedFilterOption === 'firstName') {
+            await this.router.navigate([], {
+              relativeTo: this.route,
+              queryParams: {page: this.pageIndex - 1, size: this.pageSize, search: null, filter: null},
+              queryParamsHandling: 'merge'
+            });
+          }
+          else {
+            await this.router.navigate([], {
+              relativeTo: this.route,
+              queryParams: {page: this.pageIndex - 1, size: this.pageSize, search: this.searchValue, filter: this.selectedFilterOption},
+              queryParamsHandling: 'merge'
+            });
+          }
         }
       }
     });
