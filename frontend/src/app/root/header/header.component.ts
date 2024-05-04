@@ -109,7 +109,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     if (this.identityService.isLoggedIn()) {
       this.router.navigate(['/shopping-cart']);
     } else {
-      this.snackBar.open('You need to be logged in to access the shopping cart!', 'Close', {
+      this.snackBar.open('Trebuie sa fii autentificat pentru a vedea cosul de cumparaturi!', 'Close', {
         duration: 3000,
       });
     }
@@ -146,7 +146,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     await this.headerService.search(this.searchText)
     this.searchResultSubscription = this.headerService.getSearchResults().subscribe({
       next: (searchResults: any) => {
-        console.log(searchResults);
         this.searchLocations = searchResults.locationList;
         this.searchEvents = searchResults.eventList;
         this.searchArtists = searchResults.artistList;

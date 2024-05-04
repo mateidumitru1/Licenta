@@ -1,0 +1,144 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-3">
+      <div class="navigation">
+        <h4 class="text-center">Filtru</h4>
+        <hr>
+        <div *ngFor="let navigationItem of navigationItems"
+             class="navigation-item"
+             [ngClass]="{'selected': selectedItem === navigationItem}"
+             (click)="selectedItem = navigationItem">
+          <b>{{ navigationItem }}</b>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-1">
+      <div class="vertical-line"></div>
+    </div>
+    <div class="col-sm-8">
+      <div *ngIf="selectedItem === 'Locatie'" >
+        <h3>Locatii</h3>
+        <div class="options">
+          <div *ngFor="let location of locations" class="locatios">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox"
+                     [id]="'location_' + location"
+                     [checked]="selectedLocations.includes(location)"
+                     (change)="toggleSelection('location', location)">
+              <label class="form-check-label" [for]="'location_' + location">
+                {{ location }}
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="selectedItem === 'Artist'">
+        <h3>Artisti</h3>
+        <div class="options">
+          <div *ngFor="let artist of artists" class="genre">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox"
+                     [id]="'artist_' + artist"
+                     [checked]="selectedArtists.includes(artist)"
+                     (change)="toggleSelection('artist', artist)" >
+              <label class="form-check-label" [for]="'artist_' + artist">
+                {{ artist }}
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="selectedItem === 'Gen'">
+        <h3>Genuri</h3>
+        <div class="options">
+          <div *ngFor="let genre of genres" class="genre">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox"
+                     [id]="'genre_' + genre"
+                     [checked]="selectedGenres.includes(genre)"
+                     (change)="toggleSelection('genre', genre)" >
+              <label class="form-check-label" [for]="'genre_' + genre">
+                {{ genre }}
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="selectedItem === 'Data'">
+        <h3>Data</h3>
+        <form [formGroup]="range">
+          <mat-form-field>
+            <mat-label>Data de inceput</mat-label>
+            <input matInput formControlName="start" [matDatepicker]="picker1" [min]="today" (dateChange)="onStartDateChange()">
+            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+          </mat-form-field>
+          <br>
+          <mat-form-field>
+            <mat-label>Data de sfarsit</mat-label>
+            <input matInput formControlName="end" [matDatepicker]="picker2" [min]="today" (dateChange)="onEndDateChange()">
+            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+            <mat-datepicker #picker2></mat-datepicker>
+          </mat-form-field>
+        </form>
+      </div>
+    </div>
+  </div>
+  <hr>
+  <div class="row footer">
+    <div class="selected-filters-section">
+      <div *ngIf="selectedLocations.length > 0">
+        Locatii:
+        <div class="selected-filters">
+          <div *ngFor="let location of selectedLocations"
+               class="filter">
+            {{ location }}
+            <button class="btn btn-sm" (click)="removeFilter('location', location)">
+              <i class="fa fa-times"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="selectedArtists.length > 0">
+        Artisti:
+        <div class="selected-filters">
+          <div *ngFor="let artist of selectedArtists"
+               class="filter">
+            {{ artist }}
+            <button class="btn btn-sm" (click)="removeFilter('artist', artist)">
+              <i class="fa fa-times"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="selectedGenres.length > 0">
+        Genuri:
+        <div class="selected-filters">
+          <div *ngFor="let genre of selectedGenres"
+               class="filter">
+            {{ genre }}
+            <button class="btn btn-sm" (click)="removeFilter('genre', genre)">
+              <i class="fa fa-times"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="selectedStartDate != '' && selectedEndDate != ''"
+           >Data:
+        <div class="selected-filters">
+          <div class="filter">
+            {{ selectedStartDate }} - {{ selectedEndDate }}
+            <button class="btn btn-sm" (click)="removeFilter('date', '')">
+              <i class="fa fa-times"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="bottom-buttons">
+      <button class="btn" (click)="close()">Close</button>
+      <button class="btn" (click)="save()">Save</button>
+    </div>
+  </div>
+
+</div>

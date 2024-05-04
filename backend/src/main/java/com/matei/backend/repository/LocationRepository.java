@@ -15,6 +15,7 @@ import java.util.UUID;
 
 public interface LocationRepository extends JpaRepository<Location, UUID> {
     Optional<Location> findByName(String name);
+    Optional<List<Location>> findAllByOrderByName();
     void deleteById(UUID id);
 
     Long countByCreatedAtAfter(LocalDateTime startDate);

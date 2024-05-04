@@ -1,0 +1,37 @@
+<div class="container-fluid">
+  <div class="event-container mb-4">
+    <img src="{{ event.imageUrl }}" class="img-fluid rounded mr-4" style="max-width: 200px;" alt="">
+    <div class="event-details">
+      <h1 class="h3 mb-4 text-gray-800">{{ event.title }}</h1>
+      <p><strong>Data:</strong> {{ event.date }}</p>
+      <p><strong>Locatie:</strong> {{ event.location?.name }}, {{ event.location?.address }}</p>
+      <p class="mb-4">{{ event.shortDescription }}</p>
+      <p class="mt-5" *ngIf="descriptionIsVisible">{{ event.description }}</p>
+      <a class="view-details text-decoration-underline" (click)="toggleDescription()">Apasa pentru a vedea detalii</a>
+    </div>
+  </div>
+  <div class="tickets-container">
+    <div *ngIf="event.ticketTypeList?.length > 0">
+      <h2 class="mb-4 text-gray-800">Bilete</h2>
+      <div class="row ticket-details" *ngFor="let ticket of event.ticketTypeList">
+        <hr>
+        <h3 class="h3 text-gray-800 ticket-name col-sm-6">{{ ticket.name }}</h3>
+        <p class="col-sm-3 price"><strong>Pret:</strong> {{ ticket.price }} RON</p>
+        <div class="ticket-number-selector-container col-sm-3">
+          <button class="btn btn-primary ticket-number-button left" (click)="decrementQuantity(ticket)">
+            <span class="fa fa-minus"></span>
+          </button>
+          <input class="ticket-number" type="number" [(ngModel)]="ticket.reservedQuantity" readonly>
+          <button class="btn btn-primary ticket-number-button right" (click)="incrementQuantity(ticket)">
+            <span class="fa fa-plus"></span>
+          </button>
+        </div>
+        <p class="remaining-quantity mt-1"><strong>Cantitate ramasa: {{ ticket.remainingQuantity }}</strong></p>
+      </div>
+      <button class="btn btn-primary buy-button" (click)="buyTickets()">Cumpara</button>
+    </div>
+    <div *ngIf="event.ticketTypeList?.length == 0">
+      <h2 class="h4 mt-3 mb-4 text-gray-800">Nu sunt bilete disponibile pentru acest eveniment</h2>
+    </div>
+  </div>
+</div>

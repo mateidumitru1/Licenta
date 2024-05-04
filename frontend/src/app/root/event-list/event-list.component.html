@@ -1,0 +1,64 @@
+<div class="container-fluid">
+  <div class="title-and-filter d-flex">
+    <h1 class="flex-grow-1">
+      Evenimente
+    </h1>
+    <button class="btn btn-light" (click)="openFilterMenu()">
+      <i class="fas fa-filter"></i>
+    </button>
+  </div>
+  <div class="filter-options justify-content-end">
+    <div>
+      <div *ngFor="let location of filter.location" class="option bg-primary">
+        {{ location }}
+        <button class="btn btn-light btn-sm remove-filter-btn" (click)="removeFilter('location', location)">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    </div>
+    <div>
+      <div *ngFor="let artist of filter.artist" class="option bg-primary">
+        {{ artist }}
+        <button class="btn btn-light btn-sm remove-filter-btn" (click)="removeFilter('artist', artist)">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    </div>
+    <div>
+      <div *ngFor="let genre of filter.genre" class="option bg-primary">
+        {{ genre }}
+        <button class="btn btn-light btn-sm remove-filter-btn" (click)="removeFilter('genre', genre)">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    </div>
+    <div *ngIf="filter.startDate && filter.endDate">
+      <div class="option bg-primary">
+        {{ filter.startDate }} - {{ filter.endDate }}
+        <button class="btn btn-light btn-sm remove-filter-btn" (click)="removeFilter('date', '')">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div *ngIf="events.length == 0">
+      <h2>Nu a fost gasit niciun eveniment</h2>
+    </div>
+    <div *ngIf="events.length > 0" class="col-12">
+      <div role="button" *ngFor="let event of events"
+           class="card event-card rounded mb-3 mt-3"
+           [routerLink]="['/event', event.title]" [queryParams]="{ id: event.id }">
+        <div class="d-flex justify-content-center align-items-center">
+          <img class="img-fluid event-image" src="{{ event.imageUrl }}" alt="{{ event.tile }} image">
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">{{ event.title }}</h5>
+          <p class="card-text card-date">{{ event.date }} | {{ event.location.name }}</p>
+          <p class="card-text">{{ event.shortDescription.substring(0, 600) }} ...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

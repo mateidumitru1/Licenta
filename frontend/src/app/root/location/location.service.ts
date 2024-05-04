@@ -1,64 +1,45 @@
 import {Injectable, OnDestroy} from "@angular/core";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {apiURL} from "../../app.config";
 import {BehaviorSubject, lastValueFrom, Subscription} from "rxjs";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {query} from "@angular/animations";
 
 @Injectable({
   providedIn: 'root'
 })
 export class LocationService {
-  private locationSubject = new BehaviorSubject<any>({});
-  private moreEventsSubject = new BehaviorSubject<any[]>([]);
+  private eventListSubject = new BehaviorSubject<any>({});
 
   constructor(private http: HttpClient, private snackBar: MatSnackBar) {}
 
   setLocation(locations: any) {
-    this.locationSubject.next(locations);
+    this.eventListSubject.next(locations);
   }
 
   getLocation() {
-    return this.locationSubject.asObservable();
+    return this.eventListSubject.asObservable();
   }
 
-  setMoreEvents(events: any[]) {
-    this.moreEventsSubject.next(events);
-  }
-
-  getMoreEvents() {
-    return this.moreEventsSubject.asObservable();
-  }
-
-  async fetchLocationWithInitialEventsByLocationId(id: string, page: number, size: number) {
+  async fetchEventList(locationName: string, artistName: string, genreName: string, page: number, size: number) {
     try {
-      const location: any = await lastValueFrom(this.http.get(apiURL + '/events/location/' + id + '/initial', {
-        params: {
-          page: page.toString(),
-          size: size.toString()
-        }
-      }));
+      let params = new HttpParams();
+      if (locationName !== undefined) {
+        params = params.append('location', locationName);
+      }
+      if (artistName !== undefined) {
+        params = params.append('artist', artistName);
+      }
+      if (genreName !== undefined) {
+        params = params.append('genre', genreName);
+      }
+      params = params.append('page', page.toString());
+      params = params.append('size', size.toString());
+      const location: any = await lastValueFrom(this.http.get(apiURL + '/events/list',  {params: params}));
       this.setLocation(location);
     }
     catch (error) {
       this.snackBar.open('Error fetching location with initial events', 'Close', {
-        duration: 3000
-      });
-    }
-  }
-
-  async fetchMoreEventsByLocationId(id: string, page: number, size: number) {
-    try {
-      const moreEvents: any = await lastValueFrom(this.http.get(apiURL + '/events/location/' + id, {
-        params: {
-          page: page.toString(),
-          size: size.toString()
-        }
-      }));
-      console.log(moreEvents);
-      this.setMoreEvents(moreEvents);
-    }
-    catch (error) {
-      this.snackBar.open('Error fetching more events', 'Close', {
         duration: 3000
       });
     }

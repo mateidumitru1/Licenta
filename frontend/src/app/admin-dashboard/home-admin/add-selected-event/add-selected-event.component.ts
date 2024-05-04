@@ -27,7 +27,7 @@ export class AddSelectedEventComponent implements OnInit, OnDestroy {
   filteredEventList: any[] = [];
   searchText: string = '';
 
-  constructor(private homeAdminService: HomeAdminService, private snackBar: MatSnackBar, private dialogRef: MatDialogRef<AddSelectedEventComponent>) {}
+  constructor(private homeAdminService: HomeAdminService, private dialogRef: MatDialogRef<AddSelectedEventComponent>) {}
 
   async ngOnInit() {
     await this.homeAdminService.fetchEventListForSelection();

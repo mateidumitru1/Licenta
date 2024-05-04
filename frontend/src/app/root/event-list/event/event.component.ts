@@ -1,14 +1,14 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
-import {EventService} from "./event.service";
+import {EventService} from "../event.service";
 import {CurrencyPipe, NgForOf, NgIf} from "@angular/common";
 import {MatFormField} from "@angular/material/form-field";
 import {FormsModule} from "@angular/forms";
 import {MatInput} from "@angular/material/input";
 import {MatButton} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
-import {TicketService} from "./ticket.service";
-import {LoadingComponent} from "../../shared/loading/loading.component";
+import {TicketService} from "../ticket.service";
+import {LoadingComponent} from "../../../shared/loading/loading.component";
 import {Subscription} from "rxjs";
 
 @Component({

@@ -20,4 +20,9 @@ public class BroadGenreController {
     public ResponseEntity<List<BroadGenreResponseDto>> getAllBroadGenres() {
         return ResponseEntity.ok(broadGenreService.getAllBroadGenres());
     }
+
+    @GetMapping("/names")
+    public ResponseEntity<List<String>> getAllBroadGenreNames() {
+        return ResponseEntity.ok(broadGenreService.getAllBroadGenreNames());
+    }
 }

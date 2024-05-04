@@ -3,7 +3,6 @@ package com.matei.backend.controller;
 import com.matei.backend.dto.request.event.EventCreationRequestDto;
 import com.matei.backend.dto.request.event.EventUpdateRequestDto;
 import com.matei.backend.dto.response.event.*;
-import com.matei.backend.dto.response.location.LocationWithEventPageResponseDto;
 import com.matei.backend.entity.User;
 import com.matei.backend.service.EventService;
 import com.matei.backend.service.auth.AuthenticationService;
@@ -17,6 +16,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -91,16 +92,37 @@ public class EventController {
         return ResponseEntity.ok(eventService.getAllEventsForSelection());
     }
 
-    @GetMapping("/location/{locationId}/initial")
-    public ResponseEntity<LocationWithEventPageResponseDto> getLocationWithInitialEvents(@PathVariable String locationId) {
-        return ResponseEntity.ok(eventService.getLocationWithInitialEvents(UUID.fromString(locationId)));
-    }
+    @GetMapping("/list")
+    public ResponseEntity<Page<EventWithoutTicketArtistResponseDto>> getEventList(@RequestParam(required = false) String location,
+                                                                                  @RequestParam(required = false) String artist,
+                                                                                  @RequestParam(required = false) String genre,
+                                                                                  @RequestParam(required = false) String startDate,
+                                                                                  @RequestParam(required = false) String endDate,
+                                                                                  @RequestParam(defaultValue = "0") int page,
+                                                                                  @RequestParam(defaultValue = "10") int size) {
+        List<String> deserializedLocation = null;
+        if(location != null) {
+            deserializedLocation = Arrays.stream(location.split(",")).toList();
+        }
+        List<String> deserializedArtist = null;
+        if(artist != null) {
+            deserializedArtist = Arrays.stream(artist.split(",")).toList();
+        }
+        List<String> deserializedGenre = null;
+        if(genre != null) {
+            deserializedGenre = Arrays.stream(genre.split(",")).toList();
+        }
+        LocalDate deserializedStartDate = null;
+        if(startDate != null) {
+            deserializedStartDate = LocalDate.parse(startDate);
+        }
+        LocalDate deserializedEndDate = null;
+        if(endDate != null) {
+            deserializedEndDate = LocalDate.parse(endDate);
+        }
 
-    @GetMapping("/location/{locationId}")
-    public ResponseEntity<Page<EventWithoutAllResponseDto>> getLocationWithMoreEvents(@PathVariable String locationId,
-                                                                                @RequestParam(defaultValue = "1") int page,
-                                                                                @RequestParam(defaultValue = "10") int size) {
-        return ResponseEntity.ok(eventService.getLocationWithMoreEvents(UUID.fromString(locationId), page, size));
+        return ResponseEntity.ok(eventService.getEventList(deserializedLocation, deserializedArtist, deserializedGenre,
+                deserializedStartDate, deserializedEndDate, page, size));
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")

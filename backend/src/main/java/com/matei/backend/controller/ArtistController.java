@@ -75,4 +75,9 @@ public class ArtistController {
                                                                                              @RequestParam String search) {
         return ResponseEntity.ok(artistService.getFilteredArtistsPaginatedManage(page, size, filter, search));
     }
+
+    @GetMapping("/names")
+    public ResponseEntity<List<String>> getAllArtistNames() {
+        return ResponseEntity.ok(artistService.getAllArtistNames());
+    }
 }

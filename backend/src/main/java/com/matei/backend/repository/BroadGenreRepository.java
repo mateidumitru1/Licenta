@@ -9,5 +9,4 @@ import java.util.UUID;
 
 public interface BroadGenreRepository extends JpaRepository<BroadGenre, UUID> {
     Optional<List<BroadGenre>> findAllByOrderByName();
-
 }

@@ -1,0 +1,12 @@
+.genre-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.card {
+  width: 200px;
+  margin: 10px;
+  cursor: pointer;
+}

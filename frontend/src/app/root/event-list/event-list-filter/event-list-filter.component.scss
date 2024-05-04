@@ -1,0 +1,55 @@
+.container-fluid {
+  padding: 20px;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.navigation-item {
+  padding: 10px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.navigation-item:hover {
+  background-color: #f0f0f0;
+}
+
+.selected {
+  background-color: #e0e0e0;
+}
+
+.vertical-line {
+  border-left: 1px solid #ccc;
+  height: 100%;
+}
+
+.options {
+  padding: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.bottom-buttons {
+  margin-top: auto;
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px;
+}
+
+.selected-filters {
+  padding: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.filter {
+  padding: 5px;
+  background-color: royalblue;
+  color: white;
+  border-radius: 5px;
+}
+

@@ -74,4 +74,9 @@ public class LocationController {
                                                                                                    @RequestParam(defaultValue = "") String search) {
         return ResponseEntity.ok(locationService.getLocationsFilteredPaginatedManage(page, size, filter, search));
     }
+
+    @GetMapping("/names")
+    public ResponseEntity<List<String>> getAllLocationNames() {
+        return ResponseEntity.ok(locationService.getAllLocationNames());
+    }
 }

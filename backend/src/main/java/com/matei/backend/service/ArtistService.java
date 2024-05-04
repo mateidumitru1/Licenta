@@ -205,4 +205,11 @@ public class ArtistService {
                 .map(artist -> modelMapper.map(artist, ArtistWithoutEventGenreResponseDto.class))
                 .toList();
     }
+
+    public List<String> getAllArtistNames() {
+        return artistRepository.findAllByOrderByName().orElseThrow(() -> new ArtistNotFoundException("Artists not found"))
+                .stream()
+                .map(Artist::getName)
+                .toList();
+    }
 }

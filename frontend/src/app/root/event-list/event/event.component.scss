@@ -56,6 +56,27 @@
   width: 100%;
 }
 
+.ticket-name {
+  margin: 0;
+  align-content: center;
+}
+
+.price {
+  margin: 0;
+  align-content: center;
+}
+
+.remaining-quantity {
+  margin: 0;
+  text-align: end;
+}
+
+.ticket-number-selector-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
 .ticket-number {
   width: 35px;
 }
@@ -86,6 +107,27 @@
   }
   .container-fluid {
     width: 90%;
+  }
+  .ticket-details {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .ticket-number-selector-container {
+    justify-content: center;
+  }
+  .ticket-name {
+    text-align: center;
+  }
+  .price {
+    text-align: center;
+  }
+  .remaining-quantity {
+    text-align: center;
+  }
+  .buy-button {
+    margin-top: 15px;
+    width: 100%;
   }
 }
 

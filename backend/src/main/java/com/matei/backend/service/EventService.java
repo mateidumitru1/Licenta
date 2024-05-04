@@ -9,7 +9,6 @@ import com.matei.backend.dto.request.ticketType.TicketTypeUpdateRequestDto;
 import com.matei.backend.dto.response.artist.ArtistWithoutEventResponseDto;
 import com.matei.backend.dto.response.event.*;
 import com.matei.backend.dto.response.genre.GenreWithoutArtistListResponseDto;
-import com.matei.backend.dto.response.location.LocationWithEventPageResponseDto;
 import com.matei.backend.dto.response.location.LocationWithoutEventListResponseDto;
 import com.matei.backend.dto.response.preference.UserGenrePreferenceResponseDto;
 import com.matei.backend.dto.response.statistics.EventWithTicketsSoldCount;
@@ -309,18 +308,96 @@ public class EventService {
         return Collections.emptyList();
     }
 
-    public Page<EventWithoutAllResponseDto> getLocationWithMoreEvents(UUID locationId, int page, int size) {
-        return eventRepository.findByDateAfterAndLocationIdOrderByDateAsc(LocalDate.now(), locationId, PageRequest.of(page, size))
-                .map(event -> modelMapper.map(event, EventWithoutAllResponseDto.class));
-    }
+    public Page<EventWithoutTicketArtistResponseDto> getEventList(List<String> locationNameList,
+                                                                  List<String> artistNameList,
+                                                                  List<String> genreNameList,
+                                                                  LocalDate startDate,
+                                                                  LocalDate endDate,
+                                                                  int page, int size) {
 
-    public LocationWithEventPageResponseDto getLocationWithInitialEvents(UUID locationId) {
-        var eventPage = eventRepository.findByDateAfterAndLocationIdOrderByDateAsc(LocalDate.now(), locationId, PageRequest.of(0, 10))
+        if ((startDate == null && endDate != null) || (startDate != null && endDate == null)) {
+            throw new RuntimeException("Bad request");
+        }
+        boolean locationFilterIsNull = locationNameList == null;
+        boolean artistFilterIsNull = artistNameList == null;
+        boolean genreFilterIsNull = genreNameList == null;
+        boolean dateFilterIsNull = startDate == null;
+
+        if (locationFilterIsNull && artistFilterIsNull && genreFilterIsNull && dateFilterIsNull) {
+            return eventRepository.findByDateAfterOrderByDateAsc(LocalDate.now(),
+                            PageRequest.of(page, size))
+                    .map(event -> modelMapper.map(event, EventWithoutTicketArtistResponseDto.class));
+        }
+        if (!locationFilterIsNull && artistFilterIsNull && genreFilterIsNull && dateFilterIsNull) {
+            return eventRepository.findByDateAfterAndLocationNameInOrderByDateAsc(LocalDate.now(),
+                            locationNameList, PageRequest.of(page, size))
+                    .map(event -> modelMapper.map(event, EventWithoutTicketArtistResponseDto.class));
+        }
+        if (locationFilterIsNull && !artistFilterIsNull && genreFilterIsNull && dateFilterIsNull) {
+            return eventRepository.findByDateAfterAndArtistListNameInOrderByDateAsc(LocalDate.now(),
+                            artistNameList, PageRequest.of(page, size))
+                    .map(event -> modelMapper.map(event, EventWithoutTicketArtistResponseDto.class));
+        }
+        if (locationFilterIsNull && artistFilterIsNull && !genreFilterIsNull && dateFilterIsNull) {
+            return eventRepository.findByDateAfterAndBroadGenreNameInOrderByDateAsc(LocalDate.now(),
+                            genreNameList, PageRequest.of(page, size))
+                    .map(event -> modelMapper.map(event, EventWithoutTicketArtistResponseDto.class));
+        }
+        if (!locationFilterIsNull && !artistFilterIsNull && genreFilterIsNull && dateFilterIsNull) {
+            return eventRepository.findByDateAfterAndLocationNameInAndArtistListNameInOrderByDateAsc(LocalDate.now(),
+                            locationNameList, artistNameList, PageRequest.of(page, size))
+                    .map(event -> modelMapper.map(event, EventWithoutTicketArtistResponseDto.class));
+        }
+        if (!locationFilterIsNull && artistFilterIsNull && !genreFilterIsNull && dateFilterIsNull) {
+            return eventRepository.findByDateAfterAndLocationNameInAndBroadGenreNameInOrderByDateAsc(LocalDate.now(),
+                            locationNameList, genreNameList, PageRequest.of(page, size))
+                    .map(event -> modelMapper.map(event, EventWithoutTicketArtistResponseDto.class));
+        }
+        if (locationFilterIsNull && !artistFilterIsNull && !genreFilterIsNull && dateFilterIsNull) {
+            return eventRepository.findByDateAfterAndArtistListNameInAndBroadGenreNameInOrderByDateAsc(LocalDate.now(),
+                            artistNameList, genreNameList, PageRequest.of(page, size))
+                    .map(event -> modelMapper.map(event, EventWithoutTicketArtistResponseDto.class));
+        }
+
+        if (locationFilterIsNull && artistFilterIsNull && genreFilterIsNull && !dateFilterIsNull) {
+            return eventRepository.findByDateBetweenOrderByDateAsc(startDate, endDate,
+                            PageRequest.of(page, size))
+                    .map(event -> modelMapper.map(event, EventWithoutTicketArtistResponseDto.class));
+        }
+        if (!locationFilterIsNull && artistFilterIsNull && genreFilterIsNull && !dateFilterIsNull) {
+            return eventRepository.findByDateBetweenAndLocationNameInOrderByDateAsc(startDate,
+                            endDate, locationNameList, PageRequest.of(page, size))
+                    .map(event -> modelMapper.map(event, EventWithoutTicketArtistResponseDto.class));
+        }
+        if (locationFilterIsNull && !artistFilterIsNull && genreFilterIsNull && !dateFilterIsNull) {
+            return eventRepository.findByDateBetweenAndArtistListNameInOrderByDateAsc(startDate,
+                            endDate, artistNameList, PageRequest.of(page, size))
+                    .map(event -> modelMapper.map(event, EventWithoutTicketArtistResponseDto.class));
+        }
+        if (locationFilterIsNull && artistFilterIsNull && !genreFilterIsNull && !dateFilterIsNull) {
+            return eventRepository.findByDateBetweenAndBroadGenreNameInOrderByDateAsc(startDate,
+                            endDate, genreNameList, PageRequest.of(page, size))
+                    .map(event -> modelMapper.map(event, EventWithoutTicketArtistResponseDto.class));
+        }
+        if (!locationFilterIsNull && !artistFilterIsNull && genreFilterIsNull && !dateFilterIsNull) {
+            return eventRepository.findByDateBetweenAndLocationNameInAndArtistListNameInOrderByDateAsc(startDate,
+                            endDate, locationNameList, artistNameList, PageRequest.of(page, size))
+                    .map(event -> modelMapper.map(event, EventWithoutTicketArtistResponseDto.class));
+        }
+        if (!locationFilterIsNull && artistFilterIsNull && !genreFilterIsNull && !dateFilterIsNull) {
+            return eventRepository.findByDateBetweenAndLocationNameInAndBroadGenreNameInOrderByDateAsc(startDate,
+                            endDate, locationNameList, genreNameList, PageRequest.of(page, size))
+                    .map(event -> modelMapper.map(event, EventWithoutTicketArtistResponseDto.class));
+        }
+        if (locationFilterIsNull && !artistFilterIsNull && !genreFilterIsNull && !dateFilterIsNull) {
+            return eventRepository.findByDateBetweenAndArtistListNameInAndBroadGenreNameInOrderByDateAsc(startDate,
+                            endDate, artistNameList, genreNameList, PageRequest.of(page, size))
+                    .map(event -> modelMapper.map(event, EventWithoutTicketArtistResponseDto.class));
+        }
+
+        return eventRepository.findByDateAfterAndLocationNameInAndArtistListNameInAndBroadGenreNameInOrderByDateAsc(LocalDate.now(),
+                        locationNameList, artistNameList, genreNameList, PageRequest.of(page, size))
                 .map(event -> modelMapper.map(event, EventWithoutTicketArtistResponseDto.class));
-        var location = locationRepository.findById(locationId).map(l -> modelMapper.map(l, LocationWithEventPageResponseDto.class))
-                .orElseThrow(() -> new EventNotFoundException("Location not found"));
-        location.setEventPage(eventPage);
-        return location;
     }
 
     public EventPageWithCountResponseDto getAllEventsPaginatedManage(int page, int size) {

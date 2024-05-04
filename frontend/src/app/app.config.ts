@@ -10,6 +10,7 @@ import {
 } from "@angular/common/http";
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import {MyHttpInterceptor} from "./util/my-http-interceptor.service";
+import {provideNativeDateAdapter} from "@angular/material/core";
 
 export const apiURL = 'http://localhost:8080/api';
 export const mapBoxToken = 'pk.eyJ1IjoibWF0ZHVtIiwiYSI6ImNsc29uNHdldTBoZ2cycmx6dGU1em0xNngifQ.CNxZncBUud9hmoevWrxSyg';
@@ -21,5 +22,6 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptorsFromDi()),
     provideAnimationsAsync(),
     { provide: HTTP_INTERCEPTORS, useClass: MyHttpInterceptor, multi: true },
+    provideNativeDateAdapter()
   ]
 };

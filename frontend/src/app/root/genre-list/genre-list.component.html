@@ -1,0 +1,14 @@
+<div class="container-fluid">
+  <h1>Genuri</h1>
+  <div class="row">
+    <div class="col-md-12 genre-container">
+      <div *ngFor="let genre of genres">
+        <div class="card" [routerLink]="'/events'" [queryParams]="{ genre: genre.name }">
+          <div class="card-body">
+            <h5 class="card-title text-center">{{genre.name}}</h5>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

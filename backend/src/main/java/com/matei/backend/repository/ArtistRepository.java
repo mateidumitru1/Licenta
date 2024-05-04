@@ -15,6 +15,7 @@ import java.util.UUID;
 public interface ArtistRepository extends JpaRepository<Artist, UUID> {
     Optional<Artist> findByName(String name);
     Optional<List<Artist>> findAllByNameStartingWith(String firstLetter);
+    Optional<List<Artist>> findAllByOrderByName();
 
     Page<Artist> findAllByOrderByCreatedAtDesc(PageRequest of);
 

@@ -195,4 +195,11 @@ public class LocationService {
                 .map(location -> modelMapper.map(location, LocationWithoutEventListResponseDto.class))
                 .toList();
     }
+
+    public List<String> getAllLocationNames() {
+        return locationRepository.findAllByOrderByName().orElseThrow(() -> new LocationNotFoundException("Location not found"))
+                .stream()
+                .map(Location::getName)
+                .toList();
+    }
 }

@@ -2,7 +2,7 @@
   <mdb-carousel *ngIf="locations.length" [animation]="'slide'" [controls]="true" [interval]="5000" [indicators]="true">
     <mdb-carousel-item *ngFor="let location of locations">
       <img class="d-block w-100" src="{{ location.imageUrl }}" alt="First slide">
-      <div role="button" class="carousel-caption d-none d-md-block" [routerLink]="[location.name]" [queryParams]="{id: location.id}">
+      <div role="button" class="carousel-caption d-none d-md-block" [routerLink]="['events']" [queryParams]="{ location: location.name }">
         <h5>{{ location.name }}</h5>
         <p>{{ location.address }}</p>
       </div>
@@ -12,7 +12,7 @@
     <h1 class="text-center">Evenimente recomandate</h1>
     <div class="cards-container">
       <div class="card" *ngFor="let event of recommendedEvents"
-           [routerLink]="['/', event.location.name, event.title]"
+           [routerLink]="['event', event.title]"
            [queryParams]="{id: event.id}">
         <img alt="" class="card-img-top" src="{{ event.imageUrl }}"/>
         <div class="card-body">
@@ -25,7 +25,7 @@
   <h1 class="text-center">Evenimente selectate</h1>
   <div class="cards-container">
     <div class="card" *ngFor="let event of selectedEvents"
-         [routerLink]="['/', event.location.name, event.title]"
+         [routerLink]="['event', event.title]"
          [queryParams]="{id: event.id}">
       <img alt="" class="card-img-top" src="{{ event.imageUrl }}"/>
       <div class="card-body">

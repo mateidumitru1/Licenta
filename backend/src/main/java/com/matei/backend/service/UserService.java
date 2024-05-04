@@ -44,7 +44,7 @@ public class UserService {
         userToSave.setEnabled(true);
         userToSave.setCreatedAt(LocalDateTime.now());
 
-        var user = userRepository.save(modelMapper.map(userCreationRequestDto, User.class));
+        var user = userRepository.save(userToSave);
 
         return getAllUsersPaginatedManage(page, size);
     }

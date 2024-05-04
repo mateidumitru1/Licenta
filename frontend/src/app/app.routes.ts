@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 import {RootComponent} from "./root/root.component";
 import {HomeComponent} from "./root/home/home.component";
 import {LocationComponent} from "./root/location/location.component";
-import {EventComponent} from "./root/event/event.component";
+import {EventComponent} from "./root/event-list/event/event.component";
 import {LoginComponent} from "./identity/login/login.component";
 import {RegisterComponent} from "./identity/register/register.component";
 import {ForgotPasswordComponent} from "./identity/forgot-password/forgot-password.component";
@@ -41,6 +41,8 @@ import {IdentityGuard} from "./util/guards/can-activate/identity.guard";
 import {ArtistsListComponent} from "./root/artists-list/artists-list.component";
 import {ArtistComponent} from "./root/artists-list/artist/artist.component";
 import {ManageArtistsComponent} from "./admin-dashboard/manage/manage-artists/manage-artists.component";
+import {EventListComponent} from "./root/event-list/event-list.component";
+import {GenreListComponent} from "./root/genre-list/genre-list.component";
 
 export const routes: Routes = [
   { path: 'home' , redirectTo: '', pathMatch: 'full' },
@@ -73,14 +75,16 @@ export const routes: Routes = [
       { path: '', pathMatch: 'full', component: HomeComponent },
       { path: 'track', canActivate: [AccountGuard], component: TrackEventComponent },
       { path: 'page-not-found', component: PageNotFoundComponent },
-      { path: 'artists', redirectTo: 'artists/A', pathMatch: 'full' },
-      { path: 'artists/:letter', component: ArtistsListComponent },
-      { path: 'artist/:artist', component: ArtistComponent },
       { path: 'track/:event', canActivate: [AccountGuard], component: TrackEventDetailsComponent },
       { path: 'shopping-cart', canActivate: [AccountGuard], component: ShoppingCartComponent },
       { path: 'verify-account/:token', canActivate: [IdentityGuard], component: VerifyAccountComponent },
       { path: 'resend-verify-account-email/:email', canActivate: [IdentityGuard], component: ResendVerifyAccountEmailComponent },
-      { path: ':location' , pathMatch: 'full', component: LocationComponent },
-      { path: ':location/:event', pathMatch: 'full', component: EventComponent },
+      { path: 'events', component: EventListComponent},
+      { path: 'genres', component: GenreListComponent},
+      { path: 'artists', redirectTo: 'artists/A', pathMatch: 'full' },
+      { path: 'artists/:letter', component: ArtistsListComponent },
+      { path: 'artist/:artist', component: ArtistComponent },
+      { path: 'location/:location' , pathMatch: 'full', component: LocationComponent },
+      { path: 'event/:event', pathMatch: 'full', component: EventComponent },
     ]},
 ];

@@ -13,7 +13,9 @@
         >
           Locatii
         </a>
-        <a class="margin-top ms-3" routerLink="/artists/A">Artisti</a>
+        <a class="margin-top ms-3" routerLink="/events">Evenimente</a>
+        <a class="margin-top ms-3" routerLink="/artists">Artisti</a>
+        <a class="margin-top ms-3" routerLink="/genres">Genuri</a>
       </div>
       <button
         class="navbar-toggler"
@@ -24,12 +26,13 @@
       >
         <i class="fas fa-bars"></i>
       </button>
-      <div class="collapse navbar-collapse"
+      <div class="collapse navbar-collapse justify-content-between align-items-center fs-5"
            id="navbarNavAltMarkup"
            mdbCollapse
            #noListNav="mdbCollapse">
 
         <div class="input-group">
+          <span class="spacer"></span>
           <input
             #searchInput
             type="search"
@@ -41,6 +44,7 @@
           <span role="button" class="btn btn-light input-group-text border-0 ms-1 me-4" id="search-addon" (click)="search()">
             <i class="fas fa-search fs-6"></i>
           </span>
+          <span class="spacer"></span>
         </div>
         <div class="right-buttons d-flex">
           <div role="button" class="btn btn-light me-4" (click)="onShoppingCartClick()">
@@ -91,7 +95,7 @@
     #externalContent="mdbCollapse"
   >
     <div class="locations-container d-flex flex-row flex-wrap">
-      <a role="button" class="card col-6 col-md-4 col-lg-2" [routerLink]="[location.name]" [queryParams]="{ id: location.id }"
+      <a role="button" class="card col-6 col-md-4 col-lg-2" [routerLink]="['/events']" [queryParams]="{ location: location.name }"
          *ngFor="let location of locationsToDisplay" (click)="externalContent.toggle()">
         <img alt="" class="img-fluid" src="{{ location.imageUrl }}" />
         <div class="card-body">
@@ -109,17 +113,17 @@
   <ul>
     <h4 *ngIf="searchLocations.length > 0">Locatii</h4>
     <li *ngFor="let searchLocation of searchLocations"
-        [routerLink]="[searchLocation.name]" [queryParams]="{ id: searchLocation.id }">
+        [routerLink]="['events']" [queryParams]="{ location: searchLocation.id }">
       <a>{{ searchLocation?.name }}</a>
     </li>
     <h4 *ngIf="searchEvents.length > 0" class="mt-2">Evenimente</h4>
     <li *ngFor="let searchEvent of searchEvents"
-        [routerLink]="[searchEvent.location.name, searchEvent.title]" [queryParams]="{ id: searchEvent.id }">
+        [routerLink]="['event', searchEvent.title]" [queryParams]="{ id: searchEvent.id }">
       <a>{{ searchEvent?.title }}</a>
     </li>
     <h4 *ngIf="searchArtists.length > 0" class="mt-2">Artisti</h4>
     <li *ngFor="let searchArtist of searchArtists"
-        [routerLink]="['artist', searchArtist.name]" [queryParams]="{ id: searchArtist.id }">
+        [routerLink]="['events']" [queryParams]="{ artist: searchArtist.name }">
       <a>{{ searchArtist?.name }}</a>
   </ul>
 </div>
