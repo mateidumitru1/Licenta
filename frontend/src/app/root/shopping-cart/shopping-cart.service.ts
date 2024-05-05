@@ -83,7 +83,9 @@ export class ShoppingCartService {
           'Authorization': 'Bearer ' + this.identityService.getToken()
         }
       }));
-      this.setShoppingCart({});
+      this.setShoppingCart({shoppingCartItemList: []});
+      this.headerService.setShoppingCartSize(0);
+      this.snackBar.open('Comanda a fost realizata cu succes!', 'Dismiss', {duration: 3000});
     }
     catch (error) {
       this.snackBar.open('Error buying tickets', 'Dismiss', {duration: 3000});

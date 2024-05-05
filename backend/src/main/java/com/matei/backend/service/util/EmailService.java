@@ -1,7 +1,9 @@
 package com.matei.backend.service.util;
 
+import com.matei.backend.dto.response.event.EventEmailDto;
 import com.matei.backend.dto.response.event.EventWithoutTicketArtistResponseDto;
 import com.matei.backend.dto.response.event.EventWithoutTicketTypesResponseDto;
+import com.matei.backend.dto.response.ticket.TicketEmailDto;
 import com.matei.backend.dto.response.ticket.TicketResponseDto;
 import com.matei.backend.entity.ResetPasswordToken;
 import com.sendgrid.Method;
@@ -15,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
@@ -69,6 +72,8 @@ public class EmailService {
 
         List<Attachments> attachmentsList = new ArrayList<>();
 
+        List<EventEmailDto> eventList = new ArrayList<>();
+
         eventTicketMap.forEach((eventResponseDto, ticketResponseDtoList) -> {
             byte[] pdfBytes = pdfService.createPdf(eventResponseDto, ticketResponseDtoList);
 
@@ -77,12 +82,24 @@ public class EmailService {
             attachments.setType("application/pdf");
             attachments.setFilename(eventResponseDto.getTitle() + ".pdf");
 
+            eventList.add(EventEmailDto.builder()
+                    .title(eventResponseDto.getTitle())
+                    .date(eventResponseDto.getDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")))
+                    .locationName(eventResponseDto.getLocation().getName())
+                    .broadGenreName(eventResponseDto.getBroadGenre().getName())
+                    .ticketList(ticketResponseDtoList.stream().map(ticketResponseDto -> TicketEmailDto.builder()
+                            .image(ticketResponseDto.getImage())
+                            .ticketType(ticketResponseDto.getTicketType().getName())
+                            .price(ticketResponseDto.getTicketType().getPrice().toString())
+                            .build()).toList())
+                    .build());
+
             attachmentsList.add(attachments);
         });
 
         Personalization personalization = new Personalization();
-//        personalization.addDynamicTemplateData("image", "data:image/jpeg;base64, " + ticketResponseDto.getImage());
         personalization.addTo(to);
+        personalization.addDynamicTemplateData("eventList", eventList);
 
         Mail mail = new Mail();
         mail.setFrom(from);

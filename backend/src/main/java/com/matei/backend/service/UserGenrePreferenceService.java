@@ -50,6 +50,7 @@ public class UserGenrePreferenceService {
         updateMergedGenrePreferences(existingGenrePreferences);
 
         userGenrePreferenceRepository.saveAll(existingGenrePreferences);
+        System.out.println("User genre preferences updated");
     }
 
     private List<UserGenrePreference> createNewGenrePreferences(Map<String, Double> genrePercentageMap,

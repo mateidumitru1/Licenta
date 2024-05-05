@@ -56,10 +56,10 @@ public class OrderService {
         });
 
         var order = orderRepository.save(Order.builder()
-                .id(UUID.randomUUID())
                 .price(shoppingCart.getPrice())
                 .createdAt(LocalDateTime.now())
                 .status(Status.CONFIRMED)
+                .orderNumber(orderRepository.findMaxOrderNumber() + 1)
                 .user(Optional.of(userService.getUserById(userId)).map(user -> User.builder()
                         .id(user.getId()).build()).orElseThrow())
                 .build());

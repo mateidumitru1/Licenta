@@ -14,6 +14,9 @@ public interface OrderRepository extends JpaRepository<Order, UUID> {
 
     Optional<Order> findByOrderNumber(Long number);
 
+    @Query("SELECT MAX(o.orderNumber) FROM Order o")
+    Long findMaxOrderNumber();
+
     @Query("SELECT COUNT(o) FROM Order o WHERE o.createdAt > :startDate AND o.status = 0")
     Long countByCreatedAtAfterAndStatusConfirmed(LocalDateTime startDate);
 
