@@ -13,6 +13,7 @@
             {{ ticket.ticketType.event.title }}
           </a>
         </h5>
+        <a [routerLink]="['/event-details', ticket.ticketType.event.title]" [queryParams]="{ id: ticket.ticketType.event.id }">Vezi biletele</a>
       </div>
       <div class="card-body">
         <p class="card-text">Data: {{ ticket.ticketType.event.date | date }}</p>

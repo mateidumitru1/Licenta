@@ -2,16 +2,15 @@ import {HostListener, Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {apiURL} from "../app.config";
 import {JwtHandler} from "./jwt.handler";
-import {Router} from "@angular/router";
 import {MatSnackBar} from "@angular/material/snack-bar";
-import {Subject} from "rxjs";
+import {Location} from "@angular/common";
 
 @Injectable({
   providedIn: 'root'
 })
 export class IdentityService {
   constructor(private http: HttpClient, private jwtHandler: JwtHandler, private snackBar: MatSnackBar,
-              private router: Router) { }
+              private location: Location) { }
 
   login(username: string, password: string, rememberMe: boolean) {
     this.http.post(apiURL + '/authenticate', {
@@ -20,13 +19,7 @@ export class IdentityService {
     }).subscribe({
       next: (response: any) => {
         this.jwtHandler.setToken(response.token, rememberMe);
-        if (this.jwtHandler.getRole() === 'ADMIN') {
-          this.router.navigate(['admin-dashboard']);
-        } else if(this.jwtHandler.getRole() === 'USER') {
-          this.router.navigate(['home']);
-        } else {
-          this.router.navigate(['validator-dashboard'])
-        }
+        this.location.back();
       },
       error: (error) => {
         this.snackBar.open(error.error, 'Dismiss', {duration: 3000});
@@ -41,9 +34,8 @@ export class IdentityService {
       }
     }).subscribe({
       next: () => {
-        this.router.navigate(['']);
         this.jwtHandler.removeToken();
-        this.snackBar.open('You have been logged out!', 'Close', {
+        this.snackBar.open('Ai fost deconectat cu succes!', 'Close', {
           duration: 3000
         });
       },
@@ -64,7 +56,8 @@ export class IdentityService {
       email: email
     }).subscribe({
       next: () => {
-        this.snackBar.open('Registration successful!', 'Close', {
+        this.location.back();
+        this.snackBar.open('Contul a fost creat cu succes!', 'Close', {
           duration: 3000
         });
         return true;
@@ -80,6 +73,7 @@ export class IdentityService {
   forgotPassword(email: string) {
     this.http.post(apiURL + '/forgot-password?email=' + email, null).subscribe({
       next: () => {
+        this.location.back();
         this.snackBar.open('Un email a fost trimis!', 'Close', {
           duration: 3000
         });
@@ -95,6 +89,7 @@ export class IdentityService {
   resetPassword(token: string, password: string) {
     this.http.post(apiURL + '/reset-password?token=' + token + '&password=' + password, null).subscribe({
       next: () => {
+        this.location.back();
         this.snackBar.open('Parola a fost schimbata!', 'Close', {
           duration: 3000
         });

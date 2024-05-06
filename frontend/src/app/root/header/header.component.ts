@@ -11,6 +11,7 @@ import {FormsModule} from "@angular/forms";
 import {DropdownService} from "./dropdown.service";
 import {ShoppingCartService} from "../shopping-cart/shopping-cart.service";
 import {Subscription} from "rxjs";
+import {MdbTooltipModule} from "mdb-angular-ui-kit/tooltip";
 
 @Component({
   selector: 'app-header',
@@ -22,7 +23,8 @@ import {Subscription} from "rxjs";
     NgForOf,
     RouterLink,
     LoadingComponent,
-    FormsModule
+    FormsModule,
+    MdbTooltipModule
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',

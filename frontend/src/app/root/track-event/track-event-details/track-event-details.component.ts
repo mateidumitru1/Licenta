@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, RouterLink} from "@angular/router";
 import {TrackEventService} from "../track-event.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {MatDialog} from "@angular/material/dialog";
@@ -13,7 +13,8 @@ import {MatButton} from "@angular/material/button";
   imports: [
     NgIf,
     MatButton,
-    NgForOf
+    NgForOf,
+    RouterLink
   ],
   templateUrl: './track-event-details.component.html',
   styleUrl: './track-event-details.component.scss'
@@ -23,7 +24,7 @@ export class TrackEventDetailsComponent implements OnInit{
   event: any = {};
 
   constructor(private route: ActivatedRoute, private trackEventService: TrackEventService,
-              private snackBar: MatSnackBar, private mapDialog: MatDialog) {}
+               private mapDialog: MatDialog) {}
 
   async ngOnInit() {
     await this.trackEventService.fetchTicketsByEventId(this.route.snapshot.queryParams['id']);
@@ -33,10 +34,6 @@ export class TrackEventDetailsComponent implements OnInit{
         this.event = tickets[0].ticketType.event;
       }
     });
-  }
-
-  displayQR(ticket: any) {
-    ticket.shouldDisplayQR = !ticket.shouldDisplayQR;
   }
 
   showMap() {

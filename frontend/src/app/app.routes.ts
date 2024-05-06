@@ -75,7 +75,7 @@ export const routes: Routes = [
       { path: '', pathMatch: 'full', component: HomeComponent },
       { path: 'track', canActivate: [AccountGuard], component: TrackEventComponent },
       { path: 'page-not-found', component: PageNotFoundComponent },
-      { path: 'track/:event', canActivate: [AccountGuard], component: TrackEventDetailsComponent },
+      { path: 'event-details/:event', canActivate: [AccountGuard], component: TrackEventDetailsComponent },
       { path: 'shopping-cart', canActivate: [AccountGuard], component: ShoppingCartComponent },
       { path: 'verify-account/:token', canActivate: [IdentityGuard], component: VerifyAccountComponent },
       { path: 'resend-verify-account-email/:email', canActivate: [IdentityGuard], component: ResendVerifyAccountEmailComponent },

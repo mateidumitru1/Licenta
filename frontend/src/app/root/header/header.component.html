@@ -48,7 +48,8 @@
         </div>
         <div class="right-buttons d-flex">
           <div role="button" class="btn btn-light me-4" (click)="onShoppingCartClick()">
-            <div class="d-flex justify-content-center align-items-center fs-5">
+            <div class="d-flex justify-content-center align-items-center fs-5"
+                 mdbTooltip="Cos de cumparaturi">
               <i id="shopping-cart-icon" class="fas fa-shopping-cart me-1"></i>
               <span id="badge" class="badge text-primary" *ngIf="getIdentityService().isLoggedIn() && shoppingCartSize > 0" >{{ shoppingCartSize }}</span>
             </div>

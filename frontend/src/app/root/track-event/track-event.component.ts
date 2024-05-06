@@ -121,7 +121,8 @@ export class TrackEventComponent implements OnInit{
   }
   handleButtonClick(data: string[]) {
     const queryParams = {id: data[data.length - 1]};
-    const routeSegments = data.slice(0, -1);
+    let routeSegments = data.slice(0, -1);
+    routeSegments = routeSegments.map(segment => segment === 'track' ? 'event-details' : segment);
     this.router.navigate(['/', ...routeSegments], {queryParams});
   }
 }

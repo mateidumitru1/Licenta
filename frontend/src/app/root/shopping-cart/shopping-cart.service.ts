@@ -41,10 +41,6 @@ export class ShoppingCartService {
   }
 
   async updateQuantity(shoppingCartItem: any) {
-    if (!this.identityService.isLoggedIn()) {
-      this.snackBar.open('You must be logged in to view your shopping cart', 'Dismiss', {duration: 3000});
-      return;
-    }
     try {
       const shoppingCart = await lastValueFrom(this.http.patch(apiURL + '/shopping-cart/' + shoppingCartItem.id + '?quantity=' + shoppingCartItem.quantity, null, {
         headers: {
@@ -52,6 +48,7 @@ export class ShoppingCartService {
         }
       }));
       this.setShoppingCart(shoppingCart);
+      this.snackBar.open('Cantitate actualizata cu succes!', 'Dismiss', {duration: 3000})
     }
     catch (error) {
       this.snackBar.open('Error updating quantity', 'Dismiss', {duration: 3000});
@@ -59,10 +56,6 @@ export class ShoppingCartService {
   }
 
   async removeTicketFromShoppingCart(ticketType: any) {
-    if (!this.identityService.isLoggedIn()) {
-      this.snackBar.open('You must be logged in to view your shopping cart', 'Dismiss', {duration: 3000});
-      return;
-    }
     try {
       const shoppingCart = await lastValueFrom(this.http.put(apiURL + '/shopping-cart/' + ticketType.id, null,{
         headers: {
@@ -70,6 +63,9 @@ export class ShoppingCartService {
         }
       }));
       this.setShoppingCart(shoppingCart);
+      const sub = this.headerService.getShoppingCartSize().subscribe(size => this.headerService.setShoppingCartSize(size - 1));
+      sub.unsubscribe();
+      this.snackBar.open('Biletul a fost sters din cosul de cumparaturi!', 'Dismiss', {duration: 3000});
     }
     catch (error) {
       this.snackBar.open('Error removing ticket from shopping cart', 'Dismiss', {duration: 3000});
