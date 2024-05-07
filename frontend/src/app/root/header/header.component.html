@@ -1,114 +1,70 @@
 <header>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid fs-5">
-      <div class="d-flex ">
-        <a class="navbar-brand" routerLink="/">Bileteria</a>
-        <a
-          class="margin-top"
-          type="button"
-          (click)="externalContent.toggle()"
-          aria-controls="navbarToggleExternalContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          Locatii
-        </a>
-        <a class="margin-top ms-3" routerLink="/events">Evenimente</a>
-        <a class="margin-top ms-3" routerLink="/artists">Artisti</a>
-        <a class="margin-top ms-3" routerLink="/genres">Genuri</a>
-      </div>
-      <button
-        class="navbar-toggler"
-        type="button"
-        (click)="noListNav.toggle()"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <i class="fas fa-bars"></i>
-      </button>
-      <div class="collapse navbar-collapse justify-content-between align-items-center fs-5"
-           id="navbarNavAltMarkup"
-           mdbCollapse
-           #noListNav="mdbCollapse">
-
-        <div class="input-group">
-          <span class="spacer"></span>
-          <input
-            #searchInput
-            type="search"
-            class="form-control rounded form-control-lg ms-3"
-            placeholder="Cauta"
-            aria-label="Search"
-            [(ngModel)]="searchText"
-          />
-          <span role="button" class="btn btn-light input-group-text border-0 ms-1 me-4" id="search-addon" (click)="search()">
-            <i class="fas fa-search fs-6"></i>
-          </span>
-          <span class="spacer"></span>
-        </div>
-        <div class="right-buttons d-flex">
-          <div role="button" class="btn btn-light me-4" (click)="onShoppingCartClick()">
-            <div class="d-flex justify-content-center align-items-center fs-5"
-                 mdbTooltip="Cos de cumparaturi">
-              <i id="shopping-cart-icon" class="fas fa-shopping-cart me-1"></i>
-              <span id="badge" class="badge text-primary" *ngIf="getIdentityService().isLoggedIn() && shoppingCartSize > 0" >{{ shoppingCartSize }}</span>
-            </div>
-          </div>
-          <div mdbDropdown class="nav-item dropdown d-flex justify-content-center align-items-center me-2">
-            <a
-              class="nav-link dropdown-toggle"
-              id="navbarDropdownMenuLink"
-              role="button"
-              mdbDropdownToggle
-              aria-expanded="false"
-            >
-              <i *ngIf="!getIdentityService().isLoggedIn()" class="fa-solid fa-user me-4"></i>
-              <div *ngIf="getIdentityService().isLoggedIn()">
-                Salut, {{ getIdentityService().getUsername() }}
+  <nav class="navbar">
+    <a class="navbar-brand" routerLink="/">Bileteria</a>
+    <div class="full-size-navbar-items">
+      <div class="dropdown">
+        <button class="nav-drop-toggle">Locatii</button>
+        <div class="dropdown-content">
+          <h1 class="dropdown-title">Ce se intampla la ...</h1>
+          <div class="locations-container">
+            <a role="button" class="card" [routerLink]="['/events']" [queryParams]="{ location: location.name }"
+               *ngFor="let location of locations">
+              <div class="card-body">
+                <h5 class="card-title">{{ location.name }}</h5>
               </div>
             </a>
-            <ul mdbDropdownMenu class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
-              <li *ngIf="!getIdentityService().isLoggedIn()">
-                <a class="dropdown-item" routerLink="/login">Login</a>
-              </li>
-              <li *ngIf="getIdentityService().isLoggedIn()">
-                <a class="dropdown-item" routerLink="/account">Contul meu</a>
-              </li>
-              <li *ngIf="getIdentityService().isLoggedIn()">
-                <a class="dropdown-item" routerLink="/account/orders">Comenzile mele</a>
-              </li>
-              <li *ngIf="getIdentityService().isLoggedIn()">
-                <a class="dropdown-item" routerLink="/track">Urmareste evenimentele</a>
-              </li>
-              <li *ngIf="getIdentityService().isLoggedIn()">
-                <a role="button" class="dropdown-item" (click)="logout()">Logout</a>
-              </li>
-            </ul>
+          </div>
+        </div>
+      </div>
+      <a class="nav-item" routerLink="/artists">Artisti</a>
+      <a class="nav-item" routerLink="/genres">Genuri</a>
+      <a class="nav-item" routerLink="/events">Evenimente</a>
+      <div class="input-group">
+        <span class="spacer"></span>
+        <input
+          #searchInput
+          type="search"
+          class="form-control rounded form-control-lg ms-3"
+          placeholder="Cauta"
+          aria-label="Search"
+          [(ngModel)]="searchText"
+        />
+        <span role="button" class="btn btn-light input-group-text border-0 ms-1 me-4" id="search-addon" (click)="search()">
+          <i class="fas fa-search fs-6"></i>
+        </span>
+        <span class="spacer"></span>
+      </div>
+      <div class="right-buttons">
+        <div role="button" class="shopping-cart-button nav-item" (click)="onShoppingCartClick()" mdbTooltip="Cos de cumparaturi">
+          <i id="shopping-cart-icon" class="fas fa-shopping-cart me-1"></i>
+          <span id="badge" class="badge text-primary" *ngIf="getIdentityService().isLoggedIn() && shoppingCartSize > 0" >{{ shoppingCartSize }}</span>
+        </div>
+        <div class="dropdown">
+          <button class="nav-drop-toggle account-button">
+            <span *ngIf="getIdentityService().isLoggedIn()">Salut, {{ getIdentityService().getUsername() }}</span>
+            <span *ngIf="!getIdentityService().isLoggedIn()">Contul meu</span>
+          </button>
+          <div class="dropdown-content left">
+            <div *ngIf="getIdentityService().isLoggedIn()">
+              <a class="dropdown-item" routerLink="/account">Contul meu</a>
+              <a class="dropdown-item" routerLink="/account/orders">Comenzile mele</a>
+              <a class="dropdown-item" routerLink="/track">Urmareste evenimentele</a>
+              <a role="button" class="dropdown-item" (click)="logout()">Deconectare</a>
+            </div>
+            <div *ngIf="!getIdentityService().isLoggedIn()">
+              <a class="dropdown-item" routerLink="/login">Autentificare</a>
+              <a class="dropdown-item" routerLink="/register">Inregistrare</a>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </nav>
-  <div
-    class="collapse"
-    id="navbarToggleExternalContent"
-    mdbCollapse
-    #externalContent="mdbCollapse"
-  >
-    <div class="locations-container d-flex flex-row flex-wrap">
-      <a role="button" class="card col-6 col-md-4 col-lg-2" [routerLink]="['/events']" [queryParams]="{ location: location.name }"
-         *ngFor="let location of locationsToDisplay" (click)="externalContent.toggle()">
-        <img alt="" class="img-fluid" src="{{ location.imageUrl }}" />
-        <div class="card-body">
-          <h5 class="card-title">{{ location.name }}</h5>
-        </div>
-      </a>
-      <button class="btn next-button" (click)="scrollToNext()">
-        <i class="fas fa-angle-right"></i>
+    <div class="mobile-navbar-items">
+      <button class="nav-menu-button" (click)="togglePanel()">
+        <i class="fas fa-bars"></i>
       </button>
     </div>
-  </div>
-
+  </nav>
 </header>
 <div #searchDropdown *ngIf="showDropdown" class="search-dropdown">
   <ul>
@@ -127,4 +83,52 @@
         [routerLink]="['events']" [queryParams]="{ artist: searchArtist.name }">
       <a>{{ searchArtist?.name }}</a>
   </ul>
+</div>
+<div *ngIf="panelDisplay" class="panel" [ngClass]="{'open': panelDisplay}">
+  <div *ngIf="getIdentityService().isLoggedIn()">
+    <h2>Salut, {{ getIdentityService().getUsername() }}</h2>
+    <hr>
+    <ul>
+      <li><a role="button" routerLink="/account">Contul meu</a></li>
+      <li><a role="button" routerLink="/account/orders">Comenzile mele</a></li>
+      <li><a role="button" routerLink="/track">Urmareste evenimentele</a></li>
+      <li><a role="button" (click)="logout()">Deconectare</a></li>
+    </ul>
+  </div>
+  <div *ngIf="!getIdentityService().isLoggedIn()">
+    <ul>
+      <li><a role="button" routerLink="/login">Autentificare</a></li>
+      <li><a role="button" routerLink="/register">Inregistrare</a></li>
+    </ul>
+  </div>
+  <hr>
+  <ul>
+    <li>
+      <a role="button" (click)="toggleContentDisplay('locations')">Locatii</a>
+      <div *ngIf="shouldDisplayLocations" class="d-flex flex-wrap">
+        <div *ngFor="let location of locations" class="location-column">
+          <a [routerLink]="['/events']" [queryParams]="{ location: location.name }">{{ location.name }}</a>
+        </div>
+      </div>
+    </li>
+    <li>
+      <a role="button" (click)="toggleContentDisplay('artists')">Artisti</a>
+      <div *ngIf="shouldDisplayArtists">
+
+      </div>
+    </li>
+    <li>
+      <a role="button" (click)="toggleContentDisplay('genres')">Genuri</a>
+      <div *ngIf="shouldDisplayGenres">
+
+      </div>
+    </li>
+    <li>
+      <a role="button" routerLink="/events">Evenimente</a>
+      <div></div>
+    </li>
+  </ul>
+  <button class="panel-close-button" (click)="togglePanel()">
+    <i class="fas fa-times"></i>
+  </button>
 </div>

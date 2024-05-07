@@ -1,7 +1,5 @@
 import {Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {MdbDropdownModule} from "mdb-angular-ui-kit/dropdown";
-import {NgForOf, NgIf} from "@angular/common";
-import {MdbCollapseModule} from "mdb-angular-ui-kit/collapse";
+import {NgClass, NgForOf, NgIf} from "@angular/common";
 import {HeaderService} from "./header.service";
 import {NavigationEnd, Router, RouterLink} from "@angular/router";
 import {IdentityService} from "../../identity/identity.service";
@@ -12,19 +10,20 @@ import {DropdownService} from "./dropdown.service";
 import {ShoppingCartService} from "../shopping-cart/shopping-cart.service";
 import {Subscription} from "rxjs";
 import {MdbTooltipModule} from "mdb-angular-ui-kit/tooltip";
+import {MdbCollapseModule} from "mdb-angular-ui-kit/collapse";
 
 @Component({
   selector: 'app-header',
   standalone: true,
   imports: [
-    MdbDropdownModule,
     NgIf,
-    MdbCollapseModule,
     NgForOf,
     RouterLink,
     LoadingComponent,
     FormsModule,
-    MdbTooltipModule
+    MdbTooltipModule,
+    MdbCollapseModule,
+    NgClass
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
@@ -36,8 +35,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private searchResultSubscription: Subscription | undefined;
 
   locations: any[] = [];
-  locationsToDisplay: any[] = [];
-  startIndex: number = 0;
 
   showDropdown: boolean = false;
   searchText: string = '';
@@ -68,6 +65,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.searchEvents = [];
         this.searchArtists = [];
         this.dropdownService.setShowDropdown(false);
+        this.panelDisplay = false;
+        this.shouldDisplayLocations = false;
+        this.shouldDisplayArtists = false;
+        this.shouldDisplayGenres = false;
       }
     });
     this.dropDownSubscription = this.dropdownService.showDropdown$.subscribe((showDropdown) => {
@@ -78,7 +79,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.headerService.getLocations().subscribe({
       next: (locations: any) => {
         this.locations = locations;
-        this.locationsToDisplay = locations.slice(0, 5);
       }
     });
     this.shoppingCartSubscription = this.headerService.getShoppingCartSize().subscribe({
@@ -93,18 +93,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.locationsSubscription?.unsubscribe();
     this.dropDownSubscription?.unsubscribe();
     this.searchResultSubscription?.unsubscribe();
-  }
-
-  scrollToNext() {
-    this.startIndex += 5;
-    if (this.startIndex >= this.locations.length) {
-      this.startIndex = 0;
-      this.locationsToDisplay = this.locations.slice(this.startIndex, this.startIndex + 5);
-    } else if (this.locations.length - this.startIndex < 5) {
-      this.locationsToDisplay = this.locations.slice(this.startIndex, this.locations.length);
-    } else {
-      this.locationsToDisplay = this.locations.slice(this.startIndex, this.startIndex + 5);
-    }
   }
 
   onShoppingCartClick() {
@@ -162,5 +150,34 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   getIdentityService() {
     return this.identityService;
+  }
+
+  panelDisplay: boolean = false;
+  shouldDisplayLocations: boolean = false;
+  shouldDisplayArtists: boolean = false;
+  shouldDisplayGenres: boolean = false;
+
+  togglePanel() {
+    this.panelDisplay = !this.panelDisplay;
+  }
+
+  toggleContentDisplay(content: string) {
+    switch (content) {
+      case 'locations':
+        this.shouldDisplayLocations = !this.shouldDisplayLocations;
+        this.shouldDisplayArtists = false;
+        this.shouldDisplayGenres = false;
+        break;
+      case 'artists':
+        this.shouldDisplayArtists = !this.shouldDisplayArtists;
+        this.shouldDisplayLocations = false;
+        this.shouldDisplayGenres = false;
+        break;
+      case 'genres':
+        this.shouldDisplayGenres = !this.shouldDisplayGenres;
+        this.shouldDisplayLocations = false;
+        this.shouldDisplayArtists = false;
+        break;
+    }
   }
 }
