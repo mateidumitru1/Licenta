@@ -22,25 +22,9 @@ import java.util.function.Function;
 @Service
 @RequiredArgsConstructor
 public class JwtService {
-
     private final BlackListedTokenRepository blackListedTokenRepository;
 
-    private static final String SECRET_KEY = "tap38llY7BEaq5uqDxRr0HDn0ydxumGJ" +
-            "UQ5DevrUedVHAlU8kDIObZZz1rm3gS6y" +
-            "HfCFliOefBov515HOTVEkdbaxLuU73wS" +
-            "04e9QmMbMLx231wf3IJ7f2vdATyVMYq6" +
-            "J3sauTwypR1Epl0Xa37E8R8i98Ar2B9A" +
-            "4ZgXuP9SRxBojYhQppTttz8iTWh49O5y" +
-            "Qf66oxtwNONZUkDBlTYB59hs6O6WMEdq" +
-            "bc2hMT4uzJU3ewfxNgTiRtS6txirpiKe" +
-            "q5lMxe9JWczVpU79zEUtjwPSvMRhrx9p" +
-            "XnLgApK47OVrQa2IZvuaFmOvcTz2g528" +
-            "hcG3wB2yyPo2mNfuyRTvh9ee4AZHDi7v" +
-            "7zHHc1RgQC4mGlwNfHB4RJ5nSRhW2AG3" +
-            "ddO8xxEAx1OCDxp73B3AYbBXnNvUmOsU" +
-            "xhw0xPhfWcMapnFMYtTpfBiGlgj31249" +
-            "kB4yIg0nUpRbTz6FSitE8o588U0Ut6KI" +
-            "U4ZJgjO2yod1buVpPvaafBhdxVdElvYW";
+    private static final String SECRET_KEY = System.getenv("JWT_SECRET_KEY");
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }

@@ -1,28 +1,56 @@
+.container-fluid {
+  padding-left: 100px;
+  padding-right: 100px;
+}
+
 .cards-container {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
+  gap: 20px;
 }
 
 .card {
-  margin: 10px;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
   box-shadow: 0 2px 3px #ccc;
   width: 300px;
+  height: 550px;
   text-align: center;
   background-color: #f8f8f8;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
 }
 
-.carousel {
-  width: 90%;
+.card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 6px #ccc;
 }
 
 .carousel-item img {
   max-height: 600px;
   object-fit: cover;
+}
+
+@media (max-width: 768px) {
+  .container-fluid {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  .card {
+    width: 250px;
+    height: 450px;
+  }
+  .card-body {
+    padding: 5px;
+  }
+}
+
+@media (max-width: 576px) {
+  .container-fluid {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
 }

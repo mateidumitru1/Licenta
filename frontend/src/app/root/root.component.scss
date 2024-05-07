@@ -1,15 +1,11 @@
-.d-flex {
+.root-container {
   display: flex;
-}
-
-.flex-column {
   flex-direction: column;
-}
-
-.min-vh-100 {
   min-height: 100vh;
 }
 
-.flex-grow-1 {
-  flex-grow: 1;
+.main-container {
+  flex: 1;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }

@@ -1,5 +1,5 @@
 <div class="container-fluid">
-  <mdb-carousel *ngIf="locations.length" [animation]="'slide'" [controls]="true" [interval]="5000" [indicators]="true">
+  <mdb-carousel *ngIf="locations.length" [animation]="'slide'" [controls]="true" [interval]="5000" [indicators]="true" class="carousel">
     <mdb-carousel-item *ngFor="let location of locations">
       <img class="d-block w-100" src="{{ location.imageUrl }}" alt="First slide">
       <div role="button" class="carousel-caption d-none d-md-block" [routerLink]="['events']" [queryParams]="{ location: location.name }">
@@ -17,7 +17,6 @@
         <img alt="" class="card-img-top" src="{{ event.imageUrl }}"/>
         <div class="card-body">
           <p class="card-text">{{ event.title }}</p>
-          <p class="card-text">{{ event.broadGenre.name }}</p>
         </div>
       </div>
     </div>
@@ -30,7 +29,6 @@
       <img alt="" class="card-img-top" src="{{ event.imageUrl }}"/>
       <div class="card-body">
         <p class="card-text">{{ event.title }}</p>
-        <p class="card-text">{{ event.broadGenre }}</p>
       </div>
     </div>
   </div>
