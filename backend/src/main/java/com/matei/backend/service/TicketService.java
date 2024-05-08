@@ -70,11 +70,11 @@ public class TicketService {
             eventTicketMap.put(eventResponseDto, tickets.stream().map(ticket -> modelMapper.map(ticket, TicketResponseDto.class)).toList());
         });
 
-        emailService.sendTicketEmail(userService.getUserById(userId).getEmail(), eventTicketMap);
+        emailService.sendTicketEmail(userService.getUserWithOrdersById(userId).getEmail(), eventTicketMap);
     }
 
     public TicketResponseDto validateTicket(UUID userId, UUID ticketId) {
-        if(!userService.getUserById(userId).getRole().equals(Role.TICKET_VALIDATOR)) {
+        if(!userService.getUserWithOrdersById(userId).getRole().equals(Role.TICKET_VALIDATOR)) {
             throw new ValidatorResourceAccessException("You are not authorized to perform this action");
         }
 

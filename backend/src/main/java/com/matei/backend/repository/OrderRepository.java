@@ -1,6 +1,8 @@
 package com.matei.backend.repository;
 
 import com.matei.backend.entity.Order;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -28,4 +30,10 @@ public interface OrderRepository extends JpaRepository<Order, UUID> {
 
     @Query("SELECT SUM(o.price) FROM Order o WHERE o.createdAt > :startDate AND o.status = 0")
     Double sumPriceByCreatedAtAfterAndStatusConfirmed(LocalDateTime startDate);
+
+    Page<Order> findAllByUserIdOrderByCreatedAtDesc(UUID id, Pageable pageable);
+
+    Page<Order> findByUserIdAndCreatedAtAfterOrderByCreatedAtDesc(UUID id, LocalDateTime startDate, Pageable pageable);
+
+    Long countByUserId(UUID id);
 }

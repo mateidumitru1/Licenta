@@ -1,0 +1,13 @@
+<div class="personal-info">
+  <h1 class="text-center">Informatii personale</h1>
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">Nume: {{ user.firstName }} {{ user.lastName }}</h5>
+      <h6 class="card-subtitle mb-2 text-muted">Email: {{ user.email }}</h6>
+    </div>
+    <div class="card-footer">
+      <button class="btn btn-primary me-2" (click)="onEditClick()">Modifica datele</button>
+      <button class="btn btn-primary" (click)="onChangePasswordClick()">Schimba parola</button>
+    </div>
+  </div>
+</div>

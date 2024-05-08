@@ -1,6 +1,5 @@
 package com.matei.backend.controller;
 
-import com.google.api.Page;
 import com.matei.backend.dto.request.auth.ChangePasswordRequestDto;
 import com.matei.backend.dto.request.user.UserCreationRequestDto;
 import com.matei.backend.dto.request.user.UserRequestDto;
@@ -41,8 +40,15 @@ public class UserController {
         return ResponseEntity.ok(userService.adminGetUserById(jwtService.extractId(jwtToken), UUID.fromString(id)));
     }
 
-    @GetMapping("/me")
-    public ResponseEntity<UserWithOrdersResponseDto> getMe(@RequestHeader("Authorization") String jwtToken) {
+    @PreAuthorize("hasAuthority('USER')")
+    @GetMapping("/me/orders")
+    public ResponseEntity<UserWithOrdersResponseDto> getMeWithOrders(@RequestHeader("Authorization") String jwtToken) {
+        return ResponseEntity.ok(userService.getUserWithOrdersById(jwtService.extractId(jwtToken)));
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/me/details")
+    public ResponseEntity<UserResponseDto> getMe(@RequestHeader("Authorization") String jwtToken) {
         return ResponseEntity.ok(userService.getUserById(jwtService.extractId(jwtToken)));
     }
 
@@ -60,6 +66,7 @@ public class UserController {
         return ResponseEntity.ok(userService.updateUser(jwtService.extractId(jwtToken), userRequestDto));
     }
 
+    @PreAuthorize("isAuthenticated()")
     @PatchMapping("/me/change-password")
     public ResponseEntity<Void> changePassword(@RequestHeader("Authorization") String jwtToken, @RequestBody ChangePasswordRequestDto changePasswordRequestDto) {
         userService.changePassword(jwtService.extractId(jwtToken), changePasswordRequestDto);

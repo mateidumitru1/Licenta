@@ -1,5 +1,7 @@
 package com.matei.backend.controller;
 
+import com.matei.backend.dto.response.order.OrderDetailsResponseDto;
+import com.matei.backend.dto.response.order.OrderPageWithCountResponseDto;
 import com.matei.backend.dto.response.order.OrderResponseDto;
 import com.matei.backend.service.auth.JwtService;
 import com.matei.backend.service.OrderService;
@@ -26,8 +28,11 @@ public class OrderController {
 
     @PreAuthorize("hasAuthority('USER')")
     @GetMapping
-    public ResponseEntity<List<OrderResponseDto>> getOrders(@RequestHeader("Authorization") String jwtToken){
-        return ResponseEntity.ok(orderService.getOrders(jwtService.extractId(jwtToken)));
+    public ResponseEntity<OrderPageWithCountResponseDto> getOrders(@RequestHeader("Authorization") String jwtToken,
+                                                                   @RequestParam(value = "page", defaultValue = "0") int page,
+                                                                   @RequestParam(value = "size", defaultValue = "10") int size,
+                                                                   @RequestParam(value = "filter", defaultValue = "all") String filter){
+        return ResponseEntity.ok(orderService.getOrders(jwtService.extractId(jwtToken), page, size, filter));
     }
 
     @GetMapping("/user/{id}")

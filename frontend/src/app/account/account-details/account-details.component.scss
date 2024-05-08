@@ -5,10 +5,11 @@
   overflow: hidden;
 }
 
-.personal-info-genres {
+.genre-preferences {
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  margin-top: 20px;
+  align-items: center;
 }
 
 @media screen and (max-width: 1150px) {
@@ -18,10 +19,3 @@
   }
 }
 
-@media screen and (max-width: 768px) {
-  .personal-info-genres {
-    flex-direction: column;
-    align-items: center;
-    gap: 30px;
-  }
-}

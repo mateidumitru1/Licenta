@@ -35,36 +35,13 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
     await this.accountDetailsService.fetchUser();
     this.userSubscription = this.accountDetailsService.getUser().subscribe((user: any) => {
       this.user = user;
-      this.orderList = this.user.orderList.sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).slice(0, 5);
+      this.orderList = this.user.orderList;
       this.createPieChart();
     });
   }
 
   ngOnDestroy() {
     this.userSubscription?.unsubscribe();
-  }
-
-  onEditClick() {
-    let dialogRef = this.dialog.open(EditAccountDetailsComponent, {
-      width: '60%',
-      data: this.user
-    });
-    dialogRef.afterClosed().subscribe(async (result: any) => {
-      if (result) {
-        await this.accountDetailsService.editUser(result);
-      }
-    });
-  }
-
-  onChangePasswordClick() {
-    let dialogRef = this.dialog.open(ChangePasswordAccountDetailsComponent, {
-      width: '60%',
-    });
-    dialogRef.afterClosed().subscribe(async (result: any) => {
-      if (result) {
-        await this.accountDetailsService.changePassword(result);
-      }
-    });
   }
 
   createPieChart() {

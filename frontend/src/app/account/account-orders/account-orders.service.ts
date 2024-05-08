@@ -9,17 +9,17 @@ import {MatSnackBar} from "@angular/material/snack-bar";
   providedIn: 'root'
 })
 export class AccountOrdersService {
-  private orderListSubject = new BehaviorSubject<any[]>([]);
+  private orderPageSubject = new BehaviorSubject<any[]>([]);
   private orderSubject = new BehaviorSubject<any>({});
 
   constructor(private http: HttpClient, private identityService: IdentityService, private snackBar: MatSnackBar) {}
 
-  setOrderList(orders: any[]) {
-    this.orderListSubject.next(orders);
+  setOrderPage(orders: any[]) {
+    this.orderPageSubject.next(orders);
   }
 
-  getOrderList() {
-    return this.orderListSubject.asObservable();
+  getOrderPage() {
+    return this.orderPageSubject.asObservable();
   }
 
   setOrder(orders: any) {
@@ -30,14 +30,19 @@ export class AccountOrdersService {
     return this.orderSubject.asObservable();
   }
 
-  async fetchOrders() {
+  async fetchOrders(page: number, size: number, filter: string) {
     try {
-      const orders: any = await lastValueFrom(this.http.get(apiURL + '/orders', {
+      const response: any = await lastValueFrom(this.http.get(apiURL + '/orders', {
+        params: {
+          page: page.toString(),
+          size: size.toString(),
+          filter: filter
+        },
         headers: {
           'Authorization': 'Bearer ' + this.identityService.getToken()
         }
       }));
-      this.setOrderList(orders);
+      this.setOrderPage(response);
     }
     catch (error) {
       this.snackBar.open('Nu s-au putut incarca comenzile', 'Close', {

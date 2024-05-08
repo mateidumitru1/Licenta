@@ -9,6 +9,7 @@
     </mdb-carousel-item>
   </mdb-carousel>
   <div *ngIf="isLoggedIn()" class="recommended-events">
+    <hr>
     <h1 class="text-center">Evenimente recomandate</h1>
     <div class="cards-container">
       <div class="card" *ngFor="let event of recommendedEvents"
@@ -21,6 +22,7 @@
       </div>
     </div>
   </div>
+  <hr>
   <h1 class="text-center">Evenimente selectate</h1>
   <div class="cards-container">
     <div class="card" *ngFor="let event of selectedEvents"
@@ -33,3 +35,4 @@
     </div>
   </div>
 </div>
+<hr>

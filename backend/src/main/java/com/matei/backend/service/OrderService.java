@@ -2,6 +2,8 @@ package com.matei.backend.service;
 
 import com.matei.backend.dto.response.event.EventWithoutTicketArtistResponseDto;
 import com.matei.backend.dto.response.location.LocationWithoutEventListResponseDto;
+import com.matei.backend.dto.response.order.OrderDetailsResponseDto;
+import com.matei.backend.dto.response.order.OrderPageWithCountResponseDto;
 import com.matei.backend.dto.response.order.OrderResponseDto;
 import com.matei.backend.dto.response.shoppingCart.ShoppingCartItemEventWithoutArtistResponseDto;
 import com.matei.backend.dto.response.ticket.TicketResponseDto;
@@ -18,14 +20,12 @@ import com.matei.backend.repository.OrderRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -60,7 +60,7 @@ public class OrderService {
                 .createdAt(LocalDateTime.now())
                 .status(Status.CONFIRMED)
                 .orderNumber(orderRepository.findMaxOrderNumber() + 1)
-                .user(Optional.of(userService.getUserById(userId)).map(user -> User.builder()
+                .user(Optional.of(userService.getUserWithOrdersById(userId)).map(user -> User.builder()
                         .id(user.getId()).build()).orElseThrow())
                 .build());
 
@@ -75,9 +75,37 @@ public class OrderService {
                 .map(shoppingCartItemResponseDto -> shoppingCartItemResponseDto.getTicketType().getEvent()).collect(Collectors.toSet()));
     }
 
-    public List<OrderResponseDto> getOrders(UUID id) {
-        var orderList = orderRepository.findAllByUserId(id).orElseThrow(() -> new OrderNotFoundException("Order not found"));
-        return orderList.stream().map(this::getOrderResponseDto).toList();
+    public OrderPageWithCountResponseDto getOrders(UUID id, int page, int size, String filter) {
+        if (Objects.equals(filter, "all")) {
+            return OrderPageWithCountResponseDto.builder()
+                    .orderPage(orderRepository.findAllByUserIdOrderByCreatedAtDesc(id, PageRequest.of(page, size)).map(order -> modelMapper.map(order, OrderDetailsResponseDto.class)))
+                    .count(orderRepository.countByUserId(id))
+                    .build();
+        }
+        LocalDateTime startDate = calculateStartDate(filter);
+        if (startDate == null) {
+            throw new IllegalArgumentException("Invalid filter");
+        }
+        var orderPage = orderRepository.findByUserIdAndCreatedAtAfterOrderByCreatedAtDesc(id, startDate, PageRequest.of(page, size));
+        return OrderPageWithCountResponseDto.builder()
+                .orderPage(orderPage.map(order -> modelMapper.map(order, OrderDetailsResponseDto.class)))
+                .count(orderRepository.countByUserId(id))
+                .build();
+    }
+
+    private LocalDateTime calculateStartDate(String filter) {
+        if (Objects.equals(filter, "last3Months")) {
+            return LocalDateTime.now().minusMonths(3);
+        } else if (Objects.equals(filter, "last6Months")) {
+            return LocalDateTime.now().minusMonths(6);
+        } else if (Objects.equals(filter, "lastYear")) {
+            return LocalDateTime.now().minusYears(1);
+        } else if (Objects.equals(filter, "last2Years")) {
+            return LocalDateTime.now().minusYears(2);
+        } else if (Objects.equals(filter, "last5Years")) {
+            return LocalDateTime.now().minusYears(5);
+        }
+        return null;
     }
 
     public List<OrderResponseDto> getOrdersByUserId(UUID userId) {

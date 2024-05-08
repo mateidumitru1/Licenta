@@ -23,7 +23,7 @@ public class UserGenrePreferenceService {
 
     public List<UserGenrePreferenceResponseDto> getUserGenrePreferences(UUID userId) {
         return userGenrePreferenceRepository
-                .findByUser(Optional.of(userService.getUserById(userId))
+                .findByUser(Optional.of(userService.getUserWithOrdersById(userId))
                         .map(u -> modelMapper.map(u, User.class)).orElseThrow(() -> new RuntimeException("User not found")))
                 .orElseThrow(() -> new RuntimeException("User genre preferences not found")).stream()
                 .map(userGenrePreference -> modelMapper.map(userGenrePreference, UserGenrePreferenceResponseDto.class))
@@ -31,7 +31,7 @@ public class UserGenrePreferenceService {
     }
 
     public void updateUserGenrePreferences(UUID userId, Set<EventWithoutTicketArtistResponseDto> eventSet) {
-        User user = Optional.of(userService.getUserById(userId))
+        User user = Optional.of(userService.getUserWithOrdersById(userId))
                 .map(u -> modelMapper.map(u, User.class))
                 .orElseThrow(() -> new RuntimeException("User not found"));
 

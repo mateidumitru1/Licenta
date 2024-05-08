@@ -466,7 +466,7 @@ public class EventService {
     }
 
     public List<EventWithoutTicketArtistResponseDto> getEventsForUser(UUID id) {
-        var user = userService.getUserById(id);
+        var user = userService.getUserWithOrdersById(id);
 
         return user.getOrderList().stream()
                 .map(order -> order.getTicketList().stream()

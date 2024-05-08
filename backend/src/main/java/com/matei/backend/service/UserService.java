@@ -27,7 +27,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -58,24 +57,34 @@ public class UserService {
         return modelMapper.map(user, UserResponseDto.class);
     }
 
-    public UserWithOrdersResponseDto getUserById(UUID id) {
+    public UserWithOrdersResponseDto getUserWithOrdersById(UUID id) {
         var user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User not found"));
 
         var userDto = modelMapper.map(user, UserWithOrdersResponseDto.class);
         userDto.setGenrePreferences(user.getUserGenrePreferenceList().stream().map(genrePreference ->
             modelMapper.map(genrePreference, UserGenrePreferenceResponseDto.class)).toList());
 
-        userDto.setOrderList(user.getOrderList().stream().map(order -> {
+        userDto.setOrderList(user.getOrderList().stream()
+                .sorted((o1, o2) -> o2.getCreatedAt().compareTo(o1.getCreatedAt()))
+                .limit(3)
+                .map(order -> {
             var orderDto = modelMapper.map(order, OrderResponseDto.class);
             orderDto.setTicketList(order.getTicketList().stream().map(ticket -> {
                 var ticketDto = modelMapper.map(ticket, TicketResponseDto.class);
                 ticketDto.setTicketType(modelMapper.map(ticket.getTicketType(), TicketTypeEventWithoutArtistResponseDto.class));
                 return ticketDto;
-            }).toList());
+            })
+                    .toList());
             return orderDto;
         }).toList());
 
         return userDto;
+    }
+
+    public UserResponseDto getUserById(UUID id) {
+        var user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        return modelMapper.map(user, UserResponseDto.class);
     }
 
     public UserResponseDto updateUser(UUID currentUserId, UserRequestDto userRequestDto) {

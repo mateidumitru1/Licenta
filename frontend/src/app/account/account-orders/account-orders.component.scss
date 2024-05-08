@@ -7,14 +7,18 @@
 }
 
 .btn-filter {
-  width: 150px;
-  height: 20px;
   padding: 0;
+  margin-left: 50px;
+  display: flex;
+  align-items: center;
 }
 
-
 .card {
-  width: 600px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .view-details-container {
@@ -22,17 +26,6 @@
   justify-content: right;
 }
 
-.page-nav-buttons {
-  padding: 0;
-  margin: 1px;
-  width: 30px;
-  height: 30px;
-  align-items: center;
-}
-
-.prev-next-buttons {
-  padding: 0;
-  margin: 1px;
-  width: 70px;
-  height: 30px;
+nav {
+  margin-top: 15px;
 }

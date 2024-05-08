@@ -1,40 +1,60 @@
 <div class="container-fluid">
-  <h1>Comenzi</h1>
-  <hr>
-  <div mdbDropdown class="btn-group dropend">
-    <button
-      type="button"
-      class="btn btn-primary dropdown-toggle"
-      mdbDropdownToggle
-      aria-expanded="false"
-    >
-      {{ getSelectedFilterLabel() }}
-    </button>
-    <ul mdbDropdownMenu class="dropdown-menu">
-      <li>
-        <button class="dropdown-item" *ngFor="let option of filterOptions" (click)="selectedFilter = option.value; onFilterChange()">{{ option.label }}</button>
-      </li>
-    </ul>
+  <div class="d-flex">
+    <h1>Comenzi</h1>
+    <hr>
+    <div mdbDropdown class="dropend btn-filter">
+      <a
+        type="button"
+        class="dropdown-toggle"
+        mdbDropdownToggle
+        aria-expanded="false"
+      >
+        {{ getSelectedFilterLabel() }}
+      </a>
+      <ul mdbDropdownMenu class="dropdown-menu">
+        <li>
+          <button class="dropdown-item" *ngFor="let option of filterOptions" (click)="selectedFilter = option.value; onFilterChange()">{{ option.label }}</button>
+        </li>
+      </ul>
+    </div>
   </div>
-
   <div>
     <div class="card mt-4" *ngFor="let order of orders">
       <div class="card-header d-flex flex-row ">
         <div>
           <h2>Comanda numarul {{ order.orderNumber }}</h2>
-          <p>{{ order.date | date }} <span><i class="fa-solid fa-ticket fa-fw ms-1 me-1"></i></span> {{ order.price }} RON</p>
+          <p>{{ order.createdAt | date }} <span><i class="fa-solid fa-ticket fa-fw ms-1 me-1"></i></span> {{ order.price }} RON</p>
         </div>
         <div class="view-details-container">
           <a class="ps-4" [routerLink]="['/account/orders', order.orderNumber]">Vezi comanda</a>
         </div>
       </div>
+      <div *ngIf="order.status === 'CANCELED'">
+        <div class="card-body">
+          <h5 class="card-title text-danger
+          ">Comanda a fost anulata</h5>
+        </div>
+      </div>
     </div>
+
   </div>
-  <div class="page-navigation mt-4">
-    <button class="btn btn-secondary prev-next-buttons" *ngIf="currentPage > 1" (click)="prevPage()">Previous</button>
-    <ng-container *ngFor="let pageNumber of pageNumbers">
-      <button class="btn btn-secondary page-nav-buttons" [class.active]="pageNumber === currentPage" (click)="goToPage(pageNumber)">{{ pageNumber }}</button>
-    </ng-container>
-    <button class="btn btn-secondary prev-next-nav" *ngIf="currentPage < totalPages" (click)="nextPage()">Next</button>
-  </div>
+  <nav aria-label="Page navigation example">
+    <ul class="pagination">
+      <li class="page-item" [ngClass]="{ disabled: currentPage == 0 }">
+        <button class="page-link" aria-label="Previous"
+           (click)="onPageChange(currentPage)">
+          <span aria-hidden="true">&laquo;</span>
+        </button>
+      </li>
+      <li class="page-item" *ngFor="let page of getPageRange(pageCount)" [ngClass]="{ active: page === currentPage + 1 }">
+        <button class="page-link" (click)="onPageChange(page)">{{ page }}</button>
+      </li>
+      <li class="page-item" [ngClass]="{ disabled: currentPage == pageCount - 1 }">
+        <button class="page-link"  aria-label="Next"
+           (click)="onPageChange(currentPage + 1)">
+          <span aria-hidden="true">&raquo;</span>
+        </button>
+      </li>
+    </ul>
+  </nav>
 </div>

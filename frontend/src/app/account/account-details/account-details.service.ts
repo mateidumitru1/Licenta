@@ -24,7 +24,7 @@ export class AccountDetailsService {
 
   async fetchUser() {
     try {
-      const user: any = await lastValueFrom(this.http.get(apiURL + '/users/me', {
+      const user: any = await lastValueFrom(this.http.get(apiURL + '/users/me/orders', {
         headers: {
           'Authorization': 'Bearer ' + this.identityService.getToken()
         }

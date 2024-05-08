@@ -13,7 +13,6 @@ import {AdminGuard} from "./util/guards/can-activate/admin.guard";
 import {RootGuard} from "./util/guards/can-activate/root.guard";
 import {HomeAdminComponent} from "./admin-dashboard/home-admin/home-admin.component";
 import {StatisticsComponent} from "./admin-dashboard/statistics/statistics.component";
-import {SettingsComponent} from "./admin-dashboard/settings/settings.component";
 import {ManageUsersComponent} from "./admin-dashboard/manage/manage-users/manage-users.component";
 import {ManageLocationsComponent} from "./admin-dashboard/manage/manage-locations/manage-locations.component";
 import {ManageEventsComponent} from "./admin-dashboard/manage/manage-events/manage-events.component";
@@ -21,7 +20,7 @@ import {ManageOrdersComponent} from "./admin-dashboard/manage/manage-orders/mana
 import {PageNotFoundComponent} from "./root/page-not-found/page-not-found.component";
 import {AccountGuard} from "./util/guards/can-activate/account.guard";
 import {AccountOrdersComponent} from "./account/account-orders/account-orders.component";
-import {AccountSettingsComponent} from "./account/account-settings/account-settings.component";
+import {AccountSettingsComponent} from "./shared/account-settings/account-settings.component";
 import {ResetPasswordComponent} from "./identity/reset-password/reset-password.component";
 import {
   AccountOrderDetailsComponent
@@ -65,11 +64,12 @@ export const routes: Routes = [
       { path: 'manage/artists', component: ManageArtistsComponent },
       { path: 'manage/orders', component: ManageOrdersComponent },
       { path: 'statistics', component: StatisticsComponent },
-      { path: 'settings', component: SettingsComponent },
+      { path: 'settings', component: AccountSettingsComponent },
     ]},
   { path: 'validator-dashboard', canActivate: [ValidatorGuard], component: ValidatorDashboardComponent, children: [
       { path: '', pathMatch: 'full', component: HomeValidatorComponent},
       { path: 'scanner', component: ScannerComponent },
+      { path: 'settings', component: AccountSettingsComponent },
     ]},
   { path: '', canActivate: [RootGuard], component: RootComponent, children: [
       { path: '', pathMatch: 'full', component: HomeComponent },

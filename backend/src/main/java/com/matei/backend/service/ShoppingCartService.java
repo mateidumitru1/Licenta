@@ -1,19 +1,8 @@
 package com.matei.backend.service;
 
 import com.matei.backend.dto.request.shoppingCart.ShoppingCartItemRequestDto;
-import com.matei.backend.dto.response.artist.ArtistWithoutEventResponseDto;
-import com.matei.backend.dto.response.event.EventWithoutLocationTicketResponseDto;
-import com.matei.backend.dto.response.event.EventWithoutTicketArtistResponseDto;
-import com.matei.backend.dto.response.event.EventWithoutTicketTypesResponseDto;
-import com.matei.backend.dto.response.genre.GenreResponseDto;
-import com.matei.backend.dto.response.genre.GenreWithoutArtistListResponseDto;
-import com.matei.backend.dto.response.location.LocationWithoutEventListResponseDto;
 import com.matei.backend.dto.response.shoppingCart.ShoppingCartItemEventWithoutArtistResponseDto;
 import com.matei.backend.dto.response.shoppingCart.ShoppingCartEventWithoutArtistResponseDto;
-import com.matei.backend.dto.response.shoppingCart.ShoppingCartItemResponseDto;
-import com.matei.backend.dto.response.shoppingCart.ShoppingCartResponseDto;
-import com.matei.backend.dto.response.ticketType.TicketTypeEventResponseDto;
-import com.matei.backend.dto.response.ticketType.TicketTypeEventWithoutArtistResponseDto;
 import com.matei.backend.entity.*;
 import com.matei.backend.exception.event.EventPastException;
 import com.matei.backend.exception.ticketType.TicketTypeNotFoundException;
@@ -123,7 +112,7 @@ public class ShoppingCartService {
 
     private ShoppingCart findShoppingCartOrElseEmpty(UUID userId) {
         return shoppingCartRepository.findByUserId(userId).orElseGet(() -> {
-            var user = userService.getUserById(userId);
+            var user = userService.getUserWithOrdersById(userId);
             return createEmptyShoppingCart(user.getId());
         });
     }

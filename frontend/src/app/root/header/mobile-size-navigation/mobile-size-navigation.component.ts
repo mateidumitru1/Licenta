@@ -65,7 +65,19 @@ export class MobileSizeNavigationComponent implements OnInit {
   togglePanel() {
     this.panelDisplay = !this.panelDisplay;
     document.body.style.overflow = this.panelDisplay ? 'hidden' : 'auto';
+    if (!this.panelDisplay) {
+      window.removeEventListener('resize', this.handleResize);
+    } else {
+      window.addEventListener('resize', this.handleResize);
+    }
   }
+  handleResize() {
+    console.log('Window width:', window.innerWidth);
+    if (window.innerWidth > 768) {
+      document.body.style.overflow = 'auto';
+    }
+  }
+
 
   toggleContentDisplay(content: string) {
     switch (content) {
