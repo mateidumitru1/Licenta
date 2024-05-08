@@ -57,14 +57,13 @@ export class ShoppingCartService {
 
   async removeTicketFromShoppingCart(ticketType: any) {
     try {
-      const shoppingCart = await lastValueFrom(this.http.put(apiURL + '/shopping-cart/' + ticketType.id, null,{
+      const shoppingCart: any = await lastValueFrom(this.http.put(apiURL + '/shopping-cart/' + ticketType.id, null,{
         headers: {
           'Authorization': 'Bearer ' + this.identityService.getToken()
         }
       }));
       this.setShoppingCart(shoppingCart);
-      const sub = this.headerService.getShoppingCartSize().subscribe(size => this.headerService.setShoppingCartSize(size - 1));
-      sub.unsubscribe();
+      this.headerService.setShoppingCartSize(shoppingCart?.shoppingCartItemList.length);
       this.snackBar.open('Biletul a fost sters din cosul de cumparaturi!', 'Dismiss', {duration: 3000});
     }
     catch (error) {

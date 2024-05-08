@@ -40,8 +40,8 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.selectedEvents = homeEvents.selectedEvents;
       this.recommendedEvents = homeEvents.recommendedEvents;
     });
-    this.locationSubscription = this.headerService.getLocations().subscribe((locations: any) => {
-      this.locations = locations;
+    this.locationSubscription = this.headerService.getHeaderData().subscribe((headerData: any) => {
+      this.locations = headerData.locations;
     });
   }
 

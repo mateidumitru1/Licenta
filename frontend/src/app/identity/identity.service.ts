@@ -4,13 +4,14 @@ import {apiURL} from "../app.config";
 import {JwtHandler} from "./jwt.handler";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {Location} from "@angular/common";
+import {Router} from "@angular/router";
 
 @Injectable({
   providedIn: 'root'
 })
 export class IdentityService {
   constructor(private http: HttpClient, private jwtHandler: JwtHandler, private snackBar: MatSnackBar,
-              private location: Location) { }
+              private location: Location, private router: Router) { }
 
   login(username: string, password: string, rememberMe: boolean) {
     this.http.post(apiURL + '/authenticate', {
@@ -27,7 +28,7 @@ export class IdentityService {
     });
   }
 
-  logout() {
+  logout(page: string) {
     this.http.post(apiURL + '/logout', null, {
       headers: {
         'Authorization': 'Bearer ' + this.jwtHandler.getToken()
@@ -35,6 +36,9 @@ export class IdentityService {
     }).subscribe({
       next: () => {
         this.jwtHandler.removeToken();
+        if (page !== '') {
+          this.router.navigate(['/']);
+        }
         this.snackBar.open('Ai fost deconectat cu succes!', 'Close', {
           duration: 3000
         });

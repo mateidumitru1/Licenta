@@ -35,16 +35,16 @@
   </nav>
   <nav id="main-navbar" class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
     <div class="container-fluid">
-      <button class="navbar-toggler" type="button" (click)="sidebarMenu.toggle()" [attr.aria-expanded]="!sidebarMenu.collapsed"
-              aria-controls="sidebarMenu">
-        <i class="fas fa-bars"></i>
-      </button>
       <a class="navbar-brand" routerLink="">{{ brand }}</a>
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
           <a class="nav-link" >{{ pageNameMap[page] }}</a>
         </li>
       </ul>
+      <button class="navbar-toggler" type="button" (click)="sidebarMenu.toggle()" [attr.aria-expanded]="!sidebarMenu.collapsed"
+              aria-controls="sidebarMenu">
+        <i class="fas fa-bars"></i>
+      </button>
     </div>
   </nav>
 </header>

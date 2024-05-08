@@ -4,6 +4,7 @@ import com.matei.backend.dto.request.location.LocationCreationRequestDto;
 import com.matei.backend.dto.request.location.LocationUpdateRequestDto;
 import com.matei.backend.dto.response.artist.ArtistWithoutEventResponseDto;
 import com.matei.backend.dto.response.event.EventWithoutLocationTicketResponseDto;
+import com.matei.backend.dto.response.location.LocationHeaderResponseDto;
 import com.matei.backend.dto.response.location.LocationPageWithCountResponseDto;
 import com.matei.backend.dto.response.location.LocationResponseDto;
 import com.matei.backend.dto.response.location.LocationWithoutEventListResponseDto;
@@ -62,6 +63,14 @@ public class LocationService {
 
         return locations.stream()
                 .map(location -> modelMapper.map(location, LocationWithoutEventListResponseDto.class))
+                .toList();
+    }
+
+    public List<LocationHeaderResponseDto> getHeaderLocations() {
+        var locations = locationRepository.findAll();
+
+        return locations.stream()
+                .map(location -> modelMapper.map(location, LocationHeaderResponseDto.class))
                 .toList();
     }
 

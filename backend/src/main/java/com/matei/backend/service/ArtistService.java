@@ -4,10 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.matei.backend.dto.request.artist.ArtistCreationRequestDto;
 import com.matei.backend.dto.request.artist.ArtistUpdateRequestDto;
 import com.matei.backend.dto.request.genre.GenreRequestDto;
-import com.matei.backend.dto.response.artist.ArtistPageWithCountResponseDto;
-import com.matei.backend.dto.response.artist.ArtistResponseDto;
-import com.matei.backend.dto.response.artist.ArtistWithoutEventGenreResponseDto;
-import com.matei.backend.dto.response.artist.ArtistWithoutEventResponseDto;
+import com.matei.backend.dto.response.artist.*;
 import com.matei.backend.dto.response.event.EventWithoutTicketArtistResponseDto;
 import com.matei.backend.dto.response.genre.GenreWithoutArtistListResponseDto;
 import com.matei.backend.entity.Artist;
@@ -28,6 +25,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -211,5 +209,18 @@ public class ArtistService {
                 .stream()
                 .map(Artist::getName)
                 .toList();
+    }
+
+    public Map<Character, List<ArtistHeaderResponseDto>> getHeaderArtists() {
+        List<Artist> artists = artistRepository.findAll();
+
+        Map<Character, List<ArtistHeaderResponseDto>> headerArtistsMap = artists.stream()
+                .collect(Collectors.groupingBy(artist -> Character.toUpperCase(artist.getName().charAt(0)),
+                        Collectors.mapping(artist -> modelMapper.map(artist, ArtistHeaderResponseDto.class),
+                                Collectors.toList())));
+
+        headerArtistsMap.replaceAll((letter, artistList) -> artistList.stream().limit(2).collect(Collectors.toList()));
+
+        return headerArtistsMap;
     }
 }

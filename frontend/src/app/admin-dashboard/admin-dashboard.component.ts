@@ -1,9 +1,7 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {MdbCollapseModule} from "mdb-angular-ui-kit/collapse";
-import {Router, RouterOutlet} from "@angular/router";
+import {RouterOutlet} from "@angular/router";
 import {NgClass} from "@angular/common";
-import {IdentityService} from "../identity/identity.service";
-import {JwtHandler} from "../identity/jwt.handler";
 import {SidebarComponent} from "../shared/sidebar/sidebar.component";
 
 @Component({

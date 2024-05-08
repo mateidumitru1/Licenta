@@ -1,0 +1,33 @@
+<div class="input-group-wrapper">
+  <div class="input-group">
+    <input
+      #searchInput
+      type="search"
+      class="form-control rounded form-control-lg ms-3"
+      placeholder="Cauta"
+      aria-label="Search"
+      [(ngModel)]="searchText"
+    />
+    <span role="button" class="btn btn-light input-group-text border-0 ms-1 me-4" (click)="search()">
+      <i class="fas fa-search fs-6"></i>
+    </span>
+  </div>
+  <div #searchDropdown *ngIf="showDropdown" class="search-dropdown">
+    <ul>
+      <h4 *ngIf="searchLocations.length > 0">Locatii</h4>
+      <li *ngFor="let searchLocation of searchLocations"
+          [routerLink]="['events']" [queryParams]="{ location: searchLocation.name }">
+        <a>{{ searchLocation?.name }}</a>
+      </li>
+      <h4 *ngIf="searchEvents.length > 0" class="mt-2">Evenimente</h4>
+      <li *ngFor="let searchEvent of searchEvents"
+          [routerLink]="['event', searchEvent.title]" [queryParams]="{ id: searchEvent.id }">
+        <a>{{ searchEvent?.title }}</a>
+      </li>
+      <h4 *ngIf="searchArtists.length > 0" class="mt-2">Artisti</h4>
+      <li *ngFor="let searchArtist of searchArtists"
+          [routerLink]="['events']" [queryParams]="{ artist: searchArtist.name }">
+        <a>{{ searchArtist?.name }}</a>
+    </ul>
+  </div>
+</div>

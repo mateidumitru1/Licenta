@@ -1,5 +1,6 @@
 package com.matei.backend.service;
 
+import com.matei.backend.dto.response.broadGenre.BroadGenreHeaderResponseDto;
 import com.matei.backend.dto.response.broadGenre.BroadGenreResponseDto;
 import com.matei.backend.entity.BroadGenre;
 import com.matei.backend.exception.broadGenre.BroadGenreNotFoundException;
@@ -20,6 +21,13 @@ public class BroadGenreService {
         return broadGenreRepository.findAllByOrderByName().orElseThrow(() -> new BroadGenreNotFoundException("Broad genres not found"))
                 .stream()
                 .map(broadGenre -> modelMapper.map(broadGenre, BroadGenreResponseDto.class))
+                .toList();
+    }
+
+    public List<BroadGenreHeaderResponseDto> getHeaderBroadGenres() {
+        return broadGenreRepository.findAllByOrderByName().orElseThrow(() -> new BroadGenreNotFoundException("Broad genres not found"))
+                .stream()
+                .map(broadGenre -> modelMapper.map(broadGenre, BroadGenreHeaderResponseDto.class))
                 .toList();
     }
 

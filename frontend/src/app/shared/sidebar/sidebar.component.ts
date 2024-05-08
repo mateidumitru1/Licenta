@@ -79,8 +79,7 @@ export class SidebarComponent implements OnInit {
     }
   }
 
-  onLogoutClick(): void {
-    this.identityService.logout();
-    this.router.navigate(['']);
+  onLogoutClick() {
+    this.identityService.logout('go home');
   }
 }

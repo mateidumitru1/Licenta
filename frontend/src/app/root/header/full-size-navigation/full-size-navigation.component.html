@@ -1,0 +1,66 @@
+<div class="dropdown">
+  <button class="nav-drop-toggle">Locatii</button>
+  <div class="dropdown-content">
+    <h1 class="dropdown-title">Ce se intampla la ...</h1>
+    <div class="locations-container">
+      <a [routerLink]="['/events']" [queryParams]="{ location: location.name }"
+         *ngFor="let location of locations">
+        {{ location.name }}
+      </a>
+    </div>
+  </div>
+</div>
+<div class="dropdown">
+  <button class="nav-drop-toggle">Artisti</button>
+  <div class="dropdown-content">
+    <h1 class="dropdown-title">Artisti</h1>
+    <div class="artists-container">
+      <div *ngFor="let entry of artists | keyvalue">
+        <a [routerLink]="['/artists', entry.key]">
+          <b>{{ entry.key }}</b>
+        </a>
+        <a *ngFor="let artist of entry.value as artists"
+           [routerLink]="['/events']" [queryParams]="{ artist: artist.name }">{{ artist.name }}</a>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="dropdown">
+  <button class="nav-drop-toggle">Genuri</button>
+  <div class="dropdown-content">
+    <h1 class="dropdown-title">Genuri</h1>
+    <div class="genres-container">
+      <a [routerLink]="['/events']" [queryParams]="{ genre: genre.name }"
+         *ngFor="let genre of broadGenres">
+        {{ genre.name }}
+      </a>
+    </div>
+  </div>
+</div>
+<a class="nav-item" routerLink="/events">Evenimente</a>
+<app-search-dropdown class="search"></app-search-dropdown>
+<div class="right-buttons">
+  <div role="button" class="shopping-cart-button nav-item" (click)="onShoppingCartClick()" mdbTooltip="Cos de cumparaturi">
+    <i id="shopping-cart-icon" class="fas fa-shopping-cart me-1"></i>
+    <span id="badge" class="badge text-primary" *ngIf="getIdentityService().isLoggedIn() && shoppingCartSize > 0" >{{ shoppingCartSize }}</span>
+  </div>
+  <div class="dropdown">
+    <button class="nav-drop-toggle account-button">
+      <span *ngIf="getIdentityService().isLoggedIn()">Salut, {{ getIdentityService().getUsername() }}</span>
+      <span *ngIf="!getIdentityService().isLoggedIn()">Contul meu</span>
+    </button>
+    <div class="dropdown-content left">
+      <div *ngIf="getIdentityService().isLoggedIn()">
+        <a class="dropdown-item" routerLink="/account">Contul meu</a>
+        <a class="dropdown-item" routerLink="/account/orders">Comenzile mele</a>
+        <a class="dropdown-item" routerLink="/track">Urmareste evenimentele</a>
+        <a role="button" class="dropdown-item" (click)="logout()">Deconectare</a>
+      </div>
+      <div *ngIf="!getIdentityService().isLoggedIn()">
+        <a class="dropdown-item" routerLink="/login">Autentificare</a>
+        <a class="dropdown-item" routerLink="/register">Inregistrare</a>
+      </div>
+    </div>
+  </div>
+</div>
+

@@ -12,7 +12,8 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import {MyHttpInterceptor} from "./util/my-http-interceptor.service";
 import {provideNativeDateAdapter} from "@angular/material/core";
 
-export const apiURL = 'https://server-backend-xmyv.onrender.com/api';
+// export const apiURL = 'https://server-backend-xmyv.onrender.com/api';
+export const apiURL = 'http://localhost:8080/api';
 export const mapBoxToken = 'pk.eyJ1IjoibWF0ZHVtIiwiYSI6ImNsc29uNHdldTBoZ2cycmx6dGU1em0xNngifQ.CNxZncBUud9hmoevWrxSyg';
 
 export const appConfig: ApplicationConfig = {

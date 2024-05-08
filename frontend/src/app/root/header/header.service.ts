@@ -9,18 +9,18 @@ import {IdentityService} from "../../identity/identity.service";
   providedIn: 'root'
 })
 export class HeaderService {
-  private locationsSubject = new BehaviorSubject<any>({});
+  private headerDataSubject = new BehaviorSubject<any>({});
   private shoppingCartSizeSubject = new BehaviorSubject<number>(0);
   private searchResultsSubject = new BehaviorSubject<any>({});
 
   constructor(private http: HttpClient, private identityService: IdentityService, private snackBar: MatSnackBar) { }
 
-  setLocations(locations: any) {
-    this.locationsSubject.next(locations);
+  setHeaderData(headerData: any) {
+    this.headerDataSubject.next(headerData);
   }
 
-  getLocations() {
-    return this.locationsSubject.asObservable();
+  getHeaderData() {
+    return this.headerDataSubject.asObservable();
   }
 
   setShoppingCartSize(shoppingCartSize: number) {
@@ -44,7 +44,11 @@ export class HeaderService {
     if (!token) {
       try {
         const headerData: any = await lastValueFrom(this.http.get(apiURL + '/header/data'));
-        this.setLocations(headerData.locations);
+        this.setHeaderData({
+          locations: headerData.locations,
+          artists: headerData.artists,
+          broadGenres: headerData.broadGenres
+        })
         this.setShoppingCartSize(headerData.shoppingCartSize);
       }
       catch (error) {
@@ -58,7 +62,11 @@ export class HeaderService {
             'Authorization': 'Bearer ' + this.identityService.getToken() || ''
           }
         }));
-        this.setLocations(headerData.locations);
+        this.setHeaderData({
+          locations: headerData.locations,
+          artists: headerData.artists,
+          broadGenres: headerData.broadGenres
+        });
         this.setShoppingCartSize(headerData.shoppingCartSize);
       }
       catch (error) {

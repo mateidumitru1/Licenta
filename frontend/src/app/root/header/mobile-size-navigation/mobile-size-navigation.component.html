@@ -1,0 +1,64 @@
+<button class="navbar-toggler" (click)="togglePanel()">
+  <i class="fas fa-bars"></i>
+</button>
+<div class="panel" [@slide]="panelDisplay ? 'in' : 'out'">
+  <app-search-dropdown></app-search-dropdown>
+  <hr>
+  <div *ngIf="getIdentityService().isLoggedIn()">
+    <h2>Salut, {{ getIdentityService().getUsername() }}</h2>
+    <hr>
+    <ul>
+      <li><a role="button" routerLink="/account">Contul meu</a></li>
+      <li><a role="button" routerLink="/account/orders">Comenzile mele</a></li>
+      <li><a role="button" routerLink="/track">Urmareste evenimentele</a></li>
+      <li><a role="button" (click)="logout()">Deconectare</a></li>
+    </ul>
+  </div>
+  <div *ngIf="!getIdentityService().isLoggedIn()">
+    <ul>
+      <li><a role="button" routerLink="/login">Autentificare</a></li>
+      <li><a role="button" routerLink="/register">Inregistrare</a></li>
+    </ul>
+  </div>
+  <hr>
+  <ul>
+    <li>
+      <a role="button" (click)="toggleContentDisplay('locations')">Locatii</a>
+      <div *ngIf="shouldDisplayLocations" class="nav-options">
+        <div *ngFor="let location of locations" class="location-column">
+          <a [routerLink]="['/events']" [queryParams]="{ location: location.name }">{{ location.name }}</a>
+        </div>
+      </div>
+    </li>
+    <li>
+      <a role="button" (click)="toggleContentDisplay('artists')">Artisti</a>
+      <div *ngIf="shouldDisplayArtists" class="nav-options">
+        <div *ngFor="let entry of artists | keyvalue" class="artist-column">
+          <a [routerLink]="['/artists', entry.key]">
+            <b>{{ entry.key }}</b>
+          </a>
+          <a *ngFor="let artist of entry.value as artists"
+             [routerLink]="['/events']" [queryParams]="{ artist: artist.name }">
+            {{ artist.name }}
+          </a>
+        </div>
+        <hr>
+      </div>
+    </li>
+    <li>
+      <a role="button" (click)="toggleContentDisplay('genres')">Genuri</a>
+      <div *ngIf="shouldDisplayGenres" class="nav-options">
+        <div *ngFor="let genre of broadGenres" class="genre-column">
+          <a [routerLink]="['/events']" [queryParams]="{ genre: genre.name }">{{ genre.name }}</a>
+        </div>
+      </div>
+    </li>
+    <li>
+      <a role="button" routerLink="/events">Evenimente</a>
+      <div></div>
+    </li>
+  </ul>
+  <button class="panel-close-button" (click)="togglePanel()">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
