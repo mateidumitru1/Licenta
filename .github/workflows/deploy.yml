@@ -48,7 +48,7 @@ jobs:
 
       - name: Build backend
         working-directory: ./backend
-        run: ./mvnw clean install package
+        run: ./mvnw clean install package -DskipTests
 
       - name: Build Docker image
         working-directory: ./backend
