@@ -44,8 +44,7 @@ jobs:
 
       - name: Create gcp-credentials.json file
         run: |
-          echo ${{ secrets.GCP_CREDENTIALS }} > ./backend/src/main/resources/gcp-credentials.json
-          ls -l ./backend/src/main/resources
+          printf '%s' "${{ secrets.GCP_CREDENTIALS }}" > ./backend/src/main/resources/gcp-credentials.json
 
       - name: Grant executable permissions to mvnw
         working-directory: ./backend
