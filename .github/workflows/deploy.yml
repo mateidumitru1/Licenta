@@ -53,13 +53,13 @@ jobs:
       - name: Build Docker image
         working-directory: ./backend
         run: |
-          docker build --build-arg db-url=${{ secrets.GH_PGSQL_URL }} \
-            --build-arg db-name=${{ secrets.GH_PGSQL_DB }} \
-            --build-arg db-user=${{ secrets.GH_PGSQL_USER }} \
-            --build-arg db-password=${{ secrets.GH_PGSQL_PASSWORD }} \
-            --build-arg mapbox-api-key=${{ secrets.GH_MAPBOX_API_KEY }} \
-            --build-arg sendgrid-api-key=${{ secrets.GH_SENDGRID_API_KEY }} \
-            --build-arg jwt-secret-key=${{ secrets.GH_JWT_SECRET_KEY }} \
+          docker build --build-arg db-url="${{ secrets.GH_PGSQL_URL }}" \
+            --build-arg db-name="${{ secrets.GH_PGSQL_DB }}" \
+            --build-arg db-user="${{ secrets.GH_PGSQL_USER }}" \
+            --build-arg db-password="${{ secrets.GH_PGSQL_PASSWORD }}" \
+            --build-arg mapbox-api-key="${{ secrets.GH_MAPBOX_API_KEY }}" \
+            --build-arg sendgrid-api-key="${{ secrets.GH_SENDGRID_API_KEY }}" \
+            --build-arg jwt-secret-key="${{ secrets.GH_JWT_SECRET_KEY }}" \
             -t backend:latest .
 
 
