@@ -55,7 +55,7 @@ jobs:
       - name: Build Docker image
         working-directory: ./backend
         run: |
-          docker build 
+          docker build \
             --build-arg DB_URL=${{ secrets.GH_PGSQL_URL }} \
             --build-arg DB_NAME=${{ secrets.GH_PGSQL_DB }} \
             --build-arg DB_USER=${{ secrets.GH_PGSQL_USER }} \
