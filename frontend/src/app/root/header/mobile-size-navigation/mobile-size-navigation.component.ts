@@ -4,18 +4,20 @@ import {Router, RouterLink} from "@angular/router";
 import {SearchDropdownComponent} from "../search-dropdown/search-dropdown.component";
 import {IdentityService} from "../../../identity/identity.service";
 import {animate, state, style, transition, trigger} from "@angular/animations";
+import {MdbTooltipModule} from "mdb-angular-ui-kit/tooltip";
 
 @Component({
   selector: 'app-mobile-size-navigation',
   standalone: true,
-  imports: [
-    NgForOf,
-    NgIf,
-    RouterLink,
-    SearchDropdownComponent,
-    NgClass,
-    KeyValuePipe
-  ],
+    imports: [
+        NgForOf,
+        NgIf,
+        RouterLink,
+        SearchDropdownComponent,
+        NgClass,
+        KeyValuePipe,
+        MdbTooltipModule
+    ],
   templateUrl: './mobile-size-navigation.component.html',
   styleUrl: './mobile-size-navigation.component.scss',
   animations: [
@@ -32,15 +34,15 @@ import {animate, state, style, transition, trigger} from "@angular/animations";
   ]
 })
 export class MobileSizeNavigationComponent implements OnInit {
-  @Input() shoppingCartSize!: number;
-  @Input() locations!: any[];
-  @Input() artists!: any[];
-  @Input() broadGenres!: any[];
-
   panelDisplay: boolean = false;
   shouldDisplayLocations: boolean = false;
   shouldDisplayArtists: boolean = false;
   shouldDisplayGenres: boolean = false;
+
+  @Input() shoppingCartSize!: number;
+  @Input() locations!: any[];
+  @Input() artists!: any[];
+  @Input() broadGenres!: any[];
 
   constructor(private identityService: IdentityService,
               private router: Router) {}

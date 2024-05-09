@@ -3,7 +3,6 @@ import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from "@angular/c
 import {AsyncPipe, JsonPipe, NgForOf, NgIf} from "@angular/common";
 import {LoadingComponent} from "../../shared/loading/loading.component";
 import {NgxScannerQrcodeModule} from "ngx-scanner-qrcode";
-import {Router} from "@angular/router";
 import {MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {ValidateComponent} from "./validate/validate.component";
 import {FormsModule} from "@angular/forms";
@@ -26,9 +25,7 @@ import {FormsModule} from "@angular/forms";
 export class ScannerComponent implements AfterViewInit, OnDestroy {
   @ViewChild('action') action: any;
   dialogRef: MatDialogRef<any> | null = null;
-
-  selectedDevice: any;
-
+  
   constructor(private dialog: MatDialog) {}
 
   ngAfterViewInit(): void {

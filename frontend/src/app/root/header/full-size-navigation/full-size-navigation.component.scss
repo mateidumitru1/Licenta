@@ -2,6 +2,11 @@ a {
   color: black;
 }
 
+ul {
+  list-style: none;
+  padding: 0;
+}
+
 .full-size-navbar-items {
   display: flex;
 }
@@ -9,10 +14,11 @@ a {
 .nav-item {
   padding: 10px;
   text-align: center;
-  font-size: 16px;
   cursor: pointer;
   color: black;
   text-decoration: none;
+  font-size: 18px;
+  min-width: 85px;
 }
 
 .nav-item:hover {
@@ -20,44 +26,73 @@ a {
   color: white;
 }
 
-.nav-drop-toggle {
-  background-color: white;
-  padding: 10px;
-  font-size: 16px;
-  border: none;
-}
-
 .dropdown {
   position: relative;
   display: inline-block;
 }
 
-.dropdown-content {
+.dropdown-container {
   display: none;
   position: absolute;
-  background-color: #f1f1f1;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background-color: white;
   box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
-  z-index: 100;
+  z-index: 10;
 }
 
-.dropdown-content a {
+.dropdown-container a {
   color: black;
   padding: 12px 16px;
   text-decoration: none;
   display: block;
 }
 
-.dropdown-content a:hover {
-  background-color: #ddd;
+.dropdown-container a:hover {
+  background-color: #f1f1f1;
 }
 
-.dropdown:hover .dropdown-content {
-  display: block;
+.account-dropdown {
+  max-width: 210px;
+  left: auto;
 }
 
-.dropdown:hover .nav-drop-toggle {
-  background-color: black;
-  color: white;
+.locations-container {
+  padding: 20px;
+  gap: 20px;
+  width: 50%;
+}
+
+.artists-container {
+  padding: 20px;
+  gap: 20px;
+  width: 50%;
+}
+
+.genres-container {
+  padding: 20px;
+  gap: 20px;
+  width: 50%;
+}
+
+.right-buttons {
+  display: flex;
+}
+
+.account-button {
+  width: 120px;
+}
+
+.shopping-cart-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+}
+
+.search {
+  flex: 1;
 }
 
 @media (max-width: 768px) {
@@ -77,59 +112,4 @@ a {
   .panel {
     display: block !important;
   }
-}
-
-.locations-container {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  padding: 20px;
-  gap: 20px;
-  width: 90vw;
-}
-
-.artists-container {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  padding: 20px;
-  gap: 20px;
-  width: 75vw;
-}
-
-.genres-container {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  padding: 20px;
-  gap: 20px;
-  width: 60vw;
-}
-
-.right-buttons {
-  display: flex;
-}
-
-.account-button {
-  width: 120px;
-}
-
-.left {
-  right: 1px;
-}
-
-ul {
-  list-style: none;
-  padding: 0;
-}
-
-.shopping-cart-button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 18px;
-}
-
-.search {
-  flex: 1;
 }

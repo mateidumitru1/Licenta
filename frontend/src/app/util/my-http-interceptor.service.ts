@@ -12,7 +12,7 @@ import {
   finalize,
   map,
   mergeMap,
-  Observable, of, retry,
+  Observable, of,
   retryWhen, switchMap,
   take,
   throwError,

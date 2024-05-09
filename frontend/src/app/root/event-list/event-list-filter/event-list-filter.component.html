@@ -1,5 +1,5 @@
 <div class="container-fluid">
-  <div class="row">
+  <div class="row filter-container">
     <div class="col-sm-3">
       <div class="navigation">
         <h4 class="text-center">Filtru</h4>
@@ -18,8 +18,12 @@
     <div class="col-sm-8">
       <div *ngIf="selectedItem === 'Locatie'" >
         <h3>Locatii</h3>
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="Cauta locatie"
+                 [(ngModel)]="searchLocation" (ngModelChange)="filter('locations')">
+        </div>
         <div class="options">
-          <div *ngFor="let location of locations" class="locatios">
+          <div *ngFor="let location of filteredLocations" class="locatios">
             <div class="form-check">
               <input class="form-check-input" type="checkbox"
                      [id]="'location_' + location"
@@ -34,8 +38,12 @@
       </div>
       <div *ngIf="selectedItem === 'Artist'">
         <h3>Artisti</h3>
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="Cauta artist"
+                 [(ngModel)]="searchArtist" (ngModelChange)="filter('artists')">
+        </div>
         <div class="options">
-          <div *ngFor="let artist of artists" class="genre">
+          <div *ngFor="let artist of filteredArtists" class="genre">
             <div class="form-check">
               <input class="form-check-input" type="checkbox"
                      [id]="'artist_' + artist"
@@ -50,8 +58,12 @@
       </div>
       <div *ngIf="selectedItem === 'Gen'">
         <h3>Genuri</h3>
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="Cauta gen"
+                 [(ngModel)]="searchGenre" (ngModelChange)="filter('genres')">
+        </div>
         <div class="options">
-          <div *ngFor="let genre of genres" class="genre">
+          <div *ngFor="let genre of filteredGenres" class="genre">
             <div class="form-check">
               <input class="form-check-input" type="checkbox"
                      [id]="'genre_' + genre"
@@ -135,10 +147,9 @@
         </div>
       </div>
     </div>
-    <div class="bottom-buttons">
-      <button class="btn" (click)="close()">Close</button>
-      <button class="btn" (click)="save()">Save</button>
-    </div>
   </div>
-
+  <div class="bottom-buttons">
+    <button class="btn" (click)="close()">Close</button>
+    <button class="btn" (click)="saveFilter()">Save</button>
+  </div>
 </div>

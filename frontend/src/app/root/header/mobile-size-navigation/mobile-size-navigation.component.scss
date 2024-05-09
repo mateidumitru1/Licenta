@@ -100,3 +100,16 @@
 .nav-menu-button {
   display: block;
 }
+
+.title-shopping-cart-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.shopping-cart-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  margin-bottom: 6px;
+}

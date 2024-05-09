@@ -65,6 +65,15 @@ export class EventListFilterComponent implements OnInit {
   range!: FormGroup;
   today: Date = new Date();
 
+  filteredLocations: any;
+  searchLocation: string = '';
+
+  filteredArtists: any;
+  searchArtist: string = '';
+
+  filteredGenres: any;
+  searchGenre: string = '';
+
   constructor(private dialogRef: MatDialogRef<EventListFilterComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
               private eventListFilterService: EventListFilterService,
@@ -73,12 +82,15 @@ export class EventListFilterComponent implements OnInit {
   ngOnInit() {
     this.eventListFilterService.getLocations().subscribe((locations: any) => {
       this.locations = locations;
+      this.filteredLocations = locations;
     });
     this.eventListFilterService.getArtists().subscribe((artists: any) => {
       this.artists = artists;
+      this.filteredArtists = artists;
     });
     this.eventListFilterService.getGenres().subscribe((genres: any) => {
       this.genres = genres;
+      this.filteredGenres = genres;
     });
     if (this.data.location !== undefined) {
       this.selectedLocations = this.data.location.split(',');
@@ -199,7 +211,7 @@ export class EventListFilterComponent implements OnInit {
     }
   }
 
-  save() {
+  saveFilter() {
     const response = {
       selectedLocations: this.selectedLocations,
       selectedArtists: this.selectedArtists,
@@ -208,5 +220,27 @@ export class EventListFilterComponent implements OnInit {
       selectedEndDate: this.selectedEndDate
     };
     this.dialogRef.close(response);
+  }
+
+  filter(type: string) {
+    switch (type) {
+      case 'locations':
+        this.filteredLocations = this.locations.filter((location) => {
+          return location.toLowerCase().includes(this.searchLocation.toLowerCase());
+        });
+        break;
+      case 'artists':
+        this.filteredArtists = this.artists.filter((artist) => {
+           return artist.toLowerCase().includes(this.searchArtist.toLowerCase());
+        });
+        break;
+      case 'genres':
+        this.filteredGenres = this.genres.filter((genre) => {
+          return genre.toLowerCase().includes(this.searchGenre.toLowerCase());
+        });
+        break;
+      default:
+        break;
+    }
   }
 }

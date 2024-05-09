@@ -1,12 +1,13 @@
 import {AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MdbTooltipModule} from "mdb-angular-ui-kit/tooltip";
-import {KeyValuePipe, NgForOf, NgIf} from "@angular/common";
+import {KeyValuePipe, NgClass, NgForOf, NgIf} from "@angular/common";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { Router, RouterLink} from "@angular/router";
 import {IdentityService} from "../../../identity/identity.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {Subscription} from "rxjs";
 import {SearchDropdownComponent} from "../search-dropdown/search-dropdown.component";
+import {animate, state, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'app-full-size-navigation',
@@ -19,10 +20,24 @@ import {SearchDropdownComponent} from "../search-dropdown/search-dropdown.compon
     RouterLink,
     FormsModule,
     SearchDropdownComponent,
-    KeyValuePipe
+    KeyValuePipe,
+    NgClass
   ],
   templateUrl: './full-size-navigation.component.html',
-  styleUrl: './full-size-navigation.component.scss'
+  styleUrl: './full-size-navigation.component.scss',
+  animations: [
+    trigger('dropdown', [
+      state('true', style({
+        opacity: 1,
+        display: 'block'
+      })),
+      state('false', style({
+        opacity: 0,
+        display: 'none'
+      })),
+      transition('true <=> false', animate('200ms ease-in-out'))
+    ])
+  ]
 })
 export class FullSizeNavigationComponent implements OnInit, OnDestroy {
   private searchResultSubscription: Subscription | undefined;
@@ -35,6 +50,11 @@ export class FullSizeNavigationComponent implements OnInit, OnDestroy {
   @ViewChild('searchInput') searchInput!: ElementRef;
   @ViewChild('searchDropdown') searchDropdown!: ElementRef;
 
+  locationsDropdownIsVisible: boolean = false;
+  artistsDropdownIsVisible: boolean = false;
+  genresDropdownIsVisible: boolean = false;
+  accountDropdownIsVisible: boolean = false;
+
 
   constructor(private identityService: IdentityService,
               private router: Router,
@@ -45,6 +65,12 @@ export class FullSizeNavigationComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.router.events.subscribe(() => {
+      this.locationsDropdownIsVisible = false;
+      this.artistsDropdownIsVisible = false;
+      this.genresDropdownIsVisible = false;
+      this.accountDropdownIsVisible = false;
+    });
   }
 
   onShoppingCartClick() {
@@ -63,5 +89,33 @@ export class FullSizeNavigationComponent implements OnInit, OnDestroy {
 
   getIdentityService() {
     return this.identityService;
+  }
+
+  toggleLocationsDropdown() {
+    this.locationsDropdownIsVisible = !this.locationsDropdownIsVisible;
+    this.artistsDropdownIsVisible = false;
+    this.genresDropdownIsVisible = false;
+    this.accountDropdownIsVisible = false;
+  }
+
+  toggleArtistsDropdown() {
+    this.artistsDropdownIsVisible = !this.artistsDropdownIsVisible;
+    this.locationsDropdownIsVisible = false;
+    this.genresDropdownIsVisible = false;
+    this.accountDropdownIsVisible = false;
+  }
+
+  toggleGenresDropdown() {
+    this.genresDropdownIsVisible = !this.genresDropdownIsVisible;
+    this.locationsDropdownIsVisible = false;
+    this.artistsDropdownIsVisible = false;
+    this.accountDropdownIsVisible = false;
+  }
+
+  toggleAccountDropdown() {
+    this.accountDropdownIsVisible = !this.accountDropdownIsVisible;
+    this.locationsDropdownIsVisible = false;
+    this.artistsDropdownIsVisible = false;
+    this.genresDropdownIsVisible = false;
   }
 }

@@ -32,18 +32,15 @@
   gap: 20px;
 }
 
-.bottom-buttons {
-  margin-top: auto;
-  display: flex;
-  justify-content: flex-end;
-  padding: 10px;
-}
-
 .selected-filters {
   padding: 10px;
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+}
+
+.filter-container {
+  overflow-y: auto;
 }
 
 .filter {
@@ -53,3 +50,17 @@
   border-radius: 5px;
 }
 
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  flex: 1;
+}
+
+.bottom-buttons {
+  flex-shrink: 0;
+  width: 100%;
+  padding: 10px;
+  text-align: center;
+}
