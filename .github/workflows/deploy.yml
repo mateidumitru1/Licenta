@@ -36,49 +36,38 @@ jobs:
       #     cname: ${{ github.repository }}
 
         # Backend build and deploy
+        
 
-      - name: Debug secrets
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'corretto'
+
+      - name: Grant executable permissions to mvnw
+        working-directory: ./backend
+        run: chmod +x mvnw
+
+      - name: Build backend
+        working-directory: ./backend
+        run: ./mvnw clean install package -DskipTests
+
+      - name: Build Docker image
+        working-directory: ./backend
         run: |
-          echo ${{ secrets.GH_PGSQL_URL }}
-          echo ${{ secrets.GH_PGSQL_DB }}
-          echo ${{ secrets.GH_PGSQL_USER }}
-          echo ${{ secrets.GH_PGSQL_PASSWORD }}
-          echo ${{ secrets.GH_MAPBOX_API_KEY }}
-          echo ${{ secrets.GH_SENDGRID_API_KEY }}
-          echo ${{ secrets.GH_JWT_SECRET_KEY }}
-          echo ${{ secrets.GH_DOCKER_USER }}
-          echo ${{ secrets.GH_DOCKER_PASSWORD }}
-
-      # - name: Setup Java
-      #   uses: actions/setup-java@v4
-      #   with:
-      #     java-version: '21'
-      #     distribution: 'corretto'
-
-      # - name: Grant executable permissions to mvnw
-      #   working-directory: ./backend
-      #   run: chmod +x mvnw
-
-      # - name: Build backend
-      #   working-directory: ./backend
-      #   run: ./mvnw clean install package -DskipTests
-
-      # - name: Build Docker image
-      #   working-directory: ./backend
-      #   run: |
-      #     docker build --build-arg db-url=${{ secrets.GH_PGSQL_URL }} \
-      #       --build-arg db-name=${{ secrets.GH_PGSQL_DB }} \
-      #       --build-arg db-user=${{ secrets.GH_PGSQL_USER }} \
-      #       --build-arg db-password=${{ secrets.GH_PGSQL_PASSWORD }} \
-      #       --build-arg mapbox-api-key=${{ secrets.GH_MAPBOX_API_KEY }} \
-      #       --build-arg sendgrid-api-key=${{ secrets.GH_SENDGRID_API_KEY }} \
-      #       --build-arg jwt-secret-key=${{ secrets.GH_JWT_SECRET_KEY }} \
-      #       -t backend:latest .
+          docker build --build-arg db-url=${{ secrets.GH_PGSQL_URL }} \
+            --build-arg db-name=${{ secrets.GH_PGSQL_DB }} \
+            --build-arg db-user=${{ secrets.GH_PGSQL_USER }} \
+            --build-arg db-password=${{ secrets.GH_PGSQL_PASSWORD }} \
+            --build-arg mapbox-api-key=${{ secrets.GH_MAPBOX_API_KEY }} \
+            --build-arg sendgrid-api-key=${{ secrets.GH_SENDGRID_API_KEY }} \
+            --build-arg jwt-secret-key=${{ secrets.GH_JWT_SECRET_KEY }} \
+            -t backend:latest .
 
 
-      #     docker tag backend:latest ${{ secrets.GH_DOCKER_USER }}/server:backend
-      #     docker login -u ${{ secrets.GH_DOCKER_USER }} -p ${{ secrets.GH_DOCKER_PASSWORD }}
-      #     docker push ${{ secrets.GH_DOCKER_USER }}/server:backend
+          docker tag backend:latest ${{ secrets.GH_DOCKER_USER }}/server:backend
+          docker login -u ${{ secrets.GH_DOCKER_USER }} -p ${{ secrets.GH_DOCKER_PASSWORD }}
+          docker push ${{ secrets.GH_DOCKER_USER }}/server:backend
 
       # - name: Trigger deployment backend
       #   run: |
