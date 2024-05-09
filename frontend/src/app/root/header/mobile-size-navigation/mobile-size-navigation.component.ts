@@ -51,6 +51,7 @@ export class MobileSizeNavigationComponent implements OnInit {
       this.shouldDisplayLocations = false;
       this.shouldDisplayArtists = false;
       this.shouldDisplayGenres = false;
+      document.body.style.overflow = 'auto';
     });
   }
 
@@ -72,7 +73,6 @@ export class MobileSizeNavigationComponent implements OnInit {
     }
   }
   handleResize() {
-    console.log('Window width:', window.innerWidth);
     if (window.innerWidth > 768) {
       document.body.style.overflow = 'auto';
     }
