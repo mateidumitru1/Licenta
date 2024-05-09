@@ -42,6 +42,3 @@ build/
 gcp-credentials.json
 
 .idea/copilot/chatSessions/xd.lck
-
-# Ignore Dockerfile
-Dockerfile

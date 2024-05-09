@@ -13,23 +13,54 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+        # Frontend build and deploy
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
           node-version: '20.9.0'
 
-      - name: Install dependencies
+      - name: Install frontend dependencies
         working-directory: ./frontend
         run: npm install
 
-      - name: Build
+      - name: Build frontend
         working-directory: ./frontend
         run: npm run build:prod
 
-      - name: Deploy
+      - name: Deploy frontend
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GH_PAGES_TOKEN_v2 }}
           publish_dir: ./frontend/dist/browser
           publish_branch: gh-pages
           cname: ${{ github.repository }}
+
+        # Backend build and deploy
+      - name: Setup Java
+        uses: actions/setup-java@v2
+        with:
+          java-version: 'adop@1.21'
+
+      - name: Build backend
+        working-directory: ./backend
+        run: ./mvnw clean install package
+
+      - name: Build Docker image
+        working-directory: ./backend
+        run: |
+          docker build --build-arg db-url=<YOUR_DB_URL> \
+              --build-arg db-name=<YOUR_DB_NAME> \
+              --build-arg db-user=<YOUR_DB_USER> \
+              --build-arg db-password=<YOUR_DB_PASSWORD> \
+              --build-arg mapbox-api-key=<YOUR_MAPBOX_API_KEY> \
+              --build-arg sendgrid-api-key=<YOUR_SENDGRID_API_KEY> \
+              --build-arg jwt-secret-key=<YOUR_JWT_SECRET_KEY> \
+              -t backend:latest .
+
+          docker tag backend:latest ${{ secrets.GH_DOCKER_USER }}/server
+          docker login -u ${{ secrets.GH_DOCKER_USER }} -p ${{ secrets.GH_DOCKER_PASSWORD }}
+          docker push ${{ secrets.GH_DOCKER_USER }}/server
+
+      - name: Trigger deployment backend
+        run: |
+          curl -X POST https://api.render.com/deploy/srv-cosbmei0si5c739sn7v0?key=jQmb2AseMfw
