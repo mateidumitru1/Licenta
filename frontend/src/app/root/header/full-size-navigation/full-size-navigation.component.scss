@@ -94,22 +94,3 @@ ul {
 .search {
   flex: 1;
 }
-
-@media (max-width: 768px) {
-  .card {
-    flex-basis: 100%;
-    max-width: 100%;
-  }
-}
-
-@media (max-width: 1050px) {
-  .nav-menu-button {
-    display: block !important;
-  }
-  .full-size-navbar-items {
-    display: none !important;
-  }
-  .panel {
-    display: block !important;
-  }
-}

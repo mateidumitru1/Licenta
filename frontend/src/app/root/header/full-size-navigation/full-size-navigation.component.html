@@ -1,15 +1,3 @@
-<!--<div class="dropdown">-->
-<!--  <button class="nav-drop-toggle nav-item">Locatii</button>-->
-<!--  <div class="dropdown-container locations-dropdown-content">-->
-<!--    <h1 class="dropdown-title">Ce se intampla la ...</h1>-->
-<!--    <div class="locations-container">-->
-<!--      <a [routerLink]="['/events']" [queryParams]="{ location: location.name }"-->
-<!--         *ngFor="let location of locations">-->
-<!--        {{ location.name }}-->
-<!--      </a>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--</div>-->
 <a class="nav-item" (click)="toggleLocationsDropdown()">Locatii</a>
 <div class="dropdown-container"
      [@dropdown]=" locationsDropdownIsVisible ? 'true' : 'false'">
