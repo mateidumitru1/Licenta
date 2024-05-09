@@ -14,26 +14,26 @@ jobs:
         uses: actions/checkout@v2
 
         # Frontend build and deploy
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '20.9.0'
+      # - name: Setup Node.js
+      #   uses: actions/setup-node@v2
+      #   with:
+      #     node-version: '20.9.0'
 
-      - name: Install frontend dependencies
-        working-directory: ./frontend
-        run: npm install
+      # - name: Install frontend dependencies
+      #   working-directory: ./frontend
+      #   run: npm install
 
-      - name: Build frontend
-        working-directory: ./frontend
-        run: npm run build:prod
+      # - name: Build frontend
+      #   working-directory: ./frontend
+      #   run: npm run build:prod
 
-      - name: Deploy frontend
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GH_PAGES_TOKEN_v2 }}
-          publish_dir: ./frontend/dist/browser
-          publish_branch: gh-pages
-          cname: ${{ github.repository }}
+      # - name: Deploy frontend
+      #   uses: peaceiris/actions-gh-pages@v3
+      #   with:
+      #     github_token: ${{ secrets.GH_PAGES_TOKEN_v2 }}
+      #     publish_dir: ./frontend/dist/browser
+      #     publish_branch: gh-pages
+      #     cname: ${{ github.repository }}
 
         # Backend build and deploy
       - name: Setup Java
@@ -53,13 +53,13 @@ jobs:
       - name: Build Docker image
         working-directory: ./backend
         run: |
-          docker build --build-arg db-url="${{ secrets.GH_PGSQL_URL }}" \
-            --build-arg db-name="${{ secrets.GH_PGSQL_DB }}" \
-            --build-arg db-user="${{ secrets.GH_PGSQL_USER }}" \
-            --build-arg db-password="${{ secrets.GH_PGSQL_PASSWORD }}" \
-            --build-arg mapbox-api-key="${{ secrets.GH_MAPBOX_API_KEY }}" \
-            --build-arg sendgrid-api-key="${{ secrets.GH_SENDGRID_API_KEY }}" \
-            --build-arg jwt-secret-key="${{ secrets.GH_JWT_SECRET_KEY }}" \
+          docker build --build-arg db-url=${{ secrets.GH_PGSQL_URL }} \
+            --build-arg db-name=${{ secrets.GH_PGSQL_DB }} \
+            --build-arg db-user=${{ secrets.GH_PGSQL_USER }} \
+            --build-arg db-password=${{ secrets.GH_PGSQL_PASSWORD }} \
+            --build-arg mapbox-api-key=${{ secrets.GH_MAPBOX_API_KEY }} \
+            --build-arg sendgrid-api-key=${{ secrets.GH_SENDGRID_API_KEY }} \
+            --build-arg jwt-secret-key=${{ secrets.GH_JWT_SECRET_KEY }} \
             -t backend:latest .
 
 
@@ -67,6 +67,6 @@ jobs:
           docker login -u ${{ secrets.GH_DOCKER_USER }} -p ${{ secrets.GH_DOCKER_PASSWORD }}
           docker push ${{ secrets.GH_DOCKER_USER }}/server:backend
 
-      - name: Trigger deployment backend
-        run: |
-          curl -X POST https://api.render.com/deploy/srv-cosbmei0si5c739sn7v0?key=jQmb2AseMfw
+      # - name: Trigger deployment backend
+      #   run: |
+      #     curl -X POST https://api.render.com/deploy/srv-cosbmei0si5c739sn7v0?key=jQmb2AseMfw
