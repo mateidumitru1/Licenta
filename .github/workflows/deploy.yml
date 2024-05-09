@@ -39,7 +39,8 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v2
         with:
-          java-version: 'adop@1.21'
+          java-version: '21'
+          distribution: 'corretto'
 
       - name: Build backend
         working-directory: ./backend
@@ -48,14 +49,15 @@ jobs:
       - name: Build Docker image
         working-directory: ./backend
         run: |
-          docker build --build-arg db-url=<YOUR_DB_URL> \
-              --build-arg db-name=<YOUR_DB_NAME> \
-              --build-arg db-user=<YOUR_DB_USER> \
-              --build-arg db-password=<YOUR_DB_PASSWORD> \
-              --build-arg mapbox-api-key=<YOUR_MAPBOX_API_KEY> \
-              --build-arg sendgrid-api-key=<YOUR_SENDGRID_API_KEY> \
-              --build-arg jwt-secret-key=<YOUR_JWT_SECRET_KEY> \
-              -t backend:latest .
+          docker build --build-arg db-url=${{ secrets.GH_PGSQL_URL }} \
+            --build-arg db-name=${{ secrets.GH_PGSQL_DB }} \
+            --build-arg db-user=${{ secrets.GH_PGSQL_USER }} \
+            --build-arg db-password=${{ secrets.GH_PGSQL_PASSWORD }} \
+            --build-arg mapbox-api-key=${{ secrets.GH_MAPBOX_API_KEY }} \
+            --build-arg sendgrid-api-key=${{ secrets.GH_SENDGRID_API_KEY }} \
+            --build-arg jwt-secret-key=${{ secrets.GH_JWT_SECRET_KEY }} \
+            -t backend:latest .
+
 
           docker tag backend:latest ${{ secrets.GH_DOCKER_USER }}/server
           docker login -u ${{ secrets.GH_DOCKER_USER }} -p ${{ secrets.GH_DOCKER_PASSWORD }}
