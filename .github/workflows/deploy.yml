@@ -43,7 +43,9 @@ jobs:
           distribution: 'corretto'
 
       - name: Create gcp-credentials.json file
-        run: echo ${{ secrets.GCP_CREDENTIALS }} > ./backend/src/main/resources/gcp-credentials.json
+        run: |
+          echo ${{ secrets.GCP_CREDENTIALS }} > ./backend/src/main/resources/gcp-credentials.json
+          cat ./backend/src/main/resources/gcp-credentials.json
 
       - name: Grant executable permissions to mvnw
         working-directory: ./backend
