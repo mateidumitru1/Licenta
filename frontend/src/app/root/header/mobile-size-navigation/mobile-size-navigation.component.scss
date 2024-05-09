@@ -14,6 +14,7 @@
 }
 
 .panel {
+  display: none;
   position: fixed;
   top: 0;
   right: 0;
@@ -26,7 +27,6 @@
   padding: 12px 20px 20px 20px;
   transition: transform 0.3s ease;
 }
-
 
 .panel h2 {
   margin-bottom: 10px;
