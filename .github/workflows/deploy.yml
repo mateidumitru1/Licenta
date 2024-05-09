@@ -65,7 +65,7 @@ jobs:
 
           docker tag backend:latest ${{ secrets.GH_DOCKER_USER }}/server:backend
           docker login -u ${{ secrets.GH_DOCKER_USER }} -p ${{ secrets.GH_DOCKER_PASSWORD }}
-          docker push ${{ secrets.GH_DOCKER_USER }}/server
+          docker push ${{ secrets.GH_DOCKER_USER }}/server:backend
 
       - name: Trigger deployment backend
         run: |
