@@ -5,6 +5,7 @@ ENTRYPOINT ["java","-jar","/app.jar"]
 
 EXPOSE 8080
 
+
 ARG db-url
 ARG db-name
 ARG db-user
