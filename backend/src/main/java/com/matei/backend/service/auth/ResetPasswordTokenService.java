@@ -21,6 +21,7 @@ public class ResetPasswordTokenService {
     public ResetPasswordToken generateResetPasswordToken(User user) {
         return resetPasswordTokenRepository.findByUser(user).orElse(ResetPasswordToken.builder()
                                 .token(UUID.randomUUID().toString())
+                                .createdAt(LocalDateTime.now())
                                 .user(user)
                                 .expiration(getExpiration())
                                 .build());

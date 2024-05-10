@@ -22,6 +22,7 @@ public class VerifyAccountTokenService {
     public VerifyAccountToken generateVerifyAccountToken(User user) {
         return verifyAccountTokenRepository.findByUser(user).orElse(VerifyAccountToken.builder()
                                 .token(UUID.randomUUID().toString())
+                                .createdAt(LocalDateTime.now())
                                 .user(user)
                                 .expiration(getExpiration())
                                 .build());

@@ -24,7 +24,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class EmailService {
     private final Email from = new Email("matei.dumitrud@gmail.com");
-    private final String urlPrefix = "http://localhost:4200/";
+    private final String urlPrefix = "https://mateidumitru1.github.io/Licenta/";
     private final PdfService pdfService;
 
 
