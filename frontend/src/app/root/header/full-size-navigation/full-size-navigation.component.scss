@@ -13,29 +13,38 @@ ul {
 
 .nav-item {
   padding: 10px;
-  text-align: center;
-  cursor: pointer;
-  color: black;
-  text-decoration: none;
   font-size: 18px;
   min-width: 85px;
+  border-radius: 5px;
+  margin-top: 2px;
+  border-bottom: 2px solid transparent;
+  text-align: center;
+  color: black;
+  cursor: pointer;
+  text-decoration: none;
+  user-select: none;
+  transition: border-bottom-color 0.5s ease, background-color 0.5s ease;
 }
 
 .nav-item:hover {
-  background-color: black;
-  color: white;
+  background-color: #f1f1f1;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom-color: #3356b9;
 }
 
-.dropdown {
-  position: relative;
-  display: inline-block;
+.nav-item.active {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom-color: #3356b9;
 }
 
 .dropdown-container {
-  display: none;
   position: absolute;
   top: 100%;
   left: 0;
+  visibility: hidden;
+  opacity: 0;
   width: 100%;
   background-color: white;
   box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
@@ -47,6 +56,7 @@ ul {
   padding: 12px 16px;
   text-decoration: none;
   display: block;
+  font-size: 15px;
 }
 
 .dropdown-container a:hover {
@@ -58,27 +68,34 @@ ul {
   left: auto;
 }
 
-.locations-container {
+
+.dropdown-body {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  flex: 1;
   padding: 20px;
   gap: 20px;
-  width: 50%;
 }
 
-.artists-container {
-  padding: 20px;
-  gap: 20px;
-  width: 50%;
+.letter {
+  font-size: 20px;
+  font-weight: bold;
 }
 
-.genres-container {
-  padding: 20px;
-  gap: 20px;
-  width: 50%;
+.dropdown-title {
+  padding: 10px;
+  text-align: center;
+  color: black;
+  text-decoration: none;
+  font-size: 18px;
+  min-width: 85px;
 }
 
 .right-buttons {
   display: flex;
 }
+
 
 .account-button {
   width: 120px;

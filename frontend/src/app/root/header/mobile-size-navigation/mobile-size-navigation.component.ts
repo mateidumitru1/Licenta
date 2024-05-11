@@ -23,11 +23,11 @@ import {MdbTooltipModule} from "mdb-angular-ui-kit/tooltip";
   animations: [
     trigger('slide', [
       state('in', style({
-        display: 'block',
+        visibility: 'visible',
         transform: 'translate3d(0, 0, 0)'
       })),
       state('out', style({
-        display: 'none',
+        visibility: 'hidden',
         transform: 'translate3d(100%, 0, 0)'
       })),
       transition('in => out', animate('400ms ease-in-out')),

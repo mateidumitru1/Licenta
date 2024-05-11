@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, HostListener, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MdbTooltipModule} from "mdb-angular-ui-kit/tooltip";
 import {KeyValuePipe, NgClass, NgForOf, NgIf} from "@angular/common";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
@@ -28,14 +28,25 @@ import {animate, state, style, transition, trigger } from '@angular/animations';
   animations: [
     trigger('dropdown', [
       state('true', style({
+        visibility: 'visible',
         opacity: 1,
-        display: 'block'
       })),
       state('false', style({
+        visibility: 'hidden',
         opacity: 0,
-        display: 'none'
       })),
       transition('true <=> false', animate('200ms ease-in-out'))
+    ]),
+    trigger('sliderAnimation', [
+      state('void', style({
+        width: '0',
+        transform: 'translateX(0)'
+      })),
+      state('*', style({
+        width: '{{ width }}px',
+        transform: 'translateX({{ offset }}px)'
+      }), { params: { width: 0, offset: 0 } }),
+      transition('void <=> *', animate('0.3s ease-in-out'))
     ])
   ]
 })
@@ -46,9 +57,6 @@ export class FullSizeNavigationComponent implements OnInit, OnDestroy {
   @Input() artists!: { [key: string]: any };
   @Input() broadGenres!: any;
   @Input() shoppingCartSize!: number;
-
-  @ViewChild('searchInput') searchInput!: ElementRef;
-  @ViewChild('searchDropdown') searchDropdown!: ElementRef;
 
   locationsDropdownIsVisible: boolean = false;
   artistsDropdownIsVisible: boolean = false;

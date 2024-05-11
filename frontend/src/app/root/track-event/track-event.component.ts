@@ -15,7 +15,7 @@ import {NgIf} from "@angular/common";
   templateUrl: './track-event.component.html',
   styleUrl: './track-event.component.scss'
 })
-export class TrackEventComponent implements OnInit{
+export class TrackEventComponent implements OnInit {
   map: mapboxgl.Map | undefined;
   style = 'mapbox://styles/mapbox/streets-v11';
   lat: number = 0;
@@ -123,6 +123,6 @@ export class TrackEventComponent implements OnInit{
     const queryParams = {id: data[data.length - 1]};
     let routeSegments = data.slice(0, -1);
     routeSegments = routeSegments.map(segment => segment === 'track' ? 'event-details' : segment);
-    this.router.navigate(['/', ...routeSegments], {queryParams});
+    this.router.navigate(['/account/', ...routeSegments], {queryParams});
   }
 }

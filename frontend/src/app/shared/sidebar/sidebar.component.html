@@ -41,7 +41,7 @@
           <a class="nav-link" >{{ pageNameMap[page] }}</a>
         </li>
       </ul>
-      <button class="navbar-toggler" type="button" (click)="sidebarMenu.toggle()" [attr.aria-expanded]="!sidebarMenu.collapsed"
+      <button class="navbar-toggler" type="button" (click)="toggleSidebarMenu()" [attr.aria-expanded]="!sidebarMenu.collapsed"
               aria-controls="sidebarMenu">
         <i class="fas fa-bars"></i>
       </button>

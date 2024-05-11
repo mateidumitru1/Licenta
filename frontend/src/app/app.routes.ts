@@ -53,6 +53,8 @@ export const routes: Routes = [
       { path: '', pathMatch: 'full', component: AccountDetailsComponent },
       { path: 'orders', component: AccountOrdersComponent },
       { path: 'orders/:orderNumber', component: AccountOrderDetailsComponent },
+      { path: 'track', component: TrackEventComponent },
+      { path: 'event-details/:event', component: TrackEventDetailsComponent },
       { path: 'settings', component: AccountSettingsComponent }
     ]},
   { path: 'admin-dashboard', canActivate: [AdminGuard], component: AdminDashboardComponent, children: [
@@ -73,9 +75,7 @@ export const routes: Routes = [
     ]},
   { path: '', canActivate: [RootGuard], component: RootComponent, children: [
       { path: '', pathMatch: 'full', component: HomeComponent },
-      { path: 'track', canActivate: [AccountGuard], component: TrackEventComponent },
       { path: 'page-not-found', component: PageNotFoundComponent },
-      { path: 'event-details/:event', canActivate: [AccountGuard], component: TrackEventDetailsComponent },
       { path: 'shopping-cart', canActivate: [AccountGuard], component: ShoppingCartComponent },
       { path: 'verify-account/:token', canActivate: [IdentityGuard], component: VerifyAccountComponent },
       { path: 'resend-verify-account-email/:email', canActivate: [IdentityGuard], component: ResendVerifyAccountEmailComponent },

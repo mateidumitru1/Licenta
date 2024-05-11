@@ -1,7 +1,7 @@
 <button class="navbar-toggler" (click)="togglePanel()">
   <i class="fas fa-bars"></i>
 </button>
-<div class="panel" [@slide]="panelDisplay ? 'in' : 'out'">
+<ul class="panel" [@slide]="panelDisplay ? 'in' : 'out'">
   <div class="panel-header">
     <app-search-dropdown class="search"></app-search-dropdown>
     <button class="panel-close-button" (click)="togglePanel()">
@@ -12,7 +12,7 @@
   <div *ngIf="getIdentityService().isLoggedIn()">
     <div class="title-shopping-cart-container">
       <h2>Salut, {{ getIdentityService().getUsername() }}</h2>
-      <div role="button" class="shopping-cart-button nav-item" [routerLink]="['shopping-cart']">
+      <div role="button" class="nav-item shopping-cart-button" [routerLink]="['shopping-cart']">
         <i id="shopping-cart-icon" class="fas fa-shopping-cart me-1"></i>
         <span id="badge" class="badge text-primary"
               *ngIf="getIdentityService().isLoggedIn() && shoppingCartSize > 0" >
@@ -24,7 +24,7 @@
     <ul>
       <li><a role="button" routerLink="/account">Contul meu</a></li>
       <li><a role="button" routerLink="/account/orders">Comenzile mele</a></li>
-      <li><a role="button" routerLink="/track">Urmareste evenimentele</a></li>
+      <li><a role="button" routerLink="/account/track">Urmareste evenimentele</a></li>
       <li><a role="button" routerLink="/account/settings">Setari</a></li>
       <li><a role="button" (click)="logout()">Deconectare</a></li>
     </ul>
@@ -37,47 +37,53 @@
   </div>
   <hr>
   <ul>
-    <li>
-      <a role="button" (click)="toggleContentDisplay('locations')">Locatii</a>
-      <div *ngIf="shouldDisplayLocations" class="nav-options">
-        <div *ngFor="let location of locations" class="location-column">
+    <li class="nav-options-container">
+      <a class="nav-options-title" role="button" (click)="toggleContentDisplay('locations')"
+         [ngClass]="{ 'active' : shouldDisplayLocations }">Locatii</a>
+      <ul *ngIf="shouldDisplayLocations" class="nav-options-body">
+        <li *ngFor="let location of locations"
+            class="location-column">
           <a [routerLink]="['/events']"
              [queryParams]="{ location: location.name }">
             {{ location.name }}
           </a>
-        </div>
-      </div>
+        </li>
+      </ul>
     </li>
-    <li>
-      <a role="button" (click)="toggleContentDisplay('artists')">Artisti</a>
-      <div *ngIf="shouldDisplayArtists" class="nav-options">
-        <div *ngFor="let entry of artists | keyvalue" class="artist-column">
+    <li class="nav-options-container">
+      <a role="button" (click)="toggleContentDisplay('artists')"
+         [ngClass]="{ 'active' : shouldDisplayArtists }">Artisti</a>
+      <ul *ngIf="shouldDisplayArtists"
+          class="nav-options-body">
+        <li *ngFor="let entry of artists | keyvalue"
+            class="artist-column">
           <a [routerLink]="['/artists', entry.key]">
             <b>{{ entry.key }}</b>
           </a>
-          <a *ngFor="let artist of entry.value as artists"
+          <a class="artist" *ngFor="let artist of entry.value as artists"
              [routerLink]="['/events']"
              [queryParams]="{ artist: artist.name }">
             {{ artist.name }}
           </a>
-        </div>
+        </li>
         <hr>
-      </div>
+      </ul>
     </li>
-    <li>
-      <a role="button" (click)="toggleContentDisplay('genres')">Genuri</a>
-      <div *ngIf="shouldDisplayGenres" class="nav-options">
-        <div *ngFor="let genre of broadGenres" class="genre-column">
+    <li class="nav-options-container">
+      <a role="button" (click)="toggleContentDisplay('genres')"
+         [ngClass]="{ 'active' : shouldDisplayGenres }">Genuri</a>
+      <ul *ngIf="shouldDisplayGenres" class="nav-options-body">
+        <li *ngFor="let genre of broadGenres" class="genre-column">
           <a [routerLink]="['/events']"
              [queryParams]="{ genre: genre.name }">
             {{ genre.name }}
           </a>
-        </div>
-      </div>
+        </li>
+      </ul>
     </li>
     <li>
       <a role="button" routerLink="/events">Evenimente</a>
       <div></div>
     </li>
   </ul>
-</div>
+</ul>

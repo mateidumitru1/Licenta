@@ -1,5 +1,5 @@
 import {Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {MdbCollapseModule} from "mdb-angular-ui-kit/collapse";
+import {MdbCollapseDirective, MdbCollapseModule} from "mdb-angular-ui-kit/collapse";
 import {NgClass, NgForOf, NgIf} from "@angular/common";
 import {ActivatedRoute, NavigationEnd, Router, RouterLink} from "@angular/router";
 import {IdentityService} from "../../identity/identity.service";
@@ -35,51 +35,79 @@ export class SidebarComponent implements OnInit {
     '/admin-dashboard/manage/orders': 'Gestioneaza Comenzi',
     '/admin-dashboard/statistics': 'Statistici',
     '/admin-dashboard/settings': 'Setari',
+    '/account': 'Contul meu',
+    '/account/orders/:id': 'Comenzi',
+    '/account/track': 'Urmareste evenimente',
+    '/account/settings': 'Setari',
   }
-
-  @ViewChild('submenu') submenu!: ElementRef;
 
   constructor(private router: Router, private route: ActivatedRoute, private identityService: IdentityService) {}
 
   ngOnInit() {
-    this.page = this.router.url.split('/').join('/').split('?')[0];
-    if (this.page.includes('manage')) {
-      this.activePage = this.pageNameMap[this.page].split(' ')[1];
-    }
-    else {
-      this.activePage = this.pageNameMap[this.page];
-    }
+    const url = this.router.url;
+    this.updateActivePage(url)
+
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe(() => {
       const url = this.router.url;
 
-      this.page = url.split('/').join('/').split('?')[0];
-      if (this.page.includes('manage')) {
-        this.activePage = this.pageNameMap[this.page].split(' ')[1];
-      }
-      else {
-        this.activePage = this.pageNameMap[this.page];
-      }
+      this.updateActivePage(url);
     });
   }
 
-  isCurrentPage(page: string): boolean {
-    return this.activePage === page;
-  }
-
-  onMenuItemClick(item: any): void {
-    if(item.route) {
-      if(item.route.includes('manage')) {
-        this.router.navigate([item.route], { queryParams: { page: 0, size: 5 } });
-      }
-      else {
-        this.router.navigate([item.route]);
+  updateActivePage(url: string) {
+    this.activePage = '';
+    for (let i = this.menuItems.length - 1; i > 0; i--) {
+      if (this.menuItems[i].hasOwnProperty('route') && url.includes(this.menuItems[i].route)) {
+        this.activePage = this.menuItems[i].label;
+        return;
       }
     }
+    if (url === this.menuItems[0].route) {
+      this.activePage = this.menuItems[0].label;
+      return;
+    }
+    if (this.activePage === '') {
+      let submenuItem: any[] = [];
+      for (let i = this.menuItems.length - 1; i > 0; i--) {
+        if (this.menuItems[i].hasOwnProperty('submenu')) {
+          submenuItem = this.menuItems[i].submenu;
+        }
+      }
+      if (submenuItem.length > 0) {
+        for (let i = submenuItem.length - 1; i >= 0; i--) {
+          if (url.includes(submenuItem[i].route)) {
+            this.activePage = submenuItem[i].label;
+            return;
+          }
+        }
+    }
   }
+}
 
-  onLogoutClick() {
-    this.identityService.logout('go home');
+isCurrentPage(page: string): boolean {
+  return this.activePage === page;
+}
+
+onMenuItemClick(item: any): void {
+  if(item.route) {
+  if(item.route.includes('manage')) {
+    this.router.navigate([item.route], { queryParams: { page: 0, size: 5 } });
   }
+  else {
+    this.router.navigate([item.route]);
+  }
+}
+}
+
+onLogoutClick() {
+  this.identityService.logout('go home');
+}
+
+@ViewChild('sidebarMenu') sidebarMenu!: MdbCollapseDirective;
+
+toggleSidebarMenu() {
+  this.sidebarMenu.toggle();
+}
 }

@@ -8,12 +8,13 @@
     <div class="card" *ngFor="let ticket of order.ticketList">
       <div class="card-header">
         <h5 class="card-title">
-          <a [routerLink]="['/' + ticket.ticketType.event.location.name, ticket.ticketType.event.title]"
+          <a [routerLink]="['/event', ticket.ticketType.event.title]"
              [queryParams]="{id: ticket.ticketType.event.id}">
             {{ ticket.ticketType.event.title }}
           </a>
         </h5>
-        <a [routerLink]="['/event-details', ticket.ticketType.event.title]" [queryParams]="{ id: ticket.ticketType.event.id }">Vezi biletele</a>
+        <a [routerLink]="['/account', 'event-details', ticket.ticketType.event.title]"
+           [queryParams]="{ id: ticket.ticketType.event.id }">Vezi biletele</a>
       </div>
       <div class="card-body">
         <p class="card-text">Data: {{ ticket.ticketType.event.date | date }}</p>

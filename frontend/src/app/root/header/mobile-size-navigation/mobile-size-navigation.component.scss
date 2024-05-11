@@ -8,13 +8,8 @@
   cursor: pointer;
 }
 
-.nav-menu-button:hover {
-  background-color: #333333;
-  color: #ffffff;
-}
-
 .panel {
-  display: none;
+  visibility: hidden;
   position: fixed;
   top: 0;
   right: 0;
@@ -48,7 +43,12 @@
   text-decoration: none;
 }
 
-.nav-options {
+.active {
+  text-decoration: underline !important;
+}
+
+.nav-options-body {
+  margin-left: 10px;
   display: flex;
   flex-wrap: wrap;
 }
@@ -102,6 +102,10 @@
   align-items: center;
 }
 
+.artist {
+  font-size: 14px;
+}
+
 .genre-column {
   flex: 0 0 50%;
   padding: 5px;
@@ -117,9 +121,15 @@
 }
 
 .shopping-cart-button {
+  border-radius: 5px;
+  padding: 10px 20px;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 18px;
   margin-bottom: 6px;
+}
+
+.shopping-cart-button:hover {
+  background-color: #f1f1f1;
 }

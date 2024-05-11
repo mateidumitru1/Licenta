@@ -1,33 +1,39 @@
-<a class="nav-item" (click)="toggleLocationsDropdown()">Locatii</a>
+<a class="nav-item dropdown-trigger"
+   [ngClass]="{ 'active' : locationsDropdownIsVisible }"
+   (click)="toggleLocationsDropdown()">Locatii</a>
 <div class="dropdown-container"
      [@dropdown]=" locationsDropdownIsVisible ? 'true' : 'false'">
   <h1 class="dropdown-title">Ce se intampla la ...</h1>
-  <div class="locations-container">
+  <div class="dropdown-body">
     <a [routerLink]="['/events']" [queryParams]="{ location: location.name }"
        *ngFor="let location of locations">
       {{ location.name }}
     </a>
   </div>
 </div>
-<a class="nav-item" (click)="toggleArtistsDropdown()">Artisti</a>
+<a class="nav-item dropdown-trigger"
+   [ngClass]="{ 'active' : artistsDropdownIsVisible }"
+   (click)="toggleArtistsDropdown()">Artisti</a>
 <div class="dropdown-container"
      [@dropdown]=" artistsDropdownIsVisible ? 'true' : 'false'">
   <h1 class="dropdown-title">Artisti</h1>
-  <div class="artists-container">
+  <div class="dropdown-body">
     <div *ngFor="let entry of artists | keyvalue">
-      <a [routerLink]="['/artists', entry.key]">
+      <a class="letter" [routerLink]="['/artists', entry.key]">
         <b>{{ entry.key }}</b>
       </a>
-      <a *ngFor="let artist of entry.value as artists"
+      <a class="artist" *ngFor="let artist of entry.value as artists"
          [routerLink]="['/events']" [queryParams]="{ artist: artist.name }">{{ artist.name }}</a>
     </div>
   </div>
 </div>
-<a class="nav-item" (click)="toggleGenresDropdown()">Genuri</a>
+<a class="nav-item dropdown-trigger"
+   [ngClass]="{ 'active' : genresDropdownIsVisible }"
+   (click)="toggleGenresDropdown()">Genuri</a>
 <div class="dropdown-container"
      [@dropdown]=" genresDropdownIsVisible ? 'true' : 'false'">
   <h1 class="dropdown-title">Genuri</h1>
-  <div class="genres-container">
+  <div class="dropdown-body">
     <a [routerLink]="['/events']" [queryParams]="{ genre: genre.name }"
        *ngFor="let genre of broadGenres">
       {{ genre.name }}
@@ -37,7 +43,7 @@
 <a class="nav-item" routerLink="/events">Evenimente</a>
 <app-search-dropdown class="search"></app-search-dropdown>
 <div class="right-buttons">
-  <div role="button" class="shopping-cart-button nav-item"
+  <div role="button" class="nav-item shopping-cart-button"
        (click)="onShoppingCartClick()" mdbTooltip="Cos de cumparaturi">
     <i id="shopping-cart-icon" class="fas fa-shopping-cart me-1"></i>
     <span id="badge" class="badge text-primary"
@@ -45,7 +51,7 @@
       {{ shoppingCartSize }}
     </span>
   </div>
-  <a class="nav-item account-button" (click)="toggleAccountDropdown()">
+  <a class="nav-item account-button dropdown-trigger" (click)="toggleAccountDropdown()">
     <span *ngIf="getIdentityService().isLoggedIn()">Salut, {{ getIdentityService().getUsername() }}</span>
     <span *ngIf="!getIdentityService().isLoggedIn()">Contul meu</span>
   </a>
@@ -54,7 +60,7 @@
     <div *ngIf="getIdentityService().isLoggedIn()">
       <a class="dropdown-item" routerLink="/account">Contul meu</a>
       <a class="dropdown-item" routerLink="/account/orders">Comenzile mele</a>
-      <a class="dropdown-item" routerLink="/track">Urmareste evenimentele</a>
+      <a class="dropdown-item" routerLink="/account/track">Urmareste evenimentele</a>
       <a class="dropdown-item" routerLink="/account/settings">Setari</a>
       <a role="button" class="dropdown-item" (click)="logout()">Deconectare</a>
     </div>
