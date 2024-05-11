@@ -5,6 +5,7 @@ import {SearchDropdownComponent} from "../search-dropdown/search-dropdown.compon
 import {IdentityService} from "../../../identity/identity.service";
 import {animate, state, style, transition, trigger} from "@angular/animations";
 import {MdbTooltipModule} from "mdb-angular-ui-kit/tooltip";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-mobile-size-navigation',
@@ -47,7 +48,8 @@ export class MobileSizeNavigationComponent implements OnInit {
   @Input() broadGenres!: any[];
 
   constructor(private identityService: IdentityService,
-              private router: Router) {}
+              private router: Router,
+              private snackBar: MatSnackBar) {}
 
   ngOnInit() {
     this.router.events.subscribe((event) => {
@@ -79,6 +81,16 @@ export class MobileSizeNavigationComponent implements OnInit {
   handleResize() {
     if (window.innerWidth > 768) {
       document.body.style.overflow = 'auto';
+    }
+  }
+
+  onShoppingCartClick() {
+    if (this.identityService.isLoggedIn()) {
+      this.router.navigate(['/account/shopping-cart']);
+    } else {
+      this.snackBar.open('Trebuie sa fii autentificat pentru a vedea cosul de cumparaturi!', 'Close', {
+        duration: 3000,
+      });
     }
   }
 

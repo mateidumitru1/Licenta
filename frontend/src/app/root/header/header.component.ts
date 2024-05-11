@@ -7,7 +7,7 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {LoadingComponent} from "../../shared/loading/loading.component";
 import {FormsModule} from "@angular/forms";
 import {DropdownService} from "./dropdown.service";
-import {ShoppingCartService} from "../shopping-cart/shopping-cart.service";
+import {ShoppingCartService} from "../../account/shopping-cart/shopping-cart.service";
 import {Subscription} from "rxjs";
 import {MdbTooltipModule} from "mdb-angular-ui-kit/tooltip";
 import {MdbCollapseModule} from "mdb-angular-ui-kit/collapse";

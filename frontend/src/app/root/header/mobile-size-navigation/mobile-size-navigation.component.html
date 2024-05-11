@@ -12,7 +12,7 @@
   <div *ngIf="getIdentityService().isLoggedIn()">
     <div class="title-shopping-cart-container">
       <h2>Salut, {{ getIdentityService().getUsername() }}</h2>
-      <div role="button" class="nav-item shopping-cart-button" [routerLink]="['shopping-cart']">
+      <div role="button" class="nav-item shopping-cart-button" (click)="onShoppingCartClick()">
         <i id="shopping-cart-icon" class="fas fa-shopping-cart me-1"></i>
         <span id="badge" class="badge text-primary"
               *ngIf="getIdentityService().isLoggedIn() && shoppingCartSize > 0" >

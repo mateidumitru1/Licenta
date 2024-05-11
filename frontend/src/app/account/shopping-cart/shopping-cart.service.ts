@@ -5,7 +5,7 @@ import {IdentityService} from "../../identity/identity.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {JwtHandler} from "../../identity/jwt.handler";
 import {BehaviorSubject, lastValueFrom, Subscription} from "rxjs";
-import {HeaderService} from "../header/header.service";
+import {HeaderService} from "../../root/header/header.service";
 
 @Injectable({
   providedIn: 'root'

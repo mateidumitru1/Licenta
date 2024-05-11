@@ -4,7 +4,7 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {HttpClient} from "@angular/common/http";
 import {apiURL} from "../../app.config";
 import {JwtHandler} from "../../identity/jwt.handler";
-import {ShoppingCartService} from "../shopping-cart/shopping-cart.service";
+import {ShoppingCartService} from "../../account/shopping-cart/shopping-cart.service";
 import {HeaderService} from "../header/header.service";
 
 @Injectable({

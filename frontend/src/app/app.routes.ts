@@ -6,7 +6,7 @@ import {EventComponent} from "./root/event-list/event/event.component";
 import {LoginComponent} from "./identity/login/login.component";
 import {RegisterComponent} from "./identity/register/register.component";
 import {ForgotPasswordComponent} from "./identity/forgot-password/forgot-password.component";
-import {ShoppingCartComponent} from "./root/shopping-cart/shopping-cart.component";
+import {ShoppingCartComponent} from "./account/shopping-cart/shopping-cart.component";
 import {AccountComponent} from "./account/account.component";
 import {AdminDashboardComponent} from "./admin-dashboard/admin-dashboard.component";
 import {AdminGuard} from "./util/guards/can-activate/admin.guard";
@@ -26,8 +26,8 @@ import {
   AccountOrderDetailsComponent
 } from "./account/account-orders/account-order-details/account-order-details.component";
 import {AccountDetailsComponent} from "./account/account-details/account-details.component";
-import {TrackEventComponent} from "./root/track-event/track-event.component";
-import {TrackEventDetailsComponent} from "./root/track-event/track-event-details/track-event-details.component";
+import {TrackEventComponent} from "./account/track-event/track-event.component";
+import {TrackEventDetailsComponent} from "./account/track-event/track-event-details/track-event-details.component";
 import {ValidatorDashboardComponent} from "./validator-dashboard/validator-dashboard.component";
 import {HomeValidatorComponent} from "./validator-dashboard/home-validator/home-validator.component";
 import {ValidatorGuard} from "./util/guards/can-activate/validator.guard";
@@ -51,6 +51,7 @@ export const routes: Routes = [
   { path: 'reset-password/:token', canActivate: [IdentityGuard], component: ResetPasswordComponent },
   { path: 'account', canActivate: [AccountGuard], component: AccountComponent, children: [
       { path: '', pathMatch: 'full', component: AccountDetailsComponent },
+      { path: 'shopping-cart', component: ShoppingCartComponent },
       { path: 'orders', component: AccountOrdersComponent },
       { path: 'orders/:orderNumber', component: AccountOrderDetailsComponent },
       { path: 'track', component: TrackEventComponent },
@@ -76,7 +77,6 @@ export const routes: Routes = [
   { path: '', canActivate: [RootGuard], component: RootComponent, children: [
       { path: '', pathMatch: 'full', component: HomeComponent },
       { path: 'page-not-found', component: PageNotFoundComponent },
-      { path: 'shopping-cart', canActivate: [AccountGuard], component: ShoppingCartComponent },
       { path: 'verify-account/:token', canActivate: [IdentityGuard], component: VerifyAccountComponent },
       { path: 'resend-verify-account-email/:email', canActivate: [IdentityGuard], component: ResendVerifyAccountEmailComponent },
       { path: 'events', component: EventListComponent},

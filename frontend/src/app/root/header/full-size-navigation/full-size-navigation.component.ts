@@ -83,7 +83,7 @@ export class FullSizeNavigationComponent implements OnInit, OnDestroy {
 
   onShoppingCartClick() {
     if (this.identityService.isLoggedIn()) {
-      this.router.navigate(['/shopping-cart']);
+      this.router.navigate(['/account/shopping-cart']);
     } else {
       this.snackBar.open('Trebuie sa fii autentificat pentru a vedea cosul de cumparaturi!', 'Close', {
         duration: 3000,

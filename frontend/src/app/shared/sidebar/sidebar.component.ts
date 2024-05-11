@@ -23,25 +23,7 @@ export class SidebarComponent implements OnInit {
   @Input() brand: string = '';
   activePage: string = '';
 
-  page: string = '';
-  pageNameMap: {
-    [key: string]: string
-  } = {
-    '/admin-dashboard': 'Acasa',
-    '/admin-dashboard/manage/users': 'Gestioneaza Utilizatori',
-    '/admin-dashboard/manage/locations': 'Gestioneaza Locatii',
-    '/admin-dashboard/manage/events': 'Gestioneaza Evenimente',
-    '/admin-dashboard/manage/artists': 'Gestioneaza Artisti',
-    '/admin-dashboard/manage/orders': 'Gestioneaza Comenzi',
-    '/admin-dashboard/statistics': 'Statistici',
-    '/admin-dashboard/settings': 'Setari',
-    '/account': 'Contul meu',
-    '/account/orders/:id': 'Comenzi',
-    '/account/track': 'Urmareste evenimente',
-    '/account/settings': 'Setari',
-  }
-
-  constructor(private router: Router, private route: ActivatedRoute, private identityService: IdentityService) {}
+  constructor(private router: Router,  private identityService: IdentityService) {}
 
   ngOnInit() {
     const url = this.router.url;
