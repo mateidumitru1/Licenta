@@ -64,32 +64,33 @@ export class SidebarComponent implements OnInit {
             return;
           }
         }
+      }
     }
   }
-}
 
-isCurrentPage(page: string): boolean {
-  return this.activePage === page;
-}
-
-onMenuItemClick(item: any): void {
-  if(item.route) {
-  if(item.route.includes('manage')) {
-    this.router.navigate([item.route], { queryParams: { page: 0, size: 5 } });
+  isCurrentPage(page: string): boolean {
+    return this.activePage === page;
   }
-  else {
-    this.router.navigate([item.route]);
+
+  onMenuItemClick(item: any): void {
+    if(item.route) {
+      if(item.route.includes('manage')) {
+        this.router.navigate([item.route], { queryParams: { page: 0, size: 5 } });
+      }
+      else {
+        this.router.navigate([item.route]);
+      }
+      this.toggleSidebarMenu();
+    }
   }
-}
-}
 
-onLogoutClick() {
-  this.identityService.logout('go home');
-}
+  onLogoutClick() {
+    this.identityService.logout('go home');
+  }
 
-@ViewChild('sidebarMenu') sidebarMenu!: MdbCollapseDirective;
+  @ViewChild('sidebarMenu') sidebarMenu!: MdbCollapseDirective;
 
-toggleSidebarMenu() {
-  this.sidebarMenu.toggle();
-}
+  toggleSidebarMenu() {
+    this.sidebarMenu.toggle();
+  }
 }

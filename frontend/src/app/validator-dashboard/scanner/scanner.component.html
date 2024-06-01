@@ -1,8 +1,10 @@
-<select class="form-select" (change)="onDeviceChange($event.target)">
-  <option *ngFor="let device of action.devices.value" [value]="device.deviceId">
-    {{ device.kind }} | {{ device.label }}
-  </option>
-</select>
+<div class="form-group">
+  <select class="form-select" (change)="onDeviceChange($event.target)">
+    <option *ngFor="let device of action.devices.value" [value]="device.deviceId">
+      {{ device.kind }} | {{ device.label }}
+    </option>
+  </select>
+</div>
 <div  class="camera">
   <ngx-scanner-qrcode class="video"
                       #action="scanner"

@@ -1,4 +1,10 @@
+.form-group {
+  display: flex;
+  justify-content: center;
+}
+
 .form-select {
+  width: 80%;
   margin-bottom: 1rem;
 }
 
