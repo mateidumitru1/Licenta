@@ -31,6 +31,9 @@ export class AddArtistComponent implements OnInit {
 
   async ngOnInit() {
     await this.manageArtistsService.fetchArtistsWithoutEventGenre();
+    this.manageArtistsService.getArtistListSubject().subscribe((artistList: any) => {
+      this.artistList = artistList;
+    });
   }
 
   onCloseClick() {

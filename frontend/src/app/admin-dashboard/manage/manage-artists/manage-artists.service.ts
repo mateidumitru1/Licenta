@@ -10,7 +10,7 @@ import {MatSnackBar} from "@angular/material/snack-bar";
   providedIn: 'root'
 })
 export class ManageArtistsService {
-  private artistListSubject = new BehaviorSubject<any>({});
+  private artistListSubject = new BehaviorSubject<any>([]);
 
   constructor(private http: HttpClient, private identityService: IdentityService, private snackBar: MatSnackBar) { }
 
@@ -66,7 +66,7 @@ export class ManageArtistsService {
 
   async fetchArtistsWithoutEventGenre() {
     try {
-      const response: any = this.http.get(apiURL + '/artists/without-event-genre');
+      const response: any = await lastValueFrom(this.http.get(apiURL + '/artists/without-event-genre'));
       this.setArtistListSubject(response);
     }
     catch (error) {
