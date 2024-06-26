@@ -59,7 +59,7 @@ public class OrderService {
                 .price(shoppingCart.getPrice())
                 .createdAt(LocalDateTime.now())
                 .status(Status.CONFIRMED)
-                .orderNumber(orderRepository.findMaxOrderNumber() + 1)
+                .orderNumber(orderRepository.findMaxOrderNumber().orElse(0L) + 1)
                 .user(Optional.of(userService.getUserWithOrdersById(userId)).map(user -> User.builder()
                         .id(user.getId()).build()).orElseThrow())
                 .build());
